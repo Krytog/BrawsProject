@@ -1,14 +1,10 @@
 #include <memory>
 
-class VisibleObjectImpl;
+#include "Position.h"
 
 class VisibleObject {
 public:
-
-    VisibleObject();
-
-    void RenderIt();
-
-private:
-    std::unique_ptr<VisibleObjectImpl> visible_; 
+    VisibleObject() = default;
+    
+    virtual void RenderIt() = 0;
 };
