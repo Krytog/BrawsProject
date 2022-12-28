@@ -23,11 +23,7 @@ double Vector2D::ScalarMultiply(const Vector2D &first, const Vector2D &second) {
     return first.x_ * second.x_ + first.y_ * second.y_;
 }
 
-Vector2D& Vector2D::operator=(const Vector2D &other) {
-    x_ = other.x_;
-    y_ = other.y_;
-    return *this;
-}
+Vector2D& Vector2D::operator=(const Vector2D &other) = default;
 
 double Vector2D::operator*(const Vector2D &other) const {
     return ScalarMultiply(*this, other);
@@ -37,3 +33,33 @@ Vector2D Vector2D::Right = Vector2D(1, 0);
 Vector2D Vector2D::Left = Vector2D(-1, 0);
 Vector2D Vector2D::Up = Vector2D(0, 1);
 Vector2D Vector2D::Down = Vector2D(0, -1);
+
+Vector2D Vector2D::operator*(const double coefficient) const {
+    return {x_ * coefficient, y_ * coefficient};
+}
+
+Vector2D& Vector2D::operator*=(const double coefficient) {
+    x_ *= coefficient;
+    y_ *= coefficient;
+    return *this;
+}
+
+Vector2D Vector2D::operator+(const Vector2D &other) const {
+    return {x_ + other.x_, y_ + other.y_};
+}
+
+Vector2D Vector2D::operator-(const Vector2D &other) const {
+    return {x_ - other.x_, y_ - other.y_};
+}
+
+Vector2D& Vector2D::operator+=(const Vector2D &other) {
+    x_ += other.x_;
+    y_ += other.y_;
+    return *this;
+}
+
+Vector2D& Vector2D::operator-=(const Vector2D &other) {
+    x_ -= other.x_;
+    y_ -= other.y_;
+    return *this;
+}

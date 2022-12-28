@@ -14,6 +14,13 @@ public:
     Vector2D& operator=(const Vector2D& other);
 
     double operator*(const Vector2D& other) const; //Scalar multiplication
+    Vector2D operator*(double coefficient) const;
+    Vector2D& operator*=(double coefficient);
+
+    Vector2D operator+(const Vector2D& other) const;
+    Vector2D operator-(const Vector2D& other) const;
+    Vector2D& operator+=(const Vector2D& other);
+    Vector2D& operator-=(const Vector2D& other);
 
     static double ScalarMultiply(const Vector2D& first, const Vector2D& second);
     static double Det(const Vector2D& first, const Vector2D& second);
