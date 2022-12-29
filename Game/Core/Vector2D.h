@@ -25,6 +25,8 @@ public:
     static double ScalarMultiply(const Vector2D& first, const Vector2D& second);
     static double Det(const Vector2D& first, const Vector2D& second);
 
+    double Length() const;
+
     static Vector2D Up;
     static Vector2D Down;
     static Vector2D Left;

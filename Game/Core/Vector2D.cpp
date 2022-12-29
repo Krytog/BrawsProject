@@ -1,5 +1,7 @@
 #include "Vector2D.h"
 
+#include <cmath>
+
 Vector2D::Vector2D() : x_(0), y_(0) {}
 
 Vector2D::Vector2D(double x, double y) : x_(x), y_(y) {}
@@ -62,4 +64,8 @@ Vector2D& Vector2D::operator-=(const Vector2D &other) {
     x_ -= other.x_;
     y_ -= other.y_;
     return *this;
+}
+
+double Vector2D::Length() const {
+    return std::hypot(x_, y_);
 }
