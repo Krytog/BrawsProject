@@ -1,3 +1,5 @@
+#pragma once
+
 #include "VisibleObject.h"
 
 class VisibleObjectImpl {
