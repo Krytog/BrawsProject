@@ -9,7 +9,8 @@ public:
     Position(const Position& other);
     explicit Position(const Vector2D& other);
 
-    Vector2D GetCoordinates() const;
+    Vector2D GetCoordinatesAsVector2D() const;
+    std::pair<double, double> GetCoordinates() const;
     void SetCoordinates(double x, double y);
     void SetCoordinates(const Vector2D& other);
 

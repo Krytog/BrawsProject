@@ -11,8 +11,12 @@ void Position::SetCoordinates(double x, double y) {
 
 Position::Position(const Position &other) : Position(other.x_, other.y_) {}
 
-Vector2D Position::GetCoordinates() const {
-    return Vector2D(x_, y_);
+std::pair<double, double> Position::GetCoordinates() const {
+    return {x_, y_};
+}
+
+Vector2D Position::GetCoordinatesAsVector2D() const {
+    return {x_, y_};
 }
 
 void Position::SetCoordinates(const Vector2D &other) {
