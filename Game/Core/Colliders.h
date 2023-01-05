@@ -1,5 +1,9 @@
 #pragma once
 
+#define FRIEND_DECLARATION_FOR_IMPLEMENTATION                                  \
+  template <typename F, typename S>                                            \
+  friend bool CheckImplementation(const F *first, const S *second);
+
 #include "Collider.h"
 
 class CircleCollider : public Collider {
@@ -15,6 +19,8 @@ private:
 
   Position position_;
   double radius_;
+
+  FRIEND_DECLARATION_FOR_IMPLEMENTATION
 };
 
 class RectangleCollider : public Collider {
@@ -31,4 +37,6 @@ private:
   Position position_;
   double width_;
   double height_;
+
+  FRIEND_DECLARATION_FOR_IMPLEMENTATION
 };
