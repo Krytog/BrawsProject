@@ -1,4 +1,5 @@
 #include "Sprites.h"
+#include "Test_SFML/Window.h"
 #include <memory>
 
 class StaticSpriteImpl: VisibleObjectImpl {
@@ -6,6 +7,15 @@ public:
     void RenderIt() override {
         // magic.do()
     }
+
+    void UpdatePosition(const Position &position) override {
+        top_left_ = position;
+    }
+
+    void Translate(const Vector2D &vector2D) override {
+        top_left_.Translate(vector2D);
+    }
+
 private:
     // magic
 };
@@ -19,6 +29,15 @@ public:
     void RenderIt() override {
         // magic.do()
     }
+
+    void UpdatePosition(const Position &position) override {
+        top_left_ = position;
+    }
+
+    void Translate(const Vector2D &vector2D) override {
+        top_left_.Translate(vector2D);
+    }
+    
 private:
     // magic
 };
