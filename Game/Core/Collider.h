@@ -12,8 +12,10 @@ public:
   bool CheckCollision(const Collider *other) const;
   bool CheckTrigger(const Collider *other) const;
 
+  virtual ~Collider() = default;
+
 protected:
   virtual bool Check(const Collider *other) const = 0;
 
-  bool is_trigger_;
+  bool is_trigger_ = false;
 };
