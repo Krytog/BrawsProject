@@ -69,3 +69,9 @@ Vector2D& Vector2D::operator-=(const Vector2D &other) {
 double Vector2D::Length() const {
     return std::hypot(x_, y_);
 }
+
+void Vector2D::Normalize() {
+    auto length = Length();
+    x_ /= length;
+    y_ /= length;
+}
