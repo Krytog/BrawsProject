@@ -20,7 +20,7 @@ public:
 
     virtual ~GameObject() = default;
 
-private:
+protected:
     std::unique_ptr<Position> position_;
     std::unique_ptr<Collider> collider_;
     std::unique_ptr<VisibleObject> visible_object_;
