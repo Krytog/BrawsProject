@@ -144,7 +144,7 @@ Circle::Circle(const Position &a, const Position &b, const Position &c) {
 }
 
 std::pair<std::optional<Position>, std::optional<Position>>
-Circle::Intersect(const Line &line) {
+Circle::Intersect(const Line &line) const {
   auto nline = Line(line.A_, line.B_,
                     line.C_ + line.A_ * center_x_ + line.B_ * center_y_);
 
@@ -161,7 +161,7 @@ Circle::Intersect(const Line &line) {
                       radius_ * radius_ *
                           (nline.A_ * nline.A_ + nline.B_ * nline.B_)) <
              PRECISION) {
-    return {Position(x_ref + center_x_, y_ref + center_y_), std::nullopt};
+    return {Position(x_ref + center_x_, y_ref + center_y_), Position(x_ref + center_x_, y_ref + center_y_)};
   } else {
     double det =
         radius_ * radius_ -
@@ -175,7 +175,7 @@ Circle::Intersect(const Line &line) {
 }
 
 std::pair<std::optional<Position>, std::optional<Position>>
-Circle::Intersect(const Circle &other) {
+Circle::Intersect(const Circle &other) const {
   auto xx = other.center_x_ - center_x_;
   auto yy = other.center_y_ - center_y_;
   auto line = Line(-2 * xx, -2 * yy,

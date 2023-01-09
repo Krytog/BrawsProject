@@ -34,8 +34,8 @@ public:
     Circle(const Position& center, double radius);
     Circle(const Position& a, const Position& b, const Position& c);
 
-    std::pair<std::optional<Position>, std::optional<Position>> Intersect(const Line& line);
-    std::pair<std::optional<Position>, std::optional<Position>> Intersect(const Circle& other);
+    std::pair<std::optional<Position>, std::optional<Position>> Intersect(const Line& line) const;
+    std::pair<std::optional<Position>, std::optional<Position>> Intersect(const Circle& other) const;
 
 private:
     long double center_x_;
