@@ -7,3 +7,7 @@ bool Collider::CheckCollision(const Collider *other) const {
 bool Collider::CheckTrigger(const Collider *other) const {
   return Check(other) && other->is_trigger_;
 }
+
+bool Collider::IsTrigger() const {
+    return is_trigger_;
+}
