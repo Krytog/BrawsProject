@@ -11,6 +11,8 @@ public:
     std::pair<double, double> GetCoordinates() const;
     void SetCoordinates(double x, double y);
 
+    void Normalize();
+
     Vector2D& operator=(const Vector2D& other);
 
     double operator*(const Vector2D& other) const; //Scalar multiplication

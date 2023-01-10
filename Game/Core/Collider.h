@@ -2,6 +2,8 @@
 
 #include "Position.h"
 
+#include <optional>
+
 class Collider {
 public:
   Collider() = default;
@@ -11,6 +13,9 @@ public:
 
   bool CheckCollision(const Collider *other) const;
   bool CheckTrigger(const Collider *other) const;
+  virtual std::optional<Position> GetIntersectionPosition(const Collider *other) const = 0;
+
+  bool IsTrigger() const;
 
   virtual ~Collider() = default;
 

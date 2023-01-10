@@ -2,7 +2,9 @@
 
 #define FRIEND_DECLARATION_FOR_IMPLEMENTATION                                  \
   template <typename F, typename S>                                            \
-  friend bool CheckImplementation(const F *first, const S *second);
+  friend bool CheckImplementation(const F *first, const S *second);            \
+  template <typename F, typename S>                                            \
+  friend std::optional<Position> IntersectionImplementation(const F *first, const S *second);     \
 
 #include "Collider.h"
 
@@ -13,6 +15,8 @@ public:
 
   void UpdatePosition(const Position &position) override;
   void Translate(const Vector2D &vector2D) override;
+
+  std::optional<Position> GetIntersectionPosition(const Collider *other) const override;
 
 private:
   bool Check(const Collider *other) const override;
@@ -30,6 +34,8 @@ public:
 
   void UpdatePosition(const Position &position) override;
   void Translate(const Vector2D &vector2D) override;
+
+  std::optional<Position> GetIntersectionPosition(const Collider *other) const override;
 
 private:
   bool Check(const Collider *other) const override;
