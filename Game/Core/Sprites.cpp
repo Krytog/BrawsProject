@@ -27,7 +27,7 @@ class StaticSpriteImpl: public VisibleObjectImpl {
 public:
 
     StaticSpriteImpl(const Position *pos, const double &width, const double &height,
-                     std::string_view path_to_file): VisibleObjectImpl(pos, width, height), image_(pos, width, height) {
+                     std::string_view path_to_file): VisibleObjectImpl(pos, width, height), image_(&top_left_, width, height) {
         image_.LoadFromFile(path_to_file);
     }
 
@@ -62,7 +62,7 @@ class AnimatedSpriteImpl: public VisibleObjectImpl {
 public:
     AnimatedSpriteImpl(const Position *pos, const double &width, const double &height,
                      std::string_view path_to_file, size_t frame_rate): VisibleObjectImpl(pos, width, height),
-                     image_(pos, width, height), frame_rate_(frame_rate) {
+                     image_(&top_left_, width, height), frame_rate_(frame_rate) {
         image_.LoadFromFile(std::string(path_to_file));
     };
 
