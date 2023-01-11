@@ -72,6 +72,9 @@ double Vector2D::Length() const {
 
 void Vector2D::Normalize() {
     auto length = Length();
+    if (length < 1e-9) {
+        return;
+    }
     x_ /= length;
     y_ /= length;
 }

@@ -92,10 +92,10 @@ bool CheckImplementation<RectangleCollider, CircleCollider>(
 template <>
 bool CheckImplementation<RectangleCollider, RectangleCollider>(
     const RectangleCollider *first, const RectangleCollider *second) {
-  const double x_distance = first->position_.GetCoordinates().first -
-                             second->position_.GetCoordinates().first;
-  const double y_distance = first->position_.GetCoordinates().second -
-                             second->position_.GetCoordinates().second;
+  const double x_distance = std::abs(first->position_.GetCoordinates().first -
+                             second->position_.GetCoordinates().first);
+  const double y_distance = std::abs(first->position_.GetCoordinates().second -
+                             second->position_.GetCoordinates().second);
   return x_distance <= (first->width_ + second->width_) / 2 &&
          y_distance <= (first->height_ + second->height_) / 2;
 }
@@ -235,10 +235,10 @@ std::optional<Position> IntersectionImplementation<RectangleCollider, CircleColl
 template <>
 std::optional<Position> IntersectionImplementation<RectangleCollider, RectangleCollider>(
         const RectangleCollider *first, const RectangleCollider *second) {
-    const double x_distance = first->position_.GetCoordinates().first -
-                              second->position_.GetCoordinates().first;
-    const double y_distance = first->position_.GetCoordinates().second -
-                              second->position_.GetCoordinates().second;
+    const double x_distance = std::abs(first->position_.GetCoordinates().first -
+                              second->position_.GetCoordinates().first);
+    const double y_distance = std::abs(first->position_.GetCoordinates().second -
+                              second->position_.GetCoordinates().second);
     if (!(x_distance <= (first->width_ + second->width_) / 2 &&
            y_distance <= (first->height_ + second->height_) / 2)) {
         return std::nullopt;
