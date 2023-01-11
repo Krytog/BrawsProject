@@ -34,6 +34,9 @@ std::vector<CollisionSystem::CollisionInfo> CollisionSystem::GetAllCollisions(co
     }
     std::vector<CollisionInfo> output;
     for (const auto& pair : registered_colliders_) {
+        if (pair.first == game_object) {
+            continue;
+        }
         if (auto position = registered_colliders_.at(game_object)->GetIntersectionPosition(pair.second)) {
             output.emplace_back(pair.first, pair.first->GetTag(), position.value());
         }
