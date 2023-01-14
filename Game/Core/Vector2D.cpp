@@ -13,6 +13,10 @@ void Vector2D::SetCoordinates(double x, double y) {
     y_ = y;
 }
 
+bool Vector2D::operator==(const Vector2D& other) {
+    return (x_ == other.x_ && y_ == other.y_);
+}
+
 std::pair<double, double> Vector2D::GetCoordinates() const {
     return {x_, y_};
 }
