@@ -1,12 +1,12 @@
 #include "Engine.h"
 
 template <class TObject, typename... Args>
-GameObject *Engine::ProduceObject(Args &&... args, Position *pos_ptr, Collider *coll_ptr,
+GameObject *Engine::ProduceObject(Args&&... args, Position *pos_ptr, Collider *coll_ptr,
                                   VisibleObject *vis_ptr, const std::string_view &tag) {
     static_assert(std::is_base_of<GameObject, TObject>(), "TObject must inherit from GameObject");
 
     GameObject *object_ptr =
-            new TObject(std::unique_ptr<Position>(pos_ptr), std::unique_ptr<Collider>(coll_ptr),
+            new TObject(std::forward<Args>(args)..., std::unique_ptr<Position>(pos_ptr), std::unique_ptr<Collider>(coll_ptr),
                         std::unique_ptr<VisibleObject>(vis_ptr), tag);
     objects_buffer_.push_back(object_ptr);
     collision_system_.RegisterColliderOf(object_ptr, coll_ptr);
