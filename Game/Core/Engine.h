@@ -13,10 +13,7 @@
 
 class Engine {
 public:
-    static Engine &getInstance() {
-        static Engine instance;
-        return instance;
-    }
+    static Engine &getInstance();
 
     template <class TObject, typename... Args>
     GameObject *ProduceObject(Args &&... args, Position *pos_ptr, Collider *coll_ptr,

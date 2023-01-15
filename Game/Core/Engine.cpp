@@ -34,3 +34,10 @@ Engine::~Engine() {
         delete object_ptr;
     }
 }
+
+Engine &Engine::getInstance() {
+    static Engine instance;
+    return instance;
+}
+
+Engine::Engine() = default;
