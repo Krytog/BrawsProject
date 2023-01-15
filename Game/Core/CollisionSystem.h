@@ -8,6 +8,8 @@
 
 class CollisionSystem {
 public:
+    static CollisionSystem& GetInstance();
+
     struct CollisionInfo {
         CollisionInfo() = default;
         CollisionInfo(const GameObject* game_object_, const std::string_view tag_, const Position& position_);
@@ -16,8 +18,6 @@ public:
         const std::string_view tag;
         Position position;
     };
-
-    CollisionSystem() = default;
 
     bool IsRegistered(const GameObject* game_object) const;
     const Collider* GetRegisteredColliderOf(const GameObject* game_object) const;
@@ -29,5 +29,7 @@ public:
     std::vector<CollisionInfo> GetAllCollisions(const GameObject* game_object) const;
 
 private:
+    CollisionSystem();
+
     std::unordered_map<const GameObject*, const Collider*> registered_colliders_;
 };

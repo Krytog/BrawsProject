@@ -43,3 +43,10 @@ std::vector<CollisionSystem::CollisionInfo> CollisionSystem::GetAllCollisions(co
     }
     return output;
 }
+
+CollisionSystem &CollisionSystem::GetInstance() {
+    static CollisionInfo instance;
+    return instance;
+}
+
+CollisionSystem::CollisionSystem() = default;
