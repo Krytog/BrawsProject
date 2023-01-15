@@ -49,7 +49,7 @@ public:
     ~Canvas();
 
 private:
-  std::unique_ptr<sf::Image> canvas_;
+    std::unique_ptr<sf::Image> canvas_;
 
-  friend class RenderImplementation;
+    friend class RenderImplementation;
 };
