@@ -1,0 +1,3 @@
+/home/matthew/HSE/CursoviProject/server/CMakeFiles/server.dir
+/home/matthew/HSE/CursoviProject/server/CMakeFiles/edit_cache.dir
+/home/matthew/HSE/CursoviProject/server/CMakeFiles/rebuild_cache.dir

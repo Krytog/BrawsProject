@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/server.dir/plug_server.cpp.o -o server  /usr/lib/x86_64-linux-gnu/libsfml-network.so.2.5.1 -lncurses /usr/lib/x86_64-linux-gnu/libsfml-system.so.2.5.1 
