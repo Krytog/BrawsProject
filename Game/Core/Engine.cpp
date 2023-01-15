@@ -9,8 +9,12 @@ GameObject *Engine::ProduceObject(Args&&... args, Position *pos_ptr, Collider *c
             new TObject(std::forward<Args>(args)..., std::unique_ptr<Position>(pos_ptr), std::unique_ptr<Collider>(coll_ptr),
                         std::unique_ptr<VisibleObject>(vis_ptr), tag);
     objects_buffer_.push_back(object_ptr);
-    collision_system_.RegisterColliderOf(object_ptr, coll_ptr);
-    render_.AddToRender(object_ptr, vis_ptr);
+    if (coll_ptr) {
+        collision_system_.RegisterColliderOf(object_ptr, coll_ptr);
+    }
+    if (vis_ptr) {
+        render_.AddToRender(object_ptr, vis_ptr);
+    }
     return object_ptr;
 }
 
