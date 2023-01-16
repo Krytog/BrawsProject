@@ -5,20 +5,20 @@
 
 class VisibleObjectImpl {
 public:
-    VisibleObjectImpl(const Position* pos, const double& width, const double& height): top_left_(*pos),
+    VisibleObjectImpl(const Position* pos, const double& width, const double& height): pos_(*pos),
                         width_(width), height_(height) {};
 
     virtual void UpdatePosition(const Position &position) {
-        top_left_ = position;
+        pos_ = position;
     };
 
     virtual void Translate(const Vector2D &vector2D) {
-        top_left_.Translate(vector2D);
+        pos_.Translate(vector2D);
     };
 
     virtual void RenderIt(Canvas* canvas) = 0;
 protected:
-    Position top_left_;
+    Position pos_; // Совпадает с центром объекта, то есть обычный локальный Position GameObjectа, где его рисовать будет Render разбираться
     double width_;
     double height_;
 };
@@ -27,7 +27,7 @@ class StaticSpriteImpl: public VisibleObjectImpl {
 public:
 
     StaticSpriteImpl(const Position *pos, const double &width, const double &height,
-                     std::string_view path_to_file): VisibleObjectImpl(pos, width, height), image_(&top_left_, width, height) {
+                     std::string_view path_to_file): VisibleObjectImpl(pos, width, height), image_(&pos_, width, height) {
         image_.LoadFromFile(path_to_file);
     }
 
@@ -62,7 +62,7 @@ class AnimatedSpriteImpl: public VisibleObjectImpl {
 public:
     AnimatedSpriteImpl(const Position *pos, const double &width, const double &height,
                      std::string_view path_to_file, size_t frame_rate): VisibleObjectImpl(pos, width, height),
-                     image_(&top_left_, width, height), frame_rate_(frame_rate) {
+                     image_(&pos_, width, height), frame_rate_(frame_rate) {
         image_.LoadFromFile(std::string(path_to_file));
     };
 

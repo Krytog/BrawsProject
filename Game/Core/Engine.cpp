@@ -1,19 +1,5 @@
 #include "Engine.h"
 
-template <class TObject, typename... Args>
-GameObject *Engine::ProduceObject(Args &&... args, Position *pos_ptr, Collider *coll_ptr,
-                                  VisibleObject *vis_ptr, const std::string_view &tag) {
-    static_assert(std::is_base_of<GameObject, TObject>(), "TObject must inherit from GameObject");
-
-    GameObject *object_ptr =
-        new TObject(std::unique_ptr<Position>(pos_ptr), std::unique_ptr<Collider>(coll_ptr),
-                    std::unique_ptr<VisibleObject>(vis_ptr), tag);
-    objects_buffer_.push_back(object_ptr);
-    collision_system_.RegisterColliderOf(object_ptr, coll_ptr);
-    render_.AddToRender(object_ptr, vis_ptr);
-    return object_ptr;
-}
-
 void Engine::Destroy(GameObject *object_ptr) {
     auto it = std::find(objects_buffer_.begin(), objects_buffer_.end(), object_ptr);
     if (it != objects_buffer_.end()) {
@@ -27,6 +13,23 @@ void Engine::Destroy(GameObject *object_ptr) {
     throw std::runtime_error(
         "The object under the pointer was not created using "
         "the engine or was destroyed");
+}
+
+Position Engine::GetCameraPosition() const {
+    render_.GetCameraPosition();
+}
+
+void Engine::SetCameraOn(const GameObject *object) {
+    render_.SetCameraOn(object);
+}
+
+//Временно
+void Engine::RenderAll() {
+    render_.RenderAll();
+}
+
+std::vector<CollisionSystem::CollisionInfo> Engine::GetAllCollisions(GameObject *game_object) {
+    return collision_system_.GetAllCollisions(game_object);
 }
 
 Engine::~Engine() {
