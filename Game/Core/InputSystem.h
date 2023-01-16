@@ -6,23 +6,24 @@
 #include <stdint.h>
 #include <list>
 
-struct KeyboardToken {
-    char symbol;
-};
-
-struct MouseClickToken {
-    uint8_t key;
-    Position position;
-};
-
 class InputSystem {
 public:
+    struct KeyboardToken {
+        char symbol;
+    };
+
+    struct MouseClickToken {
+        uint8_t key;
+        Position position;
+    };
+
     using InputToken = std::variant<KeyboardToken, MouseClickToken>;
+    using InputTokensArray = const std::list<InputToken>&;
 
     static InputSystem& GetInstance();
 
     void ReadNewInput();
-    const std::list<InputToken>& GetInput() const;
+    InputTokensArray GetInput() const;
 
 private:
     InputSystem();

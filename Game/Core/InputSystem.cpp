@@ -11,6 +11,6 @@ void InputSystem::ReadNewInput() {
     //implementation defined;
 }
 
-const &InputSystem::GetInput() const {
+InputSystem::InputTokensArray InputSystem::GetInput() const {
     return input_tokens_;
 }
