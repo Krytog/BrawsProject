@@ -25,8 +25,11 @@ public:
     void RegisterColliderOf(const GameObject* game_object, const Collider* collider);
     void UnregisterColliderOf(const GameObject* game_object);
 
-    std::optional<Position> CheckCollision(const GameObject* first, const GameObject* second) const;
-    std::vector<CollisionInfo> GetAllCollisions(const GameObject* game_object) const;
+    using PossiblePosition = std::optional<Position>;
+    using CollisionsInfoArray = std::vector<CollisionInfo>;
+
+    PossiblePosition CheckCollision(const GameObject* first, const GameObject* second) const;
+    CollisionsInfoArray GetAllCollisions(const GameObject* game_object) const;
 
 private:
     CollisionSystem();
