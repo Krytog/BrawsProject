@@ -44,6 +44,7 @@ Engine::~Engine() {
     for (const auto &object_ptr : objects_buffer_) {
         delete object_ptr;
     }
+
 }
 
 Engine::Engine(): collision_system_(CollisionSystem::GetInstance()), input_system_(InputSystem::GetInstance()), delay_queue_(DelayQueue::GetInstance()), ticks_count_(0) {}
