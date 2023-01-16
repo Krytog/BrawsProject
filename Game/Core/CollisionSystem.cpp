@@ -21,14 +21,14 @@ void CollisionSystem::RegisterColliderOf(const GameObject *game_object, const Co
     registered_colliders_[game_object] = collider;
 }
 
-std::optional<Position> CollisionSystem::CheckCollision(const GameObject *first, const GameObject *second) const {
+CollisionSystem::PossiblePosition CollisionSystem::CheckCollision(const GameObject *first, const GameObject *second) const {
     if (!registered_colliders_.contains(first) || !registered_colliders_.contains(second)) {
         return std::nullopt;
     }
     return registered_colliders_.at(first)->GetIntersectionPosition(registered_colliders_.at(second));
 }
 
-std::vector<CollisionSystem::CollisionInfo> CollisionSystem::GetAllCollisions(const GameObject *game_object) const {
+CollisionSystem::CollisionsInfoArray CollisionSystem::GetAllCollisions(const GameObject *game_object) const {
     if (!registered_colliders_.contains(game_object)) {
         return {};
     }
@@ -43,3 +43,10 @@ std::vector<CollisionSystem::CollisionInfo> CollisionSystem::GetAllCollisions(co
     }
     return output;
 }
+
+CollisionSystem &CollisionSystem::GetInstance() {
+    static CollisionSystem instance;
+    return instance;
+}
+
+CollisionSystem::CollisionSystem() = default;

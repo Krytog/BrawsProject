@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#define PRECISION 1e-9
+
 Vector2D::Vector2D() : x_(0), y_(0) {}
 
 Vector2D::Vector2D(double x, double y) : x_(x), y_(y) {}
@@ -72,7 +74,7 @@ double Vector2D::Length() const {
 
 void Vector2D::Normalize() {
     auto length = Length();
-    if (length < 1e-9) {
+    if (length < PRECISION) {
         return;
     }
     x_ /= length;
