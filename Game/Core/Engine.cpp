@@ -1,21 +1,8 @@
 #include "Engine.h"
 
-template <class TObject, typename... Args>
-GameObject *Engine::ProduceObject(Args&&... args, Position *pos_ptr, Collider *coll_ptr,
-                                  VisibleObject *vis_ptr, const std::string_view &tag) {
-    static_assert(std::is_base_of<GameObject, TObject>(), "TObject must inherit from GameObject");
-
-    GameObject *object_ptr =
-            new TObject(std::forward<Args>(args)..., std::unique_ptr<Position>(pos_ptr), std::unique_ptr<Collider>(coll_ptr),
-                        std::unique_ptr<VisibleObject>(vis_ptr), tag);
-    objects_buffer_.push_back(object_ptr);
-    if (coll_ptr) {
-        collision_system_.RegisterColliderOf(object_ptr, coll_ptr);
-    }
-    if (vis_ptr) {
-        render_.AddToRender(object_ptr, vis_ptr);
-    }
-    return object_ptr;
+Engine& Engine::GetInstance() {
+    static Engine instance;
+    return instance;
 }
 
 void Engine::Destroy(GameObject *object_ptr) {
@@ -29,8 +16,28 @@ void Engine::Destroy(GameObject *object_ptr) {
     }
 
     throw std::runtime_error(
-            "The object under the pointer was not created using "
-            "the engine or was destroyed");
+            "The the pointed object was not created using "
+            "the engine or was already destroyed");
+}
+
+Position Engine::GetCameraPosition() const {
+    render_.GetCameraPosition();
+}
+
+void Engine::SetCameraOn(const GameObject *object) {
+    render_.SetCameraOn(object);
+}
+
+void Engine::RenderAll() const {
+    render_.RenderAll();
+}
+
+CollisionSystem::CollisionsInfoArray Engine::GetAllCollisions(const GameObject *game_object) const {
+    return collision_system_.GetAllCollisions(game_object);
+}
+
+CollisionSystem::PossiblePosition Engine::CheckCollision(const GameObject *first, const GameObject *second) const {
+    return collision_system_.CheckCollision(first, second);
 }
 
 Engine::~Engine() {
@@ -39,9 +46,16 @@ Engine::~Engine() {
     }
 }
 
-Engine &Engine::getInstance() {
-    static Engine instance;
-    return instance;
+Engine::Engine(): collision_system_(CollisionSystem::GetInstance()), input_system_(InputSystem::GetInstance()), delay_queue_(DelayQueue::GetInstance()), ticks_count_(0) {}
+
+void Engine::ReadNewInput() {
+    input_system_.ReadNewInput();
 }
 
-Engine::Engine() = default;
+InputSystem::InputTokensArray Engine::GetInput() const {
+    return input_system_.GetInput();
+}
+
+void Engine::TryExecuteDelayedCallbacks() {
+    delay_queue_.TryExecute(std::chrono::steady_clock::now(), ticks_count_);
+}
