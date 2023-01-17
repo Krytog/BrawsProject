@@ -51,8 +51,12 @@ public:
     };
 
     Position GetCameraPosition() const {
-        camera_.GetPosition();
+        return camera_.GetPosition();
     };
+
+    sf::Window* GetWindowPointer() {
+        return &window_;
+    }
 
 private:
     std::unordered_map<const GameObject *, const VisibleObject *> visible_objects_;
@@ -98,3 +102,7 @@ Position Render::GetCameraPosition() const {
 }
 
 Render::~Render() = default;
+
+sf::Window *Render::GetWindowPointer() const {
+    return impl_->GetWindowPointer();
+}

@@ -21,7 +21,7 @@ void Engine::Destroy(GameObject *object_ptr) {
 }
 
 Position Engine::GetCameraPosition() const {
-    render_.GetCameraPosition();
+    return render_.GetCameraPosition();
 }
 
 void Engine::SetCameraOn(const GameObject *object) {
@@ -47,14 +47,21 @@ Engine::~Engine() {
 
 }
 
-Engine::Engine(): collision_system_(CollisionSystem::GetInstance()), input_system_(InputSystem::GetInstance()), delay_queue_(DelayQueue::GetInstance()), ticks_count_(0) {}
+Engine::Engine(): collision_system_(CollisionSystem::GetInstance()), render_(Render()), input_system_(InputSystem::GetInstance(*render_.GetWindowPointer())), delay_queue_(DelayQueue::GetInstance()), ticks_count_(0) {}
 
 void Engine::ReadNewInput() {
     input_system_.ReadNewInput();
 }
 
 InputSystem::InputTokensArray Engine::GetInput() const {
-    return input_system_.GetInput();
+    auto raw_input = input_system_.GetInput();
+    auto mouse_token_variant = *(raw_input.begin());
+    auto mouse_token = std::get<InputSystem::MouseToken>(mouse_token_variant);  //Make sure that MouseToken is the first token
+    auto window_size = render_.GetWindowPointer()->getSize();
+    Vector2D difference = Vector2D(static_cast<double>(window_size.x) / 2, static_cast<double>(window_size.y) / 2) - mouse_token.position.GetCoordinatesAsVector2D();
+    Position global_mouse_pos(render_.GetCameraPosition().GetCoordinatesAsVector2D() - difference);
+    *(raw_input.begin()) = InputSystem::MouseToken{mouse_token.key, global_mouse_pos};
+    return raw_input;
 }
 
 void Engine::TryExecuteDelayedCallbacks() {

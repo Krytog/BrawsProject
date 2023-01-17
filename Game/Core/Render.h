@@ -22,6 +22,10 @@ public:
 
     ~Render();
 
+
+    //temporary, need to get mouse position over the window
+    sf::Window* GetWindowPointer() const;
+
 private:
     std::unique_ptr<RenderImplementation> impl_;
 };
