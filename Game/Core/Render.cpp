@@ -14,6 +14,7 @@ class RenderImplementation {
 public:
     RenderImplementation()
         : window_(sf::RenderWindow(sf::VideoMode(kWindowWidth, kWindowHeight), kWindowTitle)) {
+        window_.setMouseCursorVisible(false);
     }
 
     void AddToRender(const GameObject *object_ptr, const VisibleObject *vis_obj_ptr) {
