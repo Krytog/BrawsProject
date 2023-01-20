@@ -9,7 +9,7 @@ public:
     Vector2D(const Vector2D& other);
 
     std::pair<double, double> GetCoordinates() const;
-    void SetCoordinates(double x, double y);        
+    void SetCoordinates(double x, double y);
 
     void Normalize();
 
@@ -17,7 +17,7 @@ public:
 
     Vector2D& operator=(const Vector2D& other);
 
-    double operator*(const Vector2D& other) const; //Scalar multiplication
+    double operator*(const Vector2D& other) const;  // Scalar multiplication
     Vector2D operator*(double coefficient) const;
     Vector2D& operator*=(double coefficient);
 
