@@ -11,6 +11,7 @@ public:
     virtual void Translate(const Vector2D &vector2D) = 0;
 
     virtual void RenderIt() = 0;
+
 protected:
     Position top_left_;
     double width_;
@@ -19,7 +20,7 @@ protected:
 
 class StaticSpriteImpl;
 
-class StaticSprite: public VisibleObject {
+class StaticSprite : public VisibleObject {
 public:
     StaticSprite();
 
@@ -27,13 +28,14 @@ public:
     void Translate(const Vector2D &vector2D) override;
 
     void RenderIt() override;
+
 private:
     std::unique_ptr<StaticSpriteImpl> impl_;
 };
 
 class AnimatedSpriteImpl;
 
-class AnimatedSprite: public VisibleObject {
+class AnimatedSprite : public VisibleObject {
 public:
     AnimatedSprite();
 
@@ -41,6 +43,7 @@ public:
     void Translate(const Vector2D &vector2D) override;
 
     void RenderIt() override;
+
 private:
     std::unique_ptr<AnimatedSpriteImpl> impl_;
 };

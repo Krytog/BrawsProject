@@ -8,7 +8,7 @@ InputSystem &InputSystem::GetInstance() {
 }
 
 void InputSystem::ReadNewInput() {
-    //implementation defined;
+    // implementation defined;
 }
 
 InputSystem::InputTokensArray InputSystem::GetInput() const {

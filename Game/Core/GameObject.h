@@ -10,7 +10,8 @@
 class GameObject {
 public:
     GameObject();
-    GameObject(std::unique_ptr<Position> position, std::unique_ptr<Collider> collider, std::unique_ptr<VisibleObject> visible_object, const std::string_view& tag);
+    GameObject(std::unique_ptr<Position> position, std::unique_ptr<Collider> collider,
+               std::unique_ptr<VisibleObject> visible_object, const std::string_view& tag);
 
     virtual void UpdatePosition(const Position& position);
     virtual void Translate(const Vector2D& vector2D);

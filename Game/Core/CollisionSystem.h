@@ -12,7 +12,8 @@ public:
 
     struct CollisionInfo {
         CollisionInfo() = default;
-        CollisionInfo(const GameObject* game_object_, const std::string_view tag_, const Position& position_);
+        CollisionInfo(const GameObject* game_object_, const std::string_view tag_,
+                      const Position& position_);
 
         const GameObject* game_object;
         const std::string_view tag;

@@ -1,6 +1,6 @@
 #include "Engine.h"
 
-Engine& Engine::GetInstance() {
+Engine &Engine::GetInstance() {
     static Engine instance;
     return instance;
 }
@@ -16,8 +16,8 @@ void Engine::Destroy(GameObject *object_ptr) {
     }
 
     throw std::runtime_error(
-            "The the pointed object was not created using "
-            "the engine or was already destroyed");
+        "The the pointed object was not created using "
+        "the engine or was already destroyed");
 }
 
 Position Engine::GetCameraPosition() const {
@@ -36,7 +36,8 @@ CollisionSystem::CollisionsInfoArray Engine::GetAllCollisions(const GameObject *
     return collision_system_.GetAllCollisions(game_object);
 }
 
-CollisionSystem::PossiblePosition Engine::CheckCollision(const GameObject *first, const GameObject *second) const {
+CollisionSystem::PossiblePosition Engine::CheckCollision(const GameObject *first,
+                                                         const GameObject *second) const {
     return collision_system_.CheckCollision(first, second);
 }
 
@@ -46,7 +47,12 @@ Engine::~Engine() {
     }
 }
 
-Engine::Engine(): collision_system_(CollisionSystem::GetInstance()), input_system_(InputSystem::GetInstance()), delay_queue_(DelayQueue::GetInstance()), ticks_count_(0) {}
+Engine::Engine()
+    : collision_system_(CollisionSystem::GetInstance()),
+      input_system_(InputSystem::GetInstance()),
+      delay_queue_(DelayQueue::GetInstance()),
+      ticks_count_(0) {
+}
 
 void Engine::ReadNewInput() {
     input_system_.ReadNewInput();
