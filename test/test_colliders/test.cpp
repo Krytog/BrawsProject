@@ -230,13 +230,13 @@ TEST_F(StressTest, CircleColliders) {
 }
 
 TEST_F(StressTest, CircleAndRectangleColliders) {
-    CircleCollider cc1(Position(), 6.679813579);
-    RectangleCollider rc2(Position(), 11.4819471291, 12.4904819444);
+    CircleCollider cc(Position(), 6.679813579);
+    RectangleCollider rc(Position(), 11.4819471291, 12.4904819444);
 
     for (size_t i = 0; i < kIterations; ++i) {
-        cc1.UpdatePosition(Position(RandDouble(), RandDouble()));
-        rc2.UpdatePosition(Position(RandDouble(), RandDouble()));
-        CheckCollisionProperties(&cc1, &rc2);
+        cc.UpdatePosition(Position(RandDouble(), RandDouble()));
+        rc.UpdatePosition(Position(RandDouble(), RandDouble()));
+        CheckCollisionProperties(&cc, &rc);
         fails += ::testing::Test::HasFailure();
     }
 }

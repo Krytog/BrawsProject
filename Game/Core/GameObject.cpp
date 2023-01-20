@@ -7,14 +7,22 @@ GameObject::GameObject(std::unique_ptr<Position> position, std::unique_ptr<Colli
 
 void GameObject::Translate(const Vector2D &vector2D) {
     position_->Translate(vector2D);
-    collider_->Translate(vector2D);
-    visible_object_->Translate(vector2D);
+    if (collider_) {
+        collider_->Translate(vector2D);
+    }
+    if (visible_object_) {
+        visible_object_->Translate(vector2D);
+    }
 }
 
 void GameObject::UpdatePosition(const Position &position) {
-    position_->operator=(position);
-    collider_->UpdatePosition(position);
-    visible_object_->UpdatePosition(position);
+    *position_ = position;
+    if (collider_) {
+        collider_->UpdatePosition(position);
+    }
+    if (visible_object_) {
+        visible_object_->UpdatePosition(position);
+    }
 }
 
 Position GameObject::GetPosition() const {

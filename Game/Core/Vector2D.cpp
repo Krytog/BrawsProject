@@ -2,8 +2,9 @@
 
 #include <cmath>
 
-Vector2D::Vector2D() : x_(0), y_(0) {
-}
+#define PRECISION 1e-9
+
+Vector2D::Vector2D() : x_(0), y_(0) {}
 
 Vector2D::Vector2D(double x, double y) : x_(x), y_(y) {
 }
@@ -17,7 +18,7 @@ void Vector2D::SetCoordinates(double x, double y) {
 }
 
 bool Vector2D::operator==(const Vector2D &other) {
-    return (x_ == other.x_ && y_ == other.y_);
+    return (std::abs(x_ - other.x_) < PRECISION && std::abs(y_ - other.y_) < PRECISION);
 }
 
 std::pair<double, double> Vector2D::GetCoordinates() const {
@@ -79,6 +80,9 @@ double Vector2D::Length() const {
 
 void Vector2D::Normalize() {
     auto length = Length();
+    if (length < PRECISION) {
+        return;
+    }
     x_ /= length;
     y_ /= length;
 }
