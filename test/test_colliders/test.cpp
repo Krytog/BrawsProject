@@ -61,6 +61,11 @@ TEST(Colliders, ConstructorsAndBasicMethods) {
     EXPECT_TRUE(circle_collider.IsTrigger());
     EXPECT_FALSE(rectangle_collider.IsTrigger());
 
+    ASSERT_TRUE(rectangle_collider.CheckTrigger(&circle_collider));
+    ASSERT_FALSE(rectangle_collider.CheckCollision(&circle_collider));
+    ASSERT_FALSE(circle_collider.CheckTrigger(&rectangle_collider));
+    ASSERT_TRUE(circle_collider.CheckCollision(&rectangle_collider));
+
     ASSERT_NO_THROW(circle_collider.UpdatePosition(Position(2, 4)));
     ASSERT_NO_THROW(rectangle_collider.Translate(Vector2D(4.5, 3.2)));
 
@@ -75,8 +80,7 @@ TEST(Colliders, ConstructorsAndBasicMethods) {
 
 TEST(Intersections, CircleColliders) {
     CircleCollider cc1(Position(100, 100), 5);
-    CircleCollider cc2(Position(5, 5), 2.5, true);
-    ASSERT_TRUE(cc2.IsTrigger());
+    CircleCollider cc2(Position(5, 5), 2.5);
     CheckCollisionProperties(&cc1, &cc2);
 
     cc1.UpdatePosition(Position(11, 7));
@@ -93,16 +97,16 @@ TEST(Intersections, CircleColliders) {
 
     cc1.UpdatePosition(Position(7.5, 5));
     CheckCollisionProperties(&cc1, &cc2);
-    ASSERT_TRUE(cc1.CheckTrigger(&cc2));
+    ASSERT_TRUE(cc1.CheckCollision(&cc2));
 
     cc1.UpdatePosition(Position(-2, 5));
     CheckCollisionProperties(&cc1, &cc2);
-    ASSERT_TRUE(cc1.CheckTrigger(&cc2));
-    ASSERT_FALSE(cc1.CheckCollision(&cc2));
+    ASSERT_TRUE(cc1.CheckCollision(&cc2));
+    ASSERT_FALSE(cc1.CheckTrigger(&cc2));
 
     cc1.UpdatePosition(Position(-2.5555, 5));
     CheckCollisionProperties(&cc1, &cc2);
-    ASSERT_FALSE(cc1.CheckTrigger(&cc2));
+    ASSERT_FALSE(cc1.CheckCollision(&cc2));
 }
 
 TEST(Intersections, RectangleColliders) {
@@ -140,7 +144,7 @@ TEST(Intersections, RectangleColliders) {
 
 TEST(Intersections, RectangleAndCircleColliders) {
     CircleCollider big_cc(Position(5, 2), 5);
-    CircleCollider small_cc(Position(6, 5), 1.5, true);
+    CircleCollider small_cc(Position(6, 5), 1.5);
     RectangleCollider rc(Position(5, 5), 8, 4);
     CheckCollisionProperties(&big_cc, &rc);
     CheckCollisionProperties(&small_cc, &rc);
@@ -175,11 +179,11 @@ TEST(Intersections, RectangleAndCircleColliders) {
     /* Small Circle Tests */
     small_cc.UpdatePosition(Position(9, 5));
     CheckCollisionProperties(&small_cc, &rc);
-    ASSERT_TRUE(rc.CheckTrigger(&small_cc));
+    ASSERT_TRUE(rc.CheckCollision(&small_cc));
 
     small_cc.UpdatePosition(Position(7, 8));
     CheckCollisionProperties(&small_cc, &rc);
-    ASSERT_TRUE(rc.CheckTrigger(&small_cc));
+    ASSERT_TRUE(rc.CheckCollision(&small_cc));
 
     small_cc.UpdatePosition(Position(3, 8.5));
     CheckCollisionProperties(&small_cc, &rc);  // Intersection by single point (3, 7)
@@ -189,20 +193,19 @@ TEST(Intersections, RectangleAndCircleColliders) {
 
     small_cc.UpdatePosition(Position(2, 6));
     CheckCollisionProperties(&small_cc, &rc);
-    ASSERT_TRUE(rc.CheckTrigger(&small_cc));
+    ASSERT_TRUE(rc.CheckCollision(&small_cc));
 
     small_cc.UpdatePosition(Position(7, 1));
     CheckCollisionProperties(&small_cc, &rc);
-    ASSERT_FALSE(rc.CheckTrigger(&small_cc));
+    ASSERT_FALSE(rc.CheckCollision(&small_cc));
 
     small_cc.UpdatePosition(Position(10, 2));
     CheckCollisionProperties(&small_cc, &rc);
-    ASSERT_TRUE(rc.CheckTrigger(&small_cc));
+    ASSERT_TRUE(rc.CheckCollision(&small_cc));
 
     small_cc.UpdatePosition(Position(4, 4.788));
     CheckCollisionProperties(&small_cc, &rc);  // Full cover
-    ASSERT_TRUE(rc.CheckTrigger(&small_cc));
-
+    ASSERT_TRUE(rc.CheckCollision(&small_cc));
 }
 
 TEST_F(StressTest, RectangleColliders) {
