@@ -163,10 +163,10 @@ TEST(Intersections, RectangleAndCircleColliders) {
     ASSERT_TRUE(rc.CheckCollision(&big_cc));
 
     big_cc.UpdatePosition(Position(-2, -1));
-    CheckCollisionProperties(&big_cc, &rc);  // Intersection by single point (3, 1)
+    CheckCollisionProperties(&big_cc, &rc);  // Intersection by single point (1, 3)
     ASSERT_TRUE(big_cc.GetIntersectionPosition(&rc) != std::nullopt);
-    EXPECT_DOUBLE_EQ(3, big_cc.GetIntersectionPosition(&rc).value().GetCoordinates().first);
-    EXPECT_DOUBLE_EQ(1, big_cc.GetIntersectionPosition(&rc).value().GetCoordinates().second);
+    EXPECT_DOUBLE_EQ(1, big_cc.GetIntersectionPosition(&rc).value().GetCoordinates().first);
+    EXPECT_DOUBLE_EQ(3, big_cc.GetIntersectionPosition(&rc).value().GetCoordinates().second);
 
     big_cc.UpdatePosition(Position(-5, -6));
     CheckCollisionProperties(&big_cc, &rc);
