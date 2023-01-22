@@ -110,8 +110,8 @@ TEST(Intersections, CircleColliders) {
 }
 
 TEST(Intersections, RectangleColliders) {
-    RectangleCollider rc1(Position(4, 4), 4, 4);
-    RectangleCollider rc2(Position(3.5, 3.5), 1, 1);
+    RectangleCollider rc1(Position(3.5, 3.5), 1, 1);
+    RectangleCollider rc2(Position(4, 4), 4, 4);
     CheckCollisionProperties(&rc1, &rc2);
 
     rc1.UpdatePosition(Position(10, 10));
