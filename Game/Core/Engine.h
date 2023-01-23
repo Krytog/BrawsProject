@@ -65,7 +65,7 @@ public:
 
     template<typename... Args, typename... Params>
     void Invoke(const uint64_t ticks_count, void (*func)(Args...), Params... args) {
-        delay_queue_.PushTicks(ticks_count, func, std::forward<Params>(args)...);
+        delay_queue_.PushTicks(ticks_count_ + ticks_count, func, std::forward<Params>(args)...);
     }
 
     template<typename F, typename... Args, typename... Params>
@@ -77,7 +77,7 @@ public:
 
     template<typename F, typename... Args, typename... Params>
     void Invoke(const uint64_t ticks_count, F *pointer, void (F::*func)(Args...), Params... args) {
-        delay_queue_.PushTicks(ticks_count, pointer, func, std::forward<Params>(args)...);
+        delay_queue_.PushTicks(ticks_count_ + ticks_count, pointer, func, std::forward<Params>(args)...);
     }
 
     template<typename F, typename... Args, typename... Params>
@@ -90,7 +90,7 @@ public:
     template<typename F, typename... Args, typename... Params>
     void Invoke(const uint64_t ticks_count, const F *pointer, void (F::*func)(Args...) const,
                 Params... args) {
-        delay_queue_.PushTicks(ticks_count, pointer, func, std::forward<Params>(args)...);
+        delay_queue_.PushTicks(ticks_count_ + ticks_count, pointer, func, std::forward<Params>(args)...);
     }
 
     // temporary public, should be private in the future as it will be called in Update method of
