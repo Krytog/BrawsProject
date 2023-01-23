@@ -61,7 +61,7 @@ public:
     }
     template <typename... Args>
     void Invoke(const uint64_t ticks_count, void (*func)(Args...), Args... args) {
-        delay_queue_.PushTicks(ticks_count, func, args...);
+        delay_queue_.PushTicks(ticks_count_ + ticks_count, func, args...);
     }
     template <typename F, typename... Args>
     void Invoke(const std::chrono::milliseconds &milliseconds, F *pointer, void (F::*func)(Args...),
@@ -71,7 +71,7 @@ public:
     }
     template <typename F, typename... Args>
     void Invoke(const uint64_t ticks_count, F *pointer, void (F::*func)(Args...), Args... args) {
-        delay_queue_.PushTicks(ticks_count, pointer, func, args...);
+        delay_queue_.PushTicks(ticks_count_ + ticks_count, pointer, func, args...);
     }
     template <typename F, typename... Args>
     void Invoke(const std::chrono::milliseconds &milliseconds, const F *pointer,
@@ -82,7 +82,7 @@ public:
     template <typename F, typename... Args>
     void Invoke(const uint64_t ticks_count, const F *pointer, void (F::*func)(Args...) const,
                 Args... args) {
-        delay_queue_.PushTicks(ticks_count, pointer, func, args...);
+        delay_queue_.PushTicks(ticks_count_ + ticks_count, pointer, func, args...);
     }
 
     // temporary public, should be private in the future as it will be called in Update method of
