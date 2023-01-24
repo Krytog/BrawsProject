@@ -6,11 +6,11 @@ public:
         // magic.do()
     }
 
-    void UpdatePosition(const Position &position) override {
+    void UpdatePosition(const Position& position) override {
         top_left_ = position;
     }
 
-    void Translate(const Vector2D &vector2D) override {
+    void Translate(const Vector2D& vector2D) override {
         top_left_.Translate(vector2D);
     }
 
@@ -28,11 +28,11 @@ public:
         // magic.do()
     }
 
-    void UpdatePosition(const Position &position) override {
+    void UpdatePosition(const Position& position) override {
         top_left_ = position;
     }
 
-    void Translate(const Vector2D &vector2D) override {
+    void Translate(const Vector2D& vector2D) override {
         top_left_.Translate(vector2D);
     }
 

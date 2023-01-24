@@ -2,7 +2,7 @@
 
 InputSystem::InputSystem() = default;
 
-InputSystem &InputSystem::GetInstance() {
+InputSystem& InputSystem::GetInstance() {
     static InputSystem instance;
     return instance;
 }

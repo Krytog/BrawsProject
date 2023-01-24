@@ -7,21 +7,21 @@
 const double PRECISION = 1e-9;
 
 template <typename F, typename S>
-bool CheckImplementation(const F *first, const S *second);
+bool CheckImplementation(const F* first, const S* second);
 
 template <>
-bool CheckImplementation<CircleCollider, CircleCollider>(const CircleCollider *first,
-                                                         const CircleCollider *second) {
+bool CheckImplementation<CircleCollider, CircleCollider>(const CircleCollider* first,
+                                                         const CircleCollider* second) {
     const double radius_sum = first->radius_ + second->radius_;
     const Vector2D distance_vector =
-            first->position_.GetCoordinatesAsVector2D() - second->position_.GetCoordinatesAsVector2D();
+        first->position_.GetCoordinatesAsVector2D() - second->position_.GetCoordinatesAsVector2D();
     const double distance = distance_vector.Length();
     return distance <= radius_sum;
 }
 
 template <>
-bool CheckImplementation<CircleCollider, RectangleCollider>(const CircleCollider *circle,
-                                                            const RectangleCollider *rectangle) {
+bool CheckImplementation<CircleCollider, RectangleCollider>(const CircleCollider* circle,
+                                                            const RectangleCollider* rectangle) {
 
     if (rectangle->IsInside(circle->position_)) {
         return true;
@@ -93,14 +93,14 @@ bool CheckImplementation<CircleCollider, RectangleCollider>(const CircleCollider
 }
 
 template <>
-bool CheckImplementation<RectangleCollider, CircleCollider>(const RectangleCollider *rectangle,
-                                                            const CircleCollider *circle) {
+bool CheckImplementation<RectangleCollider, CircleCollider>(const RectangleCollider* rectangle,
+                                                            const CircleCollider* circle) {
     return CheckImplementation<CircleCollider, RectangleCollider>(circle, rectangle);
 }
 
 template <>
-bool CheckImplementation<RectangleCollider, RectangleCollider>(
-        const RectangleCollider *first, const RectangleCollider *second) {
+bool CheckImplementation<RectangleCollider, RectangleCollider>(const RectangleCollider* first,
+                                                               const RectangleCollider* second) {
     const double x_distance = std::abs(first->position_.GetCoordinates().first -
                                        second->position_.GetCoordinates().first);
     const double y_distance = std::abs(first->position_.GetCoordinates().second -
@@ -110,57 +110,59 @@ bool CheckImplementation<RectangleCollider, RectangleCollider>(
 }
 
 template <typename T>
-bool CheckImplementationPrimary(const T *self, const Collider *other) {
-    if (const auto *ptr = dynamic_cast<const CircleCollider *>(other)) {
+bool CheckImplementationPrimary(const T* self, const Collider* other) {
+    if (const auto* ptr = dynamic_cast<const CircleCollider*>(other)) {
         return CheckImplementation<T, CircleCollider>(self, ptr);
     }
-    if (const auto *ptr = dynamic_cast<const RectangleCollider *>(other)) {
+    if (const auto* ptr = dynamic_cast<const RectangleCollider*>(other)) {
         return CheckImplementation<T, RectangleCollider>(self, ptr);
     }
     throw std::runtime_error("Colliders dynamic cast failed!");
     return false;
 }
 
-void CircleCollider::UpdatePosition(const Position &position) {
+void CircleCollider::UpdatePosition(const Position& position) {
     position_ = position;
 }
 
-void CircleCollider::Translate(const Vector2D &vector2D) {
+void CircleCollider::Translate(const Vector2D& vector2D) {
     position_.Translate(vector2D);
 }
 
-bool CircleCollider::IsInside(const Position &position) const {
+bool CircleCollider::IsInside(const Position& position) const {
     auto coord = position.GetCoordinates();
     auto this_coord = position_.GetCoordinates();
 
-    return radius_ * radius_ - ((coord.first - this_coord.first) * (coord.first - this_coord.first) +
-                                (coord.second - this_coord.second) * (coord.second - this_coord.second)) >= -PRECISION;
+    return radius_ * radius_ -
+               ((coord.first - this_coord.first) * (coord.first - this_coord.first) +
+                (coord.second - this_coord.second) * (coord.second - this_coord.second)) >=
+           -PRECISION;
 }
 
-CircleCollider::CircleCollider(const Position &position, double radius, bool is_trigger)
-        : position_(position), radius_(radius) {
+CircleCollider::CircleCollider(const Position& position, double radius, bool is_trigger)
+    : position_(position), radius_(radius) {
     is_trigger_ = is_trigger;
 }
 
-bool CircleCollider::Check(const Collider *other) const {
+bool CircleCollider::Check(const Collider* other) const {
     return CheckImplementationPrimary(this, other);
 }
 
-RectangleCollider::RectangleCollider(const Position &position, double width, double height,
+RectangleCollider::RectangleCollider(const Position& position, double width, double height,
                                      bool is_trigger)
-        : position_(position), width_(width), height_(height) {
+    : position_(position), width_(width), height_(height) {
     is_trigger_ = is_trigger;
 }
 
-void RectangleCollider::UpdatePosition(const Position &position) {
+void RectangleCollider::UpdatePosition(const Position& position) {
     position_ = position;
 }
 
-void RectangleCollider::Translate(const Vector2D &vector2D) {
+void RectangleCollider::Translate(const Vector2D& vector2D) {
     position_.Translate(vector2D);
 }
 
-bool RectangleCollider::IsInside(const Position &position) const {
+bool RectangleCollider::IsInside(const Position& position) const {
     auto coord = position.GetCoordinates();
     auto this_coord = position_.GetCoordinates();
 
@@ -168,19 +170,19 @@ bool RectangleCollider::IsInside(const Position &position) const {
            height_ / 2 - std::abs(this_coord.second - coord.second) >= -PRECISION;
 }
 
-bool RectangleCollider::Check(const Collider *other) const {
+bool RectangleCollider::Check(const Collider* other) const {
     return CheckImplementationPrimary(this, other);
 }
 
 template <typename F, typename S>
-std::optional<Position> IntersectionImplementation(const F *first, const S *second);
+std::optional<Position> IntersectionImplementation(const F* first, const S* second);
 
 template <>
 std::optional<Position> IntersectionImplementation<CircleCollider, CircleCollider>(
-        const CircleCollider *first, const CircleCollider *second) {
+    const CircleCollider* first, const CircleCollider* second) {
     const double radius_sum = first->radius_ + second->radius_;
     const Vector2D distance_vector =
-            first->position_.GetCoordinatesAsVector2D() - second->position_.GetCoordinatesAsVector2D();
+        first->position_.GetCoordinatesAsVector2D() - second->position_.GetCoordinatesAsVector2D();
     const double distance = distance_vector.Length();
     if (distance > radius_sum) {
         return std::nullopt;
@@ -205,7 +207,7 @@ std::optional<Position> IntersectionImplementation<CircleCollider, CircleCollide
 
 template <>
 std::optional<Position> IntersectionImplementation<CircleCollider, RectangleCollider>(
-        const CircleCollider *circle, const RectangleCollider *rectangle) {
+    const CircleCollider* circle, const RectangleCollider* rectangle) {
 
     if (rectangle->IsInside(circle->position_)) {
         return circle->position_;
@@ -278,13 +280,13 @@ std::optional<Position> IntersectionImplementation<CircleCollider, RectangleColl
 
 template <>
 std::optional<Position> IntersectionImplementation<RectangleCollider, CircleCollider>(
-        const RectangleCollider *rectangle, const CircleCollider *circle) {
+    const RectangleCollider* rectangle, const CircleCollider* circle) {
     return IntersectionImplementation<CircleCollider, RectangleCollider>(circle, rectangle);
 }
 
 template <>
 std::optional<Position> IntersectionImplementation<RectangleCollider, RectangleCollider>(
-        const RectangleCollider *first, const RectangleCollider *second) {
+    const RectangleCollider* first, const RectangleCollider* second) {
     const double x_distance = std::abs(first->position_.GetCoordinates().first -
                                        second->position_.GetCoordinates().first);
     const double y_distance = std::abs(first->position_.GetCoordinates().second -
@@ -316,12 +318,13 @@ std::optional<Position> IntersectionImplementation<RectangleCollider, RectangleC
     second_rect[3] = Vector2D(second_center.GetCoordinates().first + second->width_ / 2,
                               second_center.GetCoordinates().second - second->height_ / 2);
 
-    auto checker = [](const Vector2D &vertex, const RectangleCollider *ptr) {
+    auto checker = [](const Vector2D& vertex, const RectangleCollider* ptr) {
         const double width = ptr->width_;
         const double height = ptr->height_;
-        const double x_dist = std::abs(vertex.GetCoordinates().first - ptr->position_.GetCoordinates().first);
+        const double x_dist =
+            std::abs(vertex.GetCoordinates().first - ptr->position_.GetCoordinates().first);
         const double y_dist =
-                std::abs(vertex.GetCoordinates().second - ptr->position_.GetCoordinates().second);
+            std::abs(vertex.GetCoordinates().second - ptr->position_.GetCoordinates().second);
         return x_dist <= width / 2 && y_dist <= height / 2;
     };
 
@@ -360,20 +363,20 @@ std::optional<Position> IntersectionImplementation<RectangleCollider, RectangleC
 }
 
 template <typename T>
-std::optional<Position> IntersectionImplementationPrimary(const T *self, const Collider *other) {
-    if (const auto *ptr = dynamic_cast<const CircleCollider *>(other)) {
+std::optional<Position> IntersectionImplementationPrimary(const T* self, const Collider* other) {
+    if (const auto* ptr = dynamic_cast<const CircleCollider*>(other)) {
         return IntersectionImplementation<T, CircleCollider>(self, ptr);
     }
-    if (const auto *ptr = dynamic_cast<const RectangleCollider *>(other)) {
+    if (const auto* ptr = dynamic_cast<const RectangleCollider*>(other)) {
         return IntersectionImplementation<T, RectangleCollider>(self, ptr);
     }
     throw std::runtime_error("Colliders dynamic cast failed!");
 }
 
-std::optional<Position> CircleCollider::GetIntersectionPosition(const Collider *other) const {
+std::optional<Position> CircleCollider::GetIntersectionPosition(const Collider* other) const {
     return IntersectionImplementationPrimary(this, other);
 }
 
-std::optional<Position> RectangleCollider::GetIntersectionPosition(const Collider *other) const {
+std::optional<Position> RectangleCollider::GetIntersectionPosition(const Collider* other) const {
     return IntersectionImplementationPrimary(this, other);
 }

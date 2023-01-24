@@ -7,8 +7,8 @@ class VisibleObjectImpl {
 public:
     VisibleObjectImpl() = default;
 
-    virtual void UpdatePosition(const Position &position) = 0;
-    virtual void Translate(const Vector2D &vector2D) = 0;
+    virtual void UpdatePosition(const Position& position) = 0;
+    virtual void Translate(const Vector2D& vector2D) = 0;
 
     virtual void RenderIt() = 0;
 
@@ -24,8 +24,8 @@ class StaticSprite : public VisibleObject {
 public:
     StaticSprite();
 
-    void UpdatePosition(const Position &position) override;
-    void Translate(const Vector2D &vector2D) override;
+    void UpdatePosition(const Position& position) override;
+    void Translate(const Vector2D& vector2D) override;
 
     void RenderIt() override;
 
@@ -39,8 +39,8 @@ class AnimatedSprite : public VisibleObject {
 public:
     AnimatedSprite();
 
-    void UpdatePosition(const Position &position) override;
-    void Translate(const Vector2D &vector2D) override;
+    void UpdatePosition(const Position& position) override;
+    void Translate(const Vector2D& vector2D) override;
 
     void RenderIt() override;
 

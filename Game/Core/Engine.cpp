@@ -1,11 +1,11 @@
 #include "Engine.h"
 
-Engine &Engine::GetInstance() {
+Engine& Engine::GetInstance() {
     static Engine instance;
     return instance;
 }
 
-void Engine::Destroy(GameObject *object_ptr) {
+void Engine::Destroy(GameObject* object_ptr) {
     auto it = std::find(objects_buffer_.begin(), objects_buffer_.end(), object_ptr);
     if (it != objects_buffer_.end()) {
         objects_buffer_.erase(it);
@@ -24,7 +24,7 @@ Position Engine::GetCameraPosition() const {
     render_.GetCameraPosition();
 }
 
-void Engine::SetCameraOn(const GameObject *object) {
+void Engine::SetCameraOn(const GameObject* object) {
     render_.SetCameraOn(object);
 }
 
@@ -32,17 +32,17 @@ void Engine::RenderAll() const {
     render_.RenderAll();
 }
 
-CollisionSystem::CollisionsInfoArray Engine::GetAllCollisions(const GameObject *game_object) const {
+CollisionSystem::CollisionsInfoArray Engine::GetAllCollisions(const GameObject* game_object) const {
     return collision_system_.GetAllCollisions(game_object);
 }
 
-CollisionSystem::PossiblePosition Engine::CheckCollision(const GameObject *first,
-                                                         const GameObject *second) const {
+CollisionSystem::PossiblePosition Engine::CheckCollision(const GameObject* first,
+                                                         const GameObject* second) const {
     return collision_system_.CheckCollision(first, second);
 }
 
 Engine::~Engine() {
-    for (const auto &object_ptr : objects_buffer_) {
+    for (const auto& object_ptr : objects_buffer_) {
         delete object_ptr;
     }
 }
