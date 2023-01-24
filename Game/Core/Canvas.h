@@ -13,45 +13,53 @@
 const int32_t kWindowWidth = 1200;
 const int32_t kWindowHeight = 760;
 
-const int32_t kCanvasWidth = 2400;
-const int32_t kCanvasHeight = 1520;
-
 class Canvas {
 public:
+    // Designed for large images that we do not want to render/load into RAM often
+    class StaticImage {
+    public:
+        StaticImage() = default;
+        void LoadFromFile(std::string_view path_to_file);
+        const sf::Image &GetEntireImage() const;
+        std::pair<size_t, size_t> GetRealSize() const;
+
+    private:
+        sf::Image image_;
+    };
+
     class Image {
     public:
-        Image(const Position *pos, const double &width, const double &height);
+        Image(const Position *pos, const size_t &width, const size_t &height);
 
-        // Expensive operation, extra copying, but so far the only way
-        void Resize(uint32_t width, uint32_t height);
+        // Maybe usefull later
+        //        void Resize(size_t width, size_t height);
         void LoadFromFile(std::string_view path_to_file);
-        void Clear();
+        void LoadFromStaticImage(const StaticImage &static_image, const Position &orig_image_pos,
+                                 const Position &rectangle_left_up_corner,
+                                 const Position &rectangle_right_down_corner,
+                                 const size_t &orig_width, const size_t &orig_height);
 
         ~Image();
 
     private:
-        std::unique_ptr<sf::Image> image_;
-        const Position *pos_;  // Тот же Position, что и в Sprite
+        sf::Texture image_;
+        const Position *pos_;  // Same Position as Sprite
 
-        double width_;
-        double height_;
+        size_t width_;
+        size_t height_;
 
         friend class Canvas;
-
-        void ResizeImage(const sf::Image &originalImage, sf::Image &resizedImage);
     };
 
-    Canvas(const double &width, const double &height);
+    Canvas(sf::RenderWindow *window_ptr_);
 
-    void Draw(const Image *image);
+    void Draw(Image *image);
     void SetCenter(Position global_center);
-    bool OnCanvas(double x, double y);
-    void Clear();
 
     ~Canvas();
 
 private:
-    std::unique_ptr<sf::Image> canvas_;
-    Position global_center_;  // Глобальные координаты камеры
+    sf::RenderWindow *canvas_;
+    Position global_center_;  // Global camera's coordinates
     friend class RenderImplementation;
 };

@@ -2,6 +2,8 @@
 #include "Canvas.h"
 #include "Camera.h"
 #include <iostream>
+#include <unordered_set>
+#include <map>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -19,13 +21,16 @@ public:
 
     void AddToRender(const GameObject *object_ptr, const VisibleObject *vis_obj_ptr) {
         visible_objects_[object_ptr] = vis_obj_ptr;
+        render_levels_[vis_obj_ptr->GetRenderLevel()].insert(vis_obj_ptr);
     }
 
-    void RemoveFromRender(const GameObject *vis_object_ptr) {
-        if (!visible_objects_.contains(vis_object_ptr)) {
+    void RemoveFromRender(const GameObject *object_ptr) {
+        if (!visible_objects_.contains(object_ptr)) {
             throw std::runtime_error("Such GameObject didn't register as Visible");
         } else {
-            visible_objects_.erase(vis_object_ptr);
+            const VisibleObject* vis_obj_ptr = visible_objects_.at(object_ptr);
+            render_levels_[vis_obj_ptr->GetRenderLevel()].erase(vis_obj_ptr);
+            visible_objects_.erase(object_ptr);
         }
     }
 
@@ -34,16 +39,15 @@ public:
             exit(0);
         }
         sf::Event event;
-        Canvas canvas(kCanvasWidth, kCanvasHeight);
+        Canvas canvas(&window_);
         canvas.SetCenter(camera_.GetPosition());
 
-        AddAllToCanvas(&canvas);
         while (window_.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window_.close();
         }
         window_.clear();
-        DrawCanvasOnWindow(&canvas);
+        AddAllToCanvas(&canvas);
         window_.display();
     }
 
@@ -55,29 +59,22 @@ public:
         return camera_.GetPosition();
     };
 
-    sf::Window* GetWindowPointer() {
+    sf::Window *GetWindowPointer() {
         return &window_;
     }
 
 private:
     std::unordered_map<const GameObject *, const VisibleObject *> visible_objects_;
+    std::map<size_t, std::unordered_set<const VisibleObject*>> render_levels_;
     sf::RenderWindow window_;
     Camera camera_ = Camera::GetInstance();
 
     void AddAllToCanvas(Canvas *canvas) {
-        for (const auto &[obj_ptr, vis_obj_ptr] : visible_objects_) {
-            vis_obj_ptr->RenderIt(canvas);
+        for (const auto &[level, vis_objects]: render_levels_) {
+            for (const auto &vis_obj: vis_objects) {
+                vis_obj->RenderIt(canvas);
+            }
         }
-    }
-
-    void DrawCanvasOnWindow(Canvas *canvas) {
-        sf::Texture canvas_texture;
-        canvas_texture.loadFromImage(*canvas->canvas_);
-        sf::Sprite drawable_canvas;
-        drawable_canvas.setTexture(canvas_texture);
-        drawable_canvas.setPosition(-((kCanvasWidth - kWindowWidth) / 2),
-                                    -((kCanvasHeight - kWindowHeight) / 2));
-        window_.draw(drawable_canvas);
     }
 };
 

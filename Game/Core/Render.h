@@ -7,6 +7,12 @@
 #include <memory>
 #include <string_view>
 
+enum LEVELS {
+    BACKGROUND_LEVEL = 0,
+    FIRST_USER_LEVEL = 1,
+    SECOND_USER_LEVEL = 2
+};
+
 class RenderImplementation;
 
 class Render {
@@ -22,9 +28,8 @@ public:
 
     ~Render();
 
-
-    //temporary, need to get mouse position over the window
-    sf::Window* GetWindowPointer() const;
+    // temporary, need to get mouse position over the window
+    sf::Window *GetWindowPointer() const;
 
 private:
     std::unique_ptr<RenderImplementation> impl_;

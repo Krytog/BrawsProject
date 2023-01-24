@@ -11,6 +11,7 @@ public:
     virtual void Translate(const Vector2D &vector2D) = 0;
     
     virtual void RenderIt(Canvas* canvas) const = 0;
+    virtual size_t GetRenderLevel() const = 0;
 
     virtual ~VisibleObject() = default;
 };
