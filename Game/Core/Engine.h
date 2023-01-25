@@ -48,10 +48,17 @@ public:
     // Engine;
     void RenderAll() const;
 
-    CollisionSystem::PossiblePosition CheckCollision(const GameObject* first,
-                                                     const GameObject* second) const;
+    CollisionSystem::PossiblePosition CheckPhysicalCollision(const GameObject* first,
+                                            const GameObject* second) const;
+    CollisionSystem::PossiblePosition CheckTriggerCollision(const GameObject* first, const GameObject* second) const;
 
     CollisionSystem::CollisionsInfoArray GetAllCollisions(const GameObject* game_object) const;
+    CollisionSystem::CollisionsInfoArray GetPhysicalCollisions(const GameObject* game_object) const;
+    CollisionSystem::CollisionsInfoArray GetTriggerCollisions(const GameObject* game_object) const;
+    CollisionSystem::CollisionsInfoArray GetAllCollisionsWithTag(const GameObject* game_object,
+                                                const std::string_view string) const;
+    template <typename T>
+    CollisionSystem::CollisionsInfoArray GetAllCollisionsWithType(const GameObject* game_object) const;
 
     void ReadNewInput();
 
