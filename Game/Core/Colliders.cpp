@@ -20,27 +20,27 @@ bool CheckImplementation<CircleCollider, CircleCollider>(const CircleCollider *f
 template <>
 bool CheckImplementation<CircleCollider, RectangleCollider>(const CircleCollider *circle,
                                                             const RectangleCollider *rectangle) {
-    const Vector2D centers_difference = rectangle->position_.GetCoordinatesAsVector2D() -
-                                        circle->position_.GetCoordinatesAsVector2D();
+    const Vector2D centers_difference =
+        rectangle->position_.GetCoordinatesAsVector2D() - circle->position_.GetCoordinatesAsVector2D();
     const double centers_distance = centers_difference.Length();
     if (centers_distance <= circle->radius_) {
         return true;  // it covers the case when the rectangle is in the circle
     }
-    const double x_distance = std::abs(rectangle->position_.GetCoordinates().first -
-                                       circle->position_.GetCoordinates().first);
-    const double y_distance = std::abs(rectangle->position_.GetCoordinates().second -
-                                       circle->position_.GetCoordinates().second);
+    const double x_distance =
+        std::abs(rectangle->position_.GetCoordinates().first - circle->position_.GetCoordinates().first);
+    const double y_distance =
+        std::abs(rectangle->position_.GetCoordinates().second - circle->position_.GetCoordinates().second);
     if (x_distance <= rectangle->width_ / 2 && y_distance <= rectangle->height_ / 2) {
         return true;  // it covers the case when the circle is in the rectangle
     }
     const double A = centers_difference.GetCoordinates().second;
     const double B = -centers_difference.GetCoordinates().first;
-    const double C_old = -rectangle->position_.GetCoordinates().first * A -
-                         rectangle->position_.GetCoordinates().second * B;
+    const double C_old =
+        -rectangle->position_.GetCoordinates().first * A - rectangle->position_.GetCoordinates().second * B;
     // Line of the form Ax + By + C_old = 0;
     // We want to translate it so the circle is centered at (0, 0):
-    const double C = C_old + A * circle->position_.GetCoordinates().first +
-                     B * circle->position_.GetCoordinates().second;
+    const double C =
+        C_old + A * circle->position_.GetCoordinates().first + B * circle->position_.GetCoordinates().second;
 
     const double x_ref = -A * C / (A * A + B * B);
     const double y_ref = -B * C / (A * A + B * B);
@@ -49,24 +49,23 @@ bool CheckImplementation<CircleCollider, RectangleCollider>(const CircleCollider
     const double coef = std::sqrt(det / (A * A + B * B));
     const Position first_intersection(x_ref + B * coef + circle->position_.GetCoordinates().first,
                                       y_ref - A * coef + circle->position_.GetCoordinates().second);
-    const Position second_intersection(
-        x_ref - B * coef + circle->position_.GetCoordinates().first,
-        y_ref + A * coef + circle->position_.GetCoordinates().second);
+    const Position second_intersection(x_ref - B * coef + circle->position_.GetCoordinates().first,
+                                       y_ref + A * coef + circle->position_.GetCoordinates().second);
 
-    const double first_intersection_distance = (first_intersection.GetCoordinatesAsVector2D() -
-                                                rectangle->position_.GetCoordinatesAsVector2D())
-                                                   .Length();
-    const double second_intersection_distance = (second_intersection.GetCoordinatesAsVector2D() -
-                                                 rectangle->position_.GetCoordinatesAsVector2D())
-                                                    .Length();
+    const double first_intersection_distance =
+        (first_intersection.GetCoordinatesAsVector2D() - rectangle->position_.GetCoordinatesAsVector2D())
+            .Length();
+    const double second_intersection_distance =
+        (second_intersection.GetCoordinatesAsVector2D() - rectangle->position_.GetCoordinatesAsVector2D())
+            .Length();
     const Position closest_point = first_intersection_distance <= second_intersection_distance
                                        ? first_intersection
                                        : second_intersection;
 
-    const double x_distance_final = std::abs(rectangle->position_.GetCoordinates().first -
-                                             closest_point.GetCoordinates().first);
-    const double y_distance_final = std::abs(rectangle->position_.GetCoordinates().second -
-                                             closest_point.GetCoordinates().second);
+    const double x_distance_final =
+        std::abs(rectangle->position_.GetCoordinates().first - closest_point.GetCoordinates().first);
+    const double y_distance_final =
+        std::abs(rectangle->position_.GetCoordinates().second - closest_point.GetCoordinates().second);
     return x_distance_final <= rectangle->width_ / 2 && y_distance_final <= rectangle->height_ / 2;
 }
 
@@ -77,12 +76,12 @@ bool CheckImplementation<RectangleCollider, CircleCollider>(const RectangleColli
 }
 
 template <>
-bool CheckImplementation<RectangleCollider, RectangleCollider>(
-    const RectangleCollider *first, const RectangleCollider *second) {
-    const double x_distance = std::abs(first->position_.GetCoordinates().first -
-                                       second->position_.GetCoordinates().first);
-    const double y_distance = std::abs(first->position_.GetCoordinates().second -
-                                       second->position_.GetCoordinates().second);
+bool CheckImplementation<RectangleCollider, RectangleCollider>(const RectangleCollider *first,
+                                                               const RectangleCollider *second) {
+    const double x_distance =
+        std::abs(first->position_.GetCoordinates().first - second->position_.GetCoordinates().first);
+    const double y_distance =
+        std::abs(first->position_.GetCoordinates().second - second->position_.GetCoordinates().second);
     return x_distance <= (first->width_ + second->width_) / 2 &&
            y_distance <= (first->height_ + second->height_) / 2;
 }
@@ -112,8 +111,7 @@ bool CircleCollider::IsInside(const Position &position) const {
     auto this_coord = position_.GetCoordinates();
 
     return ((coord.first - this_coord.first) * (coord.first - this_coord.first) +
-            (coord.second - this_coord.second) * (coord.second - this_coord.second)) <=
-           radius_ * radius_;
+            (coord.second - this_coord.second) * (coord.second - this_coord.second)) <= radius_ * radius_;
 }
 
 CircleCollider::CircleCollider(const Position &position, double radius, bool is_trigger)
@@ -125,8 +123,7 @@ bool CircleCollider::Check(const Collider *other) const {
     return CheckImplementationPrimary(this, other);
 }
 
-RectangleCollider::RectangleCollider(const Position &position, double width, double height,
-                                     bool is_trigger)
+RectangleCollider::RectangleCollider(const Position &position, double width, double height, bool is_trigger)
     : position_(position), width_(width), height_(height) {
     is_trigger_ = is_trigger;
 }
@@ -143,8 +140,7 @@ bool RectangleCollider::IsInside(const Position &position) const {
     auto coord = position.GetCoordinates();
     auto this_coord = position_.GetCoordinates();
 
-    return (this_coord.first - width_ / 2 <= coord.first &&
-            coord.first <= this_coord.first + width_ / 2) &&
+    return (this_coord.first - width_ / 2 <= coord.first && coord.first <= this_coord.first + width_ / 2) &&
            (this_coord.second - height_ / 2 <= coord.second &&
             coord.second <= this_coord.second + height_ / 2);
 }
@@ -181,16 +177,16 @@ std::optional<Position> IntersectionImplementation<CircleCollider, CircleCollide
 template <>
 std::optional<Position> IntersectionImplementation<CircleCollider, RectangleCollider>(
     const CircleCollider *circle, const RectangleCollider *rectangle) {
-    const Vector2D centers_difference = rectangle->position_.GetCoordinatesAsVector2D() -
-                                        circle->position_.GetCoordinatesAsVector2D();
+    const Vector2D centers_difference =
+        rectangle->position_.GetCoordinatesAsVector2D() - circle->position_.GetCoordinatesAsVector2D();
     const double centers_distance = centers_difference.Length();
     if (centers_distance <= circle->radius_) {
         return rectangle->position_;  // it covers the case when the rectangle is in the circle
     }
-    const double x_distance = std::abs(rectangle->position_.GetCoordinates().first -
-                                       circle->position_.GetCoordinates().first);
-    const double y_distance = std::abs(rectangle->position_.GetCoordinates().second -
-                                       circle->position_.GetCoordinates().second);
+    const double x_distance =
+        std::abs(rectangle->position_.GetCoordinates().first - circle->position_.GetCoordinates().first);
+    const double y_distance =
+        std::abs(rectangle->position_.GetCoordinates().second - circle->position_.GetCoordinates().second);
     if (x_distance <= rectangle->width_ / 2 && y_distance <= rectangle->height_ / 2) {
         return circle->position_;  // it covers the case when the circle is in the rectangle
     }
@@ -201,19 +197,17 @@ std::optional<Position> IntersectionImplementation<CircleCollider, RectangleColl
         throw std::runtime_error("Intersection of circle and rectangle failed!");
     }
     const double first_intersection_distance =
-        (pair.first->GetCoordinatesAsVector2D() - rectangle->position_.GetCoordinatesAsVector2D())
-            .Length();
+        (pair.first->GetCoordinatesAsVector2D() - rectangle->position_.GetCoordinatesAsVector2D()).Length();
     const double second_intersection_distance =
-        (pair.second->GetCoordinatesAsVector2D() - rectangle->position_.GetCoordinatesAsVector2D())
-            .Length();
+        (pair.second->GetCoordinatesAsVector2D() - rectangle->position_.GetCoordinatesAsVector2D()).Length();
     const Position closest_point = first_intersection_distance <= second_intersection_distance
                                        ? pair.first.value()
                                        : pair.second.value();
 
-    const double x_distance_final = std::abs(rectangle->position_.GetCoordinates().first -
-                                             closest_point.GetCoordinates().first);
-    const double y_distance_final = std::abs(rectangle->position_.GetCoordinates().second -
-                                             closest_point.GetCoordinates().second);
+    const double x_distance_final =
+        std::abs(rectangle->position_.GetCoordinates().first - closest_point.GetCoordinates().first);
+    const double y_distance_final =
+        std::abs(rectangle->position_.GetCoordinates().second - closest_point.GetCoordinates().second);
     if (x_distance_final <= rectangle->width_ / 2 && y_distance_final <= rectangle->height_ / 2) {
         return closest_point;
     }
@@ -228,11 +222,11 @@ std::optional<Position> IntersectionImplementation<RectangleCollider, CircleColl
 
 template <>
 std::optional<Position> IntersectionImplementation<RectangleCollider, RectangleCollider>(
-        const RectangleCollider *first, const RectangleCollider *second) {
-    const double x_distance = std::abs(first->position_.GetCoordinates().first -
-                              second->position_.GetCoordinates().first);
-    const double y_distance = std::abs(first->position_.GetCoordinates().second -
-                              second->position_.GetCoordinates().second);
+    const RectangleCollider *first, const RectangleCollider *second) {
+    const double x_distance =
+        std::abs(first->position_.GetCoordinates().first - second->position_.GetCoordinates().first);
+    const double y_distance =
+        std::abs(first->position_.GetCoordinates().second - second->position_.GetCoordinates().second);
     if (!(x_distance <= (first->width_ + second->width_) / 2 &&
           y_distance <= (first->height_ + second->height_) / 2)) {
         return std::nullopt;
@@ -264,8 +258,7 @@ std::optional<Position> IntersectionImplementation<RectangleCollider, RectangleC
         const double width = ptr->width_;
         const double height = ptr->height_;
         const double x_dist = vertex.GetCoordinates().first - ptr->position_.GetCoordinates().first;
-        const double y_dist =
-            vertex.GetCoordinates().second - ptr->position_.GetCoordinates().second;
+        const double y_dist = vertex.GetCoordinates().second - ptr->position_.GetCoordinates().second;
         return x_dist <= (width + width) / 2 && y_dist <= (height + height) / 2;
     };
 

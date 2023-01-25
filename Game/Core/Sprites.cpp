@@ -1,7 +1,6 @@
 #include "Sprites.h"
 
-
-class StaticSpriteImpl: VisibleObjectImpl {
+class StaticSpriteImpl : VisibleObjectImpl {
 public:
     void RenderIt() override {
         // magic.do()
@@ -23,7 +22,7 @@ StaticSprite::StaticSprite() {
     impl_ = std::make_unique<StaticSpriteImpl>();
 };
 
-class AnimatedSpriteImpl: VisibleObjectImpl {
+class AnimatedSpriteImpl : VisibleObjectImpl {
 public:
     void RenderIt() override {
         // magic.do()
@@ -36,7 +35,7 @@ public:
     void Translate(const Vector2D &vector2D) override {
         top_left_.Translate(vector2D);
     }
-    
+
 private:
     // magic
 };
