@@ -68,17 +68,9 @@ public:
         delay_queue_.PushTime(std::chrono::steady_clock::now() + milliseconds, func,
                               std::forward<Params>(args)...);
     }
-
-    template <typename... Args, typename... Params>
-    void Invoke(const uint64_t ticks_count, void (*func)(Args...), Params... args) {
-        delay_queue_.PushTicks(ticks_count_ + ticks_count, func, std::forward<Params>(args)...);
-    }
-
-    template <typename F, typename... Args, typename... Params>
-    void Invoke(const std::chrono::milliseconds& milliseconds, F* pointer, void (F::*func)(Args...),
-                Params... args) {
-        delay_queue_.PushTime(std::chrono::steady_clock::now() + milliseconds, pointer, func,
-                              std::forward<Params>(args)...);
+    template <typename Callable, typename... Args>
+    void Invoke(const uint64_t ticks_count, Callable&& cb, Args... args) {
+        delay_queue_.PushTicks(ticks_count, std::forward<Callable>(cb), std::forward<Args>(args)...);
     }
 
     template <typename F, typename... Args, typename... Params>
