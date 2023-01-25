@@ -20,14 +20,12 @@ public:
     template <class TObject, typename... Args>
     GameObject* ProduceObject(Position* pos_ptr, Collider* coll_ptr, VisibleObject* vis_ptr,
                               const std::string_view& tag, Args&&... args) {
-        static_assert(std::is_base_of<GameObject, TObject>(),
-                      "TObject must inherit from GameObject");
+        static_assert(std::is_base_of<GameObject, TObject>(), "TObject must inherit from GameObject");
 
         std::unique_ptr<Position> pos_uptr(pos_ptr);
         std::unique_ptr<Collider> coll_uptr(coll_ptr);
         std::unique_ptr<VisibleObject> vis_uptr(vis_ptr);
-        GameObject* object_ptr =
-            new TObject(pos_uptr, coll_uptr, vis_uptr, tag, std::forward<Args>(args)...);
+        GameObject* object_ptr = new TObject(pos_uptr, coll_uptr, vis_uptr, tag, std::forward<Args>(args)...);
         objects_buffer_.push_back(object_ptr);
         if (coll_ptr) {
             collision_system_.RegisterColliderOf(object_ptr, coll_ptr);
@@ -49,14 +47,15 @@ public:
     void RenderAll() const;
 
     CollisionSystem::PossiblePosition CheckPhysicalCollision(const GameObject* first,
-                                            const GameObject* second) const;
-    CollisionSystem::PossiblePosition CheckTriggerCollision(const GameObject* first, const GameObject* second) const;
+                                                             const GameObject* second) const;
+    CollisionSystem::PossiblePosition CheckTriggerCollision(const GameObject* first,
+                                                            const GameObject* second) const;
 
     CollisionSystem::CollisionsInfoArray GetAllCollisions(const GameObject* game_object) const;
     CollisionSystem::CollisionsInfoArray GetPhysicalCollisions(const GameObject* game_object) const;
     CollisionSystem::CollisionsInfoArray GetTriggerCollisions(const GameObject* game_object) const;
     CollisionSystem::CollisionsInfoArray GetAllCollisionsWithTag(const GameObject* game_object,
-                                                const std::string_view string) const;
+                                                                 const std::string_view string) const;
     template <typename T>
     CollisionSystem::CollisionsInfoArray GetAllCollisionsWithType(const GameObject* game_object) const;
 
@@ -65,8 +64,7 @@ public:
     InputSystem::InputTokensArray GetInput() const;
 
     template <typename... Args, typename... Params>
-    void Invoke(const std::chrono::milliseconds& milliseconds, void (*func)(Args...),
-                Params... args) {
+    void Invoke(const std::chrono::milliseconds& milliseconds, void (*func)(Args...), Params... args) {
         delay_queue_.PushTime(std::chrono::steady_clock::now() + milliseconds, func,
                               std::forward<Params>(args)...);
     }
@@ -85,8 +83,7 @@ public:
 
     template <typename F, typename... Args, typename... Params>
     void Invoke(const uint64_t ticks_count, F* pointer, void (F::*func)(Args...), Params... args) {
-        delay_queue_.PushTicks(ticks_count_ + ticks_count, pointer, func,
-                               std::forward<Params>(args)...);
+        delay_queue_.PushTicks(ticks_count_ + ticks_count, pointer, func, std::forward<Params>(args)...);
     }
 
     template <typename F, typename... Args, typename... Params>
@@ -99,8 +96,7 @@ public:
     template <typename F, typename... Args, typename... Params>
     void Invoke(const uint64_t ticks_count, const F* pointer, void (F::*func)(Args...) const,
                 Params... args) {
-        delay_queue_.PushTicks(ticks_count_ + ticks_count, pointer, func,
-                               std::forward<Params>(args)...);
+        delay_queue_.PushTicks(ticks_count_ + ticks_count, pointer, func, std::forward<Params>(args)...);
     }
 
     // temporary public, should be private in the future as it will be called in Update method of

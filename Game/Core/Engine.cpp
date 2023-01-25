@@ -57,15 +57,15 @@ void Engine::TryExecuteDelayedCallbacks() {
     delay_queue_.TryExecute(std::chrono::steady_clock::now(), ticks_count_);
 }
 
-CollisionSystem::CollisionsInfoArray Engine::GetAllCollisions(const GameObject *game_object) const {
+CollisionSystem::CollisionsInfoArray Engine::GetAllCollisions(const GameObject* game_object) const {
     return collision_system_.GetAllCollisions(game_object);
 }
 
-CollisionSystem::CollisionsInfoArray Engine::GetPhysicalCollisions(const GameObject *game_object) const {
+CollisionSystem::CollisionsInfoArray Engine::GetPhysicalCollisions(const GameObject* game_object) const {
     return collision_system_.GetPhysicalCollisions(game_object);
 }
 
-CollisionSystem::CollisionsInfoArray Engine::GetTriggerCollisions(const GameObject *game_object) const {
+CollisionSystem::CollisionsInfoArray Engine::GetTriggerCollisions(const GameObject* game_object) const {
     return collision_system_.GetTriggerCollisions(game_object);
 }
 
@@ -80,11 +80,11 @@ CollisionSystem::CollisionsInfoArray Engine::GetAllCollisionsWithType(const Game
 }
 
 CollisionSystem::PossiblePosition Engine::CheckPhysicalCollision(const GameObject* first,
-                                                         const GameObject* second) const {
+                                                                 const GameObject* second) const {
     return collision_system_.CheckPhysicalCollision(first, second);
 }
 
 CollisionSystem::PossiblePosition Engine::CheckTriggerCollision(const GameObject* first,
-                                                                 const GameObject* second) const {
+                                                                const GameObject* second) const {
     return collision_system_.CheckTriggerCollision(first, second);
 }

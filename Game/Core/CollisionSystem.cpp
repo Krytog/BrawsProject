@@ -1,7 +1,6 @@
 #include "CollisionSystem.h"
 
-CollisionSystem::CollisionInfo::CollisionInfo(const GameObject* game_object_,
-                                              const std::string_view tag_,
+CollisionSystem::CollisionInfo::CollisionInfo(const GameObject* game_object_, const std::string_view tag_,
                                               const Position& position_, const bool is_trigger_)
     : game_object(game_object_), tag(tag_), position(position_), is_trigger(is_trigger_) {
 }
@@ -24,8 +23,8 @@ void CollisionSystem::RegisterColliderOf(const GameObject* game_object, const Co
     registered_colliders_[game_object] = collider;
 }
 
-CollisionSystem::PossiblePosition CollisionSystem::CheckPhysicalCollision(
-    const GameObject* first, const GameObject* second) const {
+CollisionSystem::PossiblePosition CollisionSystem::CheckPhysicalCollision(const GameObject* first,
+                                                                          const GameObject* second) const {
     if (!registered_colliders_.contains(first) || !registered_colliders_.contains(second)) {
         return std::nullopt;
     }
@@ -34,12 +33,11 @@ CollisionSystem::PossiblePosition CollisionSystem::CheckPhysicalCollision(
         return std::nullopt;
     }
 
-    return registered_colliders_.at(first)->GetIntersectionPosition(
-        registered_colliders_.at(second));
+    return registered_colliders_.at(first)->GetIntersectionPosition(registered_colliders_.at(second));
 }
 
-CollisionSystem::PossiblePosition CollisionSystem::CheckTriggerCollision(
-    const GameObject* first, const GameObject* second) const {
+CollisionSystem::PossiblePosition CollisionSystem::CheckTriggerCollision(const GameObject* first,
+                                                                         const GameObject* second) const {
     if (!registered_colliders_.contains(first) || !registered_colliders_.contains(second)) {
         return std::nullopt;
     }
@@ -48,12 +46,10 @@ CollisionSystem::PossiblePosition CollisionSystem::CheckTriggerCollision(
         return std::nullopt;
     }
 
-    return registered_colliders_.at(first)->GetIntersectionPosition(
-        registered_colliders_.at(second));
+    return registered_colliders_.at(first)->GetIntersectionPosition(registered_colliders_.at(second));
 }
 
-CollisionSystem::CollisionsInfoArray CollisionSystem::GetAllCollisions(
-    const GameObject* game_object) const {
+CollisionSystem::CollisionsInfoArray CollisionSystem::GetAllCollisions(const GameObject* game_object) const {
     if (!registered_colliders_.contains(game_object)) {
         return {};
     }
@@ -62,10 +58,8 @@ CollisionSystem::CollisionsInfoArray CollisionSystem::GetAllCollisions(
         if (pair.first == game_object) {
             continue;
         }
-        if (auto position =
-                registered_colliders_.at(game_object)->GetIntersectionPosition(pair.second)) {
-            output.emplace_back(pair.first, pair.first->GetTag(), position.value(),
-                                pair.second->IsTrigger());
+        if (auto position = registered_colliders_.at(game_object)->GetIntersectionPosition(pair.second)) {
+            output.emplace_back(pair.first, pair.first->GetTag(), position.value(), pair.second->IsTrigger());
         }
     }
     return output;
@@ -84,10 +78,8 @@ CollisionSystem::CollisionsInfoArray CollisionSystem::GetPhysicalCollisions(
         if (pair.first == game_object) {
             continue;
         }
-        if (auto position =
-                registered_colliders_.at(game_object)->GetIntersectionPosition(pair.second)) {
-            output.emplace_back(pair.first, pair.first->GetTag(), position.value(),
-                                pair.second->IsTrigger());
+        if (auto position = registered_colliders_.at(game_object)->GetIntersectionPosition(pair.second)) {
+            output.emplace_back(pair.first, pair.first->GetTag(), position.value(), pair.second->IsTrigger());
         }
     }
     return output;
@@ -106,10 +98,8 @@ CollisionSystem::CollisionsInfoArray CollisionSystem::GetTriggerCollisions(
         if (pair.first == game_object) {
             continue;
         }
-        if (auto position =
-                registered_colliders_.at(game_object)->GetIntersectionPosition(pair.second)) {
-            output.emplace_back(pair.first, pair.first->GetTag(), position.value(),
-                                pair.second->IsTrigger());
+        if (auto position = registered_colliders_.at(game_object)->GetIntersectionPosition(pair.second)) {
+            output.emplace_back(pair.first, pair.first->GetTag(), position.value(), pair.second->IsTrigger());
         }
     }
     return output;
@@ -128,10 +118,8 @@ CollisionSystem::CollisionsInfoArray CollisionSystem::GetAllCollisionsWithTag(
         if (pair.first == game_object) {
             continue;
         }
-        if (auto position =
-                registered_colliders_.at(game_object)->GetIntersectionPosition(pair.second)) {
-            output.emplace_back(pair.first, pair.first->GetTag(), position.value(),
-                                pair.second->IsTrigger());
+        if (auto position = registered_colliders_.at(game_object)->GetIntersectionPosition(pair.second)) {
+            output.emplace_back(pair.first, pair.first->GetTag(), position.value(), pair.second->IsTrigger());
         }
     }
     return output;
@@ -151,10 +139,8 @@ CollisionSystem::CollisionsInfoArray CollisionSystem::GetAllCollisionsWithType(
         if (pair.first == game_object) {
             continue;
         }
-        if (auto position =
-                registered_colliders_.at(game_object)->GetIntersectionPosition(pair.second)) {
-            output.emplace_back(pair.first, pair.first->GetTag(), position.value(),
-                                pair.second->IsTrigger());
+        if (auto position = registered_colliders_.at(game_object)->GetIntersectionPosition(pair.second)) {
+            output.emplace_back(pair.first, pair.first->GetTag(), position.value(), pair.second->IsTrigger());
         }
     }
     return output;

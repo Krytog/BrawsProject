@@ -12,42 +12,42 @@ enum EventStatus {
 class Event {
 public:
     template <typename PredicateReturn, typename... PredicateArgs, typename CallableReturn,
-            typename... CallableArgs, typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
-    typename CallableArgsTuple = std::tuple<CallableArgs...>,
-    std::enable_if_t<std::is_convertible_v<PredicateReturn, bool>, bool> = true,
-    std::enable_if_t<std::is_void_v<CallableReturn>, bool> = true>
+              typename... CallableArgs, typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
+              typename CallableArgsTuple = std::tuple<CallableArgs...>,
+              std::enable_if_t<std::is_convertible_v<PredicateReturn, bool>, bool> = true,
+              std::enable_if_t<std::is_void_v<CallableReturn>, bool> = true>
     Event(PredicateReturn (*pr)(PredicateArgs...), PredicateArgsTuple&& pr_args,
           CallableReturn (*cb)(CallableArgs...), CallableArgsTuple&& cb_args, EventStatus status)
-            : predicate_([pr, pr_args] { return static_cast<bool>(std::apply(pr, pr_args)); }),
-              callable_([cb, cb_args] { std::apply(cb, cb_args); }),
-              status_(status) {
+        : predicate_([pr, pr_args] { return static_cast<bool>(std::apply(pr, pr_args)); }),
+          callable_([cb, cb_args] { std::apply(cb, cb_args); }),
+          status_(status) {
     }
 
     template <typename PredicateReturn, typename... PredicateArgs, typename Invoker, typename CallableReturn,
-            typename... CallableArgs, typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
-    typename CallableArgsTuple = std::tuple<CallableArgs...>,
-    std::enable_if_t<std::is_convertible_v<PredicateReturn, bool>, bool> = true,
-    std::enable_if_t<std::is_void_v<CallableReturn>, bool> = true>
+              typename... CallableArgs, typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
+              typename CallableArgsTuple = std::tuple<CallableArgs...>,
+              std::enable_if_t<std::is_convertible_v<PredicateReturn, bool>, bool> = true,
+              std::enable_if_t<std::is_void_v<CallableReturn>, bool> = true>
     Event(PredicateReturn (*pr)(PredicateArgs...), PredicateArgsTuple&& pr_args, Invoker* pointer,
           CallableReturn (Invoker::*cb)(CallableArgs...), CallableArgsTuple&& cb_args, EventStatus status)
-            : predicate_([pr, pr_args] { return static_cast<bool>(std::apply(pr, pr_args)); }),
-              callable_(
-                      [pointer, cb, cb_args] { std::apply(cb, std::tuple_cat(std::make_tuple(pointer), cb_args)); }),
-              status_(status) {
+        : predicate_([pr, pr_args] { return static_cast<bool>(std::apply(pr, pr_args)); }),
+          callable_(
+              [pointer, cb, cb_args] { std::apply(cb, std::tuple_cat(std::make_tuple(pointer), cb_args)); }),
+          status_(status) {
     }
 
     template <typename PredicateReturn, typename... PredicateArgs, typename Invoker, typename CallableReturn,
-            typename... CallableArgs, typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
-    typename CallableArgsTuple = std::tuple<CallableArgs...>,
-    std::enable_if_t<std::is_convertible_v<PredicateReturn, bool>, bool> = true,
-    std::enable_if_t<std::is_void_v<CallableReturn>, bool> = true>
+              typename... CallableArgs, typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
+              typename CallableArgsTuple = std::tuple<CallableArgs...>,
+              std::enable_if_t<std::is_convertible_v<PredicateReturn, bool>, bool> = true,
+              std::enable_if_t<std::is_void_v<CallableReturn>, bool> = true>
     Event(PredicateReturn (*pr)(PredicateArgs...), PredicateArgsTuple&& pr_args, Invoker* pointer,
           CallableReturn (Invoker::*cb)(CallableArgs...) const, CallableArgsTuple&& cb_args,
           EventStatus status)
-            : predicate_([pr, pr_args] { return static_cast<bool>(std::apply(pr, pr_args)); }),
-              callable_(
-                      [pointer, cb, cb_args] { std::apply(cb, std::tuple_cat(std::make_tuple(pointer), cb_args)); }),
-              status_(status) {
+        : predicate_([pr, pr_args] { return static_cast<bool>(std::apply(pr, pr_args)); }),
+          callable_(
+              [pointer, cb, cb_args] { std::apply(cb, std::tuple_cat(std::make_tuple(pointer), cb_args)); }),
+          status_(status) {
     }
 
     void ForceExecute();
@@ -72,8 +72,8 @@ public:
        Predicate and Callable must be passed using std::ref
     */
     template <typename Predicate, typename... PredicateArgs, typename Callable, typename... CallableArgs,
-            typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
-    typename CallableArgsTuple = std::tuple<CallableArgs...>>
+              typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
+              typename CallableArgsTuple = std::tuple<CallableArgs...>>
     Event* CreateDisposableEvent(Predicate&& pr, PredicateArgsTuple&& pr_args, Callable&& cb,
                                  CallableArgsTuple&& cb_args) {
         events_.emplace_back(std::forward<Predicate>(pr), std::forward<PredicateArgsTuple>(pr_args),
@@ -87,8 +87,8 @@ public:
        Predicate and Callable must be passed using std::ref
     */
     template <typename Predicate, typename... PredicateArgs, typename Invoker, typename Callable,
-            typename... CallableArgs, typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
-    typename CallableArgsTuple = std::tuple<CallableArgs...>>
+              typename... CallableArgs, typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
+              typename CallableArgsTuple = std::tuple<CallableArgs...>>
     Event* CreateDisposableEvent(Predicate&& pr, PredicateArgsTuple&& pr_args, Invoker* pointer,
                                  Callable&& cb, CallableArgsTuple&& cb_args) {
         events_.emplace_back(std::forward<Predicate>(pr), std::forward<PredicateArgsTuple>(pr_args), pointer,
@@ -102,8 +102,8 @@ public:
         Reference arguments for Predicate and Callable must be passed using std::ref
     */
     template <typename Predicate, typename... PredicateArgs, typename Callable, typename... CallableArgs,
-            typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
-    typename CallableArgsTuple = std::tuple<CallableArgs...>>
+              typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
+              typename CallableArgsTuple = std::tuple<CallableArgs...>>
     Event* CreateReusableEvent(Predicate&& pr, PredicateArgsTuple&& pr_args, Callable&& cb,
                                CallableArgsTuple&& cb_args) {
         events_.emplace_back(std::forward<Predicate>(pr), std::forward<PredicateArgsTuple>(pr_args),
@@ -116,8 +116,8 @@ public:
        Predicate and Callable must be passed using std::ref
     */
     template <typename Predicate, typename... PredicateArgs, typename Invoker, typename Callable,
-            typename... CallableArgs, typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
-    typename CallableArgsTuple = std::tuple<CallableArgs...>>
+              typename... CallableArgs, typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
+              typename CallableArgsTuple = std::tuple<CallableArgs...>>
     Event* CreateReusableEvent(Predicate&& pr, PredicateArgsTuple&& pr_args, Invoker* pointer, Callable&& cb,
                                CallableArgsTuple&& cb_args) {
         events_.emplace_back(std::forward<Predicate>(pr), std::forward<PredicateArgsTuple>(pr_args), pointer,

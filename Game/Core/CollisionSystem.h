@@ -12,8 +12,8 @@ public:
 
     struct CollisionInfo {
         CollisionInfo() = default;
-        CollisionInfo(const GameObject* game_object_, const std::string_view tag_,
-                      const Position& position_, const bool is_trigger_);
+        CollisionInfo(const GameObject* game_object_, const std::string_view tag_, const Position& position_,
+                      const bool is_trigger_);
 
         const GameObject* game_object;
         const std::string_view tag;
@@ -30,8 +30,7 @@ public:
     using PossiblePosition = std::optional<Position>;
     using CollisionsInfoArray = std::vector<CollisionInfo>;
 
-    PossiblePosition CheckPhysicalCollision(const GameObject* first,
-                                            const GameObject* second) const;
+    PossiblePosition CheckPhysicalCollision(const GameObject* first, const GameObject* second) const;
     PossiblePosition CheckTriggerCollision(const GameObject* first, const GameObject* second) const;
 
     CollisionsInfoArray GetAllCollisions(const GameObject* game_object) const;

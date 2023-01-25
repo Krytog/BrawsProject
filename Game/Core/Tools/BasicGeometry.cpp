@@ -100,16 +100,13 @@ bool DoesIntersect(const Position& b1, const Position& e1, const Position& b2, c
 }
 
 Circle::Circle(const Position& center, double radius)
-    : center_x_(center.GetCoordinates().first),
-      center_y_(center.GetCoordinates().second),
-      radius_(radius) {
+    : center_x_(center.GetCoordinates().first), center_y_(center.GetCoordinates().second), radius_(radius) {
 }
 
 Circle::Circle(const Position& a, const Position& b, const Position& c) {
-    double coef =
-        2 * (a.GetCoordinates().first * (b.GetCoordinates().second - c.GetCoordinates().second) +
-             b.GetCoordinates().first * (c.GetCoordinates().second - a.GetCoordinates().second) +
-             c.GetCoordinates().first * (a.GetCoordinates().second - b.GetCoordinates().second));
+    double coef = 2 * (a.GetCoordinates().first * (b.GetCoordinates().second - c.GetCoordinates().second) +
+                       b.GetCoordinates().first * (c.GetCoordinates().second - a.GetCoordinates().second) +
+                       c.GetCoordinates().first * (a.GetCoordinates().second - b.GetCoordinates().second));
     center_x_ = ((a.GetCoordinates().first * a.GetCoordinates().first +
                   a.GetCoordinates().second * a.GetCoordinates().second) *
                      (b.GetCoordinates().second - c.GetCoordinates().second) +
@@ -134,40 +131,34 @@ Circle::Circle(const Position& a, const Position& b, const Position& c) {
     radius_ = (center - a.GetCoordinatesAsVector2D()).Length();
 }
 
-std::pair<std::optional<Position>, std::optional<Position>> Circle::Intersect(
-    const Line& line) const {
+std::pair<std::optional<Position>, std::optional<Position>> Circle::Intersect(const Line& line) const {
     auto nline = Line(line.A_, line.B_, line.C_ + line.A_ * center_x_ + line.B_ * center_y_);
 
     double x_ref = -nline.A_ * nline.C_ / (nline.A_ * nline.A_ + nline.B_ * nline.B_);
     double y_ref = -nline.B_ * nline.C_ / (nline.A_ * nline.A_ + nline.B_ * nline.B_);
 
-    if (nline.C_ * nline.C_ - radius_ * radius_ * (nline.A_ * nline.A_ + nline.B_ * nline.B_) >
-        PRECISION) {
+    if (nline.C_ * nline.C_ - radius_ * radius_ * (nline.A_ * nline.A_ + nline.B_ * nline.B_) > PRECISION) {
         return {std::nullopt, std::nullopt};
     } else if (std::abs(nline.C_ * nline.C_ -
-                        radius_ * radius_ * (nline.A_ * nline.A_ + nline.B_ * nline.B_)) <
-               PRECISION) {
+                        radius_ * radius_ * (nline.A_ * nline.A_ + nline.B_ * nline.B_)) < PRECISION) {
         return {Position(x_ref + center_x_, y_ref + center_y_),
                 Position(x_ref + center_x_, y_ref + center_y_)};
     } else {
-        double det =
-            radius_ * radius_ - nline.C_ * nline.C_ / (nline.A_ * nline.A_ + nline.B_ * nline.B_);
+        double det = radius_ * radius_ - nline.C_ * nline.C_ / (nline.A_ * nline.A_ + nline.B_ * nline.B_);
         double coef = std::sqrt(det / (nline.A_ * nline.A_ + nline.B_ * nline.B_));
         return {Position(x_ref + nline.B_ * coef + center_x_, y_ref - nline.A_ * coef + center_y_),
                 Position(x_ref - nline.B_ * coef + center_x_, y_ref + nline.A_ * coef + center_y_)};
     }
 }
 
-std::pair<std::optional<Position>, std::optional<Position>> Circle::Intersect(
-    const Circle& other) const {
+std::pair<std::optional<Position>, std::optional<Position>> Circle::Intersect(const Circle& other) const {
     auto xx = other.center_x_ - center_x_;
     auto yy = other.center_y_ - center_y_;
-    auto line = Line(-2 * xx, -2 * yy,
-                     radius_ * radius_ - other.radius_ * other.radius_ + xx * xx + yy * yy);
+    auto line = Line(-2 * xx, -2 * yy, radius_ * radius_ - other.radius_ * other.radius_ + xx * xx + yy * yy);
     auto circ = Circle(Position(0, 0), radius_);
     auto pr = circ.Intersect(line);
-    return {Position(pr.first->GetCoordinates().first + center_x_,
-                     pr.first->GetCoordinates().second + center_y_),
-            Position(pr.second->GetCoordinates().first + center_x_,
-                     pr.second->GetCoordinates().second + center_y_)};
+    return {
+        Position(pr.first->GetCoordinates().first + center_x_, pr.first->GetCoordinates().second + center_y_),
+        Position(pr.second->GetCoordinates().first + center_x_,
+                 pr.second->GetCoordinates().second + center_y_)};
 }

@@ -29,8 +29,7 @@ private:
 
 class RectangleCollider : public Collider {
 public:
-    RectangleCollider(const Position& position, double width, double height,
-                      bool is_trigger = false);
+    RectangleCollider(const Position& position, double width, double height, bool is_trigger = false);
 
     void UpdatePosition(const Position& position) override;
     void Translate(const Vector2D& vector2D) override;

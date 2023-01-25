@@ -101,10 +101,10 @@ bool CheckImplementation<RectangleCollider, CircleCollider>(const RectangleColli
 template <>
 bool CheckImplementation<RectangleCollider, RectangleCollider>(const RectangleCollider* first,
                                                                const RectangleCollider* second) {
-    const double x_distance = std::abs(first->position_.GetCoordinates().first -
-                                       second->position_.GetCoordinates().first);
-    const double y_distance = std::abs(first->position_.GetCoordinates().second -
-                                       second->position_.GetCoordinates().second);
+    const double x_distance =
+        std::abs(first->position_.GetCoordinates().first - second->position_.GetCoordinates().first);
+    const double y_distance =
+        std::abs(first->position_.GetCoordinates().second - second->position_.GetCoordinates().second);
     return x_distance <= (first->width_ + second->width_) / 2 &&
            y_distance <= (first->height_ + second->height_) / 2;
 }
@@ -133,9 +133,8 @@ bool CircleCollider::IsInside(const Position& position) const {
     auto coord = position.GetCoordinates();
     auto this_coord = position_.GetCoordinates();
 
-    return radius_ * radius_ -
-               ((coord.first - this_coord.first) * (coord.first - this_coord.first) +
-                (coord.second - this_coord.second) * (coord.second - this_coord.second)) >=
+    return radius_ * radius_ - ((coord.first - this_coord.first) * (coord.first - this_coord.first) +
+                                (coord.second - this_coord.second) * (coord.second - this_coord.second)) >=
            -PRECISION;
 }
 
@@ -148,8 +147,7 @@ bool CircleCollider::Check(const Collider* other) const {
     return CheckImplementationPrimary(this, other);
 }
 
-RectangleCollider::RectangleCollider(const Position& position, double width, double height,
-                                     bool is_trigger)
+RectangleCollider::RectangleCollider(const Position& position, double width, double height, bool is_trigger)
     : position_(position), width_(width), height_(height) {
     is_trigger_ = is_trigger;
 }
@@ -287,10 +285,10 @@ std::optional<Position> IntersectionImplementation<RectangleCollider, CircleColl
 template <>
 std::optional<Position> IntersectionImplementation<RectangleCollider, RectangleCollider>(
     const RectangleCollider* first, const RectangleCollider* second) {
-    const double x_distance = std::abs(first->position_.GetCoordinates().first -
-                                       second->position_.GetCoordinates().first);
-    const double y_distance = std::abs(first->position_.GetCoordinates().second -
-                                       second->position_.GetCoordinates().second);
+    const double x_distance =
+        std::abs(first->position_.GetCoordinates().first - second->position_.GetCoordinates().first);
+    const double y_distance =
+        std::abs(first->position_.GetCoordinates().second - second->position_.GetCoordinates().second);
     if (!(x_distance <= (first->width_ + second->width_) / 2 &&
           y_distance <= (first->height_ + second->height_) / 2)) {
         return std::nullopt;
@@ -321,8 +319,7 @@ std::optional<Position> IntersectionImplementation<RectangleCollider, RectangleC
     auto checker = [](const Vector2D& vertex, const RectangleCollider* ptr) {
         const double width = ptr->width_;
         const double height = ptr->height_;
-        const double x_dist =
-            std::abs(vertex.GetCoordinates().first - ptr->position_.GetCoordinates().first);
+        const double x_dist = std::abs(vertex.GetCoordinates().first - ptr->position_.GetCoordinates().first);
         const double y_dist =
             std::abs(vertex.GetCoordinates().second - ptr->position_.GetCoordinates().second);
         return x_dist <= width / 2 && y_dist <= height / 2;

@@ -6,7 +6,7 @@ void Event::ForceExecute() {
 }
 
 bool Event::TryExecute() const {
-    if (force_executed_ && status_ == Disposable) {  /* Lazy delete */
+    if (force_executed_ && status_ == Disposable) { /* Lazy delete */
         return true;
     }
     if (predicate_()) {
