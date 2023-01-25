@@ -43,7 +43,7 @@ public:
 
     void TryExecute(const TimePoint& time_point, const uint64_t ticks_count);
 
-    bool Empty();
+    bool Empty() const;
 
 private:
     DelayQueue();
@@ -72,7 +72,7 @@ private:
 
         void TryExecute(const TimePoint& time_point);
 
-        bool Empty();
+        bool Empty() const;
     private:
         std::priority_queue<TypeQueueTime, std::vector<TypeQueueTime>, CompareFunctor> queue_;
     };
@@ -101,7 +101,7 @@ private:
 
         void TryExecute(const uint64_t time_point);
 
-        bool Empty();
+        bool Empty() const;
     private:
         std::priority_queue<TypeQueueTicks, std::vector<TypeQueueTicks>, CompareFunctor> queue_;
     };
