@@ -14,7 +14,7 @@ void DelayQueue::DelayQueueTime::TryExecute(const TimePoint& time_point) {
     }
 }
 
-bool DelayQueue::DelayQueueTime::Empty() {
+bool DelayQueue::DelayQueueTime::Empty() const {
     return queue_.empty();
 }
 
@@ -25,7 +25,7 @@ void DelayQueue::DelayQueueTicks::TryExecute(const uint64_t ticks_count) {
     }
 }
 
-bool DelayQueue::DelayQueueTicks::Empty() {
+bool DelayQueue::DelayQueueTicks::Empty() const {
     return queue_.empty();
 }
 
@@ -34,7 +34,7 @@ void DelayQueue::TryExecute(const TimePoint& time_point, const uint64_t ticks_co
     queue_ticks_.TryExecute(ticks_count);
 }
 
-bool DelayQueue::Empty() {
+bool DelayQueue::Empty() const {
     return queue_ticks_.Empty() && queue_time_.Empty();
 }
 
