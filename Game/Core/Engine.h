@@ -51,31 +51,23 @@ public:
     void ReadNewInput();
     InputSystem::InputTokensArray GetInput() const;
 
-    template <typename... Args>
-    void Invoke(const std::chrono::milliseconds& milliseconds, void (*func)(Args...), Args... args) {
-        delay_queue_.PushTime(std::chrono::steady_clock::now() + milliseconds, func, args...);
+    template <typename Callable, typename... Args>
+    void Invoke(const std::chrono::milliseconds& milliseconds, Callable&& cb, Args... args) {
+        delay_queue_.PushTime(std::chrono::steady_clock::now() + milliseconds, std::forward<Callable>(cb),
+                              std::forward<Args>(args)...);
     }
-    template <typename... Args>
-    void Invoke(const uint64_t ticks_count, void (*func)(Args...), Args... args) {
-        delay_queue_.PushTicks(ticks_count, func, args...);
+    template <typename Callable, typename... Args>
+    void Invoke(const uint64_t ticks_count, Callable&& cb, Args... args) {
+        delay_queue_.PushTicks(ticks_count, std::forward<Callable>(cb), std::forward<Args>(args)...);
     }
-    template <typename F, typename... Args>
-    void Invoke(const std::chrono::milliseconds& milliseconds, F* pointer, void (F::*func)(Args...),
-                Args... args) {
-        delay_queue_.PushTime(std::chrono::steady_clock::now() + milliseconds, pointer, func, args...);
+    template <typename F, typename Callable, typename... Args>
+    void Invoke(const std::chrono::milliseconds& milliseconds, F* pointer, Callable&& cb, Args... args) {
+        delay_queue_.PushTime(std::chrono::steady_clock::now() + milliseconds, pointer,
+                              std::forward<Callable>(cb), std::forward<Args>(args)...);
     }
-    template <typename F, typename... Args>
-    void Invoke(const uint64_t ticks_count, F* pointer, void (F::*func)(Args...), Args... args) {
-        delay_queue_.PushTicks(ticks_count, pointer, func, args...);
-    }
-    template <typename F, typename... Args>
-    void Invoke(const std::chrono::milliseconds& milliseconds, const F* pointer,
-                void (F::*func)(Args...) const, Args... args) {
-        delay_queue_.PushTime(std::chrono::steady_clock::now() + milliseconds, pointer, func, args...);
-    }
-    template <typename F, typename... Args>
-    void Invoke(const uint64_t ticks_count, const F* pointer, void (F::*func)(Args...) const, Args... args) {
-        delay_queue_.PushTicks(ticks_count, pointer, func, args...);
+    template <typename F, typename Callable, typename... Args>
+    void Invoke(const uint64_t ticks_count, F* pointer, Callable&& cb, Args... args) {
+        delay_queue_.PushTicks(ticks_count, pointer, std::forward<Callable>(cb), std::forward<Args>(args)...);
     }
 
     // temporary public, should be private in the future as it will be called in Update method of
