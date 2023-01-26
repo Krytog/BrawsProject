@@ -41,6 +41,7 @@ Engine::~Engine() {
 Engine::Engine()
     : collision_system_(CollisionSystem::GetInstance()),
       input_system_(InputSystem::GetInstance()),
+      event_handler_(EventHandler::GetInstance()),
       delay_queue_(DelayQueue::GetInstance()),
       ticks_count_(0) {
 }
