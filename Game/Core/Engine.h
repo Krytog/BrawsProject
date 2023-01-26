@@ -42,10 +42,6 @@ public:
 
     Position GetCameraPosition() const;
 
-    // temporary public, should be private in the future as it will be called in Update method of
-    // Engine;
-    void RenderAll() const;
-
     CollisionSystem::PossiblePosition CheckPhysicalCollision(const GameObject* first,
                                                              const GameObject* second) const;
     CollisionSystem::PossiblePosition CheckTriggerCollision(const GameObject* first,
@@ -59,7 +55,7 @@ public:
     template <typename T>
     CollisionSystem::CollisionsInfoArray GetAllCollisionsWithType(const GameObject* game_object) const;
 
-    void ReadNewInput();
+
 
     InputSystem::InputTokensArray GetInput() const;
 
@@ -82,22 +78,33 @@ public:
         delay_queue_.PushTicks(ticks_count, pointer, std::forward<Callable>(cb), std::forward<Args>(args)...);
     }
 
-    // temporary public, should be private in the future as it will be called in Update method of
-    // Engine;
-    void TryExecuteDelayedCallbacks();
+    uint64_t GetTicksCount() const;
 
     ~Engine();
+
+
+    //This function should be called exactly once per game tick
+    void Update();
+
+    //The next functions can be used only if Update() is not called
+    //The following order must be maintained
+    /////////////////////////////////////////////////////////////
+    void ReadNewInput();
+    void ExecuteUpdatesOfCustomBehaviours();
+    void TryExecuteDelayedCallbacks();
+    void TryExecuteEvents();
+    void RenderAll();
+    void IncreaseTicksCount();
+    /////////////////////////////////////////////////////////////
 
 private:
     Engine();
 
     CollisionSystem collision_system_;
-    mutable Render render_;
+    Render render_;
     InputSystem input_system_;
     DelayQueue delay_queue_;
 
     std::vector<GameObject*> objects_buffer_;
-
-public:
     uint64_t ticks_count_ = 0;
 };
