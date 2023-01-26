@@ -67,18 +67,17 @@ class EventHandler {
 public:
     static EventHandler& GetInstance();
 
-    /*  Syntax : &Predicate, std::make_tuple(PredicateArgs...), &Callable,
+    /*  Syntax : &Predicate, std::make_tuple(PredicateArgs...), InvokerPtr, &Callable,
        std::make_tuple(CallableArgs...) Empty tuples can be replaced with {} Reference arguments for
        Predicate and Callable must be passed using std::ref
     */
     template <typename Predicate, typename... PredicateArgs, typename Callable, typename... CallableArgs,
               typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
               typename CallableArgsTuple = std::tuple<CallableArgs...>>
-    Event* CreateDisposableEvent(Predicate&& pr, PredicateArgsTuple&& pr_args, Callable&& cb,
-                                 CallableArgsTuple&& cb_args) {
+    Event* CreateEvent(Predicate&& pr, PredicateArgsTuple&& pr_args, Callable&& cb,
+                       CallableArgsTuple&& cb_args, EventStatus status) {
         events_.emplace_back(std::forward<Predicate>(pr), std::forward<PredicateArgsTuple>(pr_args),
-                             std::forward<Callable>(cb), std::forward<CallableArgsTuple>(cb_args),
-                             Disposable);
+                             std::forward<Callable>(cb), std::forward<CallableArgsTuple>(cb_args), status);
         return &events_.back();
     }
 
@@ -89,39 +88,10 @@ public:
     template <typename Predicate, typename... PredicateArgs, typename Invoker, typename Callable,
               typename... CallableArgs, typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
               typename CallableArgsTuple = std::tuple<CallableArgs...>>
-    Event* CreateDisposableEvent(Predicate&& pr, PredicateArgsTuple&& pr_args, Invoker* pointer,
-                                 Callable&& cb, CallableArgsTuple&& cb_args) {
+    Event* CreateEvent(Predicate&& pr, PredicateArgsTuple&& pr_args, Invoker* pointer, Callable&& cb,
+                       CallableArgsTuple&& cb_args, EventStatus status) {
         events_.emplace_back(std::forward<Predicate>(pr), std::forward<PredicateArgsTuple>(pr_args), pointer,
-                             std::forward<Callable>(cb), std::forward<CallableArgsTuple>(cb_args),
-                             Disposable);
-        return &events_.back();
-    }
-
-    /*  Syntax : &Predicate, std::tuple(PredicateArgs...), &Callable, std::tuple(CallableArgs...)
-        Empty tuples can be replaced with {}
-        Reference arguments for Predicate and Callable must be passed using std::ref
-    */
-    template <typename Predicate, typename... PredicateArgs, typename Callable, typename... CallableArgs,
-              typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
-              typename CallableArgsTuple = std::tuple<CallableArgs...>>
-    Event* CreateReusableEvent(Predicate&& pr, PredicateArgsTuple&& pr_args, Callable&& cb,
-                               CallableArgsTuple&& cb_args) {
-        events_.emplace_back(std::forward<Predicate>(pr), std::forward<PredicateArgsTuple>(pr_args),
-                             std::forward<Callable>(cb), std::forward<CallableArgsTuple>(cb_args), Reusable);
-        return &events_.back();
-    }
-
-    /*  Syntax : &Predicate, std::make_tuple(PredicateArgs...), InvokerPtr, &Callable,
-       std::make_tuple(CallableArgs...) Empty tuples can be replaced with {} Reference arguments for
-       Predicate and Callable must be passed using std::ref
-    */
-    template <typename Predicate, typename... PredicateArgs, typename Invoker, typename Callable,
-              typename... CallableArgs, typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
-              typename CallableArgsTuple = std::tuple<CallableArgs...>>
-    Event* CreateReusableEvent(Predicate&& pr, PredicateArgsTuple&& pr_args, Invoker* pointer, Callable&& cb,
-                               CallableArgsTuple&& cb_args) {
-        events_.emplace_back(std::forward<Predicate>(pr), std::forward<PredicateArgsTuple>(pr_args), pointer,
-                             std::forward<Callable>(cb), std::forward<CallableArgsTuple>(cb_args), Reusable);
+                             std::forward<Callable>(cb), std::forward<CallableArgsTuple>(cb_args), status);
         return &events_.back();
     }
 
