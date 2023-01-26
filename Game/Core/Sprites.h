@@ -2,7 +2,11 @@
 
 #include <memory>
 #include <string_view>
+#include <unordered_set>
+#include <queue>
+
 #include "VisibleObject.h"
+#include "BasicSequncer.h"
 
 class StaticSpriteImpl;
 
@@ -17,6 +21,9 @@ public:
     void RenderIt(Canvas* canvas) const override;
     size_t GetRenderLevel() const override;
 
+    bool IsFinished() const override;
+    bool IsAbleToInterrupt() const override;
+
     ~StaticSprite();
 
 private:
@@ -30,7 +37,7 @@ public:
     AnimatedSprite(const Position* pos, const size_t& width, const size_t& height,
                    std::string_view path_to_file, const size_t& render_level,
                    const size_t& frame_rate, const size_t& frames_count_width,
-                   const size_t& frames_count_height, bool is_cycled = true);
+                   const size_t& frames_count_height, const std::unordered_set<size_t>& interrupt_points = {}, bool is_cycled = true);
 
     void UpdatePosition(const Position& position) override;
     void Translate(const Vector2D& vector2D) override;
@@ -38,10 +45,44 @@ public:
     void RenderIt(Canvas* canvas) const override;
     size_t GetRenderLevel() const override;
 
-    bool AnimationIsFinished() const;
+    bool IsFinished() const override;
+    bool IsAbleToInterrupt() const override;
 
     ~AnimatedSprite();
 
 private:
     std::unique_ptr<AnimatedSpriteImpl> impl_;
+};
+
+class AnimationSequencer : public VisibleObject, public BasicSequencer<VisibleObject> {
+public:
+    enum SwitchOption {
+        FORSE, /* Change animation immediately */
+        MIXED, /* Change after first breakpoint */
+        SOFT   /* Change after current animation is finished */
+    };
+
+public:
+    AnimationSequencer(const std::vector<std::pair<std::string_view, VisibleObject*>> &params_list,
+                       const std::unordered_set<std::string_view> &interrupt_points = {},
+                       bool is_cycled = true);
+
+    void SwitchAnimationTo(std::string_view tag, SwitchOption option);
+
+    void RenderIt(Canvas *canvas) const override;
+    void UpdatePosition(const Position &position) override;
+    void Translate(const Vector2D &vector2D) override;
+
+    bool IsFinished() const override;
+    bool IsAbleToInterrupt() const override;
+    size_t GetRenderLevel() const override;
+
+private:
+    struct SwitchInfo {
+        std::string_view tag;
+        SwitchOption option;
+    };
+
+    std::unordered_set<std::string_view> interrupt_points_;
+    mutable std::queue<SwitchInfo> switch_queue_;
 };

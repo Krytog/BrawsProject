@@ -1,12 +1,11 @@
 #include <memory>
 #include <list>
-// Log
-#include <iostream>
+#include <unordered_map>
+#include <queue>
 
 #include "Sprites.h"
 #include "Canvas.h"
 
-// Basic Implementation class
 class VisibleObjectImpl {
 public:
     VisibleObjectImpl(const Position *pos, const size_t &width, const size_t &height,
@@ -29,6 +28,14 @@ public:
         return render_level_;
     }
 
+    bool IsFinished() const {
+        return is_finished_;
+    }
+
+    bool IsAbleToInterrupt() const {
+        return is_able_to_interrupt_ || is_finished_;
+    }
+
     virtual void RenderIt(Canvas *canvas) = 0;
 
 protected:
@@ -40,8 +47,13 @@ protected:
     size_t render_level_;
 
     bool is_finished_ = false;  // Object animation complete
-    bool is_cycled_ = true;     // Object animation is cycled, only meaningful for animated sprites
+    bool is_cycled_ =
+        true;  // Object animation is cycled, only meaningful for animated sprites and sequnceres
+    bool is_able_to_interrupt_ =
+        false;  // Animation/Change of VisibleObject can be interrupted at the moment
 };
+
+///////////////////////////////////////////////////////////////////////
 
 class StaticSpriteImpl : public VisibleObjectImpl {
 public:
@@ -83,31 +95,41 @@ size_t StaticSprite::GetRenderLevel() const {
     return impl_->GelRenderLevel();
 }
 
+bool StaticSprite::IsFinished() const {
+    return impl_->IsFinished();
+}
+
+bool StaticSprite::IsAbleToInterrupt() const {
+    return impl_->IsAbleToInterrupt();
+}
+
 StaticSprite::~StaticSprite() noexcept = default;
+
+/////////////////////////////////////////////////////////////////
 
 class AnimatedSpriteImpl : public VisibleObjectImpl {
 public:
     AnimatedSpriteImpl(const Position *pos, const size_t &width, const size_t &height,
                        std::string_view path_to_file, const size_t &render_level,
                        const size_t &frame_rate, const size_t &frames_count_width,
-                       const size_t &frames_count_height, bool is_cycled)
+                       const size_t &frames_count_height,
+                       const std::unordered_set<size_t> &interrupt_points, bool is_cycled)
         : VisibleObjectImpl(pos, width, height, render_level, is_cycled),
           image_(&pos_, width, height),
           frame_rate_(frame_rate),
           frames_count_width_(frames_count_width),
           frames_count_height_(frames_count_height) {
         static_image_.LoadFromFile(std::string(path_to_file));
-        FRAME_SIZE_X = static_cast<double>(static_image_.GetRealSize().first) / frames_count_width_;
-        FRAME_SIZE_Y =
+        kFRAME_SIZE_X =
+            static_cast<double>(static_image_.GetRealSize().first) / frames_count_width_;
+        kFRAME_SIZE_Y =
             static_cast<double>(static_image_.GetRealSize().second) / frames_count_height;
-
-        // Log
-        std::cout << static_image_.GetRealSize().first << " " << static_image_.GetRealSize().second
-                  << "\n";
-        std::cout << frames_count_width << " " << frames_count_height << "\n";
     };
 
     void RenderIt(Canvas *canvas) override {
+        const size_t current_frame = (current_frame_y * frames_count_width_) + current_frame_x;
+        is_able_to_interrupt_ = (interrupt_points_.count(current_frame)) ? (false) : (true);
+
         if (is_finished_ && !is_cycled_) {
             canvas->Draw(&image_);
             return;
@@ -133,15 +155,11 @@ public:
 
         image_.LoadFromStaticImage(
             static_image_, Position(0, 0),
-            Position(current_frame_x * FRAME_SIZE_X, current_frame_y * FRAME_SIZE_Y),
-            Position((current_frame_x + 1) * FRAME_SIZE_X, (current_frame_y + 1) * FRAME_SIZE_Y),
-            FRAME_SIZE_X, FRAME_SIZE_Y);
+            Position(current_frame_x * kFRAME_SIZE_X, current_frame_y * kFRAME_SIZE_Y),
+            Position((current_frame_x + 1) * kFRAME_SIZE_X, (current_frame_y + 1) * kFRAME_SIZE_Y),
+            kFRAME_SIZE_X, kFRAME_SIZE_Y);
         canvas->Draw(&image_);
     }
-
-    bool AnimationIsFinished() const {
-        return is_finished_;
-    };
 
 private:
     Canvas::StaticImage static_image_;  // All frames
@@ -157,18 +175,21 @@ private:
 
     size_t current_rate_ = 0;
 
+    std::unordered_set<size_t> interrupt_points_;
+
     // Frame size on real image
-    size_t FRAME_SIZE_X;
-    size_t FRAME_SIZE_Y;
+    size_t kFRAME_SIZE_X;
+    size_t kFRAME_SIZE_Y;
 };
 
 AnimatedSprite::AnimatedSprite(const Position *pos, const size_t &width, const size_t &height,
                                std::string_view path_to_file, const size_t &render_level,
                                const size_t &frame_rate, const size_t &frames_count_width,
-                               const size_t &frames_count_height, bool is_cycled) {
+                               const size_t &frames_count_height,
+                               const std::unordered_set<size_t> &interrupt_points, bool is_cycled) {
     impl_ = std::make_unique<AnimatedSpriteImpl>(pos, width, height, path_to_file, render_level,
                                                  frame_rate, frames_count_width,
-                                                 frames_count_height, is_cycled);
+                                                 frames_count_height, interrupt_points, is_cycled);
 }
 
 void AnimatedSprite::RenderIt(Canvas *canvas) const {
@@ -187,29 +208,73 @@ size_t AnimatedSprite::GetRenderLevel() const {
     return impl_->GelRenderLevel();
 }
 
+bool AnimatedSprite::IsFinished() const {
+    return impl_->IsFinished();
+}
+
+bool AnimatedSprite::IsAbleToInterrupt() const {
+    return impl_->IsAbleToInterrupt();
+}
+
 AnimatedSprite::~AnimatedSprite() noexcept = default;
 
-//
-template <class T>
-class BasicSequncer {
+//////////////////////////////////////////////////////////////////
 
-    struct DisplayInfo {
-        T* object;
-        std::string_view tag;
-    };
+AnimationSequencer::AnimationSequencer(
+    const std::vector<std::pair<std::string_view, VisibleObject *>> &params_list,
+    const std::unordered_set<std::string_view> &interrupt_points, bool is_cycled)
+    : BasicSequencer<VisibleObject>(params_list, is_cycled), interrupt_points_(interrupt_points){};
 
-public:
-//    BasicSequncer(const std::initializer_list<DisplayInfo>& objects_list) {
-//        for (c)
-//    }
+void AnimationSequencer::SwitchAnimationTo(std::string_view tag, SwitchOption option) {
+    if (option == SwitchOption::FORSE) {
+        cur_object_tag_ = tag;
+        std::queue<SwitchInfo> empty_queue;
+        std::swap(switch_queue_, empty_queue); /* Fast clear */
+        return;
+    }
+    switch_queue_.push({tag, option});
+}
 
-private:
-    std::list<DisplayInfo> display_objects_;
-};
+void AnimationSequencer::RenderIt(Canvas *canvas) const {
+    if (switch_queue_.empty()) {
+        const Node &cur_node = display_objects_.at(cur_object_tag_);
+        if (cur_node.object->IsFinished() && !cur_node.outcoming.empty()) {
+            cur_object_tag_ = *cur_node.outcoming.begin();
+        }
+        display_objects_.at(cur_object_tag_).object->RenderIt(canvas);
+    } else if (switch_queue_.front().option == SwitchOption::SOFT &&
+               display_objects_.at(cur_object_tag_).object->IsFinished()) {
+        cur_object_tag_ = switch_queue_.front().tag;
+        switch_queue_.pop();
+    } else if (switch_queue_.front().option == SwitchOption::MIXED &&
+               display_objects_.at(cur_object_tag_).object->IsAbleToInterrupt()) {
+        cur_object_tag_ = switch_queue_.front().tag;
+        switch_queue_.pop();
+    }
 
-class VisibleSequncer: public BasicSequncer<VisibleObject>, VisibleObject {
-public:
+    display_objects_.at(cur_object_tag_).object->RenderIt(canvas);
+}
 
-private:
+void AnimationSequencer::UpdatePosition(const Position &position) {
+    for (auto &[tag, node] : display_objects_) {
+        node.object->UpdatePosition(position);
+    }
+}
 
-};
+void AnimationSequencer::Translate(const Vector2D &vector2D) {
+    for (auto &[tag, node] : display_objects_) {
+        node.object->Translate(vector2D);
+    }
+}
+
+bool AnimationSequencer::IsFinished() const {
+    return display_objects_.at(cur_object_tag_).object->IsFinished();
+}
+
+bool AnimationSequencer::IsAbleToInterrupt() const {
+    return interrupt_points_.contains(cur_object_tag_);
+}
+
+size_t AnimationSequencer::GetRenderLevel() const {
+    return display_objects_.at(cur_object_tag_).object->GetRenderLevel();
+}

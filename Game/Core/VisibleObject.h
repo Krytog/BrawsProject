@@ -13,5 +13,9 @@ public:
     virtual void RenderIt(Canvas* canvas) const = 0;
     virtual size_t GetRenderLevel() const = 0;
 
+    virtual bool IsFinished() const = 0;
+    virtual bool IsAbleToInterrupt() const = 0;
+//    virtual void ResetAnimationOptions() = 0;
+
     virtual ~VisibleObject() = default;
 };
