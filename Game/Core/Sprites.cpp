@@ -10,11 +10,11 @@ class VisibleObjectImpl {
 public:
     VisibleObjectImpl(const Position *pos, const size_t &width, const size_t &height,
                       const size_t &render_level, bool is_cycled = true)
-        : pos_(*pos),
-          width_(width),
-          height_(height),
-          render_level_(render_level),
-          is_cycled_(is_cycled){};
+            : pos_(*pos),
+              width_(width),
+              height_(height),
+              render_level_(render_level),
+              is_cycled_(is_cycled){};
 
     virtual void UpdatePosition(const Position &position) {
         pos_ = position;
@@ -40,7 +40,7 @@ public:
 
 protected:
     Position pos_;  // Coincides with the center of the object, that is, the usual local Position of
-                    // the GameObject, where Render will draw it
+    // the GameObject, where Render will draw it
     size_t width_;
     size_t height_;
 
@@ -48,9 +48,9 @@ protected:
 
     bool is_finished_ = false;  // Object animation complete
     bool is_cycled_ =
-        true;  // Object animation is cycled, only meaningful for animated sprites and sequnceres
+            true;  // Object animation is cycled, only meaningful for animated sprites and sequnceres
     bool is_able_to_interrupt_ =
-        false;  // Animation/Change of VisibleObject can be interrupted at the moment
+            false;  // Animation/Change of VisibleObject can be interrupted at the moment
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ class StaticSpriteImpl : public VisibleObjectImpl {
 public:
     StaticSpriteImpl(const Position *pos, const size_t &width, const size_t &height,
                      std::string_view path_to_file, const size_t &render_level)
-        : VisibleObjectImpl(pos, width, height, render_level), image_(&pos_, width, height) {
+            : VisibleObjectImpl(pos, width, height, render_level), image_(&pos_, width, height) {
         image_.LoadFromFile(path_to_file);
     }
 
@@ -114,16 +114,16 @@ public:
                        const size_t &frame_rate, const size_t &frames_count_width,
                        const size_t &frames_count_height,
                        const std::unordered_set<size_t> &interrupt_points, bool is_cycled)
-        : VisibleObjectImpl(pos, width, height, render_level, is_cycled),
-          image_(&pos_, width, height),
-          frame_rate_(frame_rate),
-          frames_count_width_(frames_count_width),
-          frames_count_height_(frames_count_height) {
+            : VisibleObjectImpl(pos, width, height, render_level, is_cycled),
+              image_(&pos_, width, height),
+              frame_rate_(frame_rate),
+              frames_count_width_(frames_count_width),
+              frames_count_height_(frames_count_height) {
         static_image_.LoadFromFile(std::string(path_to_file));
         kFRAME_SIZE_X =
-            static_cast<double>(static_image_.GetRealSize().first) / frames_count_width_;
+                static_cast<double>(static_image_.GetRealSize().first) / frames_count_width_;
         kFRAME_SIZE_Y =
-            static_cast<double>(static_image_.GetRealSize().second) / frames_count_height;
+                static_cast<double>(static_image_.GetRealSize().second) / frames_count_height;
     };
 
     void RenderIt(Canvas *canvas) override {
@@ -154,10 +154,10 @@ public:
         }
 
         image_.LoadFromStaticImage(
-            static_image_, Position(0, 0),
-            Position(current_frame_x * kFRAME_SIZE_X, current_frame_y * kFRAME_SIZE_Y),
-            Position((current_frame_x + 1) * kFRAME_SIZE_X, (current_frame_y + 1) * kFRAME_SIZE_Y),
-            kFRAME_SIZE_X, kFRAME_SIZE_Y);
+                static_image_, Position(0, 0),
+                Position(current_frame_x * kFRAME_SIZE_X, current_frame_y * kFRAME_SIZE_Y),
+                Position((current_frame_x + 1) * kFRAME_SIZE_X, (current_frame_y + 1) * kFRAME_SIZE_Y),
+                kFRAME_SIZE_X, kFRAME_SIZE_Y);
         canvas->Draw(&image_);
     }
 
@@ -221,12 +221,12 @@ AnimatedSprite::~AnimatedSprite() noexcept = default;
 //////////////////////////////////////////////////////////////////
 
 AnimationSequencer::AnimationSequencer(
-    const std::vector<std::pair<std::string_view, VisibleObject *>> &params_list,
-    const std::unordered_set<std::string_view> &interrupt_points, bool is_cycled)
-    : BasicSequencer<VisibleObject>(params_list, is_cycled), interrupt_points_(interrupt_points){};
+        const std::vector<std::pair<std::string_view, VisibleObject *>> &params_list,
+        const std::unordered_set<std::string_view> &interrupt_points, bool is_cycled)
+        : BasicSequencer<VisibleObject>(params_list, is_cycled), interrupt_points_(interrupt_points){};
 
 void AnimationSequencer::SwitchAnimationTo(std::string_view tag, SwitchOption option) {
-    if (option == SwitchOption::FORSE) {
+    if (option == SwitchOption::FORCE) {
         cur_object_tag_ = tag;
         std::queue<SwitchInfo> empty_queue;
         std::swap(switch_queue_, empty_queue); /* Fast clear */

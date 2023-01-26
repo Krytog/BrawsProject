@@ -13,7 +13,7 @@ void MyTime::ResetTime() {
     start_clock_ = std::chrono::steady_clock::now();
 }
 
-MyTime &MyTime::operator=(const MyTime &other) {
+MyTime& MyTime::operator=(const MyTime& other) {
     start_clock_ = other.start_clock_;
     return *this;
 }

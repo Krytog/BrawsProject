@@ -1,6 +1,9 @@
 #pragma once
 
+<<<<<<< HEAD
 #include "Canvas.h"
+=======
+>>>>>>> main
 #include "Position.h"
 
 class VisibleObject {

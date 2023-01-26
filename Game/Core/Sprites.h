@@ -57,11 +57,10 @@ private:
 class AnimationSequencer : public VisibleObject, public BasicSequencer<VisibleObject> {
 public:
     enum SwitchOption {
-        FORSE, /* Change animation immediately */
+        FORCE, /* Change animation immediately */
         MIXED, /* Change after first breakpoint */
         SOFT   /* Change after current animation is finished */
     };
-
 public:
     AnimationSequencer(const std::vector<std::pair<std::string_view, VisibleObject*>> &params_list,
                        const std::unordered_set<std::string_view> &interrupt_points = {},
