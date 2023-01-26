@@ -105,6 +105,10 @@ void Engine::ExecuteUpdatesOfCustomBehaviours() {
     }
 }
 
+void Engine::TryExecuteEvents() {
+    event_handler_.TryExecuteAll();
+}
+
 void Engine::Update() {
     ReadNewInput();
     ExecuteUpdatesOfCustomBehaviours();
