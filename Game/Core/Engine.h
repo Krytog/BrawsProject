@@ -12,11 +12,15 @@
 #include "Sprites.h"
 #include "DelayQueue.h"
 #include "InputSystem.h"
+#include "EventHandler.h"
 
 class Engine {
 public:
     static Engine& GetInstance();
 
+
+    //Creating and destroying objects
+    ///////////////////////////////////////////////////////////////////////////////////////
     template <class TObject, typename... Args>
     GameObject* ProduceObject(Position* pos_ptr, Collider* coll_ptr, VisibleObject* vis_ptr,
                               const std::string_view& tag, Args&&... args) {
@@ -37,11 +41,18 @@ public:
     }
 
     void Destroy(GameObject* object_ptr);
+    ///////////////////////////////////////////////////////////////////////////////////////
 
+
+    //Camera controls
+    ///////////////////////////////////////////////////////////////////////////////////////
     void SetCameraOn(const GameObject* object);
-
     Position GetCameraPosition() const;
+    ///////////////////////////////////////////////////////////////////////////////////////
 
+
+    //Collisions
+    ///////////////////////////////////////////////////////////////////////////////////////
     CollisionSystem::PossiblePosition CheckPhysicalCollision(const GameObject* first,
                                                              const GameObject* second) const;
     CollisionSystem::PossiblePosition CheckTriggerCollision(const GameObject* first,
@@ -54,11 +65,18 @@ public:
                                                                  const std::string_view string) const;
     template <typename T>
     CollisionSystem::CollisionsInfoArray GetAllCollisionsWithType(const GameObject* game_object) const;
+    ///////////////////////////////////////////////////////////////////////////////////////
 
 
 
+    //Getting input
+    ///////////////////////////////////////////////////////////////////////////////////////
     InputSystem::InputTokensArray GetInput() const;
+    ///////////////////////////////////////////////////////////////////////////////////////
 
+
+    //Delayed callbacks
+    ///////////////////////////////////////////////////////////////////////////////////////
     template <typename Callable, typename... Args>
     void Invoke(const std::chrono::milliseconds& milliseconds, Callable&& cb, Args... args) {
         delay_queue_.PushTime(std::chrono::steady_clock::now() + milliseconds, std::forward<Callable>(cb),
@@ -77,8 +95,60 @@ public:
     void Invoke(const uint64_t ticks_count, F* pointer, Callable&& cb, Args... args) {
         delay_queue_.PushTicks(ticks_count, pointer, std::forward<Callable>(cb), std::forward<Args>(args)...);
     }
+    ///////////////////////////////////////////////////////////////////////////////////////
 
+
+    //Events
+    ///////////////////////////////////////////////////////////////////////////////////////
+    template <typename Predicate, typename... PredicateArgs, typename Callable, typename... CallableArgs,
+            typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
+    typename CallableArgsTuple = std::tuple<CallableArgs...>>
+    Event* CreateDisposableEvent(Predicate&& pr, PredicateArgsTuple&& pr_args, Callable&& cb,
+                                 CallableArgsTuple&& cb_args) {
+        event_handler_.CreateDisposableEvent(std::forward<Predicate>(pr), std::forward<PredicateArgsTuple>(pr_args),
+                             std::forward<Callable>(cb), std::forward<CallableArgsTuple>(cb_args),
+                             Disposable);
+        return &events_.back();
+    }
+
+    template <typename Predicate, typename... PredicateArgs, typename Invoker, typename Callable,
+            typename... CallableArgs, typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
+    typename CallableArgsTuple = std::tuple<CallableArgs...>>
+    Event* CreateDisposableEvent(Predicate&& pr, PredicateArgsTuple&& pr_args, Invoker* pointer,
+                                 Callable&& cb, CallableArgsTuple&& cb_args) {
+        event_handler_.CreateDisposableEvent(std::forward<Predicate>(pr), std::forward<PredicateArgsTuple>(pr_args), pointer,
+                             std::forward<Callable>(cb), std::forward<CallableArgsTuple>(cb_args),
+                             Disposable);
+        return &events_.back();
+    }
+
+    template <typename Predicate, typename... PredicateArgs, typename Callable, typename... CallableArgs,
+            typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
+    typename CallableArgsTuple = std::tuple<CallableArgs...>>
+    Event* CreateReusableEvent(Predicate&& pr, PredicateArgsTuple&& pr_args, Callable&& cb,
+                               CallableArgsTuple&& cb_args) {
+        event_handler_.CreateReusableEvent(std::forward<Predicate>(pr), std::forward<PredicateArgsTuple>(pr_args),
+                             std::forward<Callable>(cb), std::forward<CallableArgsTuple>(cb_args), Reusable);
+        return &events_.back();
+    }
+
+    template <typename Predicate, typename... PredicateArgs, typename Invoker, typename Callable,
+            typename... CallableArgs, typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
+    typename CallableArgsTuple = std::tuple<CallableArgs...>>
+    Event* CreateReusableEvent(Predicate&& pr, PredicateArgsTuple&& pr_args, Invoker* pointer, Callable&& cb,
+                               CallableArgsTuple&& cb_args) {
+        event_handler_.CreateReusableEvent(std::forward<Predicate>(pr), std::forward<PredicateArgsTuple>(pr_args), pointer,
+                             std::forward<Callable>(cb), std::forward<CallableArgsTuple>(cb_args), Reusable);
+        return &events_.back();
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////
+
+
+    //Ticks
+    ///////////////////////////////////////////////////////////////////////////////////////
     uint64_t GetTicksCount() const;
+    ///////////////////////////////////////////////////////////////////////////////////////
+
 
     ~Engine();
 
@@ -88,14 +158,14 @@ public:
 
     //The next functions can be used only if Update() is not called
     //The following order must be maintained
-    /////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////
     void ReadNewInput();
     void ExecuteUpdatesOfCustomBehaviours();
     void TryExecuteDelayedCallbacks();
     void TryExecuteEvents();
     void RenderAll();
     void IncreaseTicksCount();
-    /////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////
 
 private:
     Engine();
@@ -104,6 +174,7 @@ private:
     Render render_;
     InputSystem input_system_;
     DelayQueue delay_queue_;
+    EventHandler event_handler_;
 
     std::vector<GameObject*> objects_buffer_;
     uint64_t ticks_count_ = 0;
