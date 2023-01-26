@@ -1,4 +1,4 @@
-#include "Engine.h"
+#include "CustomBehaviour.h"
 
 Engine& Engine::GetInstance() {
     static Engine instance;
@@ -95,4 +95,29 @@ CollisionSystem::PossiblePosition Engine::CheckPhysicalCollision(const GameObjec
 CollisionSystem::PossiblePosition Engine::CheckTriggerCollision(const GameObject* first,
                                                                 const GameObject* second) const {
     return collision_system_.CheckTriggerCollision(first, second);
+}
+
+uint64_t Engine::GetTicksCount() const {
+    return ticks_count_;
+}
+
+void Engine::IncreaseTicksCount() {
+    ++ticks_count_;
+}
+
+void Engine::ExecuteUpdatesOfCustomBehaviours() {
+    for (auto game_object : objects_buffer_) {
+        if (auto custom = dynamic_cast<CustomBehaviour*>(game_object)) {
+            custom->OnUpdate();
+        }
+    }
+}
+
+void Engine::Update() {
+    ReadNewInput();
+    ExecuteUpdatesOfCustomBehaviours();
+    TryExecuteDelayedCallbacks();
+    TryExecuteEvents();
+    RenderAll();
+    IncreaseTicksCount();
 }
