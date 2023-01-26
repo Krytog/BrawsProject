@@ -133,9 +133,9 @@ TEST_F(EventHandlerTest, BasicNoThrow) {
     eh->TryExecuteAll();
     eh->Clear();
 
-    ASSERT_NO_THROW(eh->CreateDisposableEvent(&AlwaysTrue, std::tuple(), &Bar, {}));
-    ASSERT_NO_THROW(eh->CreateDisposableEvent(&CastCheck, {}, &Bar, std::tuple()));
-    ASSERT_NO_THROW(eh->CreateReusableEvent(&ReturnBool, std::make_tuple(true), &Bar, {}));
+    ASSERT_NO_THROW(eh->CreateEvent(&AlwaysTrue, std::tuple(), &Bar, {}, EventStatus::Disposable));
+    ASSERT_NO_THROW(eh->CreateEvent(&CastCheck, {}, &Bar, std::tuple(), EventStatus::Disposable));
+    ASSERT_NO_THROW(eh->CreateEvent(&ReturnBool, std::make_tuple(true), &Bar, {}, EventStatus::Reusable));
 
     EXPECT_TRUE(!eh->Empty()) << "Fake Emplace";
     eh->Clear();
@@ -143,16 +143,16 @@ TEST_F(EventHandlerTest, BasicNoThrow) {
 
     SomeStruct s;
     int a = 5, b = 6, c = 7;
-    ASSERT_NO_THROW(eh->CreateDisposableEvent(&FooPointer, std::make_tuple(&a, &b),  &s,&SomeStruct::SomeMethod, std::tuple(c)));
-    ASSERT_NO_THROW(eh->CreateReusableEvent(&FooReference, std::make_tuple(std::ref(a), std::ref(b)), &s, &SomeStruct::SomeConstMethod, std::tuple(7)));
-    ASSERT_NO_THROW(eh->CreateDisposableEvent(&AlwaysTrue, {}, &SomeStruct::SomeStaticMethod, {}));
+    ASSERT_NO_THROW(eh->CreateEvent(&FooPointer, std::make_tuple(&a, &b),  &s,&SomeStruct::SomeMethod, std::tuple(c), EventStatus::Disposable));
+    ASSERT_NO_THROW(eh->CreateEvent(&FooReference, std::make_tuple(std::ref(a), std::ref(b)), &s, &SomeStruct::SomeConstMethod, std::tuple(7), EventStatus::Reusable));
+    ASSERT_NO_THROW(eh->CreateEvent(&AlwaysTrue, {}, &SomeStruct::SomeStaticMethod, {}, EventStatus::Disposable));
     ASSERT_NO_THROW(eh->TryExecuteAll());
 
     /* TearDown auto clear */
 }
 
 TEST_F(EventHandlerTest, BasicCorrectness) {
-    Event* d_ptr = eh->CreateDisposableEvent(&CheckStatus, {}, &ChangeStatus, {});
+    Event* d_ptr = eh->CreateEvent(&CheckStatus, {}, &ChangeStatus, {},EventStatus::Disposable);
     EXPECT_FALSE(eh->Empty());
     eh->TryExecuteAll();
     EXPECT_FALSE(eh->Empty());
@@ -162,7 +162,7 @@ TEST_F(EventHandlerTest, BasicCorrectness) {
     EXPECT_TRUE(eh->Empty());
     EXPECT_TRUE(status) << "TryExecute should not execute Disposable and ForceExecuted Events";
 
-    Event* r_ptr = eh->CreateReusableEvent(&CheckStatus, {}, &ChangeStatus, {});
+    Event* r_ptr = eh->CreateEvent(&CheckStatus, {}, &ChangeStatus, {}, EventStatus::Reusable);
     EXPECT_FALSE(eh->Empty());
     eh->TryExecuteAll();
     EXPECT_FALSE(eh->Empty());
@@ -179,7 +179,7 @@ TEST_F(EventHandlerTest, PointerAndReferencePredicate) {
     Functional f;
 
     int a = 5, b = 6, c = 7;
-    eh->CreateDisposableEvent(&FooPointer, std::tuple(&a, &b), &f, &Functional::ChangeStatus, std::tuple(c));
+    eh->CreateEvent(&FooPointer, std::tuple(&a, &b), &f, &Functional::ChangeStatus, std::tuple(c), EventStatus::Disposable);
     eh->TryExecuteAll();
     EXPECT_NE(f.GetStatus(), c);
     EXPECT_FALSE(eh->Empty());
@@ -189,7 +189,7 @@ TEST_F(EventHandlerTest, PointerAndReferencePredicate) {
     EXPECT_TRUE(eh->Empty());
 
     f.ChangeStatus(0);
-    eh->CreateDisposableEvent(&FooReference, std::tuple(std::ref(a), std::ref(c)), &f, &Functional::ChangeStatus, std::tuple(b));
+    eh->CreateEvent(&FooReference, std::tuple(std::ref(a), std::ref(c)), &f, &Functional::ChangeStatus, std::tuple(b), EventStatus::Disposable);
     eh->TryExecuteAll();
     EXPECT_EQ(f.GetStatus(), 0);
     EXPECT_FALSE(eh->Empty());
@@ -200,16 +200,16 @@ TEST_F(EventHandlerTest, PointerAndReferencePredicate) {
 
     bool boolean = false;
     int cnt = 0;
-    auto ptr = eh->CreateReusableEvent(&ReturnBoolRef, std::make_tuple(std::ref(boolean)), &SetBoolTrue, std::make_tuple(std::ref(boolean), std::ref(cnt)));
+    auto ptr = eh->CreateEvent(&ReturnBoolRef, std::make_tuple(std::ref(boolean)), &SetBoolTrue, std::make_tuple(std::ref(boolean), std::ref(cnt)), EventStatus::Reusable);
     eh->TryExecuteAll();
     EXPECT_FALSE(eh->Empty());
     ptr->ForceExecute();
     EXPECT_TRUE(boolean);
     eh->TryExecuteAll();
-    auto ptr2 = eh->CreateReusableEvent(&CastCheck, {}, &SetBoolTrue, std::make_tuple(std::ref(boolean), std::ref(cnt)));
+    auto ptr2 = eh->CreateEvent(&CastCheck, {}, &SetBoolTrue, std::make_tuple(std::ref(boolean), std::ref(cnt)), EventStatus::Reusable);
     eh->TryExecuteAll();
     eh->TryExecuteAll();
-    eh->CreateDisposableEvent(&AlwaysTrue, {}, &SomeStruct::SomeStaticMethod, {});
+    eh->CreateEvent(&AlwaysTrue, {}, &SomeStruct::SomeStaticMethod, {}, EventStatus::Disposable);
     eh->TryExecuteAll();
     ptr2->ForceExecute();
     EXPECT_EQ(cnt, 9);
@@ -223,7 +223,7 @@ TEST_F(EventHandlerTest, StressForce) {
     copies.reserve(kIterations);
 
     for (size_t i = 0; i < kIterations - 1; ++i) {
-        auto ptr = eh->CreateDisposableEvent(&GoodIndex, std::make_tuple(std::cref(checkers), i), &UpdateIndex, std::make_tuple(std::ref(checkers), i + 1));
+        auto ptr = eh->CreateEvent(&GoodIndex, std::make_tuple(std::cref(checkers), i), &UpdateIndex, std::make_tuple(std::ref(checkers), i + 1), EventStatus::Disposable);
         copies.push_back(ptr);
     }
     checkers[0] = true;
@@ -241,7 +241,7 @@ TEST_F(EventHandlerTest, StrangeStress) {
     int cnt = 0;
 
     for (size_t i = 1; i <= 1001; ++i) {
-        eh->CreateDisposableEvent(&FakeIf, std::make_tuple(&v, i), &SetBoolTrue, std::make_tuple(std::ref(b), std::ref(cnt)));
+        eh->CreateEvent(&FakeIf, std::make_tuple(&v, i), &SetBoolTrue, std::make_tuple(std::ref(b), std::ref(cnt)), EventStatus::Disposable);
     }
     size_t iterations = 0;
     while (!eh->Empty()) {
