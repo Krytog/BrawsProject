@@ -29,7 +29,7 @@ CollisionSystem::PossiblePosition CollisionSystem::CheckPhysicalCollision(const 
         return std::nullopt;
     }
 
-    if (registered_colliders_.at(second).IsTrigger()) {
+    if (registered_colliders_.at(second)->IsTrigger()) {
         return std::nullopt;
     }
 
@@ -42,7 +42,7 @@ CollisionSystem::PossiblePosition CollisionSystem::CheckTriggerCollision(const G
         return std::nullopt;
     }
 
-    if (!registered_colliders_.at(second).IsTrigger()) {
+    if (!registered_colliders_.at(second)->IsTrigger()) {
         return std::nullopt;
     }
 

@@ -18,10 +18,6 @@ void Vector2D::SetCoordinates(double x, double y) {
     y_ = y;
 }
 
-bool Vector2D::operator==(const Vector2D& other) {
-    return (std::abs(x_ - other.x_) < PRECISION && std::abs(y_ - other.y_) < PRECISION);
-}
-
 std::pair<double, double> Vector2D::GetCoordinates() const {
     return {x_, y_};
 }
