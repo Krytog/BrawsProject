@@ -4,7 +4,7 @@
 
 class CustomBehaviour {
 public:
-    CustomBehaviour();
+    CustomBehaviour(): engine_(&Engine::GetInstance()) {};
 
     virtual void OnUpdate() = 0;
 

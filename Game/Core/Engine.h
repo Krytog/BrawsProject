@@ -14,6 +14,8 @@
 #include "InputSystem.h"
 #include "EventHandler.h"
 
+#include <iostream>
+
 class Engine {
 public:
     static Engine& GetInstance();
@@ -36,6 +38,7 @@ public:
         if (vis_ptr) {
             render_.AddToRender(object_ptr, vis_ptr);
         }
+
         return object_ptr;
     }
 
