@@ -7,8 +7,8 @@ GameObject::GameObject()
       tag_("__NULL") {
 }
 
-GameObject::GameObject(std::unique_ptr<Position> position, std::unique_ptr<Collider> collider,
-                       std::unique_ptr<VisibleObject> visible_object, const std::string_view& tag)
+GameObject::GameObject(std::unique_ptr<Position>& position, std::unique_ptr<Collider>& collider,
+                       std::unique_ptr<VisibleObject>& visible_object, const std::string_view& tag)
     : position_(position.release()),
       collider_(collider.release()),
       visible_object_(visible_object.release()),

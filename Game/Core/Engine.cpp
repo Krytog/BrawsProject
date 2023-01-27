@@ -28,7 +28,7 @@ void Engine::SetCameraOn(const GameObject* object) {
     render_.SetCameraOn(object);
 }
 
-void Engine::RenderAll() const {
+void Engine::RenderAll() {
     render_.RenderAll();
 }
 
@@ -40,7 +40,7 @@ Engine::~Engine() {
 
 Engine::Engine()
     : collision_system_(CollisionSystem::GetInstance()),
-      input_system_(InputSystem::GetInstance()),
+      input_system_(InputSystem::GetInstance(*render_.GetWindowPointer())),
       event_handler_(EventHandler::GetInstance()),
       delay_queue_(DelayQueue::GetInstance()),
       ticks_count_(0) {
@@ -72,7 +72,7 @@ CollisionSystem::CollisionsInfoArray Engine::GetTriggerCollisions(const GameObje
 
 CollisionSystem::CollisionsInfoArray Engine::GetAllCollisionsWithTag(const GameObject* game_object,
                                                                      const std::string_view string) const {
-    return collision_system_.GetAllCollisionsWithTag(game_object);
+    return collision_system_.GetAllCollisionsWithTag(game_object, string);
 }
 
 template <typename T>
