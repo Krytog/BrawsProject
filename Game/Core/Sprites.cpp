@@ -130,7 +130,7 @@ public:
         const size_t current_frame = (current_frame_y * frames_count_width_) + current_frame_x;
         is_able_to_interrupt_ = (interrupt_points_.count(current_frame)) ? (false) : (true);
 
-        if (is_finished_ && !is_cycled_) {
+        if (is_finished_) {
             canvas->Draw(&image_);
             return;
         }
@@ -142,10 +142,8 @@ public:
                 if (++current_frame_y ==
                     frames_count_height_) {  // The last frame in the sprite has been played
                     current_frame_y = 0;
-                    if (!is_finished_) {
-                        is_finished_ = true;
-                    }
                     if (!is_cycled_) {
+                        is_finished_ = true;
                         canvas->Draw(&image_);
                         return;
                     }

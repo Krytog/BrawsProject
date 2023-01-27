@@ -16,7 +16,7 @@ void Engine::Destroy(GameObject* object_ptr) {
     }
 
     throw std::runtime_error(
-        "The the pointed object was not created using "
+        "The pointed object was not created using "
         "the engine or was already destroyed");
 }
 
