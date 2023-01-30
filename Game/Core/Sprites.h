@@ -23,6 +23,7 @@ public:
 
     bool IsFinished() const override;
     bool IsAbleToInterrupt() const override;
+    void Reset() override;
 
     ~StaticSprite();
 
@@ -47,6 +48,7 @@ public:
 
     bool IsFinished() const override;
     bool IsAbleToInterrupt() const override;
+    void Reset() override;
 
     ~AnimatedSprite();
 
@@ -58,9 +60,10 @@ class AnimationSequencer : public VisibleObject, public BasicSequencer<VisibleOb
 public:
     enum SwitchOption {
         FORCE, /* Change animation immediately */
-        MIXED, /* Change after first breakpoint */
-        SOFT   /* Change after current animation is finished */
+        MIXED, /* Change after first breakpoint, or animation is finished */
+        SOFT   /* Change after current animation is finished( !Cyclic objects are never finished! ) */
     };
+
 public:
     AnimationSequencer(const std::vector<std::pair<std::string_view, VisibleObject*>> &params_list,
                        const std::unordered_set<std::string_view> &interrupt_points = {},
@@ -75,6 +78,8 @@ public:
     bool IsFinished() const override;
     bool IsAbleToInterrupt() const override;
     size_t GetRenderLevel() const override;
+
+    void Reset() override;
 
 private:
     struct SwitchInfo {

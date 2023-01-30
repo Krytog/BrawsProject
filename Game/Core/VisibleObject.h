@@ -15,7 +15,7 @@ public:
 
     virtual bool IsFinished() const = 0;
     virtual bool IsAbleToInterrupt() const = 0;
-//    virtual void ResetAnimationOptions() = 0;
+    virtual void Reset() = 0;
 
     virtual ~VisibleObject() = default;
 };

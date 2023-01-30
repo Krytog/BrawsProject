@@ -50,5 +50,3 @@ private:
     size_t spawn_frequency_ = 90;
     size_t number_per_spawn_ = 2;
 };
-
-

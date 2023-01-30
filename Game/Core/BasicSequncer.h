@@ -27,6 +27,9 @@ public:
 
     void RemoveByTag(std::string_view tag) {
         IsAt(tag);
+        if (tag == start_object_tag_) {
+            throw std::runtime_error("Sequncer: Unable to delete start animation object!");
+        }
         Node &node = display_objects_.at(tag);
         for (const auto &incom_tag : node.incoming) {
             display_objects_[incom_tag].outcoming.erase(tag);
@@ -69,11 +72,17 @@ public:
     }
 
     void SetStartTag(std::string_view tag) {
+        IsAt(tag);
         start_object_tag_ = tag;
     }
 
     void SetEndTag(std::string_view tag) {
+        IsAt(tag);
         end_object_tag_ = tag;
+    }
+
+    void Reset() {
+        cur_object_tag_ = start_object_tag_;
     }
 
 protected:
