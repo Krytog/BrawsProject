@@ -5,9 +5,8 @@ ColumnLimit: 110
 AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
-#DerivePointerAlignment: true
+DerivePointerAlignment: false
 PointerAlignment: Left
 ReferenceAlignment: Left
 KeepEmptyLinesAtTheStartOfBlocks: true
 SortIncludes: Never
-
