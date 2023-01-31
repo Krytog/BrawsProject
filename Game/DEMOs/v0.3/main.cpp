@@ -33,7 +33,6 @@ int main() {
                                                  aim);
 
     engine.ProduceObject<KripProducer>(nullptr, nullptr, nullptr, "kripoc", player, GameMode::GOD);
-
     engine.SetCameraOn(player);
 
 

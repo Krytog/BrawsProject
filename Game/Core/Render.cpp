@@ -36,8 +36,10 @@ public:
         if (!window_.isOpen()) {
             exit(0);
         }
+
         sf::Event event;
         Canvas canvas(&window_);
+
         canvas.SetCenter(camera_.GetPosition());
 
         while (window_.pollEvent(event)) {
