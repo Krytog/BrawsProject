@@ -9,7 +9,6 @@
 
 #include "Zelensky.h"
 #include "Cursor.h"
-#include "KripProducer.h"
 
 #include <iostream>
 
@@ -47,15 +46,12 @@ int main() {
 
     auto player = engine.ProduceObject<Zelensky>(new Position(0, 0),
                                                  new RectangleCollider(Position(0, 0), 200, 250),
-//                                                 run_left,
+                                                 //run_left,
                                                  new AnimationSequencer(decoy_vector, interrupt_points, true),
                                                  "Zelensky_player",
                                                  arg_pack,
                                                  aim,
                                                  20);
-
-    auto krip_factory = engine.ProduceObject<KripProducer>(nullptr, nullptr, nullptr, "kripoc", player, GameMode::GOD);
-
     engine.SetCameraOn(player);
 
 
