@@ -31,7 +31,7 @@ public:
         std::unique_ptr<Collider> coll_uptr(coll_ptr);
         std::unique_ptr<VisibleObject> vis_uptr(vis_ptr);
         GameObject* object_ptr = new TObject(pos_uptr, coll_uptr, vis_uptr, tag, std::forward<Args>(args)...);
-        objects_buffer_.push_back(object_ptr);
+        objects_buffer_.push_front(object_ptr);
         if (coll_ptr) {
             collision_system_.RegisterColliderOf(object_ptr, coll_ptr);
         }
@@ -44,6 +44,9 @@ public:
 
     void Destroy(GameObject* object_ptr);
     ///////////////////////////////////////////////////////////////////////////////////////
+
+    // Render
+    void RenderSwith(GameObject* game_object, VisibleObject* new_visible_object);
 
     // Camera controls
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -148,6 +151,6 @@ private:
     EventHandler event_handler_;
     DelayQueue delay_queue_;
 
-    std::vector<GameObject*> objects_buffer_;
+    std::deque<GameObject*> objects_buffer_;
     uint64_t ticks_count_ = 0;
 };

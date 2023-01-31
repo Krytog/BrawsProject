@@ -25,9 +25,7 @@ public:
     }
 
     void RemoveFromRender(const GameObject *object_ptr) {
-        if (!visible_objects_.contains(object_ptr)) {
-            throw std::runtime_error("Such GameObject didn't register as Visible");
-        } else {
+        if (visible_objects_.contains(object_ptr)) {
             const VisibleObject* vis_obj_ptr = visible_objects_.at(object_ptr);
             render_levels_[vis_obj_ptr->GetRenderLevel()].erase(vis_obj_ptr);
             visible_objects_.erase(object_ptr);

@@ -126,3 +126,8 @@ void Engine::Update() {
     RenderAll();
     IncreaseTicksCount();
 }
+
+void Engine::RenderSwith(GameObject *game_object, VisibleObject *new_visible_object) {
+    render_.RemoveFromRender(game_object);
+    render_.AddToRender(game_object, new_visible_object);
+}

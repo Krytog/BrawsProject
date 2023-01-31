@@ -2,6 +2,11 @@
 
 #include <iostream>
 
+static double k_health = 100;
+static Position k_shoot_pos(0, 0);
+static double k_damage = 50;
+static double k_speed = 10;
+
 Vector2D ResultVector(const InputSystem::InputTokensArray& input) {
     Vector2D output(0, 0);
     for (auto token : input) {
@@ -20,9 +25,78 @@ Vector2D ResultVector(const InputSystem::InputTokensArray& input) {
     return output;
 }
 
-Zelensky::Zelensky(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_ptr, std::unique_ptr<VisibleObject>& vis_ptr, std::string_view tag, const CharacterInitArgPack &char_pack, GameObject* aim, const double speed):
-                                                                                          GameObject(pos_ptr, coll_ptr, vis_ptr, tag), Character(char_pack), aim_(aim), speed_(speed) {
-    std::cout << "DAROVENKO" << std::endl;
+Zelensky::Zelensky(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_ptr, std::unique_ptr<VisibleObject>& vis_ptr, std::string_view tag, GameObject* aim):
+                                                                                          GameObject(pos_ptr, coll_ptr, vis_ptr, tag), Character(k_health, k_shoot_pos, k_damage), aim_(aim), speed_(k_speed) {
+    CharacterAnimationArgPack arg_pack;
+    {
+        TempStaticSpriteArgPack pack;
+        pack.path = "../Game/DEMOs/v0.3/Resources/ZelenskyStandLeft.png";
+        pack.width = 180;
+        pack.height = 220;
+        pack.render_level = LEVELS::SECOND_USER_LEVEL;
+        arg_pack.stand_left_animation = pack;
+    }
+    {
+        TempStaticSpriteArgPack pack;
+        pack.path = "../Game/DEMOs/v0.3/Resources/ZelenskyStandRight.png";
+        pack.width = 180;
+        pack.height = 220;
+        pack.render_level = LEVELS::SECOND_USER_LEVEL;
+        arg_pack.stand_right_animation = pack;
+    }
+    {
+        TempAnimatedSpriteArgPack pack;
+        pack.path = "../Game/DEMOs/v0.3/Resources/ZelenskyRunsLeft.png";
+        pack.width = 200;
+        pack.height = 250;
+        pack.render_level = LEVELS::SECOND_USER_LEVEL;
+        pack.ticks_per_frame = 2;
+        pack.interrupt_points = {0};
+        pack.cycled = true;
+        pack.columns = 18;
+        pack.rows = 1;
+        arg_pack.run_left_animation = pack;
+    }
+    {
+        TempAnimatedSpriteArgPack pack;
+        pack.path = "../Game/DEMOs/v0.3/Resources/ZelenskyRunsRight.png";
+        pack.width = 200;
+        pack.height = 250;
+        pack.render_level = LEVELS::SECOND_USER_LEVEL;
+        pack.ticks_per_frame = 2;
+        pack.interrupt_points = {0};
+        pack.cycled = true;
+        pack.columns = 18;
+        pack.rows = 1;
+        arg_pack.run_right_animation = pack;
+    }
+    {
+        TempAnimatedSpriteArgPack pack;
+        pack.path = "../Game/DEMOs/v0.3/Resources/ZelenskyRunsLeft.png";
+        pack.width = 200;
+        pack.height = 250;
+        pack.render_level = LEVELS::SECOND_USER_LEVEL;
+        pack.ticks_per_frame = 2;
+        pack.interrupt_points = {0};
+        pack.cycled = true;
+        pack.columns = 18;
+        pack.rows = 1;
+        arg_pack.death_left_animation = pack;
+    }
+    {
+        TempAnimatedSpriteArgPack pack;
+        pack.path = "../Game/DEMOs/v0.3/Resources/ZelenskyRunsRight.png";
+        pack.width = 200;
+        pack.height = 250;
+        pack.render_level = LEVELS::SECOND_USER_LEVEL;
+        pack.ticks_per_frame = 2;
+        pack.interrupt_points = {0};
+        pack.cycled = true;
+        pack.columns = 18;
+        pack.rows = 1;
+        arg_pack.death_right_animation = pack;
+    }
+    AnimationsInitialization(arg_pack);
 };
 
 void Zelensky::Shoot(const Position &aim_pos) {
@@ -42,5 +116,5 @@ void Zelensky::OnUpdate() {
         Shoot(aim_->GetPosition());
     }
     auto vector = ResultVector(input);
-    Move(vector * speed_);
+    CharacterMove(vector * speed_);
 }

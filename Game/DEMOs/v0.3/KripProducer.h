@@ -44,9 +44,9 @@ private:
     // Krip's characteristics
     double start_health_ = 50;
     double damage_ = 20;
-    double speed_ = 2;
+    double speed_ = 7.5;
 
     double spawn_radius_ = 800;
-    size_t spawn_frequency_ = 90;
+    size_t spawn_frequency_ = 500;
     size_t number_per_spawn_ = 2;
 };
