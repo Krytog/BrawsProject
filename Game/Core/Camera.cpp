@@ -2,7 +2,7 @@
 
 #define DefaultPosition Position(0, 0)
 
-void Camera::SetCameraOn(const GameObject *object) {
+void Camera::SetCameraOn(const GameObject* object) {
     object_to_follow_ = object;
 }
 

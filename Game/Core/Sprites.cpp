@@ -72,7 +72,6 @@ public:
         image_.UpdatePosition(position);
     }
 
-
     void Translate(const Vector2D& vector2D) override {
         pos_.Translate(vector2D);
         image_.Translate(vector2D);
@@ -187,7 +186,6 @@ public:
         pos_ = position;
         image_.UpdatePosition(position);
     }
-
 
     void Translate(const Vector2D& vector2D) override {
         pos_.Translate(vector2D);

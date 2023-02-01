@@ -19,12 +19,12 @@ public:
         window_.setMouseCursorVisible(false);
     }
 
-    void AddToRender(const GameObject *object_ptr, const VisibleObject *vis_obj_ptr) {
+    void AddToRender(const GameObject* object_ptr, const VisibleObject* vis_obj_ptr) {
         visible_objects_[object_ptr] = vis_obj_ptr;
         render_levels_[vis_obj_ptr->GetRenderLevel()].insert(vis_obj_ptr);
     }
 
-    void RemoveFromRender(const GameObject *object_ptr) {
+    void RemoveFromRender(const GameObject* object_ptr) {
         if (!visible_objects_.contains(object_ptr)) {
             throw std::runtime_error("Such GameObject didn't register as Visible");
         } else {
@@ -53,7 +53,7 @@ public:
         window_.display();
     }
 
-    void SetCameraOn(const GameObject *object) {
+    void SetCameraOn(const GameObject* object) {
         camera_.SetCameraOn(object);
     };
 
@@ -61,19 +61,19 @@ public:
         return camera_.GetPosition();
     };
 
-    sf::Window *GetWindowPointer() {
+    sf::Window* GetWindowPointer() {
         return &window_;
     }
 
 private:
-    std::unordered_map<const GameObject *, const VisibleObject *> visible_objects_;
+    std::unordered_map<const GameObject*, const VisibleObject*> visible_objects_;
     std::map<size_t, std::unordered_set<const VisibleObject*>> render_levels_;
     sf::RenderWindow window_;
     Camera camera_ = Camera::GetInstance();
 
-    void AddAllToCanvas(Canvas *canvas) {
-        for (const auto &[level, vis_objects]: render_levels_) {
-            for (const auto &vis_obj: vis_objects) {
+    void AddAllToCanvas(Canvas* canvas) {
+        for (const auto& [level, vis_objects] : render_levels_) {
+            for (const auto& vis_obj : vis_objects) {
                 vis_obj->RenderIt(canvas);
             }
         }
@@ -82,10 +82,10 @@ private:
 
 Render::Render() : impl_(std::make_unique<RenderImplementation>()){};
 
-void Render::AddToRender(const GameObject *object_ptr, const VisibleObject *vis_obj_ptr) {
+void Render::AddToRender(const GameObject* object_ptr, const VisibleObject* vis_obj_ptr) {
     impl_->AddToRender(object_ptr, vis_obj_ptr);
 }
-void Render::RemoveFromRender(const GameObject *vis_object_ptr) {
+void Render::RemoveFromRender(const GameObject* vis_object_ptr) {
     impl_->RemoveFromRender(vis_object_ptr);
 }
 
@@ -93,7 +93,7 @@ void Render::RenderAll() {
     impl_->RenderAll();
 }
 
-void Render::SetCameraOn(const GameObject *object) {
+void Render::SetCameraOn(const GameObject* object) {
     impl_->SetCameraOn(object);
 }
 
@@ -103,6 +103,6 @@ Position Render::GetCameraPosition() const {
 
 Render::~Render() = default;
 
-sf::Window *Render::GetWindowPointer() const {
+sf::Window* Render::GetWindowPointer() const {
     return impl_->GetWindowPointer();
 }

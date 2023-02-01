@@ -41,8 +41,7 @@ int main() {
     auto spider_pos = new Position(250, 250);
     auto spider_object = engine.ProduceObject<GameObject>(
         spider_pos, new RectangleCollider(*spider_pos, 250, 250),
-        new StaticSprite(spider_pos, 250, 250,
-                         std::string_view("../Game/Core/test_pics/download.jpeg")),
+        new StaticSprite(spider_pos, 250, 250, std::string_view("../Game/Core/test_pics/download.jpeg")),
         std::string_view("wall"));
 
     //    Position pos2(482, 273);

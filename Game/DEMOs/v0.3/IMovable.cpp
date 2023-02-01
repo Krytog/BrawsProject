@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-void IMovable::Move(const Vector2D &direction) {
+void IMovable::Move(const Vector2D& direction) {
     // Trying to go exactly the given direction
     collider_->Translate(direction);
 
@@ -15,7 +15,7 @@ void IMovable::Move(const Vector2D &direction) {
         }
     }
 
-    //We fail to go exactly the given direction, but maybe we can slide along
+    // We fail to go exactly the given direction, but maybe we can slide along
     const double up = direction * Vector2D::Up;
     const double down = direction * Vector2D::Down;
     const double right = direction * Vector2D::Right;

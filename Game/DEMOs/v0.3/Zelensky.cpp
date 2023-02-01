@@ -20,17 +20,23 @@ Vector2D ResultVector(const InputSystem::InputTokensArray& input) {
     return output;
 }
 
-Zelensky::Zelensky(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_ptr, std::unique_ptr<VisibleObject>& vis_ptr, std::string_view tag, const CharacterInitArgPack &char_pack, GameObject* aim, const double speed):
-                                                                                          GameObject(pos_ptr, coll_ptr, vis_ptr, tag), Character(char_pack), aim_(aim), speed_(speed) {
+Zelensky::Zelensky(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_ptr,
+                   std::unique_ptr<VisibleObject>& vis_ptr, std::string_view tag,
+                   const CharacterInitArgPack& char_pack, GameObject* aim, const double speed)
+    : GameObject(pos_ptr, coll_ptr, vis_ptr, tag), Character(char_pack), aim_(aim), speed_(speed) {
     std::cout << "DAROVENKO" << std::endl;
 };
 
-void Zelensky::Shoot(const Position &aim_pos) {
-    engine_->ProduceObject<Bullet>(new Position(position_->GetCoordinatesAsVector2D() + shoot_pos_.GetCoordinatesAsVector2D()),
-                    new CircleCollider(Position(position_->GetCoordinatesAsVector2D() + shoot_pos_.GetCoordinatesAsVector2D()), 50, true),
-                    new StaticSprite(new Position(position_->GetCoordinatesAsVector2D() + shoot_pos_.GetCoordinatesAsVector2D()), 50, 50, "../Game/DEMOs/v0.3/Resources/fireball.png", LEVELS::SECOND_USER_LEVEL),
-                    "bullet",
-                    10, 25, 2000, aim_pos);
+void Zelensky::Shoot(const Position& aim_pos) {
+    engine_->ProduceObject<Bullet>(
+        new Position(position_->GetCoordinatesAsVector2D() + shoot_pos_.GetCoordinatesAsVector2D()),
+        new CircleCollider(
+            Position(position_->GetCoordinatesAsVector2D() + shoot_pos_.GetCoordinatesAsVector2D()), 50,
+            true),
+        new StaticSprite(
+            new Position(position_->GetCoordinatesAsVector2D() + shoot_pos_.GetCoordinatesAsVector2D()), 50,
+            50, "../Game/DEMOs/v0.3/Resources/fireball.png", LEVELS::SECOND_USER_LEVEL),
+        "bullet", 10, 25, 2000, aim_pos);
     std::cout << "ZELENSKY SHOOT!" << std::endl;
 }
 

@@ -36,7 +36,6 @@ Engine::~Engine() {
     for (const auto& object_ptr : objects_buffer_) {
         delete object_ptr;
     }
-
 }
 
 Engine::Engine()
@@ -54,9 +53,12 @@ void Engine::ReadNewInput() {
 InputSystem::InputTokensArray Engine::GetInput() const {
     auto raw_input = input_system_.GetInput();
     auto mouse_token_variant = *(raw_input.begin());
-    auto mouse_token = std::get<InputSystem::MouseToken>(mouse_token_variant);  //Make sure that MouseToken is the first token
+    auto mouse_token = std::get<InputSystem::MouseToken>(
+        mouse_token_variant);  // Make sure that MouseToken is the first token
     auto window_size = render_.GetWindowPointer()->getSize();
-    Vector2D difference = Vector2D(static_cast<double>(window_size.x) / 2, static_cast<double>(window_size.y) / 2) - mouse_token.position.GetCoordinatesAsVector2D();
+    Vector2D difference =
+        Vector2D(static_cast<double>(window_size.x) / 2, static_cast<double>(window_size.y) / 2) -
+        mouse_token.position.GetCoordinatesAsVector2D();
     Position global_mouse_pos(render_.GetCameraPosition().GetCoordinatesAsVector2D() - difference);
     *(raw_input.begin()) = InputSystem::MouseToken{mouse_token.key, global_mouse_pos};
     return raw_input;

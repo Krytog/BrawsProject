@@ -18,7 +18,7 @@ void Vector2D::SetCoordinates(double x, double y) {
     y_ = y;
 }
 
-bool Vector2D::operator==(const Vector2D &other) {
+bool Vector2D::operator==(const Vector2D& other) {
     return (std::abs(x_ - other.x_) < PRECISION && std::abs(y_ - other.y_) < PRECISION);
 }
 
@@ -49,7 +49,7 @@ Vector2D Vector2D::operator*(const double coefficient) const {
     return {x_ * coefficient, y_ * coefficient};
 }
 
-Vector2D &Vector2D::operator*=(const double coefficient) {
+Vector2D& Vector2D::operator*=(const double coefficient) {
     x_ *= coefficient;
     y_ *= coefficient;
     return *this;

@@ -2,14 +2,15 @@
 
 #include <SFML/Window.hpp>
 
-InputSystem::InputSystem(const sf::Window& window): window_(window) {}
+InputSystem::InputSystem(const sf::Window& window) : window_(window) {
+}
 
-InputSystem &InputSystem::GetInstance(const sf::Window& window) {
+InputSystem& InputSystem::GetInstance(const sf::Window& window) {
     static InputSystem instance(window);
     return instance;
 }
 
-//Implementation defined, make sure that MouseToken is ALWAYS at list.begin()!
+// Implementation defined, make sure that MouseToken is ALWAYS at list.begin()!
 void InputSystem::ReadNewInput() {
     input_tokens_.clear();
 
