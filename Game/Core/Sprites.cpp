@@ -12,14 +12,6 @@ public:
                       const size_t& render_level, bool is_cycled = true)
         : pos_(*pos), width_(width), height_(height), render_level_(render_level), is_cycled_(is_cycled){};
 
-    virtual void UpdatePosition(const Position& position) {
-        pos_ = position;
-    };
-
-    virtual void Translate(const Vector2D& vector2D) {
-        pos_.Translate(vector2D);
-    };
-
     size_t GelRenderLevel() const {
         return render_level_;
     }
@@ -31,6 +23,9 @@ public:
     bool IsAbleToInterrupt() const {
         return is_able_to_interrupt_;
     }
+
+    virtual void UpdatePosition(const Position& position) = 0;
+    virtual void Translate(const Vector2D& vector2D) = 0;
 
     virtual void RenderIt(Canvas* canvas) = 0;
     virtual void Reset() = 0;
@@ -57,8 +52,12 @@ class StaticSpriteImpl : public VisibleObjectImpl {
 public:
     StaticSpriteImpl(const Position* pos, const size_t& width, const size_t& height,
                      std::string_view path_to_file, const size_t& render_level)
-        : VisibleObjectImpl(pos, width, height, render_level), image_(&pos_, width, height) {
-        image_.LoadFromFile(path_to_file);
+        : VisibleObjectImpl(pos, width, height, render_level), image_(pos_, width, height) {
+        try {
+            image_.LoadFromFile(path_to_file);
+        } catch (...) {
+            image_.SetDefaultImage();
+        }
     }
 
     void RenderIt(Canvas* canvas) override {
@@ -66,6 +65,17 @@ public:
         if (!is_finished_) {
             is_finished_ = true;
         }
+    }
+
+    void UpdatePosition(const Position& position) override {
+        pos_ = position;
+        image_.UpdatePosition(position);
+    }
+
+
+    void Translate(const Vector2D& vector2D) override {
+        pos_.Translate(vector2D);
+        image_.Translate(vector2D);
     }
 
     void Reset() override {
@@ -121,12 +131,16 @@ public:
                        const size_t& frames_count_height, const std::unordered_set<size_t>& interrupt_points,
                        bool is_cycled)
         : VisibleObjectImpl(pos, width, height, render_level, is_cycled),
-          image_(&pos_, width, height),
+          image_(pos_, width, height),
           tics_per_frame_(tics_per_frame),
           frames_count_width_(frames_count_width),
           frames_count_height_(frames_count_height),
           interrupt_points_(interrupt_points) {
-        static_image_.LoadFromFile(std::string(path_to_file));
+        try {
+            static_image_.LoadFromFile(path_to_file);
+        } catch (...) {
+            static_image_.SetDefaultImage();
+        }
         kFrameSizeX = static_cast<double>(static_image_.GetRealSize().first) / frames_count_width_;
         kFrameSizeY = static_cast<double>(static_image_.GetRealSize().second) / frames_count_height;
     };
@@ -167,6 +181,17 @@ public:
             Position((current_frame_x_ + 1) * kFrameSizeX, (current_frame_y_ + 1) * kFrameSizeY), kFrameSizeX,
             kFrameSizeY);
         canvas->Draw(&image_);
+    }
+
+    void UpdatePosition(const Position& position) override {
+        pos_ = position;
+        image_.UpdatePosition(position);
+    }
+
+
+    void Translate(const Vector2D& vector2D) override {
+        pos_.Translate(vector2D);
+        image_.Translate(vector2D);
     }
 
     void Reset() override {

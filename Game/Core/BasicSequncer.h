@@ -6,23 +6,26 @@
 #include <memory>
 #include <unordered_map>
 
+#include <iostream>
+
 template <class T>
 class BasicSequencer {
 public:
+    BasicSequencer() = default;
+
     BasicSequencer(const std::vector<std::pair<std::string_view, T *>> &params_list,
-                   bool is_cycled = true)
-        : cur_object_tag_(params_list.front().first),
-          start_object_tag_(params_list.front().first),
-          end_object_tag_(params_list.back().first) {
+                   bool is_cycled = true) {
+        if (params_list.empty()) { return; }
+
+        cur_object_tag_ = params_list.front().first;
+        start_object_tag_ = params_list.front().first;
+        end_object_tag_ = params_list.back().first;
+
         for (const auto &params : params_list) {
             AddByTag(params.first, params.second);
         }
-        for (size_t it = 0; it < params_list.size() - 1; ++it) {
-            AddEdgeFromTo(params_list[it].first, params_list[it + 1].first);
-        }
-        if (is_cycled) {
-            AddEdgeFromTo(params_list.back().first, params_list.front().first);
-        }
+
+        AddEdgeFromTo(start_object_tag_, end_object_tag_);
     }
 
     void RemoveByTag(std::string_view tag) {
@@ -57,6 +60,18 @@ public:
         to_node.incoming.insert(from_tag);
     }
 
+    void RemoveEdgeFromTo(std::string_view from_tag, std::string_view to_tag) {
+        IsAt(from_tag);
+        IsAt(to_tag);
+        Node &from_node = display_objects_.at(from_tag);
+        Node &to_node = display_objects_.at(to_tag);
+        if (from_node.outcoming.empty()) {
+            throw std::runtime_error("Sequncer: No edges coming from node!");
+        }
+        from_node.outcoming.erase(to_tag);
+        to_node.incoming.erase(from_tag);
+    }
+
     void AddAfterByTag(std::string_view after_node_tag, std::string_view tag, T *ptr) {
         IsAt(after_node_tag);
         IsNotAt(tag);
@@ -71,6 +86,11 @@ public:
         node.incoming.insert(after_node_tag);
     }
 
+    T* GetObjectByTag(std::string_view tag) {
+        IsAt(tag);
+        return display_objects_[tag].object.get();
+    }
+
     void SetStartTag(std::string_view tag) {
         IsAt(tag);
         start_object_tag_ = tag;
@@ -83,6 +103,10 @@ public:
 
     void Reset() {
         cur_object_tag_ = start_object_tag_;
+    }
+
+    void Clear() {
+        display_objects_.clear();
     }
 
 protected:

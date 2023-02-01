@@ -5,7 +5,7 @@
 #define LOCAL_CENTER_X (kWindowWidth / 2)
 #define LOCAL_CENTER_Y (kWindowHeight / 2)
 
-Canvas::Image::Image(const Position *pos, const size_t &width, const size_t &height)
+Canvas::Image::Image(const Position &pos, const size_t &width, const size_t &height)
     : pos_(pos), width_(width), height_(height){};
 
 void Canvas::Image::LoadFromFile(std::string_view path_to_file) {
@@ -14,6 +14,10 @@ void Canvas::Image::LoadFromFile(std::string_view path_to_file) {
 
 void Canvas::StaticImage::LoadFromFile(std::string_view path_to_file) {
     image_.loadFromFile(path_to_file.data());
+}
+
+void Canvas::StaticImage::SetDefaultImage() {
+    image_.create(100, 100); /* Need to fix Later */
 }
 
 std::pair<size_t, size_t> Canvas::StaticImage::GetRealSize() const {
@@ -41,14 +45,22 @@ void Canvas::Image::LoadFromStaticImage(const StaticImage &static_image,
     image_.loadFromImage(frame_image);
 }
 
+void Canvas::Image::UpdatePosition(const Position& position) {
+    pos_ = position;
+}
+
+void Canvas::Image::Translate(const Vector2D& vector2D) {
+    pos_.Translate(vector2D);
+}
+
 Canvas::Image::~Image() = default;
 
 Canvas::Canvas(sf::RenderWindow *window_ptr_) : canvas_(window_ptr_){};
 
 void Canvas::Draw(Canvas::Image *image) {
-    const Position *global_pos = image->pos_;
+    const Position global_pos = image->pos_;
     const Vector2D offset =
-        global_pos->GetCoordinatesAsVector2D() - global_center_.GetCoordinatesAsVector2D();
+        global_pos.GetCoordinatesAsVector2D() - global_center_.GetCoordinatesAsVector2D();
     const long long local_pos_x =
         LOCAL_CENTER_X + offset.GetCoordinates().first - (image->width_ / 2);
     const long long local_pos_y =
@@ -64,6 +76,10 @@ void Canvas::Draw(Canvas::Image *image) {
 
 void Canvas::SetCenter(Position global_center) {
     global_center_ = global_center;
+}
+
+void Canvas::Image::SetDefaultImage() {
+    image_.create(width_, height_);
 }
 
 Canvas::~Canvas() = default;
