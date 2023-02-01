@@ -14,6 +14,8 @@
 #include "InputSystem.h"
 #include "EventHandler.h"
 
+#include <iostream>
+
 class Engine {
 public:
     static Engine& GetInstance();
@@ -36,6 +38,7 @@ public:
         if (vis_ptr) {
             render_.AddToRender(object_ptr, vis_ptr);
         }
+
         return object_ptr;
     }
 
@@ -72,23 +75,15 @@ public:
     // Delayed callbacks
     ///////////////////////////////////////////////////////////////////////////////////////
     template <typename Callable, typename... Args>
-    void Invoke(const std::chrono::milliseconds& milliseconds, Callable&& cb, Args... args) {
+    void Invoke(const std::chrono::milliseconds& milliseconds, Callable&& cb, Args&&... args) {
         delay_queue_.PushTime(std::chrono::steady_clock::now() + milliseconds, std::forward<Callable>(cb),
                               std::forward<Args>(args)...);
     }
     template <typename Callable, typename... Args>
-    void Invoke(const uint64_t ticks_count, Callable&& cb, Args... args) {
+    void Invoke(const uint64_t ticks_count, Callable&& cb, Args&&... args) {
         delay_queue_.PushTicks(ticks_count, std::forward<Callable>(cb), std::forward<Args>(args)...);
     }
-    template <typename F, typename Callable, typename... Args>
-    void Invoke(const std::chrono::milliseconds& milliseconds, F* pointer, Callable&& cb, Args... args) {
-        delay_queue_.PushTime(std::chrono::steady_clock::now() + milliseconds, pointer,
-                              std::forward<Callable>(cb), std::forward<Args>(args)...);
-    }
-    template <typename F, typename Callable, typename... Args>
-    void Invoke(const uint64_t ticks_count, F* pointer, Callable&& cb, Args... args) {
-        delay_queue_.PushTicks(ticks_count, pointer, std::forward<Callable>(cb), std::forward<Args>(args)...);
-    }
+
     ///////////////////////////////////////////////////////////////////////////////////////
 
     // Events
