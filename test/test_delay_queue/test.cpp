@@ -3,64 +3,65 @@
 #include <../../Game/Core/DelayQueue.h>
 #include <gtest/gtest.h>
 
-DelayQueue *dq;
+DelayQueue* dq;
 
 using namespace std::chrono_literals;
 
 namespace /* Mock Functions */ {
-    void DoNothing() {
-    }
-
-    void DoNothingWithParams(int a, int &b, const int &c) {
-        b = a + 28 + c * 2;
-    }
-
-    void ChangePointer(int *ptr) {
-        *ptr = 42;
-    }
-
-    void FillVector(std::vector<uint64_t> &vector, uint64_t value) {
-        vector.push_back(value);
-    }
-
-    void CheckSort(const std::vector<uint64_t> &vector) {
-        if (vector.size() <= 1) return;
-        for (uint64_t i = 1; i < vector.size(); ++i) {
-            EXPECT_LE(vector[i - 1], vector[i]) << "Vector is not sorted";
-        }
-    }
-
-    class FuncOwner {
-        const int kUninitializedStatus = -1;
-    public:
-
-        void ChangeStatus(int new_status) {
-            status = new_status;
-        }
-
-        void CheckValidStatus() const {
-            EXPECT_TRUE(status != kUninitializedStatus);
-        }
-
-        void JustConstMethod() const {
-        }
-
-    public:
-        int status = kUninitializedStatus;
-    };
-
-    struct SomeStruct {
-        void Foo() {
-        }
-
-        void ConstFoo(int *a) const {
-            *a = 0;
-        }
-
-        static void SomeStaticMethod() {
-        }
-    };
+void DoNothing() {
 }
+
+void DoNothingWithParams(int a, int& b, const int& c) {
+    b = a + 28 + c * 2;
+}
+
+void ChangePointer(int* ptr) {
+    *ptr = 42;
+}
+
+void FillVector(std::vector<uint64_t>& vector, uint64_t value) {
+    vector.push_back(value);
+}
+
+void CheckSort(const std::vector<uint64_t>& vector) {
+    if (vector.size() <= 1)
+        return;
+    for (uint64_t i = 1; i < vector.size(); ++i) {
+        EXPECT_LE(vector[i - 1], vector[i]) << "Vector is not sorted";
+    }
+}
+
+class FuncOwner {
+    const int kUninitializedStatus = -1;
+
+public:
+    void ChangeStatus(int new_status) {
+        status = new_status;
+    }
+
+    void CheckValidStatus() const {
+        EXPECT_TRUE(status != kUninitializedStatus);
+    }
+
+    void JustConstMethod() const {
+    }
+
+public:
+    int status = kUninitializedStatus;
+};
+
+struct SomeStruct {
+    void Foo() {
+    }
+
+    void ConstFoo(int* a) const {
+        *a = 0;
+    }
+
+    static void SomeStaticMethod() {
+    }
+};
+}  // namespace
 
 class DelayQueueTest : public ::testing::Test {
 public:
@@ -68,7 +69,7 @@ public:
         dq = new DelayQueue(DelayQueue::GetInstance());
     }
 
-    void TearDown() override {  /* Clear queue */
+    void TearDown() override { /* Clear queue */
         dq->TryExecute(std::chrono::steady_clock::time_point::max(), UINT64_MAX);
     }
 
@@ -88,8 +89,11 @@ protected:
 class DelayQueueStressTest : public DelayQueueTest {
     class Randomizer {
     public:
-        Randomizer() : dist_(std::numeric_limits<uint64_t>::min(), std::numeric_limits<uint64_t>::max()),
-                       rd_(), /* Initializer list is ordered */ e2_(rd_()) {}
+        Randomizer()
+            : dist_(std::numeric_limits<uint64_t>::min(), std::numeric_limits<uint64_t>::max()),
+              rd_(),
+              /* Initializer list is ordered */ e2_(rd_()) {
+        }
 
         uint64_t RandUInt() {
             return dist_(e2_);
@@ -117,7 +121,7 @@ public:
         uint64_t ticks_deadline = 0;
         if (stressTime) {
             time_deadline = std::chrono::time_point_cast<std::chrono::nanoseconds>(
-                    time_deadline + operator ""ns(UINT64_MAX));
+                time_deadline + operator""ns(UINT64_MAX));
         }
         if (stressTicks) {
             ticks_deadline = UINT64_MAX;
@@ -138,7 +142,6 @@ public:
         if (stressTime && stressTicks) {
             ASSERT_EQ(big_buf.size(), push_iterations);
         }
-
     }
 
 protected:
@@ -168,17 +171,16 @@ TEST_F(DelayQueueTest, BasicMethods) {
             ASSERT_EQ(b, 1);
         }
 
-        void Baz(int *a) {
+        void Baz(int* a) {
             ASSERT_EQ(*a, 42);
         }
-
     };
     Bar bar;
 
     int a = 1;
-    const int &b = a;
-    dq->PushTime(now + 20ms, &bar, &Bar::Foo, b);
-    dq->PushTicks(700, &bar, &Bar::Baz, &a);
+    const int& b = a;
+    dq->PushTime(now + 20ms, &Bar::Foo, &bar, b);
+    dq->PushTicks(700, &Bar::Baz, &bar, &a);
     a = 42;
     dq->TryExecute(now + 100ms, 1000);
     EXPECT_TRUE(dq->Empty());
@@ -198,17 +200,17 @@ TEST_F(DelayQueueTest, PushTime) {
     dq->TryExecute(now + 100000000ms, 0);
     ASSERT_TRUE(dq->Empty());
 
-    ASSERT_NO_THROW(dq->PushTime(now + 40s, &owner, &FuncOwner::ChangeStatus, 99));
-    ASSERT_NO_THROW(dq->PushTime(now + 50s, &owner, &FuncOwner::CheckValidStatus));
-    ASSERT_NO_THROW(dq->PushTime(now + 60s, &c_owner, &FuncOwner::JustConstMethod));
+    ASSERT_NO_THROW(dq->PushTime(now + 40s, &FuncOwner::ChangeStatus, &owner, 99));
+    ASSERT_NO_THROW(dq->PushTime(now + 50s, &FuncOwner::CheckValidStatus, &owner));
+    ASSERT_NO_THROW(dq->PushTime(now + 60s, &FuncOwner::JustConstMethod, &c_owner));
     ASSERT_NO_THROW(dq->TryExecute(now + 1h, 41));
 
-    dq->PushTime(now + 1ms, &owner, &FuncOwner::ChangeStatus, 1);
-    dq->PushTime(now + 100ms, &owner, &FuncOwner::ChangeStatus, 2);
-    dq->PushTime(now + 31s, &owner, &FuncOwner::ChangeStatus, 3);
-    dq->PushTime(now + 1h, &owner, &FuncOwner::ChangeStatus, 4);
-    dq->PushTime(now + 1ns, &owner, &FuncOwner::ChangeStatus, 5);
-    dq->PushTime(now + 7min, &owner, &FuncOwner::ChangeStatus, 6);
+    dq->PushTime(now + 1ms, &FuncOwner::ChangeStatus, &owner, 1);
+    dq->PushTime(now + 100ms, &FuncOwner::ChangeStatus, &owner, 2);
+    dq->PushTime(now + 31s, &FuncOwner::ChangeStatus, &owner, 3);
+    dq->PushTime(now + 1h, &FuncOwner::ChangeStatus, &owner, 4);
+    dq->PushTime(now + 1ns, &FuncOwner::ChangeStatus, &owner, 5);
+    dq->PushTime(now + 7min, &FuncOwner::ChangeStatus, &owner, 6);
 
     dq->TryExecute(now + 7ns, 100);
     EXPECT_EQ(owner.status, 5);
@@ -226,7 +228,7 @@ TEST_F(DelayQueueTest, PushTicks) {
     auto now = Now();
     FuncOwner owner;
     const FuncOwner c_owner;
-    const FuncOwner *cp_owner = new FuncOwner();
+    const FuncOwner* cp_owner = new FuncOwner();
     int a = 0, b = 42, c = 100;
 
     dq->PushTicks(20, &DoNothing);
@@ -241,19 +243,19 @@ TEST_F(DelayQueueTest, PushTicks) {
     dq->TryExecute(now, 20);
     EXPECT_TRUE(dq->Empty());
 
-    ASSERT_NO_THROW(dq->PushTicks(40, &owner, &FuncOwner::ChangeStatus, 99));
-    ASSERT_NO_THROW(dq->PushTicks(50, &owner, &FuncOwner::CheckValidStatus));
-    ASSERT_NO_THROW(dq->PushTicks(60, &c_owner, &FuncOwner::JustConstMethod));
-    ASSERT_NO_THROW(dq->PushTicks(70, cp_owner, &FuncOwner::JustConstMethod));
+    ASSERT_NO_THROW(dq->PushTicks(40, &FuncOwner::ChangeStatus, &owner, 99));
+    ASSERT_NO_THROW(dq->PushTicks(50, &FuncOwner::CheckValidStatus, &owner));
+    ASSERT_NO_THROW(dq->PushTicks(60, &FuncOwner::JustConstMethod, &c_owner));
+    ASSERT_NO_THROW(dq->PushTicks(70, &FuncOwner::JustConstMethod, cp_owner));
     ASSERT_NO_THROW(dq->TryExecute(now, 100));
     delete cp_owner;
 
-    dq->PushTicks(4, &owner, &FuncOwner::ChangeStatus, 100);
-    dq->PushTicks(50, &owner, &FuncOwner::ChangeStatus, 200);
-    dq->PushTicks(27, &owner, &FuncOwner::ChangeStatus, 300);
-    dq->PushTicks(13, &owner, &FuncOwner::ChangeStatus, 400);
-    dq->PushTicks(38, &owner, &FuncOwner::ChangeStatus, 500);
-    dq->PushTicks(9, &owner, &FuncOwner::ChangeStatus, 600);
+    dq->PushTicks(4, &FuncOwner::ChangeStatus, &owner, 100);
+    dq->PushTicks(50, &FuncOwner::ChangeStatus, &owner, 200);
+    dq->PushTicks(27, &FuncOwner::ChangeStatus, &owner, 300);
+    dq->PushTicks(13, &FuncOwner::ChangeStatus, &owner, 400);
+    dq->PushTicks(38, &FuncOwner::ChangeStatus, &owner, 500);
+    dq->PushTicks(9, &FuncOwner::ChangeStatus, &owner, 600);
 
     dq->TryExecute(now, 11);
     EXPECT_EQ(owner.status, 600);
@@ -275,9 +277,9 @@ TEST_F(DelayQueueTest, SomeCombinations) {
 
     dq->PushTime(now + 3ms, &ChangePointer, &a);
     dq->PushTicks(4, DoNothingWithParams, a, std::ref(a), a);
-    dq->PushTime(now + 8ms, &owner, &FuncOwner::JustConstMethod);
-    dq->PushTicks(3, &s, &SomeStruct::Foo);
-    dq->PushTicks(8, &s, &SomeStruct::ConstFoo, &a);
+    dq->PushTime(now + 8ms, &FuncOwner::JustConstMethod, &owner);
+    dq->PushTicks(3, &SomeStruct::Foo, &s);
+    dq->PushTicks(8, &SomeStruct::ConstFoo, &s, &a);
 
     dq->TryExecute(now + 4ms, 5);
     EXPECT_TRUE(a == 42 || a == 328);
@@ -293,12 +295,13 @@ TEST_F(DelayQueueTest, SomeCombinations) {
 }
 
 TEST_F(DelayQueueStressTest, StressTime) {
-    auto start_point = std::chrono::steady_clock::time_point::min(); /*No need to sleep on this thread for hours and prevent overflow*/
+    auto start_point = std::chrono::steady_clock::time_point::min(); /*No need to sleep on this thread for
+                                                                        hours and prevent overflow*/
 
     for (size_t i = 0; i < kIterations; ++i) {
         uint64_t val = RandUInt();
-        DelayQueue::TimePoint tp = std::chrono::time_point_cast<std::chrono::nanoseconds>(
-                start_point + operator ""ns(val));
+        DelayQueue::TimePoint tp =
+            std::chrono::time_point_cast<std::chrono::nanoseconds>(start_point + operator""ns(val));
         dq->PushTime(tp, &FillVector, std::ref(test_time_vector), val);
     }
     CheckSuccess(kIterations, true, false);
@@ -313,7 +316,8 @@ TEST_F(DelayQueueStressTest, StressTicks) {
 }
 
 TEST_F(DelayQueueStressTest, StressAll) {
-    auto start_point = std::chrono::steady_clock::time_point::min();  /*No need to sleep on this thread for hours*/
+    auto start_point =
+        std::chrono::steady_clock::time_point::min(); /*No need to sleep on this thread for hours*/
 
     for (size_t i = 0; i < kIterations; ++i) {
         uint64_t val = RandUInt();
@@ -322,10 +326,10 @@ TEST_F(DelayQueueStressTest, StressAll) {
             dq->PushTicks(val, &FillVector, std::ref(test_ticks_vector), val);
             dq->PushTicks(big_buf_val, &FillVector, std::ref(big_buf), big_buf_val);
         } else {
-            DelayQueue::TimePoint tp = std::chrono::time_point_cast<std::chrono::nanoseconds>(
-                    start_point + operator ""ns(val));
+            DelayQueue::TimePoint tp =
+                std::chrono::time_point_cast<std::chrono::nanoseconds>(start_point + operator""ns(val));
             DelayQueue::TimePoint big_buf_tp = std::chrono::time_point_cast<std::chrono::nanoseconds>(
-                    start_point + operator ""ns(big_buf_val));
+                start_point + operator""ns(big_buf_val));
             dq->PushTime(tp, &FillVector, std::ref(test_time_vector), val);
             dq->PushTime(big_buf_tp, &FillVector, std::ref(big_buf), big_buf_val);
         }
