@@ -12,37 +12,37 @@ public:
 
     struct CollisionInfo {
         CollisionInfo() = default;
-        CollisionInfo(const GameObject* game_object_, const std::string_view tag_, const Position& position_,
+        CollisionInfo(GameObject* game_object_, const std::string_view tag_, const Position& position_,
                       const bool is_trigger_);
 
-        const GameObject* game_object;
+        GameObject* game_object;
         const std::string_view tag;
         Position position;
         bool is_trigger;
     };
 
-    bool IsRegistered(const GameObject* game_object) const;
-    const Collider* GetRegisteredColliderOf(const GameObject* game_object) const;
+    bool IsRegistered(GameObject* game_object) const;
+    const Collider* GetRegisteredColliderOf(GameObject* game_object) const;
 
-    void RegisterColliderOf(const GameObject* game_object, const Collider* collider);
-    void UnregisterColliderOf(const GameObject* game_object);
+    void RegisterColliderOf(GameObject* game_object, const Collider* collider);
+    void UnregisterColliderOf(GameObject* game_object);
 
     using PossiblePosition = std::optional<Position>;
     using CollisionsInfoArray = std::vector<CollisionInfo>;
 
-    PossiblePosition CheckPhysicalCollision(const GameObject* first, const GameObject* second) const;
-    PossiblePosition CheckTriggerCollision(const GameObject* first, const GameObject* second) const;
+    PossiblePosition CheckPhysicalCollision(GameObject* first, GameObject* second) const;
+    PossiblePosition CheckTriggerCollision(GameObject* first, GameObject* second) const;
 
-    CollisionsInfoArray GetAllCollisions(const GameObject* game_object) const;
-    CollisionsInfoArray GetPhysicalCollisions(const GameObject* game_object) const;
-    CollisionsInfoArray GetTriggerCollisions(const GameObject* game_object) const;
-    CollisionsInfoArray GetAllCollisionsWithTag(const GameObject* game_object,
+    CollisionsInfoArray GetAllCollisions(GameObject* game_object) const;
+    CollisionsInfoArray GetPhysicalCollisions(GameObject* game_object) const;
+    CollisionsInfoArray GetTriggerCollisions(GameObject* game_object) const;
+    CollisionsInfoArray GetAllCollisionsWithTag(GameObject* game_object,
                                                 const std::string_view string) const;
     template <typename T>
-    CollisionsInfoArray GetAllCollisionsWithType(const GameObject* game_object) const;
+    CollisionsInfoArray GetAllCollisionsWithType(GameObject* game_object) const;
 
 private:
     CollisionSystem();
 
-    std::unordered_map<const GameObject*, const Collider*> registered_colliders_;
+    std::unordered_map<GameObject*, const Collider*> registered_colliders_;
 };
