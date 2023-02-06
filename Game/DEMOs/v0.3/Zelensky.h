@@ -13,4 +13,3 @@ private:
     GameObject* aim_;
     double speed_;
 };
-

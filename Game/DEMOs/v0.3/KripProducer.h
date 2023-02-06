@@ -33,6 +33,10 @@ public:
     KripProducer(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_ptr, std::unique_ptr<VisibleObject>& vis_ptr, std::string_view tag,
                  const GameObject* obj_to_follow, GameMode mode);
 
+    KripProducer(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_ptr, std::unique_ptr<VisibleObject>& vis_ptr, std::string_view tag,
+                 const GameObject* obj_to_follow, const double& krip_start_health, const double& krip_damage, const double& krip_speed, const double& krip_spawn_radius,
+                 const double& krip_number_per_spawn_, GameMode mode);
+
     void OnUpdate() override;
     void ProduceKrip();
 

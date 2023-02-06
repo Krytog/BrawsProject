@@ -12,6 +12,7 @@ public:
 
     void OnUpdate() override;
     void Shoot(const Position &aim_pos) override;
+    static bool ReadyToDie(const Krip* ptr);
 
     static uint8_t GetInstanceCount();
 

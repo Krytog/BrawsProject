@@ -66,35 +66,35 @@ void Engine::TryExecuteDelayedCallbacks() {
     delay_queue_.TryExecute(std::chrono::steady_clock::now(), ticks_count_);
 }
 
-CollisionSystem::CollisionsInfoArray Engine::GetAllCollisions(const GameObject* game_object) const {
+CollisionSystem::CollisionsInfoArray Engine::GetAllCollisions(GameObject* game_object) const {
     return collision_system_.GetAllCollisions(game_object);
 }
 
-CollisionSystem::CollisionsInfoArray Engine::GetPhysicalCollisions(const GameObject* game_object) const {
+CollisionSystem::CollisionsInfoArray Engine::GetPhysicalCollisions(GameObject* game_object) const {
     return collision_system_.GetPhysicalCollisions(game_object);
 }
 
-CollisionSystem::CollisionsInfoArray Engine::GetTriggerCollisions(const GameObject* game_object) const {
+CollisionSystem::CollisionsInfoArray Engine::GetTriggerCollisions(GameObject* game_object) const {
     return collision_system_.GetTriggerCollisions(game_object);
 }
 
-CollisionSystem::CollisionsInfoArray Engine::GetAllCollisionsWithTag(const GameObject* game_object,
+CollisionSystem::CollisionsInfoArray Engine::GetAllCollisionsWithTag(GameObject* game_object,
                                                                      const std::string_view string) const {
     return collision_system_.GetAllCollisionsWithTag(game_object, string);
 }
 
 template <typename T>
-CollisionSystem::CollisionsInfoArray Engine::GetAllCollisionsWithType(const GameObject* game_object) const {
+CollisionSystem::CollisionsInfoArray Engine::GetAllCollisionsWithType(GameObject* game_object) const {
     return collision_system_.GetAllCollisionsWithType<T>(game_object);
 }
 
-CollisionSystem::PossiblePosition Engine::CheckPhysicalCollision(const GameObject* first,
-                                                                 const GameObject* second) const {
+CollisionSystem::PossiblePosition Engine::CheckPhysicalCollision(GameObject* first,
+                                                                 GameObject* second) const {
     return collision_system_.CheckPhysicalCollision(first, second);
 }
 
-CollisionSystem::PossiblePosition Engine::CheckTriggerCollision(const GameObject* first,
-                                                                const GameObject* second) const {
+CollisionSystem::PossiblePosition Engine::CheckTriggerCollision(GameObject* first,
+                                                                GameObject* second) const {
     return collision_system_.CheckTriggerCollision(first, second);
 }
 

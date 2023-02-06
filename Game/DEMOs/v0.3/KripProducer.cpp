@@ -5,9 +5,12 @@
 
 KripProducer::KripProducer(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_ptr, std::unique_ptr<VisibleObject>& vis_ptr,
                            std::string_view tag, const GameObject* obj_to_follow, GameMode mode): GameObject(pos_ptr, coll_ptr, vis_ptr, tag),
-                            obj_to_follow_(obj_to_follow) {
-    //engine_->Invoke(std::chrono::milliseconds(20000), engine_, &Engine::Destroy, this);
-};
+                            obj_to_follow_(obj_to_follow) {};
+
+KripProducer::KripProducer(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_ptr, std::unique_ptr<VisibleObject>& vis_ptr, std::string_view tag,
+                           const GameObject* obj_to_follow, const double& krip_start_health, const double& krip_damage, const double& krip_speed, const double&
+                                                                              krip_spawn_radius, const double& krip_number_per_spawn_, GameMode mode): GameObject(pos_ptr, coll_ptr, vis_ptr, tag),
+                              obj_to_follow_(obj_to_follow), start_health_(krip_start_health), damage_(krip_damage), speed_(krip_speed), spawn_radius_(krip_spawn_radius), number_per_spawn_(krip_number_per_spawn_) {}
 
 void KripProducer::OnUpdate() {
     ProduceKrip();
@@ -19,12 +22,7 @@ void KripProducer::ProduceKrip() {
     }
     std::vector<Position> positions = random_.RandPoints(obj_to_follow_->GetPosition(), spawn_radius_, number_per_spawn_);
     for (const auto& pos: positions) {
-//        std::vector<std::pair<std::string_view, VisibleObject*>> decoy_vector;
-
-//        auto blow_animation = new AnimatedSprite(new Position(pos), 100, 100, "../Game/DEMOs/v0.3/Resources/boom.png", LEVELS::FIRST_USER_LEVEL, 4, 2, 2, {}, false);
-//        decoy_vector.emplace_back(RUN, officer_animation);
-//        decoy_vector.emplace_back(SHEET, blow_animation);
-        if (Krip::GetInstanceCount() < 30) {
+        if (Krip::GetInstanceCount() < 10) {
             engine_->ProduceObject<Krip>(new Position(pos),
                                          new RectangleCollider(Position(pos), 40, 150, false),
                                          nullptr,

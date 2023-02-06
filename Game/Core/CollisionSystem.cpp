@@ -1,30 +1,30 @@
 #include "CollisionSystem.h"
 
-CollisionSystem::CollisionInfo::CollisionInfo(const GameObject* game_object_, const std::string_view tag_,
+CollisionSystem::CollisionInfo::CollisionInfo(GameObject* game_object_, const std::string_view tag_,
                                               const Position& position_, const bool is_trigger_)
     : game_object(game_object_), tag(tag_), position(position_), is_trigger(is_trigger_) {
 }
 
-bool CollisionSystem::IsRegistered(const GameObject* game_object) const {
+bool CollisionSystem::IsRegistered(GameObject* game_object) const {
     return registered_colliders_.contains(game_object);
 }
 
-const Collider* CollisionSystem::GetRegisteredColliderOf(const GameObject* game_object) const {
+const Collider* CollisionSystem::GetRegisteredColliderOf(GameObject* game_object) const {
     return registered_colliders_.at(game_object);
 }
 
-void CollisionSystem::UnregisterColliderOf(const GameObject* game_object) {
+void CollisionSystem::UnregisterColliderOf(GameObject* game_object) {
     if (registered_colliders_.contains(game_object)) {
         registered_colliders_.erase(game_object);
     }
 }
 
-void CollisionSystem::RegisterColliderOf(const GameObject* game_object, const Collider* collider) {
+void CollisionSystem::RegisterColliderOf(GameObject* game_object, const Collider* collider) {
     registered_colliders_[game_object] = collider;
 }
 
-CollisionSystem::PossiblePosition CollisionSystem::CheckPhysicalCollision(const GameObject* first,
-                                                                          const GameObject* second) const {
+CollisionSystem::PossiblePosition CollisionSystem::CheckPhysicalCollision(GameObject* first,
+                                                                          GameObject* second) const {
     if (!registered_colliders_.contains(first) || !registered_colliders_.contains(second)) {
         return std::nullopt;
     }
@@ -36,8 +36,8 @@ CollisionSystem::PossiblePosition CollisionSystem::CheckPhysicalCollision(const 
     return registered_colliders_.at(first)->GetIntersectionPosition(registered_colliders_.at(second));
 }
 
-CollisionSystem::PossiblePosition CollisionSystem::CheckTriggerCollision(const GameObject* first,
-                                                                         const GameObject* second) const {
+CollisionSystem::PossiblePosition CollisionSystem::CheckTriggerCollision(GameObject* first,
+                                                                         GameObject* second) const {
     if (!registered_colliders_.contains(first) || !registered_colliders_.contains(second)) {
         return std::nullopt;
     }
@@ -49,7 +49,7 @@ CollisionSystem::PossiblePosition CollisionSystem::CheckTriggerCollision(const G
     return registered_colliders_.at(first)->GetIntersectionPosition(registered_colliders_.at(second));
 }
 
-CollisionSystem::CollisionsInfoArray CollisionSystem::GetAllCollisions(const GameObject* game_object) const {
+CollisionSystem::CollisionsInfoArray CollisionSystem::GetAllCollisions(GameObject* game_object) const {
     if (!registered_colliders_.contains(game_object)) {
         return {};
     }
@@ -66,7 +66,7 @@ CollisionSystem::CollisionsInfoArray CollisionSystem::GetAllCollisions(const Gam
 }
 
 CollisionSystem::CollisionsInfoArray CollisionSystem::GetPhysicalCollisions(
-    const GameObject* game_object) const {
+    GameObject* game_object) const {
     if (!registered_colliders_.contains(game_object)) {
         return {};
     }
@@ -86,7 +86,7 @@ CollisionSystem::CollisionsInfoArray CollisionSystem::GetPhysicalCollisions(
 }
 
 CollisionSystem::CollisionsInfoArray CollisionSystem::GetTriggerCollisions(
-    const GameObject* game_object) const {
+    GameObject* game_object) const {
     if (!registered_colliders_.contains(game_object)) {
         return {};
     }
@@ -106,7 +106,7 @@ CollisionSystem::CollisionsInfoArray CollisionSystem::GetTriggerCollisions(
 }
 
 CollisionSystem::CollisionsInfoArray CollisionSystem::GetAllCollisionsWithTag(
-    const GameObject* game_object, const std::string_view string) const {
+    GameObject* game_object, const std::string_view string) const {
     if (!registered_colliders_.contains(game_object)) {
         return {};
     }
@@ -127,7 +127,7 @@ CollisionSystem::CollisionsInfoArray CollisionSystem::GetAllCollisionsWithTag(
 
 template <typename T>
 CollisionSystem::CollisionsInfoArray CollisionSystem::GetAllCollisionsWithType(
-    const GameObject* game_object) const {
+    GameObject* game_object) const {
     if (!registered_colliders_.contains(game_object)) {
         return {};
     }

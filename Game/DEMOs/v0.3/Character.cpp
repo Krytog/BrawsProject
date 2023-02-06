@@ -83,6 +83,7 @@ void Character::AnimationsInitialization(const CharacterAnimationArgPack &arg_pa
     VisibleObject* run_right;
     VisibleObject* death_left;
     VisibleObject* death_right;
+
     {
         auto anim = arg_pack.stand_left_animation;
         stand_left = new StaticSprite(position_.get(), anim.width, anim.height, anim.path, anim.render_level);
@@ -120,6 +121,9 @@ void Character::AnimationsInitialization(const CharacterAnimationArgPack &arg_pa
     if (auto sequencer = dynamic_cast<AnimationSequencer*>(visible_object_.get())) {
         sequencer->AddByTag(STAND_LEFT, stand_left);
         sequencer->AddByTag(STAND_RIGHT, stand_right);
+
+        sequencer->AddEndTag(DEATH_LEFT);
+        sequencer->AddEndTag(DEATH_RIGHT);
     }
 
     engine_->RenderSwith(this, visible_object_.get());

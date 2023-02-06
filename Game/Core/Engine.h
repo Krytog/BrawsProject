@@ -56,18 +56,18 @@ public:
 
     // Collisions
     ///////////////////////////////////////////////////////////////////////////////////////
-    CollisionSystem::PossiblePosition CheckPhysicalCollision(const GameObject* first,
-                                                             const GameObject* second) const;
-    CollisionSystem::PossiblePosition CheckTriggerCollision(const GameObject* first,
-                                                            const GameObject* second) const;
+    CollisionSystem::PossiblePosition CheckPhysicalCollision(GameObject* first,
+                                                             GameObject* second) const;
+    CollisionSystem::PossiblePosition CheckTriggerCollision(GameObject* first,
+                                                            GameObject* second) const;
 
-    CollisionSystem::CollisionsInfoArray GetAllCollisions(const GameObject* game_object) const;
-    CollisionSystem::CollisionsInfoArray GetPhysicalCollisions(const GameObject* game_object) const;
-    CollisionSystem::CollisionsInfoArray GetTriggerCollisions(const GameObject* game_object) const;
-    CollisionSystem::CollisionsInfoArray GetAllCollisionsWithTag(const GameObject* game_object,
+    CollisionSystem::CollisionsInfoArray GetAllCollisions(GameObject* game_object) const;
+    CollisionSystem::CollisionsInfoArray GetPhysicalCollisions(GameObject* game_object) const;
+    CollisionSystem::CollisionsInfoArray GetTriggerCollisions(GameObject* game_object) const;
+    CollisionSystem::CollisionsInfoArray GetAllCollisionsWithTag(GameObject* game_object,
                                                                  const std::string_view string) const;
     template <typename T>
-    CollisionSystem::CollisionsInfoArray GetAllCollisionsWithType(const GameObject* game_object) const;
+    CollisionSystem::CollisionsInfoArray GetAllCollisionsWithType(GameObject* game_object) const;
     ///////////////////////////////////////////////////////////////////////////////////////
 
     // Getting input

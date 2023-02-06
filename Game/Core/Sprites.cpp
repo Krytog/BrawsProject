@@ -4,6 +4,8 @@
 #include <memory>
 #include <queue>
 
+#include <iostream>
+
 #include "Canvas.h"
 
 class VisibleObjectImpl {
@@ -290,7 +292,12 @@ void AnimationSequencer::Translate(const Vector2D& vector2D) {
 }
 
 bool AnimationSequencer::IsFinished() const {
-    return display_objects_.at(end_object_tag_).object->IsFinished();
+    for (const auto& tag: end_object_tags_) {
+        if (display_objects_.at(tag).object->IsFinished()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool AnimationSequencer::IsAbleToInterrupt() const {

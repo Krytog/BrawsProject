@@ -1,6 +1,12 @@
 #pragma once
 
 #include "../../Core/CustomBehaviour.h"
+#include "Character.h" // Just for Animated packs structures, fix later
+
+struct BulletAnimationPack {
+    TempStaticSpriteArgPack fly_static;
+    TempAnimatedSpriteArgPack clash_animation;
+};
 
 struct GameObjectArgPack {
     std::unique_ptr<Position> position;
@@ -14,9 +20,15 @@ public:
 
     void OnUpdate() override;
 
+    void ApplyDamage();
+
+    static bool ReadyToDestroy(const Bullet* ptr);
+    void BordersCheck();
+
 protected:
     double speed_;
     double damage_;
     Vector2D direction_;
+    bool alive_ = true;
 };
 

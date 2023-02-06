@@ -19,13 +19,10 @@ public:
 
         cur_object_tag_ = params_list.front().first;
         start_object_tag_ = params_list.front().first;
-        end_object_tag_ = params_list.back().first;
 
         for (const auto &params : params_list) {
             AddByTag(params.first, params.second);
         }
-
-        AddEdgeFromTo(start_object_tag_, end_object_tag_);
     }
 
     void RemoveByTag(std::string_view tag) {
@@ -96,9 +93,14 @@ public:
         start_object_tag_ = tag;
     }
 
-    void SetEndTag(std::string_view tag) {
+    void AddEndTag(std::string_view tag) {
         IsAt(tag);
-        end_object_tag_ = tag;
+        end_object_tags_.insert(tag);
+    }
+
+    void RemoveEndTag(std::string_view tag) {
+        IsAt(tag);
+        end_object_tags_.erase(tag);
     }
 
     void Reset() {
@@ -134,6 +136,6 @@ protected:
 
     std::string_view
         start_object_tag_; /* For now, we will assume that we do not delete the start animation */
-    std::string_view end_object_tag_; /* After this object is finished, the entire sequencer will be
+    std::unordered_set<std::string_view> end_object_tags_; /* After one of this objects is finished, the entire sequencer will be
                                          considered finished. */
 };
