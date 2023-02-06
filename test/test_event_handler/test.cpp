@@ -143,8 +143,8 @@ TEST_F(EventHandlerTest, BasicNoThrow) {
 
     SomeStruct s;
     int a = 5, b = 6, c = 7;
-    ASSERT_NO_THROW(eh->CreateEvent(&FooPointer, std::make_tuple(&a, &b),  &s,&SomeStruct::SomeMethod, std::tuple(c), EventStatus::Disposable));
-    ASSERT_NO_THROW(eh->CreateEvent(&FooReference, std::make_tuple(std::ref(a), std::ref(b)), &s, &SomeStruct::SomeConstMethod, std::tuple(7), EventStatus::Reusable));
+    ASSERT_NO_THROW(eh->CreateEvent(&FooPointer, std::make_tuple(&a, &b), &SomeStruct::SomeMethod, std::tuple(&s, c), EventStatus::Disposable));
+    ASSERT_NO_THROW(eh->CreateEvent(&FooReference, std::make_tuple(std::ref(a), std::ref(b)), &SomeStruct::SomeConstMethod, std::tuple(&s, 7), EventStatus::Reusable));
     ASSERT_NO_THROW(eh->CreateEvent(&AlwaysTrue, {}, &SomeStruct::SomeStaticMethod, {}, EventStatus::Disposable));
     ASSERT_NO_THROW(eh->TryExecuteAll());
 
@@ -179,7 +179,7 @@ TEST_F(EventHandlerTest, PointerAndReferencePredicate) {
     Functional f;
 
     int a = 5, b = 6, c = 7;
-    eh->CreateEvent(&FooPointer, std::tuple(&a, &b), &f, &Functional::ChangeStatus, std::tuple(c), EventStatus::Disposable);
+    eh->CreateEvent(&FooPointer, std::tuple(&a, &b),  &Functional::ChangeStatus, std::tuple(&f, c), EventStatus::Disposable);
     eh->TryExecuteAll();
     EXPECT_NE(f.GetStatus(), c);
     EXPECT_FALSE(eh->Empty());
@@ -189,7 +189,7 @@ TEST_F(EventHandlerTest, PointerAndReferencePredicate) {
     EXPECT_TRUE(eh->Empty());
 
     f.ChangeStatus(0);
-    eh->CreateEvent(&FooReference, std::tuple(std::ref(a), std::ref(c)), &f, &Functional::ChangeStatus, std::tuple(b), EventStatus::Disposable);
+    eh->CreateEvent(&FooReference, std::tuple(std::ref(a), std::ref(c)), &Functional::ChangeStatus, std::tuple(&f, b), EventStatus::Disposable);
     eh->TryExecuteAll();
     EXPECT_EQ(f.GetStatus(), 0);
     EXPECT_FALSE(eh->Empty());
