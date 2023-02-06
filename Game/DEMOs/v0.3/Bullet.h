@@ -1,12 +1,10 @@
 #pragma once
 
 #include "../../Core/CustomBehaviour.h"
-#include "Character.h" // Just for Animated packs structures, fix later
+#include "IAnimated.h"
 
-struct BulletAnimationPack {
-    TempStaticSpriteArgPack fly_static;
-    TempAnimatedSpriteArgPack clash_animation;
-};
+#define FLY "fly"
+#define CLASH "clash"
 
 struct GameObjectArgPack {
     std::unique_ptr<Position> position;
@@ -14,7 +12,7 @@ struct GameObjectArgPack {
     std::unique_ptr<VisibleObject> visible_object;
 };
 
-class Bullet : public virtual GameObject, public virtual CustomBehaviour {
+class Bullet : public virtual GameObject, public virtual CustomBehaviour, public IAnimated {
 public:
     Bullet(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_ptr, std::unique_ptr<VisibleObject>& vis_ptr, std::string_view tag, const double speed, const double damage, const uint64_t life_time, const Position& fly_to);
 
@@ -25,10 +23,12 @@ public:
     static bool ReadyToDestroy(const Bullet* ptr);
     void BordersCheck();
 
+    void AddAnimationDependences() override;
+    void Die();
+
 protected:
     double speed_;
     double damage_;
     Vector2D direction_;
     bool alive_ = true;
 };
-

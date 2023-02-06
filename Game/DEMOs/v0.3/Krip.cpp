@@ -27,14 +27,14 @@ Krip::Krip(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_p
     //Spawn inside each other avoiding
     engine_->Invoke(0, this, &Krip::SpawnGlitchAvoiding);
 
-    CharacterAnimationArgPack arg_pack;
+    IAnimated::CommonAnimationPack anim_pack;
     {
         TempStaticSpriteArgPack pack;
         pack.path = "../Game/DEMOs/v0.3/Resources/Krip0StandLeft.png";
         pack.width = 100;
         pack.height = 200;
         pack.render_level = LEVELS::FIRST_USER_LEVEL;
-        arg_pack.stand_left_animation = pack;
+        anim_pack[STAND_LEFT] = pack;
     }
     {
         TempStaticSpriteArgPack pack;
@@ -42,7 +42,7 @@ Krip::Krip(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_p
         pack.width = 100;
         pack.height = 200;
         pack.render_level = LEVELS::FIRST_USER_LEVEL;
-        arg_pack.stand_right_animation = pack;
+        anim_pack[STAND_RIGHT] = pack;
     }
     {
         TempAnimatedSpriteArgPack pack;
@@ -55,7 +55,7 @@ Krip::Krip(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_p
         pack.cycled = true;
         pack.columns = 7;
         pack.rows = 1;
-        arg_pack.run_left_animation = pack;
+        anim_pack[RUN_LEFT] = pack;
     }
     {
         TempAnimatedSpriteArgPack pack;
@@ -68,7 +68,7 @@ Krip::Krip(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_p
         pack.cycled = true;
         pack.columns = 7;
         pack.rows = 1;
-        arg_pack.run_right_animation = pack;
+        anim_pack[RUN_RIGHT] = pack;
     }
     {
         TempAnimatedSpriteArgPack pack;
@@ -81,7 +81,7 @@ Krip::Krip(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_p
         pack.cycled = false;
         pack.columns = 2;
         pack.rows = 2;
-        arg_pack.death_left_animation = pack;
+        anim_pack[DEATH_LEFT] = pack;
     }
     {
         TempAnimatedSpriteArgPack pack;
@@ -94,9 +94,11 @@ Krip::Krip(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_p
         pack.cycled = false;
         pack.columns = 2;
         pack.rows = 2;
-        arg_pack.death_right_animation = pack;
+        anim_pack[DEATH_RIGHT] = pack;
     }
-    AnimationsInitialization(arg_pack);
+
+    IAnimated::InterruptPoints interrupt_points = {STAND_RIGHT, STAND_LEFT, RUN_RIGHT, RUN_LEFT, DEATH_RIGHT, DEATH_LEFT};
+    AnimationsInitialization(anim_pack, interrupt_points);
 }
 
 void Krip::OnUpdate() {

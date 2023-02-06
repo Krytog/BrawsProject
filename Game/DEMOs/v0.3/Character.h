@@ -2,36 +2,16 @@
 
 #include "../../Core/CustomBehaviour.h"
 #include "IMovable.h"
+#include "IAnimated.h"
 
-struct TempStaticSpriteArgPack {
-    double width;
-    double height;
-    std::string_view path;
-    LEVELS render_level;
-};
+#define STAND_LEFT "stand_left"
+#define STAND_RIGHT "stand_right"
+#define RUN_LEFT "run_left"
+#define RUN_RIGHT "run_right"
+#define DEATH_LEFT "death_left"
+#define DEATH_RIGHT "death_right"
 
-struct TempAnimatedSpriteArgPack {
-    double width;
-    double height;
-    std::string_view path;
-    LEVELS render_level;
-    uint8_t ticks_per_frame;
-    uint64_t columns;
-    uint64_t rows;
-    std::unordered_set<size_t> interrupt_points;
-    bool cycled;
-};
-
-struct CharacterAnimationArgPack {
-    TempStaticSpriteArgPack stand_left_animation;
-    TempStaticSpriteArgPack stand_right_animation;
-    TempAnimatedSpriteArgPack run_left_animation;
-    TempAnimatedSpriteArgPack run_right_animation;
-    TempAnimatedSpriteArgPack death_left_animation;
-    TempAnimatedSpriteArgPack death_right_animation;
-};
-
-class Character : public virtual CustomBehaviour, public virtual GameObject, public IMovable {
+class Character : public virtual CustomBehaviour, public virtual GameObject, public IMovable, public IAnimated {
 public:
     static bool ReadyToDestroy(const Character* ptr);
 
@@ -51,12 +31,11 @@ public:
     void CharacterMove(const Vector2D& direction);
 
     virtual void OnUpdate() override = 0;
+    virtual void AddAnimationDependences() override;
 
     virtual ~Character() = default;
 
 protected:
-    void AnimationsInitialization(const CharacterAnimationArgPack& arg_pack);
-
     MovingDirection moving_direction_;
     double health_;
     Position shoot_pos_;

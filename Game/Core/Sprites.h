@@ -65,7 +65,8 @@ public:
     };
 
 public:
-    AnimationSequencer(const std::vector<std::pair<std::string_view, VisibleObject*>> &params_list,
+    using NamedVisibleObjectsList = std::vector<std::pair<std::string_view, VisibleObject*>>;
+    AnimationSequencer(const NamedVisibleObjectsList&params_list,
                        const std::unordered_set<std::string_view> &interrupt_points = {},
                        bool is_cycled = true);
 

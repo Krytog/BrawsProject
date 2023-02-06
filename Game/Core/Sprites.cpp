@@ -245,7 +245,7 @@ AnimatedSprite::~AnimatedSprite() noexcept = default;
 /* In this implementation, a pimple is not used for, because while it is meaningless, it is desirable to use
  * this pattern in the future */
 AnimationSequencer::AnimationSequencer(
-    const std::vector<std::pair<std::string_view, VisibleObject*>>& params_list,
+    const NamedVisibleObjectsList & params_list,
     const std::unordered_set<std::string_view>& interrupt_points, bool is_cycled)
     : BasicSequencer<VisibleObject>(params_list, is_cycled), interrupt_points_(interrupt_points){};
 

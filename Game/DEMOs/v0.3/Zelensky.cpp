@@ -27,14 +27,14 @@ Vector2D ResultVector(const InputSystem::InputTokensArray& input) {
 
 Zelensky::Zelensky(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_ptr, std::unique_ptr<VisibleObject>& vis_ptr, std::string_view tag, GameObject* aim):
                                                                                           GameObject(pos_ptr, coll_ptr, vis_ptr, tag), Character(k_health, k_shoot_pos, k_damage), aim_(aim), speed_(k_speed) {
-    CharacterAnimationArgPack arg_pack;
+    IAnimated::CommonAnimationPack anim_pack;
     {
         TempStaticSpriteArgPack pack;
         pack.path = "../Game/DEMOs/v0.3/Resources/ZelenskyStandLeft.png";
         pack.width = 180;
         pack.height = 220;
         pack.render_level = LEVELS::SECOND_USER_LEVEL;
-        arg_pack.stand_left_animation = pack;
+        anim_pack[STAND_LEFT] = pack;
     }
     {
         TempStaticSpriteArgPack pack;
@@ -42,7 +42,7 @@ Zelensky::Zelensky(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>
         pack.width = 180;
         pack.height = 220;
         pack.render_level = LEVELS::SECOND_USER_LEVEL;
-        arg_pack.stand_right_animation = pack;
+        anim_pack[STAND_RIGHT] = pack;
     }
     {
         TempAnimatedSpriteArgPack pack;
@@ -55,7 +55,7 @@ Zelensky::Zelensky(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>
         pack.cycled = true;
         pack.columns = 18;
         pack.rows = 1;
-        arg_pack.run_left_animation = pack;
+        anim_pack[RUN_LEFT] = pack;
     }
     {
         TempAnimatedSpriteArgPack pack;
@@ -68,7 +68,7 @@ Zelensky::Zelensky(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>
         pack.cycled = true;
         pack.columns = 18;
         pack.rows = 1;
-        arg_pack.run_right_animation = pack;
+        anim_pack[RUN_RIGHT] = pack;
     }
     {
         TempAnimatedSpriteArgPack pack;
@@ -81,7 +81,7 @@ Zelensky::Zelensky(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>
         pack.cycled = true;
         pack.columns = 18;
         pack.rows = 1;
-        arg_pack.death_left_animation = pack;
+        anim_pack[DEATH_LEFT] = pack;
     }
     {
         TempAnimatedSpriteArgPack pack;
@@ -94,15 +94,17 @@ Zelensky::Zelensky(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>
         pack.cycled = true;
         pack.columns = 18;
         pack.rows = 1;
-        arg_pack.death_right_animation = pack;
+        anim_pack[DEATH_RIGHT] = pack;
     }
-    AnimationsInitialization(arg_pack);
+
+    IAnimated::InterruptPoints interrupt_points = {STAND_RIGHT, STAND_LEFT, RUN_RIGHT, RUN_LEFT, DEATH_RIGHT, DEATH_LEFT};
+    IAnimated::AnimationsInitialization(anim_pack, interrupt_points);
 };
 
 void Zelensky::Shoot(const Position &aim_pos) {
     engine_->ProduceObject<Bullet>(new Position(position_->GetCoordinatesAsVector2D() + shoot_pos_.GetCoordinatesAsVector2D()),
                     new CircleCollider(Position(position_->GetCoordinatesAsVector2D() + shoot_pos_.GetCoordinatesAsVector2D()), 50, true),
-                    new StaticSprite(new Position(position_->GetCoordinatesAsVector2D() + shoot_pos_.GetCoordinatesAsVector2D()), 50, 50, "../Game/DEMOs/v0.3/Resources/fireball.png", LEVELS::SECOND_USER_LEVEL),
+                    nullptr,
                     "bullet",
                     10, 25, 2000, aim_pos);
     std::cout << "ZELENSKY SHOOT!" << std::endl;
