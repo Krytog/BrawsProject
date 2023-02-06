@@ -22,7 +22,7 @@ void KripProducer::ProduceKrip() {
     }
     std::vector<Position> positions = random_.RandPoints(obj_to_follow_->GetPosition(), spawn_radius_, number_per_spawn_);
     for (const auto& pos: positions) {
-        if (Krip::GetInstanceCount() < 10) {
+        if (Krip::GetInstanceCount() < 20) {
             engine_->ProduceObject<Krip>(new Position(pos),
                                          new RectangleCollider(Position(pos), 40, 150, false),
                                          nullptr,

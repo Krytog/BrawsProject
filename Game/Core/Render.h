@@ -10,7 +10,8 @@
 enum LEVELS {
     BACKGROUND_LEVEL = 0,
     FIRST_USER_LEVEL = 1,
-    SECOND_USER_LEVEL = 2
+    SECOND_USER_LEVEL = 2,
+    THIRD_USER_LEVEL = 3
 };
 
 class RenderImplementation;

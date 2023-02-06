@@ -52,5 +52,5 @@ private:
 
     double spawn_radius_ = 800;
     size_t spawn_frequency_ = 500;
-    size_t number_per_spawn_ = 2;
+    size_t number_per_spawn_ = 3;
 };

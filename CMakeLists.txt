@@ -15,6 +15,6 @@ add_executable(BrawlStars  Game/Core/MyTime.h Game/Core/MyTime.cpp
         Game/Core/Camera.h Game/Core/Camera.cpp Game/Core/InputSystem.cpp Game/Core/DelayQueue.cpp
         Game/Core/CustomBehaviour.h Game/Core/EventHandler.cpp
         Game/DEMOs/v0.3/main.cpp Game/DEMOs/v0.3/Bullet.cpp Game/DEMOs/v0.3/Zelensky.cpp
-        Game/DEMOs/v0.3/Character.cpp Game/DEMOs/v0.3/IMovable.cpp Game/DEMOs/v0.3/Cursor.cpp Game/DEMOs/v0.3/Krip.h Game/DEMOs/v0.3/Krip.cpp Game/DEMOs/v0.3/KripProducer.h Game/DEMOs/v0.3/KripProducer.cpp Game/DEMOs/v0.3/IAnimated.cpp Game/DEMOs/v0.3/IAnimated.h)
+        Game/DEMOs/v0.3/Character.cpp Game/DEMOs/v0.3/IMovable.cpp Game/DEMOs/v0.3/Cursor.cpp Game/DEMOs/v0.3/Krip.h Game/DEMOs/v0.3/Krip.cpp Game/DEMOs/v0.3/KripProducer.h Game/DEMOs/v0.3/KripProducer.cpp Game/DEMOs/v0.3/IAnimated.cpp Game/DEMOs/v0.3/IAnimated.h Game/DEMOs/v0.3/Airplane.cpp Game/DEMOs/v0.3/Airplane.h)
 
 target_link_libraries(BrawlStars sfml-graphics sfml-audio sfml-system sfml-window)
