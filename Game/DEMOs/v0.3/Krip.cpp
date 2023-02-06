@@ -27,10 +27,12 @@ Krip::Krip(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_p
     //Spawn inside each other avoiding
     engine_->Invoke(0, this, &Krip::SpawnGlitchAvoiding);
 
+    int type = rand() % 2;
+
     IAnimated::CommonAnimationPack anim_pack;
     {
         TempStaticSpriteArgPack pack;
-        pack.path = "../Game/DEMOs/v0.3/Resources/Krip0StandLeft.png";
+        pack.path = k_kostil[type * 6 + 0];
         pack.width = 100;
         pack.height = 200;
         pack.render_level = LEVELS::FIRST_USER_LEVEL;
@@ -38,7 +40,7 @@ Krip::Krip(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_p
     }
     {
         TempStaticSpriteArgPack pack;
-        pack.path = "../Game/DEMOs/v0.3/Resources/Krip0StandRight.png";
+        pack.path = k_kostil[type * 6 + 1];
         pack.width = 100;
         pack.height = 200;
         pack.render_level = LEVELS::FIRST_USER_LEVEL;
@@ -46,7 +48,7 @@ Krip::Krip(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_p
     }
     {
         TempAnimatedSpriteArgPack pack;
-        pack.path =  "../Game/DEMOs/v0.3/Resources/Krip0RunLeft.png";
+        pack.path =  k_kostil[type * 6 + 2];
         pack.width = 100;
         pack.height = 200;
         pack.render_level = LEVELS::FIRST_USER_LEVEL;
@@ -59,7 +61,7 @@ Krip::Krip(std::unique_ptr<Position>& pos_ptr, std::unique_ptr<Collider>& coll_p
     }
     {
         TempAnimatedSpriteArgPack pack;
-        pack.path = "../Game/DEMOs/v0.3/Resources/Krip0RunRight.png";
+        pack.path = k_kostil[type * 6 + 3];
         pack.width = 100;
         pack.height = 200;
         pack.render_level = LEVELS::FIRST_USER_LEVEL;

@@ -106,7 +106,7 @@ void Zelensky::Shoot(const Position &aim_pos) {
                     new CircleCollider(Position(position_->GetCoordinatesAsVector2D() + shoot_pos_.GetCoordinatesAsVector2D()), 50, true),
                     nullptr,
                     "bullet",
-                    10, 25, 2000, aim_pos);
+                    25, 25, 2000, aim_pos);
     std::cout << "ZELENSKY SHOOT!" << std::endl;
 }
 
