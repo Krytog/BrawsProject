@@ -38,9 +38,10 @@ class EventHandler {
 public:
     static EventHandler& GetInstance();
 
-    /*  Syntax : &Predicate, std::make_tuple(PredicateArgs...), InvokerPtr, &Callable,
-       std::make_tuple(CallableArgs...) Empty tuples can be replaced with {} Reference arguments for
-       Predicate and Callable must be passed using std::ref
+    /* Syntax :
+     * &Predicate, std::make_tuple(PredicateArgs...), &Callable, std::make_tuple(CallableArgs...)
+     * Empty tuples can be replaced with {}
+     * Reference arguments for Predicate and Callable must be passed using std::ref
     */
     template <typename Predicate, typename... PredicateArgs, typename Callable, typename... CallableArgs,
               typename PredicateArgsTuple = std::tuple<PredicateArgs...>,
