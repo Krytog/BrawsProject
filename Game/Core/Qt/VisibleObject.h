@@ -1,0 +1,8 @@
+//
+// Created by arbuz on 21.02.23.
+//
+
+#ifndef BRAWLSTARS_VISIBLEOBJECT_H
+#define BRAWLSTARS_VISIBLEOBJECT_H
+
+#endif  // BRAWLSTARS_VISIBLEOBJECT_H
