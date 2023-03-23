@@ -16,12 +16,12 @@ void Engine::Destroy(GameObject* object_ptr) {
     }
 
     throw std::runtime_error(
-        "The the pointed object was not created using "
+        "The pointed object was not created using "
         "the engine or was already destroyed");
 }
 
 Position Engine::GetCameraPosition() const {
-    render_.GetCameraPosition();
+    return render_.GetCameraPosition();
 }
 
 void Engine::SetCameraOn(const GameObject* object) {
@@ -36,6 +36,7 @@ Engine::~Engine() {
     for (const auto& object_ptr : objects_buffer_) {
         delete object_ptr;
     }
+
 }
 
 Engine::Engine()
@@ -51,42 +52,49 @@ void Engine::ReadNewInput() {
 }
 
 InputSystem::InputTokensArray Engine::GetInput() const {
-    return input_system_.GetInput();
+    auto raw_input = input_system_.GetInput();
+    auto mouse_token_variant = *(raw_input.begin());
+    auto mouse_token = std::get<InputSystem::MouseToken>(mouse_token_variant);  //Make sure that MouseToken is the first token
+    auto window_size = render_.GetWindowPointer()->getSize();
+    Vector2D difference = Vector2D(static_cast<double>(window_size.x) / 2, static_cast<double>(window_size.y) / 2) - mouse_token.position.GetCoordinatesAsVector2D();
+    Position global_mouse_pos(render_.GetCameraPosition().GetCoordinatesAsVector2D() - difference);
+    *(raw_input.begin()) = InputSystem::MouseToken{mouse_token.key, global_mouse_pos};
+    return raw_input;
 }
 
 void Engine::TryExecuteDelayedCallbacks() {
     delay_queue_.TryExecute(std::chrono::steady_clock::now(), ticks_count_);
 }
 
-CollisionSystem::CollisionsInfoArray Engine::GetAllCollisions(const GameObject* game_object) const {
+CollisionSystem::CollisionsInfoArray Engine::GetAllCollisions(GameObject* game_object) const {
     return collision_system_.GetAllCollisions(game_object);
 }
 
-CollisionSystem::CollisionsInfoArray Engine::GetPhysicalCollisions(const GameObject* game_object) const {
+CollisionSystem::CollisionsInfoArray Engine::GetPhysicalCollisions(GameObject* game_object) const {
     return collision_system_.GetPhysicalCollisions(game_object);
 }
 
-CollisionSystem::CollisionsInfoArray Engine::GetTriggerCollisions(const GameObject* game_object) const {
+CollisionSystem::CollisionsInfoArray Engine::GetTriggerCollisions(GameObject* game_object) const {
     return collision_system_.GetTriggerCollisions(game_object);
 }
 
-CollisionSystem::CollisionsInfoArray Engine::GetAllCollisionsWithTag(const GameObject* game_object,
+CollisionSystem::CollisionsInfoArray Engine::GetAllCollisionsWithTag(GameObject* game_object,
                                                                      const std::string_view string) const {
     return collision_system_.GetAllCollisionsWithTag(game_object, string);
 }
 
 template <typename T>
-CollisionSystem::CollisionsInfoArray Engine::GetAllCollisionsWithType(const GameObject* game_object) const {
+CollisionSystem::CollisionsInfoArray Engine::GetAllCollisionsWithType(GameObject* game_object) const {
     return collision_system_.GetAllCollisionsWithType<T>(game_object);
 }
 
-CollisionSystem::PossiblePosition Engine::CheckPhysicalCollision(const GameObject* first,
-                                                                 const GameObject* second) const {
+CollisionSystem::PossiblePosition Engine::CheckPhysicalCollision(GameObject* first,
+                                                                 GameObject* second) const {
     return collision_system_.CheckPhysicalCollision(first, second);
 }
 
-CollisionSystem::PossiblePosition Engine::CheckTriggerCollision(const GameObject* first,
-                                                                const GameObject* second) const {
+CollisionSystem::PossiblePosition Engine::CheckTriggerCollision(GameObject* first,
+                                                                GameObject* second) const {
     return collision_system_.CheckTriggerCollision(first, second);
 }
 
@@ -117,4 +125,9 @@ void Engine::Update() {
     TryExecuteEvents();
     RenderAll();
     IncreaseTicksCount();
+}
+
+void Engine::RenderSwith(GameObject *game_object, VisibleObject *new_visible_object) {
+    render_.RemoveFromRender(game_object);
+    render_.AddToRender(game_object, new_visible_object);
 }

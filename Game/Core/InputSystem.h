@@ -3,8 +3,9 @@
 #include "Position.h"
 
 #include <variant>
-#include <stdint.h>
+#include <cstdint>
 #include <list>
+#include <SFML/Window.hpp>
 
 class InputSystem {
 public:
@@ -12,20 +13,21 @@ public:
         char symbol;
     };
 
-    struct MouseClickToken {
+    struct MouseToken {
         uint8_t key;
         Position position;
     };
 
-    using InputToken = std::variant<KeyboardToken, MouseClickToken>;
-    using InputTokensArray = const std::list<InputToken>&;
+    using InputToken = std::variant<KeyboardToken, MouseToken>;
+    using InputTokensArray = std::list<InputToken>;
 
-    static InputSystem& GetInstance();
+    static InputSystem& GetInstance(const sf::Window& window);
 
     void ReadNewInput();
     InputTokensArray GetInput() const;
 
 private:
-    InputSystem();
-    std::list<InputToken> input_tokens_;
+    explicit InputSystem(const sf::Window& window);
+    InputTokensArray input_tokens_;
+    const sf::Window& window_;
 };

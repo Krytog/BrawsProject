@@ -31,7 +31,7 @@ public:
         std::unique_ptr<Collider> coll_uptr(coll_ptr);
         std::unique_ptr<VisibleObject> vis_uptr(vis_ptr);
         GameObject* object_ptr = new TObject(pos_uptr, coll_uptr, vis_uptr, tag, std::forward<Args>(args)...);
-        objects_buffer_.push_back(object_ptr);
+        objects_buffer_.push_front(object_ptr);
         if (coll_ptr) {
             collision_system_.RegisterColliderOf(object_ptr, coll_ptr);
         }
@@ -45,6 +45,9 @@ public:
     void Destroy(GameObject* object_ptr);
     ///////////////////////////////////////////////////////////////////////////////////////
 
+    // Render
+    void RenderSwith(GameObject* game_object, VisibleObject* new_visible_object);
+
     // Camera controls
     ///////////////////////////////////////////////////////////////////////////////////////
     void SetCameraOn(const GameObject* object);
@@ -53,18 +56,18 @@ public:
 
     // Collisions
     ///////////////////////////////////////////////////////////////////////////////////////
-    CollisionSystem::PossiblePosition CheckPhysicalCollision(const GameObject* first,
-                                                             const GameObject* second) const;
-    CollisionSystem::PossiblePosition CheckTriggerCollision(const GameObject* first,
-                                                            const GameObject* second) const;
+    CollisionSystem::PossiblePosition CheckPhysicalCollision(GameObject* first,
+                                                             GameObject* second) const;
+    CollisionSystem::PossiblePosition CheckTriggerCollision(GameObject* first,
+                                                            GameObject* second) const;
 
-    CollisionSystem::CollisionsInfoArray GetAllCollisions(const GameObject* game_object) const;
-    CollisionSystem::CollisionsInfoArray GetPhysicalCollisions(const GameObject* game_object) const;
-    CollisionSystem::CollisionsInfoArray GetTriggerCollisions(const GameObject* game_object) const;
-    CollisionSystem::CollisionsInfoArray GetAllCollisionsWithTag(const GameObject* game_object,
+    CollisionSystem::CollisionsInfoArray GetAllCollisions(GameObject* game_object) const;
+    CollisionSystem::CollisionsInfoArray GetPhysicalCollisions(GameObject* game_object) const;
+    CollisionSystem::CollisionsInfoArray GetTriggerCollisions(GameObject* game_object) const;
+    CollisionSystem::CollisionsInfoArray GetAllCollisionsWithTag(GameObject* game_object,
                                                                  const std::string_view string) const;
     template <typename T>
-    CollisionSystem::CollisionsInfoArray GetAllCollisionsWithType(const GameObject* game_object) const;
+    CollisionSystem::CollisionsInfoArray GetAllCollisionsWithType(GameObject* game_object) const;
     ///////////////////////////////////////////////////////////////////////////////////////
 
     // Getting input
@@ -140,6 +143,6 @@ private:
     EventHandler event_handler_;
     DelayQueue delay_queue_;
 
-    std::vector<GameObject*> objects_buffer_;
+    std::deque<GameObject*> objects_buffer_;
     uint64_t ticks_count_ = 0;
 };

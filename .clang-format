@@ -10,4 +10,3 @@ PointerAlignment: Left
 ReferenceAlignment: Left
 KeepEmptyLinesAtTheStartOfBlocks: true
 SortIncludes: Never
-
