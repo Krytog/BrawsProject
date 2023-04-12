@@ -10,8 +10,8 @@
 class GameObject {
 public:
     GameObject();
-    GameObject(std::unique_ptr<Position>& position, std::unique_ptr<Collider>& collider,
-               std::unique_ptr<VisibleObject>& visible_object, const std::string_view& tag);
+    GameObject(Position* position, Collider* collider,
+               VisibleObject* visible_object, const std::string_view& tag);
 
     virtual void UpdatePosition(const Position& position);
     virtual void Translate(const Vector2D& vector2D);
@@ -20,6 +20,10 @@ public:
     const std::string_view GetTag() const;
 
     virtual ~GameObject() = default;
+
+    Position* GetPointerToPosition() const;
+    Collider* GetPointerToCollider() const;
+    VisibleObject* GetPointerToVisibleObject() const;
 
 protected:
     std::unique_ptr<Position> position_;

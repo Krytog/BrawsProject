@@ -23,18 +23,35 @@ public:
     // Creating and destroying objects
     ///////////////////////////////////////////////////////////////////////////////////////
     template <class TObject, typename... Args>
-    GameObject* ProduceObject(Position* pos_ptr, Collider* coll_ptr, VisibleObject* vis_ptr,
+    GameObject* CreateGameObject(Position* pos_ptr, Collider* coll_ptr, VisibleObject* vis_ptr,
                               const std::string_view& tag, Args&&... args) {
         static_assert(std::is_base_of<GameObject, TObject>(), "TObject must inherit from GameObject");
 
-        std::unique_ptr<Position> pos_uptr(pos_ptr);
-        std::unique_ptr<Collider> coll_uptr(coll_ptr);
-        std::unique_ptr<VisibleObject> vis_uptr(vis_ptr);
-        GameObject* object_ptr = new TObject(pos_uptr, coll_uptr, vis_uptr, tag, std::forward<Args>(args)...);
+        GameObject* object_ptr = new TObject(pos_ptr, coll_ptr, vis_ptr, tag, std::forward<Args>(args)...);
         objects_buffer_.push_front(object_ptr);
         if (coll_ptr) {
             collision_system_.RegisterColliderOf(object_ptr, coll_ptr);
         }
+        if (vis_ptr) {
+            render_.AddToRender(object_ptr, vis_ptr);
+        }
+
+        return object_ptr;
+    }
+
+    template <class TObject, typename... Args>
+    GameObject* CreateGameObjectByDefault() {
+        static_assert(std::is_base_of<GameObject, TObject>(), "TObject must inherit from GameObject");
+
+        GameObject* object_ptr = new TObject();
+        objects_buffer_.push_front(object_ptr);
+
+        auto coll_ptr = object_ptr->GetPointerToPosition();
+        if (coll_ptr) {
+            collision_system_.RegisterColliderOf(object_ptr, coll_ptr);
+        }
+
+        auto vis_ptr = object_ptr->GetPointerToVisibleObject();
         if (vis_ptr) {
             render_.AddToRender(object_ptr, vis_ptr);
         }

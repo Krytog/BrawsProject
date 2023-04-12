@@ -7,11 +7,11 @@ GameObject::GameObject()
       tag_("__NULL") {
 }
 
-GameObject::GameObject(std::unique_ptr<Position>& position, std::unique_ptr<Collider>& collider,
-                       std::unique_ptr<VisibleObject>& visible_object, const std::string_view& tag)
-    : position_(position.release()),
-      collider_(collider.release()),
-      visible_object_(visible_object.release()),
+GameObject::GameObject(Position* position, Collider* collider,
+                       VisibleObject* visible_object, const std::string_view& tag)
+    : position_(std::unique_ptr<Position>(position)),
+      collider_(std::unique_ptr<Collider>(collider)),
+      visible_object_(std::unique_ptr<VisibleObject>(visible_object)),
       tag_(tag) {
 }
 
@@ -42,3 +42,16 @@ Position GameObject::GetPosition() const {
 const std::string_view GameObject::GetTag() const {
     return tag_;
 }
+
+Position* GameObject::GetPointerToPosition() const {
+    return position_.get();
+}
+
+Collider* GameObject::GetPointerToCollider() const {
+    return collider_.get();
+}
+
+VisibleObject* GameObject::GetPointerToVisibleObject() const {
+    return visible_object_.get();
+}
+
