@@ -49,5 +49,31 @@ void Overmind::RegisterNewCerebrate(Cerebrate* cerebrate) {
 }
 
 void Overmind::ForceCerebratesExecuteCommands(const std::string& serialized_command) {
-    // parsing implementations
+    size_t beg = 0, ptr = 1;
+    while (ptr < serialized_command.size()) {
+        while (ptr < serialized_command.size() && serialized_command[ptr] != '#') {
+            ++ptr;
+        }
+
+        size_t id, type_id, cerebrate_info_size;
+        std::memcpy(&id, &serialized_command[beg + 1], sizeof(id));
+        std::memcpy(&type_id, &serialized_command[beg + 1 + sizeof(id)], sizeof(type_id));
+        std::memcpy(&cerebrate_info_size, &serialized_command[beg + 1 + sizeof(id) + sizeof(type_id)],
+                    sizeof(cerebrate_info_size));
+
+        if (cerebrates_.contains(id)) {
+            if (cerebrates_.at(id)->GetType() != type_id) {
+                throw "kringe";
+                return;
+            }
+            cerebrates_.at(id)->ForcePossessedExecuteCommand(
+                serialized_command.substr(beg + 2 + 3 * sizeof(size_t), cerebrate_info_size));
+        } else {
+            //          find object by type_id in global table and creates new obj in map by copying from
+            //          global table
+        }
+
+        beg = ptr;
+        ++ptr;
+    }
 }
