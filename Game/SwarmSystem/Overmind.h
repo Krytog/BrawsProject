@@ -20,4 +20,6 @@ private:
     std::string cerebrates_info_serialized_;
     size_t current_id_;
     std::unordered_map<size_t, Cerebrate*> cerebrates_;
+
+    enum { AVG_GETINFO_STRLEN = 80 };
 };
