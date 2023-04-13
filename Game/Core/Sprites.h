@@ -12,7 +12,7 @@ class StaticSpriteImpl;
 
 class StaticSprite : public VisibleObject {
 public:
-    StaticSprite(const Position* pos, const size_t& width, const size_t& height,
+    StaticSprite(const Position& pos, const size_t& width, const size_t& height,
                  std::string_view path_to_file, const size_t& render_level);
 
     void UpdatePosition(const Position& position) override;
@@ -35,7 +35,7 @@ class AnimatedSpriteImpl;
 
 class AnimatedSprite : public VisibleObject {
 public:
-    AnimatedSprite(const Position* pos, const size_t& width, const size_t& height,
+    AnimatedSprite(const Position& pos, const size_t& width, const size_t& height,
                    std::string_view path_to_file, const size_t& render_level,
                    const size_t& frame_rate, const size_t& frames_count_width,
                    const size_t& frames_count_height, const std::unordered_set<size_t>& interrupt_points = {}, bool is_cycled = true);

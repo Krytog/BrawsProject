@@ -10,9 +10,9 @@
 
 class VisibleObjectImpl {
 public:
-    VisibleObjectImpl(const Position* pos, const size_t& width, const size_t& height,
+    VisibleObjectImpl(const Position& pos, const size_t& width, const size_t& height,
                       const size_t& render_level, bool is_cycled = true)
-        : pos_(*pos), width_(width), height_(height), render_level_(render_level), is_cycled_(is_cycled){};
+        : pos_(pos), width_(width), height_(height), render_level_(render_level), is_cycled_(is_cycled){};
 
     virtual void UpdatePosition(const Position& position) {
         pos_ = position;
@@ -57,7 +57,7 @@ protected:
 
 class StaticSpriteImpl : public VisibleObjectImpl {
 public:
-    StaticSpriteImpl(const Position* pos, const size_t& width, const size_t& height,
+    StaticSpriteImpl(const Position& pos, const size_t& width, const size_t& height,
                      std::string_view path_to_file, const size_t& render_level)
         : VisibleObjectImpl(pos, width, height, render_level), image_(&pos_, width, height) {
         image_.LoadFromFile(path_to_file);
@@ -78,7 +78,7 @@ private:
     Canvas::Image image_;
 };
 
-StaticSprite::StaticSprite(const Position* pos, const size_t& width, const size_t& height,
+StaticSprite::StaticSprite(const Position& pos, const size_t& width, const size_t& height,
                            std::string_view path_to_file, const size_t& render_level) {
     impl_ = std::make_unique<StaticSpriteImpl>(pos, width, height, path_to_file, render_level);
 }
@@ -117,7 +117,7 @@ StaticSprite::~StaticSprite() noexcept = default;
 
 class AnimatedSpriteImpl : public VisibleObjectImpl {
 public:
-    AnimatedSpriteImpl(const Position* pos, const size_t& width, const size_t& height,
+    AnimatedSpriteImpl(const Position& pos, const size_t& width, const size_t& height,
                        std::string_view path_to_file, const size_t& render_level,
                        const size_t& tics_per_frame, const size_t& frames_count_width,
                        const size_t& frames_count_height, const std::unordered_set<size_t>& interrupt_points,
@@ -200,7 +200,7 @@ private:
     size_t kFrameSizeY;
 };
 
-AnimatedSprite::AnimatedSprite(const Position* pos, const size_t& width, const size_t& height,
+AnimatedSprite::AnimatedSprite(const Position& pos, const size_t& width, const size_t& height,
                                std::string_view path_to_file, const size_t& render_level,
                                const size_t& tics_per_frame, const size_t& frames_count_width,
                                const size_t& frames_count_height,
