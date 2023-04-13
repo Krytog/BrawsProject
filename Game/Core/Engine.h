@@ -39,14 +39,14 @@ public:
         return object_ptr;
     }
 
-    template <class TObject, typename... Args>
+    template <class TObject>
     GameObject* CreateGameObjectByDefault() {
         static_assert(std::is_base_of<GameObject, TObject>(), "TObject must inherit from GameObject");
 
         GameObject* object_ptr = new TObject();
         objects_buffer_.push_front(object_ptr);
 
-        auto coll_ptr = object_ptr->GetPointerToPosition();
+        auto coll_ptr = object_ptr->GetPointerToCollider();
         if (coll_ptr) {
             collision_system_.RegisterColliderOf(object_ptr, coll_ptr);
         }
