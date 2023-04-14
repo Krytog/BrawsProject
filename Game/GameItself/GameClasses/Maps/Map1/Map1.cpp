@@ -18,6 +18,6 @@ Map1::Map1(): GameObject(new Position(0, 0), nullptr, nullptr, "background") {
     std::cout << "hello" << std::endl;
     RectangleCollider* lake_collider = new RectangleCollider(Position(LAKE_X, LAKE_Y), LAKE_WIDTH, LAKE_HEIGHT);
     Engine::GetInstance().CreateGameObject<GameObject>(nullptr, lake_collider, nullptr, TAGS_COLLIDERS_NOWALK_FLY);
-    VisibleObject* visible_object = new StaticSprite(new Position(0, 0), MAP_WIDTH, MAP_HEIGHT, RES_PATH_MAPS_MAP1_BACKGROUND_PATH, LEVELS::BACKGROUND_LEVEL);
+    VisibleObject* visible_object = new StaticSprite(Position(0, 0), MAP_WIDTH, MAP_HEIGHT, RES_PATH_MAPS_MAP1_BACKGROUND_PATH, LEVELS::BACKGROUND_LEVEL);
     visible_object_ = std::unique_ptr<VisibleObject>(visible_object);
 }
