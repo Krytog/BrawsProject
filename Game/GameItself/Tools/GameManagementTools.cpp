@@ -6,4 +6,6 @@
 void GameManagementTools::InitGame() {
     Engine* engine = &Engine::GetInstance();
     engine->CreateGameObjectByDefault<Map1>();
+    auto ptr = engine->CreateGameObjectByDefault<GameObject>();
+    engine->SetCameraOn(ptr);
 }
