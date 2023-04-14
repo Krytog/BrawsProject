@@ -66,7 +66,7 @@ void Overmind::ForceCerebratesExecuteCommands(const std::string& serialized_comm
 
         if (cerebrates_.contains(id)) {
             if (cerebrates_.at(id)->GetType() != type_id) {
-                throw "kringe";
+                throw "cringe";
                 return;
             }
             cerebrates_.at(id)->ForcePossessedExecuteCommand(
@@ -92,14 +92,13 @@ void Overmind::ActualizeCerebrate(const std::string& serialized_command) {
     for (auto& elem : cerebrates_) {
         if (!set.contains(elem.first)) {
             cerebrates_.erase(elem.first);
+            delete elem.second;
         }
     }
 }
 
 Overmind::~Overmind() {
     for (auto& elem : cerebrates_) {
-        delete (elem.second);
+        delete elem.second;
     }
 }
-// Actualazie cerebrate -- parse string and delete anython that is not in string
-// Add destructor

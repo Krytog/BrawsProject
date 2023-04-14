@@ -16,3 +16,5 @@ Cerebrate::Cerebrate(size_t type) : type_(type) {
 void Cerebrate::AddCommandToBuffer(const std::string& serialized_command) {
     buffer_ += serialized_command;
 }
+
+Cerebrate::~Cerebrate() = default;

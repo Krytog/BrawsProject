@@ -11,6 +11,8 @@ public:
     void AddCommandToBuffer(const std::string& serialized_command);
     size_t GetType();
 
+    virtual ~Cerebrate();
+
 private:
     size_t type_;
     std::string buffer_;
