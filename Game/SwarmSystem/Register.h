@@ -27,7 +27,7 @@ public:
 
     template <class Cerebrate>
     void RegisterClass(size_t type_id) {
-        register_.insert({type_id, std::make_unique<Factory<TestClass>>()});
+        register_.insert({type_id, std::make_unique<Factory<Cerebrate>>()});
     }
 
     Cerebrate* GetCerbrate(size_t type_id) {
