@@ -1,7 +1,7 @@
 #include "Map1.h"
 
-#include "../../../Resources/ResourcesPaths.h"
-#include "../../GameObjectTags.h"
+#include "../../../../Resources/ResourcesPaths.h"
+#include "../../../GameObjectTags.h"
 
 enum {
     LAKE_X = 2000,

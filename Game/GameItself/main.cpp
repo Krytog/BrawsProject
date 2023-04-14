@@ -8,7 +8,8 @@ int main() {
     Engine& engine = Engine::GetInstance();
     GameManagementTools::InitGame();
     MyTime time;
-    while (true) {
+    engine.SetActiveOn();
+    while (engine.IsActive()) {
         if (time.EvaluateTime() < static_cast<double>(1) / 60) {
             continue;
         }
