@@ -12,6 +12,7 @@ int main() {
         if (time.EvaluateTime() < static_cast<double>(1) / 60) {
             continue;
         }
+        time.ResetTime();
         engine.Update();
     }
     return 0;
