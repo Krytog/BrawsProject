@@ -1,5 +1,6 @@
 #include "Overmind.h"
 #include <cstring>
+#include <unordered_set>
 
 #include "Register.h"
 
@@ -79,5 +80,26 @@ void Overmind::ForceCerebratesExecuteCommands(const std::string& serialized_comm
     }
 }
 
+void Overmind::ActualizeCerebrate(const std::string& serialized_command) {
+    std::unordered_set<size_t> set;
+    for (size_t i = 0; i < serialized_command.size(); ++i) {
+        if (serialized_command[i] == '#' && i + 1 < serialized_command.size()) {
+            size_t id;
+            std::memcpy(&id, &serialized_command[i + 1], sizeof(id));
+            set.insert(id);
+        }
+    }
+    for (auto& elem : cerebrates_) {
+        if (!set.contains(elem.first)) {
+            cerebrates_.erase(elem.first);
+        }
+    }
+}
+
+Overmind::~Overmind() {
+    for (auto& elem : cerebrates_) {
+        delete (elem.second);
+    }
+}
 // Actualazie cerebrate -- parse string and delete anython that is not in string
 // Add destructor
