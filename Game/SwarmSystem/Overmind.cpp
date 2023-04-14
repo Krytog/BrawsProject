@@ -71,10 +71,13 @@ void Overmind::ForceCerebratesExecuteCommands(const std::string& serialized_comm
             cerebrates_.at(id)->ForcePossessedExecuteCommand(
                 serialized_command.substr(beg + 2 + 3 * sizeof(size_t), cerebrate_info_size));
         } else {
-            cerebrates_[id] = CerebrateRegistry::GetInstance().GetCerbrate(type_id).release();
+            cerebrates_[id] = CerebrateRegistry::GetInstance().GetCerbrate(type_id);
         }
 
         beg = ptr;
         ++ptr;
     }
 }
+
+// Actualazie cerebrate -- parse string and delete anython that is not in string
+// Add destructor

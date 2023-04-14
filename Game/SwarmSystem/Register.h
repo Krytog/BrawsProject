@@ -1,18 +1,18 @@
 #include <memory>
-#include <map>
+#include <unordered_map>
 #include "Cerebrate.h"
 
 class IFactory {
 public:
-    virtual std::unique_ptr<Cerebrate> Create() = 0;
+    virtual Cerebrate* Create() = 0;
     virtual ~IFactory() = default;
 };
 
 template <typename T>
 class Factory : public IFactory {
 public:
-    virtual std::unique_ptr<Cerebrate> Create() override {
-        return std::make_shared<T>();
+    virtual Cerebrate* Create() override {
+        return new T();
     }
 
     ~Factory() = default;
@@ -30,7 +30,7 @@ public:
         register_.insert({type_id, std::make_unique<Factory<TestClass>>()});
     }
 
-    std::unique_ptr<Cerebrate> GetCerbrate(size_t type_id) {
+    Cerebrate* GetCerbrate(size_t type_id) {
         return register_[type_id]->Create();
     }
 
