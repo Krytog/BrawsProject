@@ -29,5 +29,5 @@ protected:
     std::unique_ptr<Position> position_;
     std::unique_ptr<Collider> collider_;
     std::unique_ptr<VisibleObject> visible_object_;
-    const std::string_view tag_;
+    std::string_view tag_;
 };

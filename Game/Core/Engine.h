@@ -23,15 +23,18 @@ public:
     // Creating and destroying objects
     ///////////////////////////////////////////////////////////////////////////////////////
     template <class TObject, typename... Args>
-    GameObject* CreateGameObject(Position* pos_ptr, Collider* coll_ptr, VisibleObject* vis_ptr,
-                              const std::string_view& tag, Args&&... args) {
+    GameObject* CreateGameObject(Args&&... args) {
         static_assert(std::is_base_of<GameObject, TObject>(), "TObject must inherit from GameObject");
 
-        GameObject* object_ptr = new TObject(pos_ptr, coll_ptr, vis_ptr, tag, std::forward<Args>(args)...);
+        GameObject* object_ptr = new TObject(std::forward<Args>(args)...);
         objects_buffer_.push_front(object_ptr);
+
+        auto coll_ptr = object_ptr->GetPointerToCollider();
         if (coll_ptr) {
             collision_system_.RegisterColliderOf(object_ptr, coll_ptr);
         }
+
+        auto vis_ptr = object_ptr->GetPointerToVisibleObject();
         if (vis_ptr) {
             render_.AddToRender(object_ptr, vis_ptr);
         }
@@ -151,6 +154,12 @@ public:
     void IncreaseTicksCount();
     ///////////////////////////////////////////////////////////////////////////////////////
 
+    // Status of engine
+    ///////////////////////////////////////////////////////////////////////////////////////
+    bool IsActive() const;
+    void SetActiveOn();
+    void SetActiveOff();
+
 private:
     Engine();
 
@@ -162,4 +171,6 @@ private:
 
     std::deque<GameObject*> objects_buffer_;
     uint64_t ticks_count_ = 0;
+
+    bool is_active_ = true;
 };

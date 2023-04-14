@@ -131,3 +131,15 @@ void Engine::RenderSwith(GameObject *game_object, VisibleObject *new_visible_obj
     render_.RemoveFromRender(game_object);
     render_.AddToRender(game_object, new_visible_object);
 }
+
+bool Engine::IsActive() const {
+    return is_active_;
+}
+
+void Engine::SetActiveOn() {
+    is_active_ = true;
+}
+
+void Engine::SetActiveOff() {
+    is_active_ = false;
+}
