@@ -1,12 +1,13 @@
 #include "Cerebrate.h"
 #include "Overmind.h"
 
-size_t Cerebrate::GetType() {
+size_t Cerebrate::GetType() const {
     return type_;
 }
 
 std::string Cerebrate::GetInfoForOvermind() {
-    return SerializeInfo() + buffer_;
+    auto temp = std::move(buffer_);
+    return SerializeInfo() + temp;
 }
 
 Cerebrate::Cerebrate(size_t type) : type_(type) {
