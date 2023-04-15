@@ -9,4 +9,6 @@ public:
 
     void Shoot(const Position& position) override;
     void ReceiveDamage() override;
+
+    void OnUpdate() override;
 };
