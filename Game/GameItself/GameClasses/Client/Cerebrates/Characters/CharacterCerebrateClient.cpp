@@ -20,7 +20,10 @@ void CharacterCerebrateClient::ForcePossessedExecuteCommand(const std::string &s
     possessed_->SetHealth(actual_info.current_health);
 }
 
-std::string CharacterCerebrateClient::SerializeInfo() const {
+std::string CharacterCerebrateClient::SerializeInfo() {
+    if (is_controllable_) {
+        HandleInput();
+    }
     Info actual_info;
     actual_info.current_health = possessed_->GetHealth();
     actual_info.current_pos = possessed_->GetPosition();
@@ -30,3 +33,25 @@ std::string CharacterCerebrateClient::SerializeInfo() const {
 }
 
 void CharacterCerebrateClient::UsePossessedApi(std::string_view serialized_command) const {}
+
+void CharacterCerebrateClient::HandleInput() {
+    auto input = Engine::GetInstance().GetInput();
+    std::string commands;
+    commands.reserve(4);
+    for (auto& token : input) {
+        auto keyboard_token = std::get_if<InputSystem::KeyboardToken>(&token);
+        if (!keyboard_token) {
+            continue;
+        }
+        if (keyboard_token->symbol == 'W') {
+            commands += 'W';
+        } else if (keyboard_token->symbol == 'A') {
+            commands += 'A';
+        } else if (keyboard_token->symbol == 'S') {
+            commands += 'S';
+        } else if (keyboard_token->symbol == 'D') {
+            commands += 'D';
+        }
+    }
+    AddCommandToBuffer(commands);
+}

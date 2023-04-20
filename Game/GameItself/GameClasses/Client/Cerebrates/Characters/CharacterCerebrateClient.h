@@ -16,9 +16,9 @@ public:
     virtual ~CharacterCerebrateClient();
 
     virtual void ForcePossessedExecuteCommand(const std::string& serialized_command) const override;
-    virtual std::string SerializeInfo() const override;
+    virtual std::string SerializeInfo() override;
     virtual void UsePossessedApi(std::string_view serialized_command) const;
-
+    void HandleInput();
 
 protected:
     CharacterPawnClient* possessed_;
