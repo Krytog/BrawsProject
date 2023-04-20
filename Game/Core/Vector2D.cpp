@@ -83,3 +83,7 @@ void Vector2D::Normalize() {
     x_ /= length;
     y_ /= length;
 }
+
+bool Vector2D::IsZero() const {
+    return Length() < PRECISION;
+}

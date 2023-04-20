@@ -12,6 +12,7 @@ public:
     void SetCoordinates(double x, double y);
 
     void Normalize();
+    bool IsZero() const;
 
     Vector2D& operator=(const Vector2D& other);
 
