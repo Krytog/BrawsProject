@@ -72,7 +72,7 @@ void Overmind::ForceCerebratesExecuteCommands(const std::string& serialized_comm
             cerebrates_.at(id)->ForcePossessedExecuteCommand(
                 serialized_command.substr(beg + 2 + 3 * sizeof(size_t), cerebrate_info_size));
         } else {
-            cerebrates_[id] = CerebrateRegistry::GetInstance().GetCerbrate(type_id);
+            cerebrates_[id] = CerebrateRegistry::GetInstance().GetCerebrate(type_id);
         }
 
         beg = ptr;
