@@ -5,12 +5,13 @@
 #include "../../../../../SwarmSystem/Serializer.h"
 #include "../../../../../SwarmSystem/CerebratesTypeId.h"
 
-CharacterCerebrateServer::CharacterCerebrateServer(CharacterPawnServer *pawn_to_possess):
-        possessed_(pawn_to_possess), Cerebrate(TypeId_CharacterCerebrateClient) {}
+CharacterCerebrateServer::CharacterCerebrateServer(CharacterPawnServer* pawn_to_possess)
+    : possessed_(pawn_to_possess), Cerebrate(TypeId_CharacterCerebrateClient) {
+}
 
 CharacterCerebrateServer::~CharacterCerebrateServer() = default;
 
-void CharacterCerebrateServer::ForcePossessedExecuteCommand(const std::string &serialized_command) const {
+void CharacterCerebrateServer::ForcePossessedExecuteCommand(const std::string& serialized_command) const {
     Vector2D input;
     for (auto s : serialized_command) {
         if (s == 'W') {
@@ -32,8 +33,9 @@ std::string CharacterCerebrateServer::SerializeInfo() {
     actual_info.current_health = possessed_->GetHealth();
     actual_info.current_pos = possessed_->GetPosition();
     std::string output;
-    Serializer::Serialize(actual_info, output);
+    Serializer::Serialize(actual_info, &output);
     return output;
 }
 
-void CharacterCerebrateServer::UsePossessedApi(std::string_view serialized_command) const {}
+void CharacterCerebrateServer::UsePossessedApi(std::string_view serialized_command) const {
+}
