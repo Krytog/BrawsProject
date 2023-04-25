@@ -120,7 +120,6 @@ void Engine::TryExecuteEvents() {
 }
 
 void Engine::Update() {
-    std::cout << objects_buffer_.size() << std::endl;
     ReadNewInput();
     ExecuteUpdatesOfCustomBehaviours();
     TryExecuteDelayedCallbacks();

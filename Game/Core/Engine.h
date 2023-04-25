@@ -14,8 +14,6 @@
 #include "InputSystem.h"
 #include "EventHandler.h"
 
-#include <iostream>
-
 class Engine {
 public:
     static Engine& GetInstance();
