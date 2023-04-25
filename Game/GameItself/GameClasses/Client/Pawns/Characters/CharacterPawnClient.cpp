@@ -28,7 +28,3 @@ void CharacterPawnClient::SetDamage(double damage) {
 void CharacterPawnClient::SetSpeed(double speed) {
     speed_ = speed;
 }
-
-size_t CharacterPawnClient::GetTypeId() const {
-    return type_id_;
-}

@@ -2,5 +2,6 @@
 
 class GameManagementTools {
 public:
-    static void InitGame();
+    static void InitGameClient();
+    static void InitGameServer();
 };

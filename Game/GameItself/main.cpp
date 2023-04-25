@@ -8,8 +8,9 @@
 int main() {
     Engine& engine = Engine::GetInstance();
     Overmind& overmind = Overmind::GetInstance();
-    GameManagementTools::InitGame();
+    GameManagementTools::InitGameClient();
     MyTime time;
+    MyTime timer;
     engine.SetActiveOn();
     while (engine.IsActive()) {
         if (time.EvaluateTime() < static_cast<double>(1) / 60) {
@@ -17,13 +18,17 @@ int main() {
         }
         time.ResetTime();
 
-
         overmind.UpdateCelebratesInfo();
+
         auto str = overmind.GetCerebratesInfoSerialized();
+        std::cout << str << std::endl;
         engine.Update();
 
-
         overmind.ForceCerebratesExecuteCommands(str);
+
+        if (timer.EvaluateTime() > 10) {
+            engine.SetActiveOff();
+        }
     }
     return 0;
 }

@@ -20,7 +20,7 @@ public:
 
     CharacterCerebrateClient() : CharacterCerebrateClient(nullptr, false) {
         auto ptr = Engine::GetInstance().CreateGameObjectByDefault<TPawn>();
-        possessed_ = ptr;
+        possessed_ = dynamic_cast<TPawn*>(ptr);
     }
 
     virtual ~CharacterCerebrateClient() = default;

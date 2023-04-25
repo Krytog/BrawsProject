@@ -7,4 +7,5 @@
 #define TAGS_COLLIDERS_WALK_FLY "__collider_noblock"
 
 // CHARACTERS TAGS
-#define TAGS_CHARACTER_DefaultCharacter "__character_defaultcharacter"
+#define TAGS_CHARACTER_Default "__character_default"
+#define TAGS_CHARACTER_Mage "__character_mage"

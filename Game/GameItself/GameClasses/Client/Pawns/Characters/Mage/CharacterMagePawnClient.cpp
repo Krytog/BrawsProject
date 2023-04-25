@@ -1,0 +1,40 @@
+#include "CharacterMagePawnClient.h"
+
+#include "CharacterMagePawnClient.h"
+
+#include "../../../../../Resources/ResourcesPaths.h"
+#include "../../../Cerebrates/Characters/CharacterCerebrateClient.h"
+#include "../../../../../../SwarmSystem/TypeIdList.h"
+#include "../../../../GameObjectTags.h"
+
+enum {
+    START_X = -50,
+    START_Y = -50,
+    COLLIDER_RADIUS = 35,
+    SPRITE_WIDTH = 100,
+    SPRITE_HEIGHT = 100
+};
+
+CharacterMagePawnClient::CharacterMagePawnClient() : CharacterMagePawnClient(Position(START_X, START_Y)) {}
+
+CharacterMagePawnClient::CharacterMagePawnClient(const Position &position) {
+    auto pos = new Position(position);
+    position_ = std::unique_ptr<Position>(pos);
+    collider_ = std::make_unique<CircleCollider>(*position_, COLLIDER_RADIUS);
+    visible_object_ = std::make_unique<StaticSprite>(*position_, SPRITE_WIDTH, SPRITE_HEIGHT, RES_PATH_CHARACTERS_MAGE, LEVELS::FIRST_USER_LEVEL);
+    tag_ = TAGS_CHARACTER_Mage;
+}
+
+void CharacterMagePawnClient::Shoot(const Position &position) {
+    std::cout << "I shoot!" << std::endl;
+}
+
+void CharacterMagePawnClient::ReceiveDamage() {
+    std::cout << "I receive damage!" << std::endl;
+}
+
+void CharacterMagePawnClient::OnUpdate() {
+    Translate(Vector2D(-10, -10));
+}
+
+const size_t CharacterMagePawnClient::kTypeId = TypeId_Character_Mage;
