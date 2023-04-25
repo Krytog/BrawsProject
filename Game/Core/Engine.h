@@ -162,12 +162,14 @@ public:
 
 private:
     Engine();
+    Engine(const Engine& other) = delete;
+    Engine& operator=(const Engine& other) = delete;
 
-    CollisionSystem collision_system_;
-    Render render_;
-    InputSystem input_system_;
-    EventHandler event_handler_;
-    DelayQueue delay_queue_;
+    CollisionSystem& collision_system_;
+    Render& render_;
+    InputSystem& input_system_;
+    EventHandler& event_handler_;
+    DelayQueue& delay_queue_;
 
     std::deque<GameObject*> objects_buffer_;
     uint64_t ticks_count_ = 0;

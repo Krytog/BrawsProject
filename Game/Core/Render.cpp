@@ -104,3 +104,8 @@ Render::~Render() = default;
 sf::Window *Render::GetWindowPointer() const {
     return impl_->GetWindowPointer();
 }
+
+Render& Render::GetInstance() {
+    static Render render;
+    return render;
+}

@@ -18,7 +18,7 @@ class RenderImplementation;
 
 class Render {
 public:
-    Render();
+    static Render& GetInstance();
 
     void AddToRender(const GameObject *object_ptr, const VisibleObject *vis_obj_ptr);
     void RemoveFromRender(const GameObject *vis_object_ptr);
@@ -33,5 +33,6 @@ public:
     sf::Window *GetWindowPointer() const;
 
 private:
+    Render();
     std::unique_ptr<RenderImplementation> impl_;
 };

@@ -41,6 +41,7 @@ Engine::~Engine() {
 
 Engine::Engine()
     : collision_system_(CollisionSystem::GetInstance()),
+      render_(Render::GetInstance()),
       input_system_(InputSystem::GetInstance(*render_.GetWindowPointer())),
       event_handler_(EventHandler::GetInstance()),
       delay_queue_(DelayQueue::GetInstance()),
@@ -119,6 +120,7 @@ void Engine::TryExecuteEvents() {
 }
 
 void Engine::Update() {
+    std::cout << objects_buffer_.size() << std::endl;
     ReadNewInput();
     ExecuteUpdatesOfCustomBehaviours();
     TryExecuteDelayedCallbacks();
