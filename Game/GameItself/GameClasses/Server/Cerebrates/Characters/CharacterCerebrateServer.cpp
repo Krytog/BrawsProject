@@ -3,7 +3,7 @@
 #include "../../Pawns/Characters/CharacterPawnServer.h"
 
 #include "../../../../../SwarmSystem/Serializer.h"
-#include "../../../../../SwarmSystem/CerebratesTypeId.h"
+#include "../../../../../SwarmSystem/TypeIdList.h"
 
 CharacterCerebrateServer::CharacterCerebrateServer(CharacterPawnServer* pawn_to_possess)
     : possessed_(pawn_to_possess), Cerebrate(TypeId_CharacterCerebrateClient) {

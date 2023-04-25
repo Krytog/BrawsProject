@@ -2,6 +2,7 @@
 
 #include "../../../../../Core/Engine.h"
 #include "../../../../../Core/CustomBehaviour.h"
+#include "../../../../../SwarmSystem/TypeIdList.h"
 
 class CharacterPawnClient : public CustomBehaviour, public GameObject {
 public:
@@ -21,7 +22,11 @@ public:
     void SetDamage(double damage);
     void SetSpeed(double speed);
 
+    size_t GetTypeId() const;
+
 protected:
+    size_t type_id_ = TypeId_UNDEFINED;
+
     double health_;
     double damage_;
     double speed_;
