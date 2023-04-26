@@ -161,8 +161,8 @@ public:
 private:
     Engine();
     void ClearAll();
-    Engine(const Engine& other) = delete;
-    Engine& operator=(const Engine& other) = delete;
+    Engine(const Engine&) = delete;
+    Engine& operator=(const Engine&) = delete;
 
     CollisionSystem& collision_system_;
     Render& render_;

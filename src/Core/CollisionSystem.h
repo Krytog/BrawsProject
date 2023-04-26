@@ -43,6 +43,8 @@ public:
 
 private:
     CollisionSystem();
+    CollisionSystem(const CollisionSystem&) = delete;
+    CollisionSystem& operator=(const CollisionSystem&) = delete;
 
     std::unordered_map<GameObject*, const Collider*> registered_colliders_;
 };

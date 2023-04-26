@@ -34,5 +34,8 @@ public:
 
 private:
     Render();
+    Render(const Render&) = delete;
+    Render& operator=(const Render&) = delete;
+
     std::unique_ptr<RenderImplementation> impl_;
 };

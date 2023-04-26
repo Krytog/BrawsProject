@@ -27,6 +27,8 @@ public:
 
 private:
     DelayQueue();
+    DelayQueue(const DelayQueue&) = delete;
+    DelayQueue& operator=(const DelayQueue&) = delete;
 
     class DelayQueueTime {
     public:

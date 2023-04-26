@@ -65,6 +65,8 @@ public:
 
 private:
     EventHandler();
+    EventHandler(const EventHandler&) = delete;
+    EventHandler& operator=(const EventHandler&) = delete;
 
 private:
     std::list<Event> events_;

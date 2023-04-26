@@ -28,6 +28,9 @@ public:
 
 private:
     explicit InputSystem(const sf::Window& window);
+    InputSystem(const InputSystem&) = delete;
+    InputSystem& operator=(const InputSystem&) = delete;
+
     InputTokensArray input_tokens_;
     const sf::Window& window_;
 };
