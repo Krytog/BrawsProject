@@ -1,7 +1,7 @@
-#include "../Core/Engine.h"
-#include "../Core/MyTime.h"
-#include "../GameItself/Tools/GameManagementTools.h"
-#include "../SwarmSystem/Overmind.h"
+#include "Core/Engine.h"
+#include "Core/MyTime.h"
+#include "Game/Tools/GameManagementTools.h"
+#include "SwarmSystem/Overmind.h"
 
 #include <iostream>
 

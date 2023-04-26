@@ -1,0 +1,19 @@
+add_library(core_lib
+        Collider.cpp
+        Colliders.cpp
+        DelayQueue.cpp
+        EventHandler.cpp
+        Position.cpp
+        Sprites.cpp
+        Vector2D.cpp
+        Camera.cpp
+        Sprites.cpp
+        CollisionSystem.cpp
+        CustomBehaviour.cpp
+        GameObject.cpp
+        InputSystem.cpp
+        MyTime.cpp
+        Render.cpp
+        Engine.cpp
+        Canvas.cpp
+        Tools/BasicGeometry.cpp)
