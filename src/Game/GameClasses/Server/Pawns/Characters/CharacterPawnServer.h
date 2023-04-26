@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../../../../Core/Engine.h"
-#include "../../../../../Core/CustomBehaviour.h"
-#include "../Interfaces/IMovable.h"
+#include <Core/Engine.h>
+#include <Core/CustomBehaviour.h>
+#include <Game/GameClasses/Server/Pawns/Interfaces/IMovable.h>
 
 class CharacterPawnServer : public CustomBehaviour, public IMovable {
 public:

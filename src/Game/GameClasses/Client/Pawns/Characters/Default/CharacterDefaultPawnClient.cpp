@@ -1,9 +1,8 @@
 #include "CharacterDefaultPawnClient.h"
 
-#include "../../../../../Resources/ResourcesPaths.h"
-#include "../../../Cerebrates/Characters/CharacterCerebrateClient.h"
-#include "../../../../../../SwarmSystem/TypeIdList.h"
-#include "../../../../GameObjectTags.h"
+#include <Game/Resources/ResourcesPaths.h>
+#include <SwarmSystem/TypeIdList.h>
+#include <Game/GameClasses/GameObjectTags.h>
 
 enum {
     START_X = 0,

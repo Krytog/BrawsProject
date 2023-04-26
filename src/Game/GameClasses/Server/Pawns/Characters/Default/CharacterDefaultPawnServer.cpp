@@ -1,9 +1,7 @@
-#include "DefaultCharacterPawnServer.h"
+#include "CharacterDefaultPawnServer.h"
 
-#include "../../../../../Resources/ResourcesPaths.h"
-#include "../../../Cerebrates/Characters/CharacterCerebrateServer.h"
-
-#define TAG "default_character"
+#include <Game/GameClasses/Server/Cerebrates/Characters/CharacterCerebrateServer.h>
+#include <Game/GameClasses/GameObjectTags.h>
 
 enum {
     START_X = 0,
@@ -13,19 +11,15 @@ enum {
     SPRITE_HEIGHT = 100
 };
 
-DefaultCharacterPawnServer::DefaultCharacterPawnServer() {
-    position_ = std::make_unique<Position>(START_X, START_Y);
-    collider_ = std::make_unique<CircleCollider>(*position_, COLLIDER_RADIUS);
-    visible_object_ = nullptr;
-    tag_ = TAG;
-}
+DefaultCharacterPawnServer::DefaultCharacterPawnServer() : DefaultCharacterPawnServer(Position(START_X, START_Y)) {}
 
 DefaultCharacterPawnServer::DefaultCharacterPawnServer(const Position &position) {
+    new CharacterCerebrateServer<DefaultCharacterPawnServer>()
     auto pos = new Position(position);
     position_ = std::unique_ptr<Position>(pos);
     collider_ = std::make_unique<CircleCollider>(*position_, COLLIDER_RADIUS);
     visible_object_ = nullptr;
-    tag_ = TAG;
+    tag_ = TAGS_CHARACTER_Default;
 }
 
 void DefaultCharacterPawnServer::Shoot(const Position &position) {

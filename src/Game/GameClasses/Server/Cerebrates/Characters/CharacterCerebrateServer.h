@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../../../../SwarmSystem/Cerebrate.h"
-#include "../../../../../Core/Engine.h"
+#include <SwarmSystem/Cerebrate.h>
+#include <Core/Engine.h>
 
 class CharacterPawnServer;
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../../../../SwarmSystem/Cerebrate.h"
-#include "../../../../../Core/Engine.h"
-#include "../../../../../SwarmSystem/Serializer.h"
+#include <SwarmSystem/Cerebrate.h>
+#include <Core/Engine.h>
+#include <SwarmSystem/Serializer.h>
 
 template <typename TPawn>
 class CharacterCerebrateClient : public Cerebrate {
