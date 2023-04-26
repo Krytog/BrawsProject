@@ -12,18 +12,14 @@ public:
         double current_health;
     };
 
-    CharacterCerebrateClient(TPawn* pawn_to_possess, bool is_controllable)
-    : possessed_(pawn_to_possess),
-      is_controllable_(is_controllable),
-      Cerebrate(TPawn::kTypeId) {}
-
-
-    CharacterCerebrateClient() : CharacterCerebrateClient(nullptr, false) {
+    CharacterCerebrateClient() : Cerebrate(TPawn::kTypeID) {
         auto ptr = Engine::GetInstance().CreateGameObjectByDefault<TPawn>();
         possessed_ = dynamic_cast<TPawn*>(ptr);
     }
 
-    virtual ~CharacterCerebrateClient() = default;
+    virtual ~CharacterCerebrateClient() {
+        Engine::GetInstance().Destroy(possessed_);
+    }
 
     virtual void ForcePossessedExecuteCommand(const std::string& serialized_command) const override {
         Info actual_info;
@@ -36,18 +32,10 @@ public:
 
 
     virtual std::string SerializeInfo() override {
-        if (is_controllable_) {
-            HandleInput();
-        }
-        Info actual_info;
-        actual_info.current_health = possessed_->GetHealth();
-        actual_info.current_pos = possessed_->GetPosition();
-        std::string output;
-        Serializer::Serialize(actual_info, &output);
-        return output;
+        return {};
     }
 
-    virtual void UsePossessedApi(std::string_view serialized_command) const {}
+    virtual void UsePossessedApi(std::string_view serialized_command) const {} // TODO
 
     void HandleInput() { // TODO: make it independent of InputSystem impl
         auto input = Engine::GetInstance().GetInput();
@@ -73,5 +61,4 @@ public:
 
 protected:
     TPawn* possessed_;
-    bool is_controllable_;
 };

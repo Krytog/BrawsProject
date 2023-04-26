@@ -21,6 +21,8 @@ public:
     void SetSpeed(double speed);
 
 protected:
+    size_t cerebrate_id;
+
     double health_;
     double damage_;
     double speed_;

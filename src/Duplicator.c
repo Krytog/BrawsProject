@@ -58,7 +58,8 @@ int main(int argc, char* argv[]) {
     close(pipefd1[0]);
     close(pipefd1[1]);
 
-    waitpid(pid1, &status, 0);
-    waitpid(pid2, &status, 0);
+    wait(NULL);
+    kill(pid1, SIGKILL);
+    kill(pid2, SIGKILL);
     return 0;
 }

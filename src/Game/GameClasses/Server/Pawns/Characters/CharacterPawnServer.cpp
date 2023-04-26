@@ -1,6 +1,7 @@
 #include "CharacterPawnServer.h"
 
 CharacterPawnServer::CharacterPawnServer() = default;
+
 CharacterPawnServer::~CharacterPawnServer() = default;
 
 void CharacterPawnServer::OnUpdate() {}

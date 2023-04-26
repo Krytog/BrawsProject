@@ -2,12 +2,16 @@
 
 #include "../CharacterPawnServer.h"
 
-class DefaultCharacterPawnServer : public CharacterPawnServer {
+class CharacterDefaultPawnServer : public CharacterPawnServer {
 public:
-    DefaultCharacterPawnServer();
-    DefaultCharacterPawnServer(const Position& position);
+    CharacterDefaultPawnServer();
+    CharacterDefaultPawnServer(const Position& position);
+
+    ~CharacterDefaultPawnServer() override;
 
     void Shoot(const Position& position) override;
 
     void OnUpdate() override;
+
+    static const size_t kTypeId;
 };

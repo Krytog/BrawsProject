@@ -2,6 +2,8 @@
 
 #include <Game/GameClasses/Server/Cerebrates/Characters/CharacterCerebrateServer.h>
 #include <Game/GameClasses/GameObjectTags.h>
+#include <SwarmSystem/TypeIdList.h>
+#include <SwarmSystem/Overmind.h>
 
 enum {
     START_X = 0,
@@ -11,10 +13,10 @@ enum {
     SPRITE_HEIGHT = 100
 };
 
-DefaultCharacterPawnServer::DefaultCharacterPawnServer() : DefaultCharacterPawnServer(Position(START_X, START_Y)) {}
+CharacterDefaultPawnServer::CharacterDefaultPawnServer() : CharacterDefaultPawnServer(Position(START_X, START_Y)) {}
 
-DefaultCharacterPawnServer::DefaultCharacterPawnServer(const Position &position) {
-    new CharacterCerebrateServer<DefaultCharacterPawnServer>()
+CharacterDefaultPawnServer::CharacterDefaultPawnServer(const Position &position) {
+    cerebrate_id = Overmind::GetInstance().CreateCerebrateToPossess<CharacterCerebrateServer<CharacterDefaultPawnServer>>(this);
     auto pos = new Position(position);
     position_ = std::unique_ptr<Position>(pos);
     collider_ = std::make_unique<CircleCollider>(*position_, COLLIDER_RADIUS);
@@ -22,10 +24,16 @@ DefaultCharacterPawnServer::DefaultCharacterPawnServer(const Position &position)
     tag_ = TAGS_CHARACTER_Default;
 }
 
-void DefaultCharacterPawnServer::Shoot(const Position &position) {
+CharacterDefaultPawnServer::~CharacterDefaultPawnServer() {
+    Overmind::GetInstance().DestroyCerebrate(cerebrate_id);
+}
+
+void CharacterDefaultPawnServer::Shoot(const Position &position) {
     std::cout << "I shoot!" << std::endl;
 }
 
-void DefaultCharacterPawnServer::OnUpdate() {
+void CharacterDefaultPawnServer::OnUpdate() {
     Translate(Vector2D(100, 100));
 }
+
+const size_t CharacterDefaultPawnServer::kTypeId = TypeId_Character_Default;
