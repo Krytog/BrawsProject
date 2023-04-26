@@ -13,14 +13,14 @@ public:
     void UpdateCelebratesInfo();
     const std::string& GetCerebratesInfoSerialized();
     void ForceCerebratesExecuteCommands(const std::string& serialized_command);
-    void RegisterNewCerebrate(Cerebrate* cerebrate);
+    size_t RegisterNewCerebrate(Cerebrate* cerebrate);
     void ActualizeCerebrate(const std::string& serialized_command);
     void DestroyCerebrate(size_t cerebrate_id);
 
     template <typename TCerebrate, typename TPawn>
-    void CreateCerebrateToPossess(TPawn* pawn_to_possess) {
+    size_t CreateCerebrateToPossess(TPawn* pawn_to_possess) {
         auto ptr = new TCerebrate(pawn_to_possess);
-        RegisterNewCerebrate(ptr);
+        return RegisterNewCerebrate(ptr);
     }
 
 private:

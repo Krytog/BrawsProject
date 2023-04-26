@@ -47,8 +47,10 @@ void Overmind::UpdateCelebratesInfo() {
     cerebrates_info_serialized_ = std::move(buffer);
 }
 
-void Overmind::RegisterNewCerebrate(Cerebrate* cerebrate) {
+size_t Overmind::RegisterNewCerebrate(Cerebrate* cerebrate) {
+    size_t out = current_id_;
     cerebrates_[current_id_++] = cerebrate;
+    return out;
 }
 
 void Overmind::ForceCerebratesExecuteCommands(const std::string& serialized_command) {
