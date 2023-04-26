@@ -11,6 +11,7 @@ public:
     static Overmind& GetInstance();
 
     void UpdateCelebratesInfo();
+    void UpdateCelebratesInfo(Cerebrate* target, bool functor(Cerebrate*, Cerebrate*)) {} // TODO
     const std::string& GetCerebratesInfoSerialized();
     void ForceCerebratesExecuteCommands(const std::string& serialized_command);
     size_t RegisterNewCerebrate(Cerebrate* cerebrate);
@@ -23,6 +24,10 @@ public:
         return RegisterNewCerebrate(ptr);
     }
 
+    void RegisterNewPlayer(uint64_t id, Cerebrate* cerebrate);
+    Cerebrate* GetPlayersCerebrate(uint64_t id);
+    void DeletePlayerFromRegistry(uint64_t id);
+
 private:
     Overmind();
     ~Overmind();
@@ -30,6 +35,7 @@ private:
     std::string cerebrates_info_serialized_;
     size_t current_id_ = 0;
     std::unordered_map<size_t, Cerebrate*> cerebrates_;
+    std::unordered_map<uint64_t , Cerebrate*> players_cerebrate_;
 
     enum { AVG_GETINFO_STRLEN = 80 };
 };
