@@ -12,8 +12,19 @@ class StaticSpriteImpl;
 
 class StaticSprite : public VisibleObject {
 public:
-    StaticSprite(const Position& pos, const size_t& width, const size_t& height,
-                 std::string_view path_to_file, const size_t& render_level);
+
+    struct ArgPack {
+        Position pos;
+        size_t width;
+        size_t height;
+        std::string_view path_to_file;
+        size_t render_level;
+    };
+
+    StaticSprite(const Position& pos, size_t width, size_t height,
+                 std::string_view path_to_file, size_t render_level);
+
+    StaticSprite(const ArgPack& pack);
 
     void UpdatePosition(const Position& position) override;
     void Translate(const Vector2D& vector2D) override;
@@ -25,7 +36,7 @@ public:
     bool IsAbleToInterrupt() const override;
     void Reset() override;
 
-    ~StaticSprite();
+    ~StaticSprite() noexcept;
 
 private:
     std::unique_ptr<StaticSpriteImpl> impl_;
@@ -35,10 +46,25 @@ class AnimatedSpriteImpl;
 
 class AnimatedSprite : public VisibleObject {
 public:
-    AnimatedSprite(const Position& pos, const size_t& width, const size_t& height,
-                   std::string_view path_to_file, const size_t& render_level,
-                   const size_t& frame_rate, const size_t& frames_count_width,
-                   const size_t& frames_count_height, const std::unordered_set<size_t>& interrupt_points = {}, bool is_cycled = true);
+
+    struct ArgPack {
+        Position pos;
+        size_t width;
+        size_t height;
+        std::string_view path_to_file;
+        size_t render_level;
+        size_t frame_rate;
+        size_t frames_count_width;
+        size_t frames_count_height;
+        std::unordered_set<size_t> interrupt_points = {};
+        bool is_cycled = true;
+    };
+
+    AnimatedSprite(const Position& pos, size_t width, size_t height,
+                   std::string_view path_to_file, size_t render_level,
+                   size_t frame_rate, size_t frames_count_width,
+                   size_t frames_count_height, const std::unordered_set<size_t>& interrupt_points = {}, bool is_cycled = true);
+    AnimatedSprite(const ArgPack& pack);
 
     void UpdatePosition(const Position& position) override;
     void Translate(const Vector2D& vector2D) override;

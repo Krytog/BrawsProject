@@ -78,9 +78,14 @@ private:
     Canvas::Image image_;
 };
 
-StaticSprite::StaticSprite(const Position& pos, const size_t& width, const size_t& height,
-                           std::string_view path_to_file, const size_t& render_level) {
+StaticSprite::StaticSprite(const Position& pos, size_t width, size_t height,
+                           std::string_view path_to_file, size_t render_level) {
     impl_ = std::make_unique<StaticSpriteImpl>(pos, width, height, path_to_file, render_level);
+}
+
+StaticSprite::StaticSprite(const ArgPack& pack) {
+    impl_ = std::make_unique<StaticSpriteImpl>(pack.pos, pack.width, pack.height,
+                                               pack.path_to_file, pack.render_level);
 }
 
 void StaticSprite::UpdatePosition(const Position& position) {
@@ -200,14 +205,20 @@ private:
     size_t kFrameSizeY;
 };
 
-AnimatedSprite::AnimatedSprite(const Position& pos, const size_t& width, const size_t& height,
-                               std::string_view path_to_file, const size_t& render_level,
-                               const size_t& tics_per_frame, const size_t& frames_count_width,
-                               const size_t& frames_count_height,
+AnimatedSprite::AnimatedSprite(const Position& pos, size_t width, size_t height,
+                               std::string_view path_to_file, size_t render_level,
+                               size_t frame_rate, size_t frames_count_width,
+                               size_t frames_count_height,
                                const std::unordered_set<size_t>& interrupt_points, bool is_cycled) {
     impl_ = std::make_unique<AnimatedSpriteImpl>(pos, width, height, path_to_file, render_level,
-                                                 tics_per_frame, frames_count_width, frames_count_height,
+                                                 frame_rate, frames_count_width, frames_count_height,
                                                  interrupt_points, is_cycled);
+}
+
+AnimatedSprite::AnimatedSprite(const AnimatedSprite::ArgPack& pack) {
+    impl_ = std::make_unique<AnimatedSpriteImpl>(pack.pos, pack.width, pack.height, pack.path_to_file, pack.render_level,
+                                                 pack.frame_rate, pack.frames_count_width, pack.frames_count_height,
+                                                 pack.interrupt_points, pack.is_cycled);
 }
 
 void AnimatedSprite::RenderIt(Canvas* canvas) const {

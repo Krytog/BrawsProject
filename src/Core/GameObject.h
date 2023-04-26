@@ -9,9 +9,18 @@
 
 class GameObject {
 public:
+
+    struct ArgPack {
+        Position* position;
+        Collider* collider;
+        VisibleObject* visible_object;
+        std::string_view tag;
+    };
+
     GameObject();
     GameObject(Position* position, Collider* collider,
-               VisibleObject* visible_object, const std::string_view& tag);
+               VisibleObject* visible_object, std::string_view tag);
+    GameObject(const ArgPack& pack);
 
     virtual void UpdatePosition(const Position& position);
     virtual void Translate(const Vector2D& vector2D);
