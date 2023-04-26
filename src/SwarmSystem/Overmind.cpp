@@ -38,7 +38,7 @@ void Overmind::UpdateCelebratesInfo() {
         buffer_sz += sizeof(type_id);
 
         std::memcpy(&buffer[0] + buffer_sz, &cerebrate_info_size, sizeof(cerebrate_info_size));
-        buffer_sz += sizeof(cerebrate_info_size);
+//        buffer_sz += sizeof(cerebrate_info_size);
 
         buffer += '<';
         buffer += cerebrate_info;
@@ -53,7 +53,7 @@ size_t Overmind::RegisterNewCerebrate(Cerebrate* cerebrate) {
     return out;
 }
 
-void Overmind::ForceCerebratesExecuteCommands(const std::string& serialized_command) {
+void Overmind::ForceCerebratesExecuteCommands(std::string_view serialized_command) {
     size_t beg = 0, ptr = 1;
     while (ptr < serialized_command.size()) {
         while (ptr < serialized_command.size() && serialized_command[ptr] != '#') {
@@ -69,7 +69,6 @@ void Overmind::ForceCerebratesExecuteCommands(const std::string& serialized_comm
         if (cerebrates_.contains(id)) {
             if (cerebrates_.at(id)->GetType() != type_id) {
                 throw "cringe";
-                return;
             }
             cerebrates_.at(id)->ForcePossessedExecuteCommand(
                 serialized_command.substr(beg + 2 + 3 * sizeof(size_t), cerebrate_info_size));
@@ -77,8 +76,7 @@ void Overmind::ForceCerebratesExecuteCommands(const std::string& serialized_comm
             cerebrates_[id] = CerebrateRegistry::GetInstance().GetCerebrate(type_id);
         }
 
-        beg = ptr;
-        ++ptr;
+        beg = ptr++;
     }
 }
 

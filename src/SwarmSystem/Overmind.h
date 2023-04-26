@@ -13,7 +13,7 @@ public:
     void UpdateCelebratesInfo();
     void UpdateCelebratesInfo(Cerebrate* target, bool functor(Cerebrate*, Cerebrate*)) {} // TODO
     const std::string& GetCerebratesInfoSerialized();
-    void ForceCerebratesExecuteCommands(const std::string& serialized_command);
+    void ForceCerebratesExecuteCommands(std::string_view serialized_command);
     size_t RegisterNewCerebrate(Cerebrate* cerebrate);
     void ActualizeCerebrate(const std::string& serialized_command);
     void DestroyCerebrate(size_t cerebrate_id);

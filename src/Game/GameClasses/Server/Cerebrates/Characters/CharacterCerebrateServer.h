@@ -16,7 +16,7 @@ public:
 
     virtual ~CharacterCerebrateServer() = default;
 
-    virtual void ForcePossessedExecuteCommand(const std::string& serialized_command) const override {
+    virtual void ForcePossessedExecuteCommand(std::string_view serialized_command) const override {
         if (!serialized_command.empty()) {
             throw std::runtime_error("Data from client force server pawn to execute command!");
         }

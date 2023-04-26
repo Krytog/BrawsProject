@@ -21,7 +21,7 @@ public:
         Engine::GetInstance().Destroy(possessed_);
     }
 
-    virtual void ForcePossessedExecuteCommand(const std::string& serialized_command) const override {
+    virtual void ForcePossessedExecuteCommand(std::string_view serialized_command) const override {
         Info actual_info;
         auto info_size = sizeof(actual_info);
         Serializer::Deserialize(actual_info, serialized_command.substr(0, info_size));
