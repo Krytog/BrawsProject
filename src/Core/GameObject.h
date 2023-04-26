@@ -25,9 +25,17 @@ public:
     Collider* GetPointerToCollider() const;
     VisibleObject* GetPointerToVisibleObject() const;
 
+    virtual void OnUpdate() = 0;
+
 protected:
     std::unique_ptr<Position> position_;
     std::unique_ptr<Collider> collider_;
     std::unique_ptr<VisibleObject> visible_object_;
     std::string_view tag_;
+};
+
+// Special Persistent GameObject
+
+class PersistentObject : public GameObject {
+    void OnUpdate() override;
 };

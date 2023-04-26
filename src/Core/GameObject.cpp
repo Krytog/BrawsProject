@@ -55,3 +55,8 @@ VisibleObject* GameObject::GetPointerToVisibleObject() const {
     return visible_object_.get();
 }
 
+// Special Persistent GameObject
+
+void PersistentObject::OnUpdate() {
+    /*   ¯\_(ツ)_/¯   */
+}

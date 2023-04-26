@@ -145,7 +145,7 @@ public:
     // The following order must be maintained
     ///////////////////////////////////////////////////////////////////////////////////////
     void ReadNewInput();
-    void ExecuteUpdatesOfCustomBehaviours();
+    void ExecuteUpdates();
     void TryExecuteDelayedCallbacks();
     void TryExecuteEvents();
     void RenderAll();
@@ -160,6 +160,7 @@ public:
 
 private:
     Engine();
+    void ClearAll();
     Engine(const Engine& other) = delete;
     Engine& operator=(const Engine& other) = delete;
 

@@ -1,4 +1,4 @@
-#include "CustomBehaviour.h"
+#include "Engine.h"
 
 Engine& Engine::GetInstance() {
     static Engine instance;
@@ -32,11 +32,14 @@ void Engine::RenderAll() {
     render_.RenderAll();
 }
 
-Engine::~Engine() {
+void Engine::ClearAll() {
     for (const auto& object_ptr : objects_buffer_) {
         delete object_ptr;
     }
+}
 
+Engine::~Engine() {
+    ClearAll();
 }
 
 Engine::Engine()
@@ -107,11 +110,9 @@ void Engine::IncreaseTicksCount() {
     ++ticks_count_;
 }
 
-void Engine::ExecuteUpdatesOfCustomBehaviours() {
+void Engine::ExecuteUpdates() {
     for (auto game_object : objects_buffer_) {
-        if (auto custom = dynamic_cast<CustomBehaviour*>(game_object)) {
-            custom->OnUpdate();
-        }
+        game_object->OnUpdate();
     }
 }
 
@@ -121,7 +122,7 @@ void Engine::TryExecuteEvents() {
 
 void Engine::Update() {
     ReadNewInput();
-    ExecuteUpdatesOfCustomBehaviours();
+    ExecuteUpdates();
     TryExecuteDelayedCallbacks();
     TryExecuteEvents();
     RenderAll();

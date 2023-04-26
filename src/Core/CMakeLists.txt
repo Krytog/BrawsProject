@@ -9,7 +9,6 @@ add_library(core_lib
         Camera.cpp
         Sprites.cpp
         CollisionSystem.cpp
-        CustomBehaviour.cpp
         GameObject.cpp
         InputSystem.cpp
         MyTime.cpp
