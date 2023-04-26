@@ -102,3 +102,11 @@ Overmind::~Overmind() {
         delete elem.second;
     }
 }
+
+void Overmind::DestroyCerebrate(size_t cerebrate_id) {
+    if (!cerebrates_.contains(cerebrate_id)) {
+        return;
+    }
+    delete cerebrates_.at(cerebrate_id);
+    cerebrates_.erase(cerebrate_id);
+}

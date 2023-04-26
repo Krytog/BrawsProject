@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <memory>
+#include <Core/GameObject.h>
 
 #include "Cerebrate.h"
 
@@ -14,6 +15,13 @@ public:
     void ForceCerebratesExecuteCommands(const std::string& serialized_command);
     void RegisterNewCerebrate(Cerebrate* cerebrate);
     void ActualizeCerebrate(const std::string& serialized_command);
+    void DestroyCerebrate(size_t cerebrate_id);
+
+    template <typename TCerebrate, typename TPawn>
+    void CreateCerebrateToPossess(TPawn* pawn_to_possess) {
+        auto ptr = new TCerebrate(pawn_to_possess);
+        RegisterNewCerebrate(ptr);
+    }
 
 private:
     Overmind();
