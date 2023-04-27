@@ -9,7 +9,7 @@
 void GameManagementTools::InitGameClient() {
     Engine* engine = &Engine::GetInstance();
     engine->CreateGameObjectByDefault<Map1>();
-    auto view_port = engine->CreateGameObjectByDefault<GameObject>();
+    auto view_port = engine->CreateGameObjectByDefault<PersistentObject>();
     new CharacterCerebrateClient<CharacterDefaultPawnClient>(); // no memory leaks
     new CharacterCerebrateClient<CharacterMagePawnClient>(); // no memory leaks
     engine->SetCameraOn(view_port);
@@ -18,7 +18,7 @@ void GameManagementTools::InitGameClient() {
 void GameManagementTools::InitGameServer() {
     Engine* engine = &Engine::GetInstance();
     engine->CreateGameObjectByDefault<Map1>();
-    auto view_port = engine->CreateGameObjectByDefault<GameObject>();
+    auto view_port = engine->CreateGameObjectByDefault<PersistentObject>();
     new CharacterCerebrateClient<CharacterDefaultPawnClient>(); // no memory leaks
     engine->SetCameraOn(view_port);
 }

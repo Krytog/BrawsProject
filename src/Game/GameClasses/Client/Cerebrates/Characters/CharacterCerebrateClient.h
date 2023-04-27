@@ -12,7 +12,7 @@ public:
         double current_health;
     };
 
-    CharacterCerebrateClient() : Cerebrate(TPawn::kTypeID) {
+    CharacterCerebrateClient() : Cerebrate(TPawn::kTypeId) {
         auto ptr = Engine::GetInstance().CreateGameObjectByDefault<TPawn>();
         possessed_ = dynamic_cast<TPawn*>(ptr);
     }

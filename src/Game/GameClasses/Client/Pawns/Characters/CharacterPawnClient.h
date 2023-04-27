@@ -1,10 +1,9 @@
 #pragma once
 
 #include <Core/Engine.h>
-#include "Core/CustomBehaviour.h"
 #include "SwarmSystem/TypeIdList.h"
 
-class CharacterPawnClient : public CustomBehaviour, public GameObject {
+class CharacterPawnClient : public GameObject {
 public:
     CharacterPawnClient();
     virtual ~CharacterPawnClient();

@@ -1,10 +1,9 @@
 #pragma once
 
 #include <Core/Engine.h>
-#include <Core/CustomBehaviour.h>
 #include <Game/GameClasses/Server/Pawns/Interfaces/IMovable.h>
 
-class CharacterPawnServer : public CustomBehaviour, public IMovable {
+class CharacterPawnServer : public IMovable {
 public:
     CharacterPawnServer();
     virtual ~CharacterPawnServer();
