@@ -3,8 +3,9 @@
 #include <SwarmSystem/Cerebrate.h>
 #include <Core/Engine.h>
 #include <SwarmSystem/Serializer.h>
+#include <Core/Tools/Concepts.h>
 
-template <typename TPawn, std::enable_if_t<std::is_same_v<decltype(std::declval<TPawn>().kTypeId), const size_t>, bool> = true>
+template <typename TPawn, HasMember(kTypeId, TPawn)>
 class CharacterCerebrateClient : public Cerebrate {
 public:
     struct Info {

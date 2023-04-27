@@ -3,8 +3,9 @@
 #include <SwarmSystem/Cerebrate.h>
 #include <Core/Engine.h>
 #include <SwarmSystem/Serializer.h>
+#include <Core/Tools/Concepts.h>
 
-template <typename TPawn>
+template <typename TPawn, HasMember(kTypeId, TPawn)>
 class CharacterCerebrateServer : public Cerebrate {
 public:
     struct Info {
