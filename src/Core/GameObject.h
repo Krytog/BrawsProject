@@ -9,7 +9,6 @@
 
 class GameObject {
 public:
-
     struct ArgPack {
         Position* position;
         Collider* collider;
@@ -18,8 +17,7 @@ public:
     };
 
     GameObject();
-    GameObject(Position* position, Collider* collider,
-               VisibleObject* visible_object, std::string_view tag);
+    GameObject(Position* position, Collider* collider, VisibleObject* visible_object, std::string_view tag);
     GameObject(const ArgPack& pack);
 
     virtual void UpdatePosition(const Position& position);
@@ -46,5 +44,10 @@ protected:
 // Special Persistent GameObject
 
 class PersistentObject : public GameObject {
+public:
+    PersistentObject();
+    PersistentObject(Position* position, Collider* collider, VisibleObject* visible_object,
+                     std::string_view tag);
+    PersistentObject(const ArgPack& pack);
     void OnUpdate() override;
 };
