@@ -16,7 +16,7 @@ public:
     }
 
     template <typename T>
-    static size_t Deserialize(T& obj, const std::string& src) {
+    static size_t Deserialize(T& obj, std::string_view src) {
         if (sizeof(obj) != src.size()) {
             return 0;
         }
