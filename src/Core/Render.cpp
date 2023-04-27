@@ -40,7 +40,7 @@ public:
         sf::Event event;
         Canvas canvas(&window_);
 
-        canvas.SetCenter(camera_.GetPosition());
+        canvas.SetCenter(camera_->GetPosition());
 
         while (window_.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
@@ -52,11 +52,11 @@ public:
     }
 
     void SetCameraOn(const GameObject *object) {
-        camera_.SetCameraOn(object);
+        camera_->SetCameraOn(object);
     };
 
     Position GetCameraPosition() const {
-        return camera_.GetPosition();
+        return camera_->GetPosition();
     };
 
     sf::Window *GetWindowPointer() {
@@ -67,7 +67,7 @@ private:
     std::unordered_map<const GameObject *, const VisibleObject *> visible_objects_;
     std::map<size_t, std::unordered_set<const VisibleObject*>> render_levels_;
     sf::RenderWindow window_;
-    Camera camera_ = Camera::GetInstance();
+    Camera* camera_ = &Camera::GetInstance();
 
     void AddAllToCanvas(Canvas *canvas) {
         for (const auto &[level, vis_objects]: render_levels_) {
