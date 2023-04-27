@@ -1,6 +1,7 @@
 add_library(game
         Tools/ControllerTools.cpp
         Tools/GameManagementTools.cpp
+        Tools/InputManagement.cpp
         GameClasses/Common/Maps/Map1/Map1.cpp
         GameClasses/Client/Pawns/Characters/CharacterPawnClient.cpp
         GameClasses/Client/Pawns/Characters/Default/CharacterDefaultPawnClient.cpp

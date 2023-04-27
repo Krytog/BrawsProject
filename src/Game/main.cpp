@@ -2,6 +2,7 @@
 #include <Core/MyTime.h>
 #include <Game/Tools/GameManagementTools.h>
 #include <SwarmSystem/Overmind.h>
+#include <Game/Tools/InputManagement.h>
 
 #include <iostream>
 
@@ -19,12 +20,14 @@ int main() {
         time.ResetTime();
 
         overmind.UpdateCelebratesInfo();
+        auto info = overmind.GetCerebratesInfoSerialized();
 
-        auto str = overmind.GetCerebratesInfoSerialized();
-        std::cout << str << std::endl;
         engine.Update();
 
-        overmind.ForceCerebratesExecuteCommands(str);
+        overmind.ForceCerebratesExecuteCommands(info);
+
+        auto str = InputManagement::SerializeInput();
+        std::cout << str << std::endl;
 
         if (timer.EvaluateTime() > 10) {
             engine.SetActiveOff();
