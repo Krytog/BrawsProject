@@ -1,24 +1,29 @@
 #include "GameManagementTools.h"
 
-#include "../../Core/Engine.h"
-#include "../GameClasses/Common/Maps/Map1/Map1.h"
-#include "../GameClasses/Client/Cerebrates/Characters/CharacterCerebrateClient.h"
-#include "../GameClasses/Client/Pawns/Characters/Default/CharacterDefaultPawnClient.h"
-#include "../GameClasses/Client/Pawns/Characters/Mage/CharacterMagePawnClient.h"
+#include <Core/Engine.h>
+#include <Game/GameClasses/Client/Pawns/Maps/Default/MapsDefaultClient.h>
+#include <Game/GameClasses/Server/Pawns/Maps/Default/MapsDefaultServer.h>
+#include <Game/GameClasses/Client/Cerebrates/Characters/CharacterCerebrateClient.h>
+#include <Game/GameClasses/Client/Pawns/Characters/Default/CharacterDefaultPawnClient.h>
+#include <Game/GameClasses/Client/Pawns/Characters/Mage/CharacterMagePawnClient.h>
+
+#define CRINGE "LET THE FUN BEGIN"
 
 void GameManagementTools::InitGameClient() {
     Engine* engine = &Engine::GetInstance();
-    engine->CreateGameObjectByDefault<Map1>();
-    auto view_port = engine->CreateGameObjectByDefault<PersistentObject>();
-    new CharacterCerebrateClient<CharacterDefaultPawnClient>(); // no memory leaks
-    new CharacterCerebrateClient<CharacterMagePawnClient>(); // no memory leaks
-    engine->SetCameraOn(view_port);
+    engine->CreateGameObjectByDefault<MapsDefaultClient>();
+    std::cout << CRINGE << std::endl;
 }
 
 void GameManagementTools::InitGameServer() {
     Engine* engine = &Engine::GetInstance();
-    engine->CreateGameObjectByDefault<Map1>();
-    auto view_port = engine->CreateGameObjectByDefault<PersistentObject>();
+    engine->CreateGameObjectByDefault<MapsDefaultServer>();
+    while (true) {
+        std::string input;
+        std::cin >> input;
+        if (input == CRINGE) {
+            break;
+        }
+    }
     new CharacterCerebrateClient<CharacterDefaultPawnClient>(); // no memory leaks
-    engine->SetCameraOn(view_port);
 }

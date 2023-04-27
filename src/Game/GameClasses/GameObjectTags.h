@@ -9,3 +9,6 @@
 // CHARACTERS TAGS
 #define TAGS_CHARACTER_Default "__character_default"
 #define TAGS_CHARACTER_Mage "__character_mage"
+
+// MAPS TAGS
+#define TAGS_MAPS_Default "__maps_default"
