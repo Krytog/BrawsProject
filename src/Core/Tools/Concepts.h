@@ -12,3 +12,12 @@
     concept MACRO_CONCAT(HasMember_, member) = requires(T t) { \
         t.member;                                              \
     };
+
+
+template <typename ...Args>
+struct AlwaysTrue {
+    static constexpr bool value = true;  // NOLINT
+};
+
+#define HasMember(member, type) std::enable_if_t<AlwaysTrue<decltype(std::declval<type>().member)>::value, bool> = true
+#define HasMethod(method, type) std::enable_if_t<AlwaysTrue<decltype(std::declval<type>().method())>::value, bool> = true
