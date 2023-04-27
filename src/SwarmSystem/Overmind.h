@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 #include <memory>
-#include <Core/GameObject.h>
+#include "../Core/GameObject.h"
 
 #include "Cerebrate.h"
 

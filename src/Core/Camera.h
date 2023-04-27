@@ -15,8 +15,6 @@ public:
 
 private:
     Camera() = default;
-    Camera(const Camera&) = delete;
-    Camera& operator=(const Camera&) = delete;
 
     const GameObject* object_to_follow_;
 };
