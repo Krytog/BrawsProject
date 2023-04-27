@@ -4,7 +4,7 @@
 #include <Core/Engine.h>
 #include <SwarmSystem/Serializer.h>
 
-template <typename TPawn>
+template <typename TPawn, std::enable_if_t<std::is_same_v<decltype(std::declval<TPawn>().kTypeId), const size_t>, bool> = true>
 class CharacterCerebrateClient : public Cerebrate {
 public:
     struct Info {
