@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../../../../Core/Engine.h"
+#include "Core/Engine.h"
 
-class Map1 : public GameObject {
+class Map1 : public PersistentObject {
 public:
     Map1();
 };
