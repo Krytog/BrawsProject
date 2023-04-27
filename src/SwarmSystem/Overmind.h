@@ -11,11 +11,11 @@ public:
     static Overmind& GetInstance();
 
     void UpdateCelebratesInfo();
-    void UpdateCelebratesInfo(Cerebrate* target, bool functor(Cerebrate*, Cerebrate*)) {} // TODO
+    void UpdateCelebratesInfo(Cerebrate* target, bool functor(Cerebrate*, Cerebrate*));
     const std::string& GetCerebratesInfoSerialized();
     void ForceCerebratesExecuteCommands(std::string_view serialized_command);
     size_t RegisterNewCerebrate(Cerebrate* cerebrate);
-    void ActualizeCerebrate(const std::string& serialized_command);
+    void ActualizeCerebrates(std::string_view serialized_command);
     void DestroyCerebrate(size_t cerebrate_id);
 
     template <typename TCerebrate, typename TPawn>

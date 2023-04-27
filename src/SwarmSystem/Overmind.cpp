@@ -4,6 +4,12 @@
 
 #include "Register.h"
 
+namespace {
+    bool FunctorAlwaysTrue(Cerebrate* first, Cerebrate* second) {
+        return true;
+    }
+}
+
 Overmind::Overmind() : current_id_(0) {
 }
 
@@ -17,34 +23,7 @@ const std::string& Overmind::GetCerebratesInfoSerialized() {
 }
 
 void Overmind::UpdateCelebratesInfo() {
-    std::string buffer;
-    buffer.reserve(3 * sizeof(size_t) + 3 + AVG_GETINFO_STRLEN);
-
-    for (auto [id, cerebrate] : cerebrates_) {
-        buffer += '#';
-
-        auto buffer_sz = buffer.size();
-        auto type_id = cerebrate->GetType();
-
-        std::string cerebrate_info = cerebrate->GetInfoForOvermind();
-        size_t cerebrate_info_size = cerebrate_info.size();
-
-        buffer.resize(buffer_sz + sizeof(id) + sizeof(type_id) + sizeof(cerebrate_info_size));
-
-        std::memcpy(&buffer[0] + buffer_sz, &id, sizeof(id));
-        buffer_sz += sizeof(id);
-
-        std::memcpy(&buffer[0] + buffer_sz, &type_id, sizeof(type_id));
-        buffer_sz += sizeof(type_id);
-
-        std::memcpy(&buffer[0] + buffer_sz, &cerebrate_info_size, sizeof(cerebrate_info_size));
-//        buffer_sz += sizeof(cerebrate_info_size);
-
-        buffer += '<';
-        buffer += cerebrate_info;
-        buffer += '>';
-    }
-    cerebrates_info_serialized_ = std::move(buffer);
+    UpdateCelebratesInfo(nullptr, FunctorAlwaysTrue);
 }
 
 size_t Overmind::RegisterNewCerebrate(Cerebrate* cerebrate) {
@@ -80,7 +59,7 @@ void Overmind::ForceCerebratesExecuteCommands(std::string_view serialized_comman
     }
 }
 
-void Overmind::ActualizeCerebrate(const std::string& serialized_command) {
+void Overmind::ActualizeCerebrates(std::string_view serialized_command) {
     std::unordered_set<size_t> set;
     for (size_t i = 0; i < serialized_command.size(); ++i) {
         if (serialized_command[i] == '#' && i + 1 < serialized_command.size()) {
@@ -127,4 +106,39 @@ void Overmind::DeletePlayerFromRegistry(uint64_t id) {
         return;
     }
     players_cerebrate_.erase(id);
+}
+
+void Overmind::UpdateCelebratesInfo(Cerebrate* target, bool (*functor)(Cerebrate*, Cerebrate*)) {
+    std::string buffer;
+    buffer.reserve(3 * sizeof(size_t) + 3 + AVG_GETINFO_STRLEN);
+
+    for (auto [id, cerebrate] : cerebrates_) {
+        if (!functor(target, cerebrate)) {
+            continue;
+        }
+
+        buffer += '#';
+
+        auto buffer_sz = buffer.size();
+        auto type_id = cerebrate->GetType();
+
+        std::string cerebrate_info = cerebrate->GetInfoForOvermind();
+        size_t cerebrate_info_size = cerebrate_info.size();
+
+        buffer.resize(buffer_sz + sizeof(id) + sizeof(type_id) + sizeof(cerebrate_info_size));
+
+        std::memcpy(&buffer[0] + buffer_sz, &id, sizeof(id));
+        buffer_sz += sizeof(id);
+
+        std::memcpy(&buffer[0] + buffer_sz, &type_id, sizeof(type_id));
+        buffer_sz += sizeof(type_id);
+
+        std::memcpy(&buffer[0] + buffer_sz, &cerebrate_info_size, sizeof(cerebrate_info_size));
+//        buffer_sz += sizeof(cerebrate_info_size);
+
+        buffer += '<';
+        buffer += cerebrate_info;
+        buffer += '>';
+    }
+    cerebrates_info_serialized_ = std::move(buffer);
 }

@@ -14,7 +14,7 @@ Cerebrate::Cerebrate(size_t type) : type_(type) {
     Overmind::GetInstance().RegisterNewCerebrate(this);
 }
 
-void Cerebrate::AddCommandToBuffer(const std::string& serialized_command) {
+void Cerebrate::AddCommandToBuffer(std::string_view serialized_command) {
     buffer_ += serialized_command;
 }
 

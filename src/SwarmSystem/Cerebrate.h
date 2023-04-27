@@ -8,7 +8,7 @@ public:
     virtual void ForcePossessedExecuteCommand(std::string_view serialized_command) const = 0;
     std::string GetInfoForOvermind();
     virtual std::string SerializeInfo() = 0;
-    void AddCommandToBuffer(const std::string& serialized_command);
+    void AddCommandToBuffer(std::string_view serialized_command);
     size_t GetType() const;
 
     virtual ~Cerebrate();
