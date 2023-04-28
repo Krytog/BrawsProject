@@ -5,11 +5,11 @@ set(CMAKE_CXX_STANDARD 20)
 
 find_package(SFML 2.5 COMPONENTS graphics audio window REQUIRED)
 
-#add_compile_options(-fsanitize=address)
-#add_link_options(-fsanitize=address)
-
 # targets and sources
-add_subdirectory(src)
+add_executable(Test src/Game/main.cpp)
+add_executable(Client src/Game/GameClasses/Client/main.cpp)
+add_executable(Server src/Game/GameClasses/Server/main.cpp)
+add_subdirectory("src")
 
 # external libraries
 # add_subdirectory(external)
