@@ -1,6 +1,6 @@
 #include <Core/Engine.h>
 #include <Core/MyTime.h>
-#include <Game/Tools/GameManagementTools.h>
+#include <Game/Tools/ServerGameManagement.h>
 #include <SwarmSystem/Overmind.h>
 #include <Game/Tools/InputManagement.h>
 
@@ -9,7 +9,7 @@
 int main() {
     Engine& engine = Engine::GetInstance();
     Overmind& overmind = Overmind::GetInstance();
-    GameManagementTools::InitGameServer();
+    ServerGameManagement::InitGameServer();
     MyTime time;
     engine.SetActiveOn();
     while (engine.IsActive()) {
