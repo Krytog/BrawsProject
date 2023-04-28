@@ -30,6 +30,8 @@ public:
 
 private:
     Overmind();
+    Overmind(const Overmind&) = delete;
+    Overmind& operator=(const Overmind&) = delete;
     ~Overmind();
 
     std::string cerebrates_info_serialized_;
