@@ -5,7 +5,7 @@
 #include <SwarmSystem/Overmind.h>
 #include <Game/Tools/InputManagement.h>
 
-#include <iostream>
+#include <Game/Tools/Decoy/ServerDecoy.h>
 
 int main() {
     Engine& engine = Engine::GetInstance();
@@ -19,15 +19,13 @@ int main() {
         }
         time.ResetTime();
 
-        //overmind.UpdateCelebratesInfo();
-        //auto info = overmind.GetCerebratesInfoSerialized();
-
         engine.Update();
 
-        //overmind.ForceCerebratesExecuteCommands(info);
+        overmind.UpdateCelebratesInfo();
+        auto data_for_client = overmind.GetCerebratesInfoSerialized();
 
-        //auto str = InputManagement::SerializeInput();
-        //std::cout << str << std::endl;
+        DecoyServer::SendToServer(data_for_client);
+
     }
     return 0;
 }

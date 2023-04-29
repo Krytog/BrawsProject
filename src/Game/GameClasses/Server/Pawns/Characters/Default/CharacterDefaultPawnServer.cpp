@@ -33,7 +33,7 @@ void CharacterDefaultPawnServer::Shoot(const Position &position) {
 }
 
 void CharacterDefaultPawnServer::OnUpdate() {
-    Translate(Vector2D(100, 100));
+    Translate(Vector2D(2, 2));
 }
 
 const size_t CharacterDefaultPawnServer::kTypeId = TypeId_Character_Default;

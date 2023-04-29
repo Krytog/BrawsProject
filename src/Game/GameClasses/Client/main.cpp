@@ -4,12 +4,15 @@
 #include <SwarmSystem/Overmind.h>
 #include <Game/Tools/InputManagement.h>
 
+#include <Game/Tools/Decoy/ServerDecoy.h>
+
 #include <iostream>
 
 int main() {
     Engine& engine = Engine::GetInstance();
     Overmind& overmind = Overmind::GetInstance();
     ClientGameManagement::InitGameClient();
+    ClientGameManagement::InitRegistryForOvermind();
     MyTime time;
     engine.SetActiveOn();
     while (engine.IsActive()) {
@@ -18,15 +21,10 @@ int main() {
         }
         time.ResetTime();
 
-        //overmind.UpdateCelebratesInfo();
-        //auto info = overmind.GetCerebratesInfoSerialized();
+        auto data = DecoyServer::ReceiveFromServer();
+        overmind.ForceCerebratesExecuteCommands(data);
 
         engine.Update();
-
-        //overmind.ForceCerebratesExecuteCommands(info);
-
-        //auto str = InputManagement::SerializeInput();
-        //std::cout << str << std::endl;
     }
     return 0;
 }
