@@ -9,6 +9,7 @@ find_package(SFML 2.5 COMPONENTS graphics audio window REQUIRED)
 add_executable(Test src/Game/main.cpp)
 add_executable(Client src/Game/GameClasses/Client/main.cpp)
 add_executable(Server src/Game/GameClasses/Server/main.cpp)
+# target_compile_definitions(Server PRIVATE __SERVER_ENGINE_MODE__)  # use carefully
 add_subdirectory("src")
 
 # external libraries

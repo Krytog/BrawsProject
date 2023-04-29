@@ -8,12 +8,16 @@
 #include "CollisionSystem.h"
 #include "Colliders.h"
 #include "GameObject.h"
-#include "Render.h"
-#include "Sprites.h"
 #include "DelayQueue.h"
-#include "InputSystem.h"
 #include "EventHandler.h"
 
+#ifndef __SERVER_ENGINE_MODE__
+#include "Render.h"
+#include "Sprites.h"
+#include "InputSystem.h"
+#endif
+
+/* Depending on the compile options - __SERVER_ENGINE_MODE__ - the functionality may vary */
 class Engine {
 public:
     static Engine& GetInstance();
@@ -32,11 +36,12 @@ public:
             collision_system_.RegisterColliderOf(object_ptr, coll_ptr);
         }
 
+#ifndef __SERVER_ENGINE_MODE__
         auto vis_ptr = object_ptr->GetPointerToVisibleObject();
         if (vis_ptr) {
             render_.AddToRender(object_ptr, vis_ptr);
         }
-
+#endif
         return object_ptr;
     }
 
@@ -51,17 +56,19 @@ public:
         if (coll_ptr) {
             collision_system_.RegisterColliderOf(object_ptr, coll_ptr);
         }
-
+#ifndef __SERVER_ENGINE_MODE__
         auto vis_ptr = object_ptr->GetPointerToVisibleObject();
         if (vis_ptr) {
             render_.AddToRender(object_ptr, vis_ptr);
         }
-
+#endif
         return object_ptr;
     }
 
     void Destroy(GameObject* object_ptr);
     ///////////////////////////////////////////////////////////////////////////////////////
+
+#ifndef __SERVER_ENGINE_MODE__
 
     // Render
     void RenderSwitch(GameObject* game_object, VisibleObject* new_visible_object);
@@ -71,6 +78,13 @@ public:
     void SetCameraOn(const GameObject* object);
     Position GetCameraPosition() const;
     ///////////////////////////////////////////////////////////////////////////////////////
+
+    // Getting input
+    ///////////////////////////////////////////////////////////////////////////////////////
+    InputSystem::InputTokensArray GetInput() const;
+    ///////////////////////////////////////////////////////////////////////////////////////
+
+#endif
 
     // Collisions
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -86,11 +100,6 @@ public:
                                                                  const std::string_view string) const;
     template <typename T>
     CollisionSystem::CollisionsInfoArray GetAllCollisionsWithType(GameObject* game_object) const;
-    ///////////////////////////////////////////////////////////////////////////////////////
-
-    // Getting input
-    ///////////////////////////////////////////////////////////////////////////////////////
-    InputSystem::InputTokensArray GetInput() const;
     ///////////////////////////////////////////////////////////////////////////////////////
 
     // Delayed callbacks
@@ -144,12 +153,14 @@ public:
     // The next functions can be used only if Update() is not called
     // The following order must be maintained
     ///////////////////////////////////////////////////////////////////////////////////////
-    void ReadNewInput();
     void ExecuteUpdates();
     void TryExecuteDelayedCallbacks();
     void TryExecuteEvents();
-    void RenderAll();
     void IncreaseTicksCount();
+#ifndef __SERVER_ENGINE_MODE__
+    void ReadNewInput();
+    void RenderAll();
+#endif
     ///////////////////////////////////////////////////////////////////////////////////////
 
     // Status of engine
@@ -164,9 +175,11 @@ private:
     Engine(const Engine&) = delete;
     Engine& operator=(const Engine&) = delete;
 
-    CollisionSystem& collision_system_;
+#ifndef __SERVER_ENGINE_MODE__
     Render& render_;
     InputSystem& input_system_;
+#endif
+    CollisionSystem& collision_system_;
     EventHandler& event_handler_;
     DelayQueue& delay_queue_;
 

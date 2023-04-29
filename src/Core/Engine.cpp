@@ -10,7 +10,9 @@ void Engine::Destroy(GameObject* object_ptr) {
     if (it != objects_buffer_.end()) {
         objects_buffer_.erase(it);
         collision_system_.UnregisterColliderOf(object_ptr);
+#ifndef __SERVER_ENGINE_MODE__
         render_.RemoveFromRender(object_ptr);
+#endif
         delete object_ptr;
         return;
     }
@@ -20,6 +22,7 @@ void Engine::Destroy(GameObject* object_ptr) {
         "the engine or was already destroyed");
 }
 
+#ifndef __SERVER_ENGINE_MODE__
 Position Engine::GetCameraPosition() const {
     return render_.GetCameraPosition();
 }
@@ -31,6 +34,7 @@ void Engine::SetCameraOn(const GameObject* object) {
 void Engine::RenderAll() {
     render_.RenderAll();
 }
+#endif
 
 void Engine::ClearAll() {
     for (const auto& object_ptr : objects_buffer_) {
@@ -44,13 +48,16 @@ Engine::~Engine() {
 
 Engine::Engine()
     : collision_system_(CollisionSystem::GetInstance()),
+#ifndef __SERVER_ENGINE_MODE__
       render_(Render::GetInstance()),
       input_system_(InputSystem::GetInstance(*render_.GetWindowPointer())),
+#endif
       event_handler_(EventHandler::GetInstance()),
       delay_queue_(DelayQueue::GetInstance()),
       ticks_count_(0) {
 }
 
+#ifndef __SERVER_ENGINE_MODE__
 void Engine::ReadNewInput() {
     input_system_.ReadNewInput();
 }
@@ -65,6 +72,7 @@ InputSystem::InputTokensArray Engine::GetInput() const {
     *(raw_input.begin()) = InputSystem::MouseToken{mouse_token.key, global_mouse_pos};
     return raw_input;
 }
+#endif
 
 void Engine::TryExecuteDelayedCallbacks() {
     delay_queue_.TryExecute(std::chrono::steady_clock::now(), ticks_count_);
@@ -125,14 +133,18 @@ void Engine::Update() {
     ExecuteUpdates();
     TryExecuteDelayedCallbacks();
     TryExecuteEvents();
+#ifndef __SERVER_ENGINE_MODE__
     RenderAll();
+#endif
     IncreaseTicksCount();
 }
 
+#ifndef __SERVER_ENGINE_MODE__
 void Engine::RenderSwitch(GameObject *game_object, VisibleObject *new_visible_object) {
     render_.RemoveFromRender(game_object);
     render_.AddToRender(game_object, new_visible_object);
 }
+#endif
 
 bool Engine::IsActive() const {
     return is_active_;

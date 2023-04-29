@@ -1,3 +1,4 @@
+#define __SERVER_ENGINE_MODE__
 #include <Core/Engine.h>
 #include <Core/MyTime.h>
 #include <Game/Tools/ServerGameManagement.h>
