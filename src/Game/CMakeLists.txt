@@ -2,12 +2,14 @@
 add_library(game_client_tools
         Tools/ClientGameManagement.cpp  # special for client
         Tools/ControllerTools.cpp
-        Tools/InputManagement.cpp)
+        Tools/InputManagement.cpp
+        Tools/Decoy/ServerDecoy.cpp)
 # server tools
 add_library(game_server_tools
         Tools/ServerGameManagement.cpp  # special for server
         Tools/ControllerTools.cpp
-        Tools/InputManagement.cpp)
+        Tools/InputManagement.cpp
+        Tools/Decoy/ServerDecoy.cpp)
 # test tools
 add_library(game_tools
         Tools/ClientGameManagement.cpp  # special for client
@@ -21,6 +23,7 @@ add_library(game_client
         GameClasses/Client/Pawns/Characters/Default/CharacterDefaultPawnClient.cpp
         GameClasses/Client/Pawns/Characters/Mage/CharacterMagePawnClient.cpp)
 add_library(game_server
+        GameClasses/Server/Pawns/Characters/CharacterPawnServer.cpp
         GameClasses/Server/Pawns/Characters/Default/CharacterDefaultPawnServer.cpp
         GameClasses/Server/Pawns/Interfaces/IMovable.cpp
         GameClasses/Server/Pawns/Maps/Default/MapsDefaultServer.cpp)
