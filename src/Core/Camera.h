@@ -4,10 +4,7 @@
 
 class Camera {
 public:
-    static Camera& GetInstance() {
-        static Camera instance;
-        return instance;
-    }
+    static Camera& GetInstance();
 
     void SetCameraOn(const GameObject* object);
 

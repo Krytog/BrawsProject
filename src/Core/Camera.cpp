@@ -2,6 +2,11 @@
 
 #define DefaultPosition Position(0, 0)
 
+Camera& Camera::GetInstance() {
+    static Camera instance;
+    return instance;
+}
+
 void Camera::SetCameraOn(const GameObject *object) {
     object_to_follow_ = object;
 }

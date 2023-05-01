@@ -129,7 +129,9 @@ void Engine::TryExecuteEvents() {
 }
 
 void Engine::Update() {
+#ifndef __SERVER_ENGINE_MODE__
     ReadNewInput();
+#endif
     ExecuteUpdates();
     TryExecuteDelayedCallbacks();
     TryExecuteEvents();
