@@ -1,6 +1,7 @@
 add_subdirectory("Core")
 add_subdirectory("Game")
 add_subdirectory("SwarmSystem")
+add_subdirectory(Infrastructure)
 
 # game depends on core
 target_link_libraries(game_client_tools core_lib)
