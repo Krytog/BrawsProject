@@ -6,6 +6,7 @@ class CharacterDefaultPawnServer : public CharacterPawnServer {
 public:
     CharacterDefaultPawnServer();
     CharacterDefaultPawnServer(const Position& position);
+    CharacterDefaultPawnServer(const CharacterPawnServer::ArgPack& base_arg_pack, const Position& position);
 
     ~CharacterDefaultPawnServer() override;
 

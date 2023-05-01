@@ -29,3 +29,12 @@ void CharacterPawnServer::SetDamage(double damage) {
 void CharacterPawnServer::SetSpeed(double speed) {
     speed_ = speed;
 }
+
+CharacterPawnServer::CharacterPawnServer(const CharacterPawnServer::ArgPack &arg_pack):
+    health_(arg_pack.health),
+    damage_(arg_pack.damage),
+    speed_(arg_pack.speed) {}
+
+size_t CharacterPawnServer::GetCerebrateId() const {
+    return cerebrate_id;
+}

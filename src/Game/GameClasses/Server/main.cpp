@@ -3,7 +3,6 @@
 #include <Core/MyTime.h>
 #include <Game/Tools/ServerGameManagement.h>
 #include <SwarmSystem/Overmind.h>
-#include <Game/Tools/InputManagement.h>
 
 #include <Game/Tools/Decoy/ServerDecoy.h>
 
@@ -19,12 +18,15 @@ int main() {
         }
         time.ResetTime();
 
+        auto from_client = DecoyServer::Receive();
+        ServerGameManagement::HandleInput(1, from_client);
+
         engine.Update();
 
         overmind.UpdateCelebratesInfo();
         auto data_for_client = overmind.GetCerebratesInfoSerialized();
 
-        DecoyServer::SendToServer(data_for_client);
+        DecoyServer::Send(data_for_client);
 
     }
     return 0;

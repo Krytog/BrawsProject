@@ -13,9 +13,20 @@ enum {
     SPRITE_HEIGHT = 100
 };
 
+#define START_HEALTH 100
+#define START_DAMAGE 25
+#define START_SPEED 10
+
 CharacterDefaultPawnServer::CharacterDefaultPawnServer() : CharacterDefaultPawnServer(Position(START_X, START_Y)) {}
 
-CharacterDefaultPawnServer::CharacterDefaultPawnServer(const Position &position) {
+CharacterDefaultPawnServer::CharacterDefaultPawnServer(const Position &position) : CharacterDefaultPawnServer(CharacterPawnServer::ArgPack(), position) {
+    health_ = START_HEALTH;
+    damage_ = START_DAMAGE;
+    speed_ = START_SPEED;
+}
+
+CharacterDefaultPawnServer::CharacterDefaultPawnServer(const CharacterPawnServer::ArgPack& base_arg_pack, const Position &position):
+    CharacterPawnServer(base_arg_pack) {
     cerebrate_id = Overmind::GetInstance().CreateCerebrateToPossess<CharacterCerebrateServer<CharacterDefaultPawnServer>>(this);
     auto pos = new Position(position);
     position_ = std::unique_ptr<Position>(pos);
@@ -33,7 +44,7 @@ void CharacterDefaultPawnServer::Shoot(const Position &position) {
 }
 
 void CharacterDefaultPawnServer::OnUpdate() {
-    Translate(Vector2D(2, 2));
+    //Translate(Vector2D(2, 2));
 }
 
 const size_t CharacterDefaultPawnServer::kTypeId = TypeId_Character_Default;
