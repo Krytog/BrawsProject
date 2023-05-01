@@ -94,15 +94,15 @@ void Overmind::DestroyCerebrate(size_t cerebrate_id) {
     cerebrates_.erase(cerebrate_id);
 }
 
-void Overmind::RegisterNewPlayer(uint64_t id, Cerebrate *cerebrate) {
-    players_cerebrate_[id] = cerebrate;
+void Overmind::RegisterNewPlayer(uint64_t id, size_t cerebrate_id) {
+    players_cerebrate_[id] = cerebrate_id;
 }
 
 Cerebrate *Overmind::GetPlayersCerebrate(uint64_t id) {
     if (!players_cerebrate_.contains(id)) {
         return nullptr;
     }
-    return players_cerebrate_.at(id);
+    return cerebrates_.at(players_cerebrate_.at(id));
 }
 
 void Overmind::DeletePlayerFromRegistry(uint64_t id) {

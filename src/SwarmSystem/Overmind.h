@@ -24,7 +24,7 @@ public:
         return RegisterNewCerebrate(ptr);
     }
 
-    void RegisterNewPlayer(uint64_t id, Cerebrate* cerebrate);
+    void RegisterNewPlayer(uint64_t id, size_t cerebrate_id);
     Cerebrate* GetPlayersCerebrate(uint64_t id);
     void DeletePlayerFromRegistry(uint64_t id);
 
@@ -37,7 +37,7 @@ private:
     std::string cerebrates_info_serialized_;
     size_t current_id_ = 0;
     std::unordered_map<size_t, Cerebrate*> cerebrates_;
-    std::unordered_map<uint64_t , Cerebrate*> players_cerebrate_;
+    std::unordered_map<uint64_t , size_t> players_cerebrate_;
 
     enum { AVG_GETINFO_STRLEN = 80 };
 };
