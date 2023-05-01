@@ -1,16 +1,15 @@
 #include "ControllerTools.h"
 
-Vector2D ControllerTools::ResultVector(const InputSystem::InputTokensArray& input) {
+Vector2D ControllerTools::ResultVector(std::string_view input) {
     Vector2D output(0, 0);
     for (auto token : input) {
-        auto keyboard_token = std::get<InputSystem::KeyboardToken>(token);
-        if (keyboard_token.symbol == 'D') {
+        if (token == 'D') {
             output += Vector2D::Right;
-        } else if (keyboard_token.symbol == 'A') {
+        } else if (token == 'A') {
             output += Vector2D::Left;
-        } else if (keyboard_token.symbol == 'W') {
+        } else if (token == 'W') {
             output += Vector2D::Up;
-        } else if (keyboard_token.symbol == 'S') {
+        } else if (token == 'S') {
             output += Vector2D::Down;
         }
     }

@@ -3,6 +3,6 @@
 #include <string>
 
 namespace DecoyServer {
-    std::string ReceiveFromServer();
-    void SendToServer(std::string_view data);
+    std::string Receive();
+    void Send(std::string_view data);
 }

@@ -6,7 +6,7 @@
 
 #define HELLA_A_LOT 10000
 
-std::string DecoyServer::ReceiveFromServer() {
+std::string DecoyServer::Receive() {
     size_t size;
     std::cin >> size;
     char buffer[HELLA_A_LOT];
@@ -21,7 +21,7 @@ std::string DecoyServer::ReceiveFromServer() {
     return output;
 }
 
-void DecoyServer::SendToServer(std::string_view data) {
+void DecoyServer::Send(std::string_view data) {
     std::cout << data.size() << std::endl;
     int fd = open("kek.txt", O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
     write(fd, data.data(), data.size());

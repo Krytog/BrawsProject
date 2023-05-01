@@ -2,20 +2,17 @@
 add_library(game_client_tools
         Tools/ClientGameManagement.cpp  # special for client
         Tools/ControllerTools.cpp
-        Tools/InputManagement.cpp
         Tools/Decoy/ServerDecoy.cpp)
 # server tools
 add_library(game_server_tools
         Tools/ServerGameManagement.cpp  # special for server
         Tools/ControllerTools.cpp
-        Tools/InputManagement.cpp
         Tools/Decoy/ServerDecoy.cpp)
 # test tools
 add_library(game_tools
         Tools/ClientGameManagement.cpp  # special for client
         Tools/ServerGameManagement.cpp  # special for server
-        Tools/ControllerTools.cpp
-        Tools/InputManagement.cpp)
+        Tools/ControllerTools.cpp)
 # game for client & server
 add_library(game_client
         GameClasses/Client/Pawns/Maps/Default/MapsDefaultClient.cpp
