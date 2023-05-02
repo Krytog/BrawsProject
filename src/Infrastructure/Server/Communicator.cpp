@@ -47,7 +47,7 @@ uint64_t Communicator::GenId() {
     } while (true);
 }
 
-void Communicator::RegUser() {
+int64_t Communicator::RegUser() {
     std::unique_ptr<struct sockaddr_in> cli_addr(new struct sockaddr_in);
     char buf[kMaxDtgrmLen];
     socklen_t cliaddr_len;
@@ -55,7 +55,7 @@ void Communicator::RegUser() {
     int n = recvfrom(sock_fd_, buf, kMaxDtgrmLen, 0,
                      reinterpret_cast<struct sockaddr *>(cli_addr.get()), &cliaddr_len);
     if (n == -1) {
-        return;
+        return 0;
     }
 
     auto usr_id = GenId();
@@ -66,6 +66,7 @@ void Communicator::RegUser() {
            cliaddr_len);
     register_[usr_id].first = std::move(cli_addr);
     register_[usr_id].second = cliaddr_len;
+    return usr_id;
 }
 
 void Communicator::SendToClient(uint64_t client_id, std::string_view data) {

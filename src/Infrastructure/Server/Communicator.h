@@ -19,7 +19,7 @@ public:
     static Communicator &GetInstance();
 
     // rewrite with epoll
-    void RegUser();
+    int64_t RegUser();
 
     // rewrite with epoll
     std::string ReceiveFromClient(uint64_t client_id);
