@@ -50,7 +50,7 @@ uint64_t Communicator::GenId() {
 int64_t Communicator::RegUser() {
     std::unique_ptr<struct sockaddr_in> cli_addr(new struct sockaddr_in);
     char buf[kMaxDtgrmLen];
-    socklen_t cliaddr_len;
+    socklen_t cliaddr_len = sizeof(struct sockaddr_in);
 
     int n = recvfrom(sock_fd_, buf, kMaxDtgrmLen, 0,
                      reinterpret_cast<struct sockaddr *>(cli_addr.get()), &cliaddr_len);
