@@ -1,5 +1,8 @@
-add_library(server
-        Server/Communicator.cpp BindSocket.c)
+# infra libs for client & server
+add_library(infra_client
+        Client/Communicator.cpp
+        BindSocket.c)
 
-add_library(client
-        Client/Communicator.cpp BindSocket.c Client/Communicator.h)
+add_library(infra_server
+        Server/Communicator.cpp
+        BindSocket.c)

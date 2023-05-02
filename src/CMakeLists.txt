@@ -1,7 +1,7 @@
 add_subdirectory("Core")
 add_subdirectory("Game")
 add_subdirectory("SwarmSystem")
-add_subdirectory(Infrastructure)
+add_subdirectory("Infrastructure")
 
 # game depends on core
 target_link_libraries(game_client_tools core_lib)
@@ -11,11 +11,11 @@ target_link_libraries(game_client core_lib)
 target_link_libraries(game_server core_lib)
 
 # link all to main
-target_link_libraries(Test PRIVATE core_lib game_tools game_client game_server swarm_system)
-target_link_libraries(Client PRIVATE core_lib game_client_tools game_client swarm_system)
-target_link_libraries(Server PRIVATE core_lib game_server_tools game_server swarm_system)
+target_link_libraries(Test PRIVATE core_lib game_tools game_client game_server swarm_system infra_client infra_server)
+target_link_libraries(Client PRIVATE core_lib game_client_tools game_client swarm_system infra_client)
+target_link_libraries(Server PRIVATE core_lib game_server_tools game_server swarm_system infra_server)
 
-# include Core, Game & SwarmSystem
+# include Core, Game, SwarmSystem & Infra
 target_include_directories(Test PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_include_directories(Client PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_include_directories(Server PRIVATE ${CMAKE_CURRENT_LIST_DIR})
