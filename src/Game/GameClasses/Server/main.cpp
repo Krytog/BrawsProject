@@ -4,11 +4,13 @@
 #include <Game/Tools/ServerGameManagement.h>
 #include <SwarmSystem/Overmind.h>
 
-#include <Game/Tools/Decoy/ServerDecoy.h>
+#include <Infrastructure/Server/Communicator.h>
 
 int main() {
     Engine& engine = Engine::GetInstance();
     Overmind& overmind = Overmind::GetInstance();
+    Communicator& communicator = Communicator::GetInstance();
+    communicator.RegUser();
     ServerGameManagement::InitGameServer();
     MyTime time;
     engine.SetActiveOn();
@@ -18,7 +20,7 @@ int main() {
         }
         time.ResetTime();
 
-        auto from_client = DecoyServer::Receive();
+        auto from_client = communicator.ReceiveFromClient(12);
         ServerGameManagement::HandleInput(1, from_client);
 
         engine.Update();
@@ -26,8 +28,7 @@ int main() {
         overmind.UpdateCelebratesInfo();
         auto data_for_client = overmind.GetCerebratesInfoSerialized();
 
-        DecoyServer::Send(data_for_client);
-
+        communicator.SendToClient(12, data_for_client);
     }
     return 0;
 }
