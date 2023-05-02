@@ -17,7 +17,7 @@ int BindToSock(const char *service) {
 
     int sock = -1;
     for (struct addrinfo *ai = res; ai; ai = ai->ai_next) {
-        sock = socket(ai->ai_family, ai->ai_socktype | SOCK_NONBLOCK, 0);
+        sock = socket(ai->ai_family, ai->ai_socktype, 0);
         if (sock < 0) {
             continue;
         }

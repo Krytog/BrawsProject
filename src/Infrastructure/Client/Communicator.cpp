@@ -10,7 +10,7 @@ Communicator &Communicator::GetInstance() {
 extern "C" int BindToSock(char *service);
 
 Communicator::Communicator() {
-    sock_fd_ = BindToSock(server_port);
+    sock_fd_ = BindToSock(my_port);
     if (sock_fd_ < 0) {
         throw std::logic_error("Unable to bind port\n");
     }
@@ -32,7 +32,7 @@ int64_t Communicator::RegOnServer() {
 std::string Communicator::ReceiveFromServer() {
     std::string cur_message;
     cur_message.resize(kMaxDtgrmLen);
-    int n = recv(sock_fd_, &cur_message[0], kMaxDtgrmLen, 0);
+    int n = recv(sock_fd_, &cur_message[0], kMaxDtgrmLen, MSG_DONTWAIT);
     if (n == -1 || n == 0) {
         return "";
     }

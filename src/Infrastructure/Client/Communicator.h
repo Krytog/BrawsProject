@@ -9,7 +9,7 @@
 
 
 namespace {
-    char server_port[] = "31337";
+    char my_port[] = "31336";
     int server_port_num = 31337;
     struct sockaddr_in server_addr = {.sin_family = AF_INET, .sin_port = htons(server_port_num)};
     const int kMaxDtgrmLen = 1024;

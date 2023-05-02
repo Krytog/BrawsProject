@@ -81,7 +81,7 @@ std::string Communicator::ReceiveFromClient(uint64_t client_id) {
 
     std::string cur_message;
     cur_message.resize(kMaxDtgrmLen);
-    int n = recv(sock_fd_, &cur_message[0], kMaxDtgrmLen, 0);
+    int n = recv(sock_fd_, &cur_message[0], kMaxDtgrmLen, MSG_DONTWAIT);
     if (n == -1 || n == 0) {
         return "";
     }
