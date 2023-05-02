@@ -6,7 +6,7 @@
 #include <Core/Tools/Concepts.h>
 #include <Game/Tools/ControllerTools.cpp>
 
-template <typename TPawn, HasMember(kTypeId, TPawn)>
+template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, Move, GetSpeed, GetHealth, GetPosition)>
 class CharacterCerebrateServer : public Cerebrate {
 public:
     struct Info {

@@ -5,7 +5,7 @@
 #include <SwarmSystem/Serializer.h>
 #include <Core/Tools/Concepts.h>
 
-template <typename TPawn, HasMember(kTypeId, TPawn)>
+template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, UpdatePosition, SetHealth)>
 class CharacterCerebrateClient : public Cerebrate {
 public:
     struct Info {
