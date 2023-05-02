@@ -6,3 +6,7 @@ add_library(infra_client
 add_library(infra_server
         Server/Communicator.cpp
         BindSocket.c)
+add_library(infra
+        Client/Communicator.cpp
+        Server/Communicator.cpp
+        BindSocket.c)

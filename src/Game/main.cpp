@@ -2,7 +2,7 @@
 #include <Core/MyTime.h>
 #include <Game/Tools/ClientGameManagement.h>
 #include <SwarmSystem/Overmind.h>
-#include <Game/Tools/InputManagement.h>
+#include <Game/Tools/ClientGameManagement.h>
 
 #include <iostream>
 
@@ -26,7 +26,7 @@ int main() {
 
         overmind.ForceCerebratesExecuteCommands(info);
 
-        auto str = InputManagement::SerializeInput();
+        auto str = ClientGameManagement::SerializeInput();
         std::cout << str << std::endl;
 
         if (timer.EvaluateTime() > 10) {

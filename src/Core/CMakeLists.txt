@@ -15,4 +15,5 @@ add_library(core_lib
         Render.cpp
         Engine.cpp
         Canvas.cpp
+        Observer.cpp
         Tools/BasicGeometry.cpp)
