@@ -153,12 +153,14 @@ public:
     // The next functions can be used only if Update() is not called
     // The following order must be maintained
     ///////////////////////////////////////////////////////////////////////////////////////
+#ifndef __SERVER_ENGINE_MODE__
+    void ReadNewInput();
+#endif
     void ExecuteUpdates();
     void TryExecuteDelayedCallbacks();
     void TryExecuteEvents();
     void IncreaseTicksCount();
 #ifndef __SERVER_ENGINE_MODE__
-    void ReadNewInput();
     void RenderAll();
 #endif
     ///////////////////////////////////////////////////////////////////////////////////////
