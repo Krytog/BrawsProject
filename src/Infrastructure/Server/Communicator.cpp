@@ -90,6 +90,7 @@ std::string Communicator::ReceiveFromClient(uint64_t client_id) {
 
     int64_t id;
     std::memcpy(&id, &cur_message[0], sizeof(id));
+    cur_message.erase(0, sizeof(id));
     if (id == client_id) {
         return std::move(cur_message);
     }
