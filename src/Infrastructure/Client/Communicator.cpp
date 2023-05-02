@@ -23,7 +23,7 @@ Communicator::~Communicator() {
 }
 
 int64_t Communicator::RegOnServer() {
-    sendto(sock_fd_, nullptr, 0, MSG_CONFIRM, reinterpret_cast<struct sockaddr*>(&server_addr), socklen);
+    sendto(sock_fd_, nullptr, 0, MSG_DONTWAIT, reinterpret_cast<struct sockaddr*>(&server_addr), socklen);
 
     recv(sock_fd_, &usr_id_, sizeof(usr_id_), 0);
     return usr_id_;

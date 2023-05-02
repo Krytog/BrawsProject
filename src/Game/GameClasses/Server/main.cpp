@@ -6,11 +6,15 @@
 
 #include <Infrastructure/Server/Communicator.h>
 
-int main() {
+#include <iostream>
+
+/*int main() {
     Engine& engine = Engine::GetInstance();
     Overmind& overmind = Overmind::GetInstance();
     Communicator& communicator = Communicator::GetInstance();
+    std::cout << "hello" << std::endl;
     communicator.RegUser();
+    std::cout << "bye" << std::endl;
     ServerGameManagement::InitGameServer();
     MyTime time;
     engine.SetActiveOn();
@@ -29,6 +33,23 @@ int main() {
         auto data_for_client = overmind.GetCerebratesInfoSerialized();
 
         communicator.SendToClient(12, data_for_client);
+    }
+    return 0;
+}
+ */
+
+int main() {
+    Communicator& communicator = Communicator::GetInstance();
+    uint64_t id = communicator.RegUser();
+    MyTime time;
+    while (true) {
+        if (time.EvaluateTime() < static_cast<double>(1) / 2) {
+            continue;
+        }
+        time.ResetTime();
+
+        auto str = communicator.ReceiveFromClient(id);
+        std::cout << str.size() << str << std::endl;
     }
     return 0;
 }
