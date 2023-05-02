@@ -23,6 +23,9 @@ public:
     }
 
     virtual void ForcePossessedExecuteCommand(std::string_view serialized_command) const override {
+        if (serialized_command.size() < sizeof(Info)) {
+            return;
+        }
         Info actual_info;
         auto info_size = sizeof(actual_info);
         Serializer::Deserialize(actual_info, serialized_command.substr(0, info_size));
@@ -37,28 +40,6 @@ public:
     }
 
     virtual void UsePossessedApi(std::string_view serialized_command) const {} // TODO
-
-    void HandleInput() { // TODO: make it independent of InputSystem impl
-        auto input = Engine::GetInstance().GetInput();
-        std::string commands;
-        commands.reserve(4);
-        for (auto& token : input) {
-            auto keyboard_token = std::get_if<InputSystem::KeyboardToken>(&token);
-            if (!keyboard_token) {
-                continue;
-            }
-            if (keyboard_token->symbol == 'W') {
-                commands += 'W';
-            } else if (keyboard_token->symbol == 'A') {
-                commands += 'A';
-            } else if (keyboard_token->symbol == 'S') {
-                commands += 'S';
-            } else if (keyboard_token->symbol == 'D') {
-                commands += 'D';
-            }
-        }
-        AddCommandToBuffer(commands);
-    }
 
 protected:
     TPawn* possessed_;

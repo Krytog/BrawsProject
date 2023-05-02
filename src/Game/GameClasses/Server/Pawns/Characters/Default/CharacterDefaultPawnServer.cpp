@@ -6,8 +6,8 @@
 #include <SwarmSystem/Overmind.h>
 
 enum {
-    START_X = 0,
-    START_Y = 0,
+    START_X = -500,
+    START_Y = -500,
     COLLIDER_RADIUS = 35,
     SPRITE_WIDTH = 100,
     SPRITE_HEIGHT = 100

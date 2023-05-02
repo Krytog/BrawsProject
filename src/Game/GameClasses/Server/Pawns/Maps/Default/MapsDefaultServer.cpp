@@ -3,8 +3,8 @@
 #include <Game/GameClasses/GameObjectTags.h>
 
 enum {
-    LAKE_X = 2000,
-    LAKE_Y = 1000,
+    LAKE_X = 0,
+    LAKE_Y = 0,
     LAKE_WIDTH = 400,
     LAKE_HEIGHT = 600,
     MAP_WIDTH = 4000,

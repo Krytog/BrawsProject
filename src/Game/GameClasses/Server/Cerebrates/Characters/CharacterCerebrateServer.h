@@ -6,6 +6,10 @@
 #include <Core/Tools/Concepts.h>
 #include <Game/Tools/ControllerTools.cpp>
 
+enum {
+    MINIMAL_INPUT_SIZE = sizeof(Position) + 1
+};
+
 template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, Move, GetSpeed, GetHealth, GetPosition)>
 class CharacterCerebrateServer : public Cerebrate {
 public:
@@ -19,6 +23,9 @@ public:
     virtual ~CharacterCerebrateServer() = default;
 
     virtual void ForcePossessedExecuteCommand(std::string_view serialized_command) const override {
+        if (serialized_command.size() < MINIMAL_INPUT_SIZE) {
+            return;
+        }
         Position aim_pos;
         size_t pos_bytes = Serializer::Deserialize(aim_pos, serialized_command.substr(0, sizeof(aim_pos)));
         uint8_t mouse_key = serialized_command[pos_bytes];

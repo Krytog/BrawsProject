@@ -35,7 +35,6 @@ void CharacterDefaultPawnClient::ReceiveDamage() {
 }
 
 void CharacterDefaultPawnClient::OnUpdate() {
-    Translate(Vector2D(100, 100));
 }
 
 const size_t CharacterDefaultPawnClient::kTypeId = TypeId_Character_Default;
