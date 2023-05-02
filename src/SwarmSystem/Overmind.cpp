@@ -10,6 +10,12 @@ namespace {
     }
 }
 
+enum {
+    BEGIN_ENTITY_TOKEN = '#',
+    OPEN_INFO_TOKEN = '<',
+    CLOSE_INFO_TOKEN = '>'
+};
+
 Overmind::Overmind() : current_id_(0) {
 }
 
@@ -32,14 +38,22 @@ size_t Overmind::RegisterNewCerebrate(Cerebrate* cerebrate) {
     return out;
 }
 
-void Overmind::ForceCerebratesExecuteCommands(const std::string& serialized_command) {
+void Overmind::ForceCerebratesExecuteCommands(std::string_view serialized_command) {
     size_t beg = 0, ptr = 1;
     while (ptr < serialized_command.size()) {
-        while (ptr < serialized_command.size() && serialized_command[ptr] != '#') {
+        while (ptr < serialized_command.size() && serialized_command[ptr] != BEGIN_ENTITY_TOKEN) {
             ++ptr;
         }
 
-        size_t id, type_id, cerebrate_info_size;
+        size_t id;
+        size_t type_id;
+        size_t cerebrate_info_size;
+
+        if (beg + 1 + sizeof(id) + sizeof(type_id) + sizeof(cerebrate_info_size) > serialized_command.size()) {
+            beg = ptr++;
+            continue;
+        }
+
         std::memcpy(&id, &serialized_command[beg + 1], sizeof(id));
 
         std::memcpy(&type_id, &serialized_command[beg + 1 + sizeof(id)], sizeof(type_id));
@@ -49,7 +63,7 @@ void Overmind::ForceCerebratesExecuteCommands(const std::string& serialized_comm
 
         if (cerebrates_.contains(id)) {
             if (cerebrates_.at(id)->GetType() != type_id) {
-                throw "cringe";
+                throw std::runtime_error("SwarmSystem corrupted data: cerebrates type mismatch");
             }
             cerebrates_.at(id)->ForcePossessedExecuteCommand(
                 serialized_command.substr(beg + 2 + 3 * sizeof(size_t), cerebrate_info_size));
@@ -66,8 +80,11 @@ void Overmind::ForceCerebratesExecuteCommands(const std::string& serialized_comm
 void Overmind::ActualizeCerebrates(std::string_view serialized_command) {
     std::unordered_set<size_t> set;
     for (size_t i = 0; i < serialized_command.size(); ++i) {
-        if (serialized_command[i] == '#' && i + 1 < serialized_command.size()) {
+        if (serialized_command[i] == BEGIN_ENTITY_TOKEN && i + 1 < serialized_command.size()) {
             size_t id;
+            if (i + 1 + sizeof(id) > serialized_command.size()) {
+                continue;
+            }
             std::memcpy(&id, &serialized_command[i + 1], sizeof(id));
             set.insert(id);
         }
@@ -121,7 +138,7 @@ void Overmind::UpdateCelebratesInfo(Cerebrate* target, bool (*functor)(Cerebrate
             continue;
         }
 
-        buffer += '#';
+        buffer += BEGIN_ENTITY_TOKEN;
 
         auto buffer_sz = buffer.size();
         auto type_id = cerebrate->GetType();
@@ -140,9 +157,9 @@ void Overmind::UpdateCelebratesInfo(Cerebrate* target, bool (*functor)(Cerebrate
         std::memcpy(&buffer[0] + buffer_sz, &cerebrate_info_size, sizeof(cerebrate_info_size));
 //        buffer_sz += sizeof(cerebrate_info_size);
 
-        buffer += '<';
+        buffer += OPEN_INFO_TOKEN;
         buffer += cerebrate_info;
-        buffer += '>';
+        buffer += CLOSE_INFO_TOKEN;
     }
     cerebrates_info_serialized_ = std::move(buffer);
 }

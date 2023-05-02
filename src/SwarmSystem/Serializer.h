@@ -4,15 +4,21 @@
 class Serializer {
 public:
     template <typename T>
-    static size_t Serialize(const T& obj, std::string* result) {
+    static size_t Serialize(const T& obj, std::string* result, size_t start = 0) {
         std::string bytes;
         bytes.resize(sizeof(obj));
 
         // little-big endian!?
 
         std::memcpy(&bytes[0], &obj, sizeof(obj));
-        *result = std::move(bytes);
-        return result->size();
+        size_t output = bytes.size();
+        if (result->size() < start + output) {
+            result->resize(start + output);
+        }
+        for (size_t i = 0; i < output; ++i) {
+            (*result)[start + i] = bytes[i];
+        }
+        return output;
     }
 
     template <typename T>
