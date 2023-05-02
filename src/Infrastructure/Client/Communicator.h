@@ -1,3 +1,5 @@
+#pragma once
+
 #include <string_view>
 #include <string>
 #include <unordered_map>
@@ -18,9 +20,7 @@ class Communicator {
 public:
     static Communicator &GetInstance();
 
-    // rewrite with epoll
-    // REWRITE WHEN REGISTRATION WILL BE READY
-    void RegOnServer();
+    int64_t RegOnServer();
 
     // rewrite with epoll
     std::string ReceiveFromServer();
@@ -36,6 +36,6 @@ private:
 
     ~Communicator();
 
-    int64_t usr_id_;
     int sock_fd_;
+    int64_t usr_id_;
 };

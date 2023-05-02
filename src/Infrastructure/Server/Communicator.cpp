@@ -1,4 +1,3 @@
-//#include <exception>
 #include <stdexcept>
 #include <unistd.h>
 #include <cstring>
@@ -13,6 +12,8 @@
  *      *Узнать как внутри устроена очередь датаграмм
 */
 
+// добавить пересылку больших датаграмм
+
 Communicator &Communicator::GetInstance() {
     static Communicator instance;
     return instance;
@@ -25,6 +26,9 @@ Communicator::Communicator() {
     if (sock_fd_ < 0) {
         throw std::logic_error("Unable to bind port\n");
     }
+
+    std::random_device rdev;
+    rand_gen_ = std::mt19937_64(rdev());
 }
 
 Communicator::~Communicator() {
@@ -33,24 +37,39 @@ Communicator::~Communicator() {
     }
 }
 
+uint64_t Communicator::GenId() {
+    do {
+        uint64_t num = rand_gen_();
+        if (!ids_.contains(num)) {
+            ids_.insert(num);
+            return num;
+        }
+    } while (true);
+}
+
 void Communicator::RegUser() {
     std::unique_ptr<struct sockaddr_in> cli_addr(new struct sockaddr_in);
     char buf[kMaxDtgrmLen];
-    socklen_t cliaddr_len = socklen;
+    socklen_t cliaddr_len;
+
     int n = recvfrom(sock_fd_, buf, kMaxDtgrmLen, 0,
                      reinterpret_cast<struct sockaddr *>(cli_addr.get()), &cliaddr_len);
     if (n == -1) {
         return;
     }
-    buf[n] = '\0';
 
-    int64_t usr_id = std::stoll(buf);
-    register_[usr_id] = std::move(cli_addr);
+    auto usr_id = GenId();
+    char payload[sizeof(usr_id)];
+    memcpy(payload, &usr_id, sizeof(usr_id));
+
+    sendto(sock_fd_, payload, sizeof(usr_id), MSG_CONFIRM, reinterpret_cast<struct sockaddr *>(cli_addr.get()),
+           cliaddr_len);
+    register_[usr_id].first = std::move(cli_addr);
+    register_[usr_id].second = cliaddr_len;
 }
 
 void Communicator::SendToClient(uint64_t client_id, std::string_view data) {
-    sendto(sock_fd_, data.data(), data.size(), 0, reinterpret_cast<const struct sockaddr *>(register_[client_id].get()),
-           socklen);
+    sendto(sock_fd_, data.data(), data.size(), 0, reinterpret_cast<struct sockaddr *>(register_[client_id].first.get()), register_[client_id].second);
 }
 
 std::string Communicator::ReceiveFromClient(uint64_t client_id) {
@@ -62,17 +81,14 @@ std::string Communicator::ReceiveFromClient(uint64_t client_id) {
 
     std::string cur_message;
     cur_message.resize(kMaxDtgrmLen);
-    socklen_t cliaddr_len = socklen;
-    std::unique_ptr<struct sockaddr_in> cli_addr(new struct sockaddr_in);
-    int n = recvfrom(sock_fd_, &cur_message[0], kMaxDtgrmLen, 0,
-                     reinterpret_cast<struct sockaddr *>(cli_addr.get()), &cliaddr_len);
-    if (n == -1) {
+    int n = recv(sock_fd_, &cur_message[0], kMaxDtgrmLen, 0);
+    if (n == -1 || n == 0) {
         return "";
     }
     cur_message.resize(n);
 
     int64_t id;
-    std::memcpy(&id, &cur_message[0] ,sizeof(id));
+    std::memcpy(&id, &cur_message[0], sizeof(id));
     if (id == client_id) {
         return std::move(cur_message);
     }
