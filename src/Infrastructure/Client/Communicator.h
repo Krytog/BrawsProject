@@ -36,5 +36,6 @@ private:
 
     ~Communicator();
 
+    int64_t usr_id_;
     int sock_fd_;
 };

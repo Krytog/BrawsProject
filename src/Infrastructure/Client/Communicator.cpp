@@ -1,3 +1,5 @@
+#include <cstring>
+
 #include "Communicator.h"
 
 Communicator &Communicator::GetInstance() {
@@ -22,6 +24,7 @@ Communicator::~Communicator() {
 
 void Communicator::RegOnServer() {
     std::string message = "12"; // my_id
+    usr_id_ = 12;
 
     socklen_t servaddr_len = socklen;
     sendto(sock_fd_, message.data(), message.size(), 0, reinterpret_cast<struct sockaddr*>(&server_addr), servaddr_len);
@@ -41,7 +44,11 @@ std::string Communicator::ReceiveFromServer() {
 }
 
 void Communicator::SendToServer(std::string_view data) {
-    sendto(sock_fd_, data.data(), data.size(), 0, reinterpret_cast<const struct sockaddr *>(&server_addr),
+    std::string my_data;
+    my_data.resize(sizeof(usr_id_) + data.size());
+    memcpy(&my_data[0], &usr_id_, sizeof(usr_id_));
+    memcpy(&my_data[0 + sizeof(usr_id_)], data.data(), data.size());
+    sendto(sock_fd_, my_data.data(), my_data.size(), 0, reinterpret_cast<const struct sockaddr *>(&server_addr),
            socklen);
 }
 
