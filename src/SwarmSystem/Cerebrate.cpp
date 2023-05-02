@@ -10,9 +10,7 @@ std::string Cerebrate::GetInfoForOvermind() {
     return SerializeInfo() + temp;
 }
 
-Cerebrate::Cerebrate(size_t type) : type_(type) {
-    Overmind::GetInstance().RegisterNewCerebrate(this);
-}
+Cerebrate::Cerebrate(size_t type) : type_(type) {}
 
 void Cerebrate::AddCommandToBuffer(std::string_view serialized_command) {
     buffer_ += serialized_command;

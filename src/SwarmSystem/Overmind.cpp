@@ -68,9 +68,14 @@ void Overmind::ForceCerebratesExecuteCommands(std::string_view serialized_comman
             cerebrates_.at(id)->ForcePossessedExecuteCommand(
                 serialized_command.substr(beg + 2 + 3 * sizeof(size_t), cerebrate_info_size));
         } else {
-            cerebrates_[id] = CerebrateRegistry::GetInstance().GetCerebrate(type_id);
-            cerebrates_.at(id)->ForcePossessedExecuteCommand(
-                    serialized_command.substr(beg + 2 + 3 * sizeof(size_t), cerebrate_info_size));
+            auto new_cerebrate = CerebrateRegistry::GetInstance().GetCerebrate(type_id);
+            if (new_cerebrate) {
+                cerebrates_[id] = new_cerebrate;
+                cerebrates_.at(id)->ForcePossessedExecuteCommand(
+                        serialized_command.substr(beg + 2 + 3 * sizeof(size_t), cerebrate_info_size));
+            } else {
+                // corrupted data case
+            }
         }
 
         beg = ptr++;

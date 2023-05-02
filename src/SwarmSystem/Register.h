@@ -1,6 +1,7 @@
 #include <memory>
 #include <unordered_map>
 #include "Cerebrate.h"
+#include "Overmind.h"
 
 class IFactory {
 public:
@@ -12,7 +13,9 @@ template <typename T>
 class Factory : public IFactory {
 public:
     virtual Cerebrate* Create() override {
-        return new T();
+        auto ptr = new T();
+        Overmind::GetInstance().RegisterNewCerebrate(ptr);
+        return ptr;
     }
 
     ~Factory() = default;
@@ -31,6 +34,9 @@ public:
     }
 
     Cerebrate* GetCerebrate(size_t type_id) {
+        if (!register_.contains(type_id)) {
+            return nullptr;
+        }
         return register_[type_id]->Create();
     }
 
