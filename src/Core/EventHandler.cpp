@@ -20,19 +20,24 @@ EventStatus Event::GetStatus() const {
     return status_;
 }
 
+void EventHandler::DestroyEvent(Event* event) {  /* Safety of erasure is guaranteed */
+    events_.erase(cache_[event]);
+    cache_.erase(event);
+}
+
 void EventHandler::TryExecuteAll() {
-    std::list<Event>::iterator it = events_.begin();
-    while (it != events_.end()) {
-        if (it->TryExecute() && it->GetStatus() == Disposable) {
-            it = events_.erase(it);
-            continue;
-        }
-        ++it;
-    }
+   std::erase_if(events_, [this](Event& event) {
+       if (event.GetStatus() == Disposable && event.TryExecute()) {
+           DestroyEvent(&event);
+           return true;
+       }
+       return false;
+    });
 }
 
 void EventHandler::Clear() {
     events_.clear();
+    cache_.clear();
 }
 
 bool EventHandler::Empty() const {

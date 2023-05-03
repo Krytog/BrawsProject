@@ -51,10 +51,13 @@ public:
         static_assert(std::is_convertible_v<decltype(std::apply(pr, pr_args)), bool>,
                       "Predicate result must be convertible to bool");
         static_assert(std::is_void_v<decltype(std::apply(cb, cb_args))>, "Callable result must be void");
-        events_.emplace_back(std::forward<Predicate>(pr), std::forward<PredicateArgsTuple>(pr_args),
+        events_.emplace_front(std::forward<Predicate>(pr), std::forward<PredicateArgsTuple>(pr_args),
                              std::forward<Callable>(cb), std::forward<CallableArgsTuple>(cb_args), status);
-        return &events_.back();
+        cache_[&events_.front()] = events_.begin();
+        return &events_.front();
     }
+
+    void DestroyEvent(Event* event);
 
     void TryExecuteAll();
 
@@ -70,4 +73,5 @@ private:
 
 private:
     std::list<Event> events_;
+    std::unordered_map<Event*, std::list<Event>::iterator> cache_;
 };
