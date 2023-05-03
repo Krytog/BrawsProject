@@ -4,6 +4,8 @@
 #include <tuple>
 #include <functional>
 
+#include "Tools/FastHashMaps.h"
+
 enum EventStatus {
     Disposable,
     Reusable,
@@ -73,5 +75,5 @@ private:
 
 private:
     std::list<Event> events_;
-    std::unordered_map<Event*, std::list<Event>::iterator> cache_;
+    FastHashMap<Event*, std::list<Event>::iterator> cache_;
 };
