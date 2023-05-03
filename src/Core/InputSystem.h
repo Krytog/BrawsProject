@@ -13,7 +13,8 @@ class InputSystem;
 template<typename T, std::enable_if_t<std::is_base_of_v<InputSystem, T>, bool> = true>
 concept InputSystemDerived = requires (const sf::Window& window)
 {
-    {T::InitInstance(window)} -> std::convertible_to<InputSystem&>;
+    /* Only Singletons may be used in InputSystem::GetInstance */
+    {T::InitInstance(window)} -> std::convertible_to<InputSystem*>;
 };
 
 class InputSystem {
@@ -31,7 +32,7 @@ public:
     using InputTokensArray = std::list<InputToken>;
 
     template <InputSystemDerived Derived>
-    static InputSystem& GetInstance(const sf::Window& window) {
+    static InputSystem* GetInstance(const sf::Window& window) {
         return Derived::InitInstance(window);
     }
 
@@ -53,7 +54,7 @@ class KeyboardInputSystem final : public InputSystem {
 public:
     void ReadNewInput() override;
 
-    static KeyboardInputSystem& InitInstance(const sf::Window& window);
+    static KeyboardInputSystem* InitInstance(const sf::Window& window);
 
 private:
     explicit KeyboardInputSystem(const sf::Window&);

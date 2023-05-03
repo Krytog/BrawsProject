@@ -50,7 +50,7 @@ Engine::Engine()
     : collision_system_(CollisionSystem::GetInstance()),
 #ifndef __SERVER_ENGINE_MODE__
       render_(Render::GetInstance()),
-      input_system_(&InputSystem::GetInstance<DefaultInputSystem>(*render_.GetWindowPointer())),
+      input_system_(InputSystem::GetInstance<DefaultInputSystem>(*render_.GetWindowPointer())),
 #endif
       event_handler_(EventHandler::GetInstance()),
       delay_queue_(DelayQueue::GetInstance()),

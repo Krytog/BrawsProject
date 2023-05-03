@@ -14,9 +14,9 @@ InputSystem::InputTokensArray InputSystem::GetInput() const {
 KeyboardInputSystem::KeyboardInputSystem(const sf::Window& window) : InputSystem(window) {
 }
 
-KeyboardInputSystem& KeyboardInputSystem::InitInstance(const sf::Window& window) {
+KeyboardInputSystem* KeyboardInputSystem::InitInstance(const sf::Window& window) {
     static KeyboardInputSystem instance(window);
-    return instance;
+    return &instance;
 }
 
 //Implementation defined, make sure that MouseToken is ALWAYS at list.begin()!

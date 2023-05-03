@@ -6,9 +6,9 @@
 
 BotInputSystem::BotInputSystem(const sf::Window& window) : InputSystem(window) {}
 
-BotInputSystem& BotInputSystem::InitInstance(const sf::Window& window) {
+BotInputSystem* BotInputSystem::InitInstance(const sf::Window& window) {
     static BotInputSystem instance(window);
-    return instance;
+    return &instance;
 }
 
 // N/Y(PosX;PosY)#WASDQE

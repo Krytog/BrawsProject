@@ -87,7 +87,7 @@ public:
     // Switch InputSystem
     template <InputSystemDerived SomeInputSystem>
     void SwitchInputSystem() {
-        input_system_ = &InputSystem::GetInstance<SomeInputSystem>(*render_.GetWindowPointer());
+        input_system_ = InputSystem::GetInstance<SomeInputSystem>(*render_.GetWindowPointer());
     }
     ///////////////////////////////////////////////////////////////////////////////////////
 
