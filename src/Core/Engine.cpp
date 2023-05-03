@@ -50,7 +50,7 @@ Engine::Engine()
     : collision_system_(CollisionSystem::GetInstance()),
 #ifndef __SERVER_ENGINE_MODE__
       render_(Render::GetInstance()),
-      input_system_(InputSystem::GetInstance<DefaultInputSystem>(*render_.GetWindowPointer())),
+      input_system_(&InputSystem::GetInstance<DefaultInputSystem>(*render_.GetWindowPointer())),
 #endif
       event_handler_(EventHandler::GetInstance()),
       delay_queue_(DelayQueue::GetInstance()),
@@ -59,11 +59,11 @@ Engine::Engine()
 
 #ifndef __SERVER_ENGINE_MODE__
 void Engine::ReadNewInput() {
-    input_system_.ReadNewInput();
+    input_system_->ReadNewInput();
 }
 
 InputSystem::InputTokensArray Engine::GetInput() const {
-    auto raw_input = input_system_.GetInput();
+    auto raw_input = input_system_->GetInput();
     auto mouse_token_variant = *(raw_input.begin());
     auto mouse_token = std::get<InputSystem::MouseToken>(mouse_token_variant);  //Make sure that MouseToken is the first token
     auto window_size = render_.GetWindowPointer()->getSize();

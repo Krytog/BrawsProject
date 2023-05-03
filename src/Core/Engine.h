@@ -87,7 +87,7 @@ public:
     // Switch InputSystem
     template <InputSystemDerived SomeInputSystem>
     void SwitchInputSystem() {
-        input_system_ = InputSystem::GetInstance<SomeInputSystem>(*render_.GetWindowPointer());
+        input_system_ = &InputSystem::GetInstance<SomeInputSystem>(*render_.GetWindowPointer());
     }
     ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -186,7 +186,7 @@ private:
 
 #ifndef __SERVER_ENGINE_MODE__
     Render& render_;
-    InputSystem& input_system_;
+    InputSystem* input_system_;
 #endif
     CollisionSystem& collision_system_;
     EventHandler& event_handler_;
