@@ -81,7 +81,14 @@ public:
 
     // Getting input
     ///////////////////////////////////////////////////////////////////////////////////////
+    using DefaultInputSystem = KeyboardInputSystem;
     InputSystem::InputTokensArray GetInput() const;
+
+    // Switch InputSystem
+    template <InputSystemDerived SomeInputSystem>
+    void SwitchInputSystem() {
+        input_system_ = InputSystem::GetInstance<SomeInputSystem>(*render_.GetWindowPointer());
+    }
     ///////////////////////////////////////////////////////////////////////////////////////
 
 #endif

@@ -1,16 +1,26 @@
 #include "InputSystem.h"
-
 #include <SFML/Window.hpp>
 
 InputSystem::InputSystem(const sf::Window& window): window_(window) {}
 
-InputSystem &InputSystem::GetInstance(const sf::Window& window) {
-    static InputSystem instance(window);
+InputSystem::~InputSystem() = default;
+
+InputSystem::InputTokensArray InputSystem::GetInput() const {
+    return input_tokens_;
+}
+
+/* Default InputSystem */
+
+KeyboardInputSystem::KeyboardInputSystem(const sf::Window& window) : InputSystem(window) {
+}
+
+KeyboardInputSystem& KeyboardInputSystem::InitInstance(const sf::Window& window) {
+    static KeyboardInputSystem instance(window);
     return instance;
 }
 
 //Implementation defined, make sure that MouseToken is ALWAYS at list.begin()!
-void InputSystem::ReadNewInput() {
+void KeyboardInputSystem::ReadNewInput() {
     input_tokens_.clear();
 
     uint8_t mouse_key = 0;
@@ -46,8 +56,4 @@ void InputSystem::ReadNewInput() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
         input_tokens_.emplace_back(KeyboardToken{'E'});
     }
-}
-
-InputSystem::InputTokensArray InputSystem::GetInput() const {
-    return input_tokens_;
 }
