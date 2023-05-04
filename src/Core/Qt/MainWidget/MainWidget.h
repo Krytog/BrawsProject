@@ -6,13 +6,13 @@
 #include <qopenglwidget.h>
 #include <QOpenGLWidget>
 #include <unordered_map>
+#include <deque>
 
-class TMainWidget : public QOpenGLWidget
-{
+class TMainWidget : public QOpenGLWidget {
+    Q_OBJECT
 public:
-    TMainWidget(QOpenGLWidget* parent = nullptr);
+    TMainWidget(QWidget* parent = nullptr);
 
-    void PaintObjects();
     void AddToRender(const GameObject *game_object, IVisibleObject *vis_obj);
     void RemoveFromRender(const GameObject *vis_obj);
 
@@ -22,5 +22,6 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
+    std::map<IVisibleObject::RenderLayers, std::deque<IVisibleObject*>> layer_to_object_;
     std::unordered_map<const GameObject*, IVisibleObject*> objects_;
 };

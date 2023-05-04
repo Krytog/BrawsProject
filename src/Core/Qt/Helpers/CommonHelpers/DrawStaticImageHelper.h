@@ -7,13 +7,18 @@
 
 class DrawStaticImageHelper : public IBasicHelper {
 public:
-    DrawStaticImageHelper() = default;
-    DrawStaticImageHelper(std::shared_ptr<QImage> image, const Position& position);
-    void Configure(std::shared_ptr<QImage> image, const Position& position);
+    DrawStaticImageHelper(QImage* image, const Position& position, const Position& source_pos,
+         const size_t& width, const size_t& height);
 
     virtual void Paint(QPainter* painter) const override;
 
+protected:
+    void DrawImage(QPainter* painter) const;
+
 private:
-    std::shared_ptr<QImage> image_;
+    QImage* image_;
     Position pos_;
+    Position source_pos_;
+    size_t width_;
+    size_t height_;
 };
