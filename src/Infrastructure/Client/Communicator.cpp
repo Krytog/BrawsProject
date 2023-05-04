@@ -11,7 +11,13 @@ Communicator &Communicator::GetInstance() {
 extern "C" int BindToSock(char *service);
 
 Communicator::Communicator() {
-    sock_fd_ = BindToSock(my_port);
+    for (int i = 0; i < num_port_available; ++i) {
+        std::string my_port = std::to_string(start_port_num + i);
+        sock_fd_ = BindToSock(my_port.data());
+        if (sock_fd_ >= 0) {
+            break;
+        }
+    }
     if (sock_fd_ < 0) {
         throw std::logic_error("Unable to bind port\n");
     }
