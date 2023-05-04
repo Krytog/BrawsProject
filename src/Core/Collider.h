@@ -6,6 +6,11 @@
 
 class Collider {
 public:
+    enum Category : bool {
+        Ordinary = true,
+        Technical = false
+    };
+
     Collider() = default;
 
     virtual void UpdatePosition(const Position& position) = 0;
@@ -18,10 +23,13 @@ public:
 
     bool IsTrigger() const;
 
+    Category GetCategory() const;
+
     virtual ~Collider() = default;
 
 protected:
     virtual bool Check(const Collider* other) const = 0;
 
     bool is_trigger_ = false;
+    Category category_ = Ordinary;
 };

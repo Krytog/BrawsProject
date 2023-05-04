@@ -11,3 +11,7 @@ bool Collider::CheckTrigger(const Collider* other) const {
 bool Collider::IsTrigger() const {
     return is_trigger_;
 }
+
+Collider::Category Collider::GetCategory() const {
+    return category_;
+}

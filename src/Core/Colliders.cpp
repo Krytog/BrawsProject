@@ -138,18 +138,20 @@ bool CircleCollider::IsInside(const Position& position) const {
            -PRECISION;
 }
 
-CircleCollider::CircleCollider(const Position& position, double radius, bool is_trigger)
+CircleCollider::CircleCollider(const Position& position, double radius, bool is_trigger, Category category)
     : position_(position), radius_(radius) {
     is_trigger_ = is_trigger;
+    category_ = category;
 }
 
 bool CircleCollider::Check(const Collider* other) const {
     return CheckImplementationPrimary(this, other);
 }
 
-RectangleCollider::RectangleCollider(const Position& position, double width, double height, bool is_trigger)
+RectangleCollider::RectangleCollider(const Position& position, double width, double height, bool is_trigger, Category category)
     : position_(position), width_(width), height_(height) {
     is_trigger_ = is_trigger;
+    category_ = category;
 }
 
 void RectangleCollider::UpdatePosition(const Position& position) {
