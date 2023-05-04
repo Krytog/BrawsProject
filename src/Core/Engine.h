@@ -29,7 +29,8 @@ public:
         static_assert(std::is_base_of<GameObject, TObject>(), "TObject must inherit from GameObject");
 
         GameObject* object_ptr = new TObject(std::forward<Args>(args)...);
-        objects_buffer_.push_front(object_ptr);
+        objects_.push_front(object_ptr);
+        cache_[object_ptr] = objects_.begin();
 
         auto coll_ptr = object_ptr->GetPointerToCollider();
         if (coll_ptr) {
@@ -50,7 +51,8 @@ public:
         static_assert(std::is_base_of<GameObject, TObject>(), "TObject must inherit from GameObject");
 
         GameObject* object_ptr = new TObject();
-        objects_buffer_.push_front(object_ptr);
+        objects_.push_front(object_ptr);
+        cache_[object_ptr] = objects_.begin();
 
         auto coll_ptr = object_ptr->GetPointerToCollider();
         if (coll_ptr) {
@@ -192,8 +194,10 @@ private:
     EventHandler& event_handler_;
     DelayQueue& delay_queue_;
 
-    std::deque<GameObject*> objects_buffer_;
-    uint64_t ticks_count_ = 0;
+    /// \brief Data structure to manage objects
+    std::list<GameObject*> objects_;
+    std::unordered_map<GameObject*, std::list<GameObject*>::iterator> cache_;
 
+    uint64_t ticks_count_ = 0;
     bool is_active_ = true;
 };

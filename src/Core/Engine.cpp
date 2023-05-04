@@ -6,9 +6,9 @@ Engine& Engine::GetInstance() {
 }
 
 void Engine::Destroy(GameObject* object_ptr) {
-    auto it = std::find(objects_buffer_.begin(), objects_buffer_.end(), object_ptr);
-    if (it != objects_buffer_.end()) {
-        objects_buffer_.erase(it);
+    if (cache_.contains(object_ptr)) {
+        objects_.erase(cache_[object_ptr]);
+        cache_.erase(object_ptr);
         collision_system_.UnregisterColliderOf(object_ptr);
 #ifndef __SERVER_ENGINE_MODE__
         render_.RemoveFromRender(object_ptr);
@@ -37,9 +37,10 @@ void Engine::RenderAll() {
 #endif
 
 void Engine::ClearAll() {
-    for (const auto& object_ptr : objects_buffer_) {
+    for (const auto& object_ptr : objects_) {
         delete object_ptr;
     }
+    cache_.clear();
 }
 
 Engine::~Engine() {
@@ -119,7 +120,7 @@ void Engine::IncreaseTicksCount() {
 }
 
 void Engine::ExecuteUpdates() {
-    for (auto game_object : objects_buffer_) {
+    for (auto game_object : objects_) {
         game_object->OnUpdate();
     }
 }
