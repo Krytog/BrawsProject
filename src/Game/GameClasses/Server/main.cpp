@@ -5,6 +5,7 @@
 #include <SwarmSystem/Overmind.h>
 
 #include <Infrastructure/Server/Communicator.h>
+#include <SwarmSystem/Profiler/Profiler.h>
 
 #include <iostream>
 
@@ -12,6 +13,7 @@ int main() {
     Engine& engine = Engine::GetInstance();
     Overmind& overmind = Overmind::GetInstance();
     Communicator& communicator = Communicator::GetInstance();
+    Profiler& profiler = Profiler::GetInstance();
     uint64_t id = communicator.RegUser();
     ServerGameManagement::InitGameServer();
     MyTime time;
@@ -29,6 +31,8 @@ int main() {
 
         overmind.UpdateCelebratesInfo();
         auto data_for_client = overmind.GetCerebratesInfoSerialized();
+
+        profiler.AddTimeMark(&data_for_client);
 
         communicator.SendToClient(id, data_for_client);
     }

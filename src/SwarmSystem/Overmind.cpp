@@ -38,6 +38,8 @@ size_t Overmind::RegisterNewCerebrate(Cerebrate* cerebrate) {
     return out;
 }
 
+#include "Profiler/Profiler.h"
+
 void Overmind::ForceCerebratesExecuteCommands(std::string_view serialized_command) {
     size_t beg = 0, ptr = 1;
     while (ptr < serialized_command.size()) {
@@ -67,14 +69,17 @@ void Overmind::ForceCerebratesExecuteCommands(std::string_view serialized_comman
             }
             cerebrates_.at(id)->ForcePossessedExecuteCommand(
                 serialized_command.substr(beg + 2 + 3 * sizeof(size_t), cerebrate_info_size));
+                Profiler::GetInstance().OnPackageSuccess();
         } else {
             auto new_cerebrate = CerebrateRegistry::GetInstance().GetCerebrate(type_id);
             if (new_cerebrate) {
                 cerebrates_[id] = new_cerebrate;
                 cerebrates_.at(id)->ForcePossessedExecuteCommand(
                         serialized_command.substr(beg + 2 + 3 * sizeof(size_t), cerebrate_info_size));
+                Profiler::GetInstance().OnPackageSuccess();
             } else {
                 // corrupted data case
+                Profiler::GetInstance().OnPackageLost();
             }
         }
 
