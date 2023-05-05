@@ -85,7 +85,7 @@ void Profiler::PrintResults() {
 
     double swarmsystem_time_sum = 0;
     double worst_swarmsystem_time = 0;
-    for (auto time : engine_times_) {
+    for (auto time : swarmsystem_times_) {
         swarmsystem_time_sum += time;
         worst_swarmsystem_time = std::max(worst_swarmsystem_time, time);
     }
