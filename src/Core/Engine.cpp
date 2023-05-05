@@ -6,7 +6,7 @@ Engine& Engine::GetInstance() {
 }
 
 void Engine::Destroy(GameObject* object_ptr) {
-    if (cache_.contains(object_ptr)) {
+    if (cache_.find(object_ptr) != cache_.end()) {
         objects_.erase(cache_[object_ptr]);
         cache_.erase(object_ptr);
         collision_system_.UnregisterColliderOf(object_ptr);

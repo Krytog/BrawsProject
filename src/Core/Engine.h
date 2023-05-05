@@ -196,7 +196,7 @@ private:
 
     /// \brief Data structure to manage objects
     std::list<GameObject*> objects_;
-    std::unordered_map<GameObject*, std::list<GameObject*>::iterator> cache_;
+    FastHashMap<GameObject*, std::list<GameObject*>::iterator> cache_;
 
     uint64_t ticks_count_ = 0;
     bool is_active_ = true;

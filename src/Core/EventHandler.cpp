@@ -27,7 +27,7 @@ void EventHandler::DestroyEvent(Event* event) {  /* Safety of erasure is guarant
 
 void EventHandler::TryExecuteAll() {
    std::erase_if(events_, [this](Event& event) {
-       if (event.GetStatus() == Disposable && event.TryExecute()) {
+       if (event.TryExecute() && event.GetStatus() == Disposable) {
            cache_.erase(&event);
            return true;
        }
