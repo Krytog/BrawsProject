@@ -10,7 +10,7 @@
 
 class CircleCollider : public Collider {
 public:
-    CircleCollider(const Position& position, double radius, bool is_trigger = false, Category category = Ordinary);
+    CircleCollider(const Position& position, double radius, Category category = Ordinary);
 
     void UpdatePosition(const Position& position) override;
     void Translate(const Vector2D& vector2D) override;
@@ -29,7 +29,7 @@ private:
 
 class RectangleCollider : public Collider {
 public:
-    RectangleCollider(const Position& position, double width, double height, bool is_trigger = false, Category category = Ordinary);
+    RectangleCollider(const Position& position, double width, double height, Category category = Ordinary);
 
     void UpdatePosition(const Position& position) override;
     void Translate(const Vector2D& vector2D) override;

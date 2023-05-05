@@ -3,7 +3,7 @@
 
 Observer::Observer()
     : GameObject(ArgPack{.position = new Position(),
-                         .collider = new RectangleCollider(Position(), kWindowWidth, kWindowHeight, true)
+                         .collider = new RectangleCollider(Position(), kWindowWidth, kWindowHeight, Collider::Technical)
                          /* tag = ??? */}) {
 }
 

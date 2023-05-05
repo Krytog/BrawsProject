@@ -12,13 +12,13 @@ public:
 
     struct CollisionInfo {
         CollisionInfo() = default;
-        CollisionInfo(GameObject* game_object_, const std::string_view tag_, const Position& position_,
-                      const bool is_trigger_);
+        CollisionInfo(GameObject* game_object, const std::string_view tag, const Position& position,
+                      Collider::Category category);
 
         GameObject* game_object;
         const std::string_view tag;
         Position position;
-        bool is_trigger;
+        Collider::Category category;
     };
 
     bool IsRegistered(GameObject* game_object) const;
@@ -37,7 +37,7 @@ public:
     CollisionsInfoArray GetPhysicalCollisions(GameObject* game_object) const;
     CollisionsInfoArray GetTriggerCollisions(GameObject* game_object) const;
     CollisionsInfoArray GetAllCollisionsWithTag(GameObject* game_object,
-                                                const std::string_view string) const;
+                                                std::string_view string) const;
     template <typename T>
     CollisionsInfoArray GetAllCollisionsWithType(GameObject* game_object) const;
 

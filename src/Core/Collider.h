@@ -3,12 +3,16 @@
 #include "Position.h"
 
 #include <optional>
+#include <cstdint>
 
 class Collider {
 public:
-    enum Category : bool {
-        Ordinary = true,
-        Technical = false
+    /// Collider Category\n
+    /// Technical Colliders are undetectable
+    enum Category : uint8_t {
+        Ordinary = 0,
+        Trigger = 1,
+        Technical = 2,
     };
 
     Collider() = default;
@@ -21,15 +25,15 @@ public:
     virtual bool IsInside(const Position& position) const = 0;
     virtual std::optional<Position> GetIntersectionPosition(const Collider* other) const = 0;
 
-    bool IsTrigger() const;
-
     Category GetCategory() const;
+    bool IsOrdinary() const;
+    bool IsTrigger() const;
+    bool IsTechnical() const;
 
     virtual ~Collider() = default;
 
 protected:
     virtual bool Check(const Collider* other) const = 0;
 
-    bool is_trigger_ = false;
     Category category_ = Ordinary;
 };

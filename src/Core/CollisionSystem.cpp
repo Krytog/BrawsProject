@@ -1,8 +1,8 @@
 #include "CollisionSystem.h"
 
-CollisionSystem::CollisionInfo::CollisionInfo(GameObject* game_object_, const std::string_view tag_,
-                                              const Position& position_, const bool is_trigger_)
-    : game_object(game_object_), tag(tag_), position(position_), is_trigger(is_trigger_) {
+CollisionSystem::CollisionInfo::CollisionInfo(GameObject* game_object, const std::string_view tag,
+                                              const Position& position, Collider::Category category)
+    : game_object(game_object), tag(tag), position(position), category(category) {
 }
 
 bool CollisionSystem::IsRegistered(GameObject* game_object) const {
@@ -54,72 +54,70 @@ CollisionSystem::CollisionsInfoArray CollisionSystem::GetAllCollisions(GameObjec
         return {};
     }
     std::vector<CollisionInfo> output;
-    for (const auto& pair : registered_colliders_) {
-        if (pair.first == game_object) {
+    for (const auto& [object, collider] : registered_colliders_) {
+        if (object == game_object || collider->IsTechnical()) {
             continue;
         }
-        if (auto position = registered_colliders_.at(game_object)->GetIntersectionPosition(pair.second)) {
-            output.emplace_back(pair.first, pair.first->GetTag(), position.value(), pair.second->IsTrigger());
+        if (auto position = registered_colliders_.at(game_object)->GetIntersectionPosition(collider)) {
+            output.emplace_back(object, object->GetTag(), position.value(), collider->GetCategory());
         }
     }
     return output;
 }
 
-CollisionSystem::CollisionsInfoArray CollisionSystem::GetPhysicalCollisions(
-    GameObject* game_object) const {
+CollisionSystem::CollisionsInfoArray CollisionSystem::GetPhysicalCollisions(GameObject* game_object) const {
     if (!registered_colliders_.contains(game_object)) {
         return {};
     }
     std::vector<CollisionInfo> output;
-    for (const auto& pair : registered_colliders_) {
-        if (pair.second->IsTrigger()) {
+    for (const auto& [object, collider] : registered_colliders_) {
+        if (!collider->IsOrdinary()) {  // not trigger && not technical
             continue;
         }
-        if (pair.first == game_object) {
+        if (object == game_object) {
             continue;
         }
-        if (auto position = registered_colliders_.at(game_object)->GetIntersectionPosition(pair.second)) {
-            output.emplace_back(pair.first, pair.first->GetTag(), position.value(), pair.second->IsTrigger());
+        if (auto position = registered_colliders_.at(game_object)->GetIntersectionPosition(collider)) {
+            output.emplace_back(object, object->GetTag(), position.value(), collider->GetCategory());
         }
     }
     return output;
 }
 
-CollisionSystem::CollisionsInfoArray CollisionSystem::GetTriggerCollisions(
-    GameObject* game_object) const {
+CollisionSystem::CollisionsInfoArray CollisionSystem::GetTriggerCollisions(GameObject* game_object) const {
     if (!registered_colliders_.contains(game_object)) {
         return {};
     }
     std::vector<CollisionInfo> output;
-    for (const auto& pair : registered_colliders_) {
-        if (!pair.second->IsTrigger()) {
+    for (const auto& [object, collider] : registered_colliders_) {
+        if (!collider->IsTrigger()) {  // not ordinary && not technical
             continue;
         }
-        if (pair.first == game_object) {
+        if (object == game_object) {
             continue;
         }
-        if (auto position = registered_colliders_.at(game_object)->GetIntersectionPosition(pair.second)) {
-            output.emplace_back(pair.first, pair.first->GetTag(), position.value(), pair.second->IsTrigger());
+        if (auto position = registered_colliders_.at(game_object)->GetIntersectionPosition(collider)) {
+            output.emplace_back(object, object->GetTag(), position.value(), collider->GetCategory());
         }
     }
     return output;
 }
 
 CollisionSystem::CollisionsInfoArray CollisionSystem::GetAllCollisionsWithTag(
-    GameObject* game_object, const std::string_view string) const {
+    GameObject* game_object, std::string_view string) const {
     if (!registered_colliders_.contains(game_object)) {
         return {};
     }
     std::vector<CollisionInfo> output;
-    for (const auto& pair : registered_colliders_) {
-        if (pair.first->GetTag() != string) {
+    for (const auto& [object, collider] : registered_colliders_) {
+        if (object->GetTag() != string || collider->IsTechnical()) {
             continue;
         }
-        if (pair.first == game_object) {
+        if (object == game_object) {
             continue;
         }
-        if (auto position = registered_colliders_.at(game_object)->GetIntersectionPosition(pair.second)) {
-            output.emplace_back(pair.first, pair.first->GetTag(), position.value(), pair.second->IsTrigger());
+        if (auto position = registered_colliders_.at(game_object)->GetIntersectionPosition(collider)) {
+            output.emplace_back(object, object->GetTag(), position.value(), collider->GetCategory());
         }
     }
     return output;
@@ -132,15 +130,15 @@ CollisionSystem::CollisionsInfoArray CollisionSystem::GetAllCollisionsWithType(
         return {};
     }
     std::vector<CollisionInfo> output;
-    for (const auto& pair : registered_colliders_) {
-        if (!dynamic_cast<T*>(pair.first)) {
+    for (const auto& [object, collider] : registered_colliders_) {
+        if (!dynamic_cast<T*>(object) || collider->IsTechnical()) {
             continue;
         }
-        if (pair.first == game_object) {
+        if (object == game_object) {
             continue;
         }
-        if (auto position = registered_colliders_.at(game_object)->GetIntersectionPosition(pair.second)) {
-            output.emplace_back(pair.first, pair.first->GetTag(), position.value(), pair.second->IsTrigger());
+        if (auto position = registered_colliders_.at(game_object)->GetIntersectionPosition(collider)) {
+            output.emplace_back(object, object->GetTag(), position.value(), collider->GetCategory());
         }
     }
     return output;
