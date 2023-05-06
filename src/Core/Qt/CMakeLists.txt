@@ -17,6 +17,7 @@ add_executable(QtTest
     Helpers/CommonHelpers/DrawStaticImageHelper.cpp
     Helpers/CommonHelpers/DrawAnimatedImageHelper.cpp
     MainWidget/MainWidget.cpp
+    MainWidget/Render.cpp
     ../GameObject.cpp
     ../Position.cpp
     ../Vector2D.cpp
