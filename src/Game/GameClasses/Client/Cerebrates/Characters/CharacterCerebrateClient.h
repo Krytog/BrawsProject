@@ -4,8 +4,9 @@
 #include <Core/Engine.h>
 #include <SwarmSystem/Serializer.h>
 #include <Core/Tools/Concepts.h>
+#include <Game/GameClasses/CommandsList.h>
 
-template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, UpdatePosition, SetHealth)>
+template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, UpdatePosition, SetHealth, CaptureViewPort)>
 class CharacterCerebrateClient : public Cerebrate {
 public:
     struct Info {
@@ -22,7 +23,11 @@ public:
         Engine::GetInstance().Destroy(possessed_);
     }
 
-    virtual void ForcePossessedExecuteCommand(std::string_view serialized_command) const override {
+    void* GetPossessed() const override {
+        return possessed_;
+    }
+
+    void ForcePossessedExecuteCommand(std::string_view serialized_command) const override {
         if (serialized_command.size() < sizeof(Info)) {
             return;
         }
@@ -35,11 +40,20 @@ public:
     }
 
 
-    virtual std::string SerializeInfo() override {
+    std::string SerializeInfo() override {
         return {};
     }
 
-    virtual void UsePossessedApi(std::string_view serialized_command) const {} // TODO
+    void UsePossessedApi(std::string_view serialized_command) const {
+        for (auto command : serialized_command) {
+            switch (command) {
+                case CharacterCommands::COMMAND_CAPTURE_VIEWPORT: {
+                    possessed_->CaptureViewPort();
+                    break;
+                }
+            }
+        }
+    }
 
 protected:
     TPawn* possessed_;

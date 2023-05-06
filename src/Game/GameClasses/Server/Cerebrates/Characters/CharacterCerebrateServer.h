@@ -20,9 +20,13 @@ public:
 
     CharacterCerebrateServer(TPawn* pawn_to_possess) : Cerebrate(TPawn::kTypeId), possessed_(pawn_to_possess) {}
 
-    virtual ~CharacterCerebrateServer() = default;
+    ~CharacterCerebrateServer() override = default;
 
-    virtual void ForcePossessedExecuteCommand(std::string_view serialized_command) const override {
+    void* GetPossessed() const override {
+        return possessed_;
+    }
+
+    void ForcePossessedExecuteCommand(std::string_view serialized_command) const override {
         if (serialized_command.size() < MINIMAL_INPUT_SIZE) {
             return;
         }
@@ -33,7 +37,7 @@ public:
         possessed_->Move(input_vector * possessed_->GetSpeed());
     }
 
-    virtual std::string SerializeInfo() override {
+    std::string SerializeInfo() override {
         Info actual_info;
         actual_info.current_health = possessed_->GetHealth();
         actual_info.current_pos = possessed_->GetPosition();
@@ -42,7 +46,7 @@ public:
         return output;
     }
 
-    virtual void UsePossessedApi(std::string_view serialized_command) const {} // TODO
+    void UsePossessedApi(std::string_view serialized_command) const {} // TODO
 
 protected:
     TPawn* possessed_;
