@@ -11,9 +11,6 @@ public:
 
     ~Render();
 private:
-    int a_ = 1;
-
-private:
     Render();
     Render(const Render&) = delete;
     Render& operator=(const Render&) = delete;

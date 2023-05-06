@@ -17,8 +17,9 @@
 
 int main(int argc, char *argv[])
 {
-    BasicSprite* image = new BasicSprite("../RecourcesForTesting/soome.png", {10, -20}, 100, 100);
-    Render::GetInstance().AddToRender(new PersistentObject(), image);
+    auto image_ptr = new PersistentObject();
+    BasicSprite* image = new BasicSprite("../RecourcesForTesting/soome.png", {0, 0}, 100, 100);
+    Render::GetInstance().AddToRender(image_ptr, image);
 
     BasicSprite* back = new BasicSprite("../RecourcesForTesting/back.jpeg", {0, 0}, 1000, 700, IVisibleObject::RenderLayers::BaseLayer);
     Render::GetInstance().AddToRender(new PersistentObject(), back);
@@ -29,6 +30,9 @@ int main(int argc, char *argv[])
     guy->ChangeRenderLogic([guy](QPainter* painter){
         DrawAnimatedImageHelper(guy, guy->GetPosition(), 90).Paint(painter);
     });
+
+    
+    Render::GetInstance().SetCameraOn(image_ptr);
     
     MyTime time;
     int counter = 0;
@@ -45,6 +49,7 @@ int main(int argc, char *argv[])
 
         time.ResetTime();
         Render::GetInstance().RenderAll();
+        // image_ptr->Translate({1, 1});
         image->Translate({1, 1});
         EventHandler::GetInstance().TryExecuteAll();
     }

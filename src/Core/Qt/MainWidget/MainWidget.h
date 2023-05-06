@@ -16,6 +16,9 @@ public:
     void AddToRender(const GameObject *game_object, IVisibleObject *vis_obj);
     void RemoveFromRender(const GameObject *vis_obj);
 
+    void SetCameraOn(const GameObject *object);
+    Position GetCameraPosition() const;
+
     ~TMainWidget() = default;
 
 protected:
@@ -24,4 +27,5 @@ protected:
 private:
     std::map<IVisibleObject::RenderLayers, std::deque<IVisibleObject*>> layer_to_object_;
     std::unordered_map<const GameObject*, IVisibleObject*> objects_;
+    const GameObject* objects_to_follow_ = nullptr;
 };

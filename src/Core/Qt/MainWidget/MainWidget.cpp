@@ -28,7 +28,14 @@ void TMainWidget::RemoveFromRender(const GameObject *vis_obj) {
 void TMainWidget::paintEvent(QPaintEvent *event) {
     QPainter painter;
     painter.begin(this);
-    painter.translate(360, 270);
+    painter.translate(360, 270); /* Fix layter, conflicts with prev impl */
+
+    /* Translate on camera */
+    if (objects_to_follow_) {
+        auto coords = objects_to_follow_->GetPosition().GetCoordinates();
+        painter.translate(-coords.first, coords.second);
+    }
+
     painter.setRenderHint(QPainter::Antialiasing);
 
     for (const auto& [layer, vis_objects]: layer_to_object_) {
@@ -39,3 +46,10 @@ void TMainWidget::paintEvent(QPaintEvent *event) {
     painter.end();
 }
 
+void TMainWidget::SetCameraOn(const GameObject *object) {
+    objects_to_follow_ = object;
+}
+
+Position TMainWidget::GetCameraPosition() const {
+    return objects_to_follow_->GetPosition();
+}
