@@ -4,7 +4,8 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <QPainter>
-#include "Helpers/CommonHelpers/DrawRotatedImageHelper.h"
+#include "Helpers/CommonHelpers/DrawStaticImageHelper.h"
+#include "Helpers/CommonHelpers/DrawAnimatedImageHelper.h"
 #include "MainWidget/MainWidget.h"
 #include "PaintTemplates/AnimatedSprite.h"
 #include "PaintTemplates/BasicSprite.h"
@@ -28,10 +29,11 @@ int main(int argc, char *argv[])
 
     AnimatedSprite* guy = new AnimatedSprite("../RecourcesForTesting/guuy.png", {-20, 0}, 300, 300, 25, 3, false);
     main_window->AddToRender(new PersistentObject(), guy);
-    // guy->ChangeRenderLogic([guy](QPainter* painter){
-        
-    // });
 
+    guy->ChangeRenderLogic([guy](QPainter* painter){
+        DrawAnimatedImageHelper(guy, guy->GetPosition(), 90).Paint(painter);
+    });
+    
     MyTime time;
     while (true) {
         if (time.EvaluateTime() < static_cast<double>(1) / 60) {
