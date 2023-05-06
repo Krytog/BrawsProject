@@ -6,7 +6,7 @@
 #include"../../PaintTemplates/AnimatedSprite.h"
 #include <memory>
 
-class DrawAnimatedImageHelper : public IBasicHelper {
+class DrawAnimatedImageHelper final: public IBasicHelper {
 public:
     DrawAnimatedImageHelper(AnimatedSprite* image, const Position&, const size_t& clockwise_angle = 0);
 

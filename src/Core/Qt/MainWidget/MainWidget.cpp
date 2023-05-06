@@ -2,14 +2,12 @@
 #include <qopenglwidget.h>
 #include <QTimer>
 #include <deque>
-
-// constexpr static size_t kWindowWidth = 720;
-// constexpr static size_t kWindowHeight = 540;
+#include <iostream>
+#include <QKeyEvent>
 
 TMainWidget::TMainWidget(QWidget* parent): QOpenGLWidget(parent) {
-    // setFixedSize(kWindowWidth, kWindowHeight);
+    setFixedSize(kWindowWidth, kWindowHeight);
     setAutoFillBackground(true);
-    setFixedSize(720, 540);
 }
 
 void TMainWidget::AddToRender(const GameObject *game_object, IVisibleObject *vis_obj) {
@@ -28,7 +26,7 @@ void TMainWidget::RemoveFromRender(const GameObject *vis_obj) {
 void TMainWidget::paintEvent(QPaintEvent *event) {
     QPainter painter;
     painter.begin(this);
-    painter.translate(360, 270); /* Fix layter, conflicts with prev impl */
+    painter.translate(kWindowWidth / 2, kWindowHeight / 2);
 
     /* Translate on camera */
     if (objects_to_follow_) {
@@ -39,8 +37,8 @@ void TMainWidget::paintEvent(QPaintEvent *event) {
     painter.setRenderHint(QPainter::Antialiasing);
 
     for (const auto& [layer, vis_objects]: layer_to_object_) {
-        for (const auto& obj: vis_objects) {
-            obj->RenderIt(&painter);
+        for (const auto& object: vis_objects) {
+            object->RenderIt(&painter);
         }
     }
     painter.end();
@@ -51,5 +49,37 @@ void TMainWidget::SetCameraOn(const GameObject *object) {
 }
 
 Position TMainWidget::GetCameraPosition() const {
-    return objects_to_follow_->GetPosition();
+    if (objects_to_follow_) {
+        return objects_to_follow_->GetPosition();
+    }
+    return {0, 0};
+}
+
+void TMainWidget::keyPressEvent(QKeyEvent *event) {
+    if (event->key() == Qt::Key_A) {
+        key_buffer_.emplace_back(InputSystem::KeyboardToken{'A'});
+    } else if (event->key() == Qt::Key_W) {
+        key_buffer_.emplace_back(InputSystem::KeyboardToken{'W'});
+    } else if (event->key() == Qt::Key_S) {
+        key_buffer_.emplace_back(InputSystem::KeyboardToken{'S'});
+    } else if (event->key() == Qt::Key_D) {
+        key_buffer_.emplace_back(InputSystem::KeyboardToken{'D'});
+    } else if (event->key() == Qt::Key_Q) {
+        key_buffer_.emplace_back(InputSystem::KeyboardToken{'Q'});
+    } else if (event->key() == Qt::Key_E) {
+        key_buffer_.emplace_back(InputSystem::KeyboardToken{'E'});
+    }
+    QWidget::keyPressEvent(event);
+}
+
+void TMainWidget::mouseMoveEvent(QMouseEvent *event) {
+    mouse_pressed_ |= (event->button() == Qt::LeftButton);
+}
+
+InputSystem::InputTokensArray TMainWidget::GetKeyBoardInput() {
+    return std::move(key_buffer_);
+}
+
+bool TMainWidget::OnMousePressed() const {
+    return mouse_pressed_;
 }

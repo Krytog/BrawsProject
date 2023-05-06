@@ -1,4 +1,6 @@
 #include "Engine.h"
+#include "MyTime.h"
+#include <iostream>
 
 Engine& Engine::GetInstance() {
     static Engine instance;
@@ -51,7 +53,7 @@ Engine::Engine()
     : collision_system_(CollisionSystem::GetInstance()),
 #ifndef __SERVER_ENGINE_MODE__
       render_(Render::GetInstance()),
-      input_system_(InputSystem::GetInstance<DefaultInputSystem>(*render_.GetWindowPointer())),
+      input_system_(InputSystem::GetInstance<DefaultInputSystem>()),
 #endif
       event_handler_(EventHandler::GetInstance()),
       delay_queue_(DelayQueue::GetInstance()),
@@ -64,14 +66,7 @@ void Engine::ReadNewInput() {
 }
 
 InputSystem::InputTokensArray Engine::GetInput() const {
-    auto raw_input = input_system_->GetInput();
-    auto mouse_token_variant = *(raw_input.begin());
-    auto mouse_token = std::get<InputSystem::MouseToken>(mouse_token_variant);  //Make sure that MouseToken is the first token
-    auto window_size = render_.GetWindowPointer()->getSize();
-    Vector2D difference = Vector2D(static_cast<double>(window_size.x) / 2, static_cast<double>(window_size.y) / 2) - mouse_token.position.GetCoordinatesAsVector2D();
-    Position global_mouse_pos(render_.GetCameraPosition().GetCoordinatesAsVector2D() - difference);
-    *(raw_input.begin()) = InputSystem::MouseToken{mouse_token.key, global_mouse_pos};
-    return raw_input;
+    return input_system_->GetInput();
 }
 #endif
 
@@ -137,17 +132,12 @@ void Engine::Update() {
     TryExecuteDelayedCallbacks();
     TryExecuteEvents();
 #ifndef __SERVER_ENGINE_MODE__
+    MyTime time;
     RenderAll();
+    std::cout << time.EvaluateTime() * 1000 << std::endl;
 #endif
     IncreaseTicksCount();
 }
-
-#ifndef __SERVER_ENGINE_MODE__
-void Engine::RenderSwitch(GameObject *game_object, VisibleObject *new_visible_object) {
-    render_.RemoveFromRender(game_object);
-    render_.AddToRender(game_object, new_visible_object);
-}
-#endif
 
 bool Engine::IsActive() const {
     return is_active_;

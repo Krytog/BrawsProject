@@ -3,7 +3,7 @@
 #include <qapplication.h>
 #include "MainWidget.h"
 
-class Render: public TMainWidget {
+class Render final: public TMainWidget {
 public:
 
     static Render& GetInstance();

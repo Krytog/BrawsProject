@@ -3,11 +3,8 @@
 
 #include "BotInputSystem.h"
 
-
-BotInputSystem::BotInputSystem(const sf::Window& window) : InputSystem(window) {}
-
-BotInputSystem* BotInputSystem::InitInstance(const sf::Window& window) {
-    static BotInputSystem instance(window);
+BotInputSystem* BotInputSystem::InitInstance() {
+    static BotInputSystem instance;
     return &instance;
 }
 

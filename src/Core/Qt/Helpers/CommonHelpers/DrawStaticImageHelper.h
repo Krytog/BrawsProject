@@ -6,7 +6,7 @@
 #include"../../PaintTemplates/BasicSprite.h"
 #include <memory>
 
-class DrawStaticImageHelper : public IBasicHelper {
+class DrawStaticImageHelper final: public IBasicHelper {
 public:
 
     DrawStaticImageHelper(BasicSprite* image, const Position& pos, const size_t& clockwise_angle = 0);

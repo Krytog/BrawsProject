@@ -1,7 +1,8 @@
 #include "InputSystem.h"
-#include <SFML/Window.hpp>
-
-InputSystem::InputSystem(const sf::Window& window): window_(window) {}
+#include "Qt/MainWidget/MainWidget.h"
+#include "Qt/MainWidget/Render.h"
+#include <qcursor.h>
+#include <qt5/QtCore/qnamespace.h>
 
 InputSystem::~InputSystem() = default;
 
@@ -11,11 +12,8 @@ InputSystem::InputTokensArray InputSystem::GetInput() const {
 
 /* Default InputSystem */
 
-KeyboardInputSystem::KeyboardInputSystem(const sf::Window& window) : InputSystem(window) {
-}
-
-KeyboardInputSystem* KeyboardInputSystem::InitInstance(const sf::Window& window) {
-    static KeyboardInputSystem instance(window);
+KeyboardInputSystem* KeyboardInputSystem::InitInstance() {
+    static KeyboardInputSystem instance;
     return &instance;
 }
 
@@ -25,7 +23,7 @@ void KeyboardInputSystem::ReadNewInput() {
 
     uint8_t mouse_key = 0;
     static bool pressed = false;
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+    if (Render::GetInstance().OnMousePressed()) {
         if (!pressed) {
             pressed = true;
             mouse_key = 1;
@@ -34,26 +32,9 @@ void KeyboardInputSystem::ReadNewInput() {
         pressed = false;
     }
 
-    auto mouse_pos = sf::Mouse::getPosition(window_);
-    auto corrected_y = window_.getSize().y - mouse_pos.y;
-    input_tokens_.emplace_back(MouseToken{mouse_key, Position(mouse_pos.x, corrected_y)});
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        input_tokens_.emplace_back(KeyboardToken{'D'});
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        input_tokens_.emplace_back(KeyboardToken{'A'});
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        input_tokens_.emplace_back(KeyboardToken{'W'});
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        input_tokens_.emplace_back(KeyboardToken{'S'});
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
-        input_tokens_.emplace_back(KeyboardToken{'Q'});
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
-        input_tokens_.emplace_back(KeyboardToken{'E'});
-    }
+    input_tokens_ = Render::GetInstance().GetKeyBoardInput();
+    auto cursor_pos =  Render::GetInstance().mapFromGlobal(QCursor::pos());
+    Position cursor_local_pos = {cursor_pos.rx() - (kWindowWidth / 2), (kWindowHeight / 2) - cursor_pos.ry()};
+    cursor_local_pos.Translate(Render::GetInstance().GetCameraPosition().GetCoordinatesAsVector2D());
+    input_tokens_.insert(input_tokens_.begin(), MouseToken{mouse_key, cursor_local_pos});
 }

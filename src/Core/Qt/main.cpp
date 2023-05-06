@@ -1,3 +1,4 @@
+#include <qcursor.h>
 #include <qimage.h>
 #include <qnumeric.h>
 #include <QApplication>
@@ -52,5 +53,7 @@ int main(int argc, char *argv[])
         // image_ptr->Translate({1, 1});
         image->Translate({1, 1});
         EventHandler::GetInstance().TryExecuteAll();
+
+        std::cout << Render::GetInstance().mapFromGlobal(QCursor::pos()).rx() << " " << Render::GetInstance().mapFromGlobal(QCursor::pos()).ry() << "\n";
     }
 }

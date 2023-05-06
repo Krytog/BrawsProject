@@ -1,19 +1,26 @@
+set(CMAKE_AUTOMOC ON)
+find_package(Qt5 COMPONENTS Core Gui Widgets OpenGL REQUIRED)
+
 add_library(core_lib
         Collider.cpp
         Colliders.cpp
         DelayQueue.cpp
         EventHandler.cpp
         Position.cpp
-        Sprites.cpp
         Vector2D.cpp
-        Camera.cpp
-        Sprites.cpp
         CollisionSystem.cpp
         GameObject.cpp
         InputSystem.cpp
         MyTime.cpp
-        Render.cpp
         Engine.cpp
-        Canvas.cpp
         Observer.cpp
-        Tools/BasicGeometry.cpp)
+        Tools/BasicGeometry.cpp
+        Qt/PaintTemplates/AnimatedSprite.cpp
+        Qt/PaintTemplates/BasicSprite.cpp
+        Qt/PaintTemplates/VisibleObject.cpp
+        Qt/MainWidget/MainWidget.cpp
+        Qt/MainWidget/Render.cpp
+        Qt/Helpers/CommonHelpers/DrawAnimatedImageHelper.cpp
+        Qt/Helpers/CommonHelpers/DrawStaticImageHelper.cpp)
+
+target_link_libraries(core_lib Qt5::Widgets Qt5::OpenGL Qt5::Core Qt5::Gui)

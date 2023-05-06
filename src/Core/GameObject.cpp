@@ -7,18 +7,18 @@ GameObject::GameObject()
       tag_("__NULL") {
 }
 
-GameObject::GameObject(Position* position, Collider* collider, VisibleObject* visible_object,
+GameObject::GameObject(Position* position, Collider* collider, IVisibleObject* visible_object,
                        std::string_view tag)
     : position_(std::unique_ptr<Position>(position)),
       collider_(std::unique_ptr<Collider>(collider)),
-      visible_object_(std::unique_ptr<VisibleObject>(visible_object)),
+      visible_object_(std::unique_ptr<IVisibleObject>(visible_object)),
       tag_(tag) {
 }
 
 GameObject::GameObject(const GameObject::ArgPack& pack)
     : position_(std::unique_ptr<Position>(pack.position)),
       collider_(std::unique_ptr<Collider>(pack.collider)),
-      visible_object_(std::unique_ptr<VisibleObject>(pack.visible_object)),
+      visible_object_(std::unique_ptr<IVisibleObject>(pack.visible_object)),
       tag_(pack.tag) {
 }
 
@@ -58,7 +58,7 @@ Collider* GameObject::GetPointerToCollider() const {
     return collider_.get();
 }
 
-VisibleObject* GameObject::GetPointerToVisibleObject() const {
+IVisibleObject* GameObject::GetPointerToVisibleObject() const {
     return visible_object_.get();
 }
 
@@ -66,7 +66,7 @@ VisibleObject* GameObject::GetPointerToVisibleObject() const {
 
 PersistentObject::PersistentObject() = default;
 
-PersistentObject::PersistentObject(Position* position, Collider* collider, VisibleObject* visible_object,
+PersistentObject::PersistentObject(Position* position, Collider* collider, IVisibleObject* visible_object,
                                    std::string_view tag)
     : GameObject(position, collider, visible_object, tag) {
 }

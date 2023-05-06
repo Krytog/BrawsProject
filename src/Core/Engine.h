@@ -12,8 +12,9 @@
 #include "EventHandler.h"
 
 #ifndef __SERVER_ENGINE_MODE__
-#include "Render.h"
-#include "Sprites.h"
+#include "Qt/MainWidget/Render.h"
+#include "Qt/PaintTemplates/BasicSprite.h"
+#include "Qt/PaintTemplates/AnimatedSprite.h"
 #include "InputSystem.h"
 #endif
 
@@ -71,10 +72,6 @@ public:
     ///////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef __SERVER_ENGINE_MODE__
-
-    // Render
-    void RenderSwitch(GameObject* game_object, VisibleObject* new_visible_object);
-
     // Camera controls
     ///////////////////////////////////////////////////////////////////////////////////////
     void SetCameraOn(const GameObject* object);
@@ -89,7 +86,7 @@ public:
     // Switch InputSystem
     template <InputSystemDerived SomeInputSystem>
     void SwitchInputSystem() {
-        input_system_ = InputSystem::GetInstance<SomeInputSystem>(*render_.GetWindowPointer());
+        input_system_ = InputSystem::GetInstance<SomeInputSystem>();
     }
     ///////////////////////////////////////////////////////////////////////////////////////
 

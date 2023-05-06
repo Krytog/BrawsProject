@@ -1,6 +1,6 @@
 #pragma once
 
-#include "VisibleObject.h"
+#include "Qt/PaintTemplates/VisibleObject.h"
 #include "Position.h"
 #include "Collider.h"
 
@@ -12,12 +12,12 @@ public:
     struct ArgPack {
         Position* position;
         Collider* collider;
-        VisibleObject* visible_object;
+        IVisibleObject* visible_object;
         std::string_view tag;
     };
 
     GameObject();
-    GameObject(Position* position, Collider* collider, VisibleObject* visible_object, std::string_view tag);
+    GameObject(Position* position, Collider* collider, IVisibleObject* visible_object, std::string_view tag);
     GameObject(const ArgPack& pack);
 
     virtual void UpdatePosition(const Position& position);
@@ -30,14 +30,14 @@ public:
 
     Position* GetPointerToPosition() const;
     Collider* GetPointerToCollider() const;
-    VisibleObject* GetPointerToVisibleObject() const;
+    IVisibleObject* GetPointerToVisibleObject() const;
 
     virtual void OnUpdate() = 0;
 
 protected:
     std::unique_ptr<Position> position_;
     std::unique_ptr<Collider> collider_;
-    std::unique_ptr<VisibleObject> visible_object_;
+    std::unique_ptr<IVisibleObject> visible_object_;
     std::string_view tag_;
 };
 
@@ -46,7 +46,7 @@ protected:
 class PersistentObject : public GameObject {
 public:
     PersistentObject();
-    PersistentObject(Position* position, Collider* collider, VisibleObject* visible_object,
+    PersistentObject(Position* position, Collider* collider, IVisibleObject* visible_object,
                      std::string_view tag);
     PersistentObject(const ArgPack& pack);
     void OnUpdate() override;

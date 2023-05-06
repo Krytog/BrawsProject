@@ -4,9 +4,9 @@ class BotInputSystem : public InputSystem {
 public:
     void ReadNewInput() override;
 
-    static BotInputSystem* InitInstance(const sf::Window&);
+    static BotInputSystem* InitInstance();
 private:
-    explicit BotInputSystem(const sf::Window&);
+    BotInputSystem() = default;
     BotInputSystem(const BotInputSystem&) = delete;
     BotInputSystem& operator=(const BotInputSystem&) = delete;
 };

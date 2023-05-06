@@ -1,6 +1,5 @@
 #pragma once
 
-#include <qpainter.h>
 #include "../../Position.h"
 #include <QPainter>
 #include <functional>

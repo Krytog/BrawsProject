@@ -1,3 +1,6 @@
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+find_package(Qt5 COMPONENTS Core Gui Widgets OpenGL REQUIRED)
+
 add_subdirectory("Core")
 add_subdirectory("Game")
 add_subdirectory("SwarmSystem")
@@ -25,7 +28,7 @@ target_include_directories(Test PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_include_directories(Client PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_include_directories(Server PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 
-# SFML
-target_link_libraries(Test PRIVATE sfml-graphics sfml-audio sfml-system sfml-window)
-target_link_libraries(Client PRIVATE sfml-graphics sfml-audio sfml-system sfml-window)
-target_link_libraries(Server PRIVATE sfml-graphics sfml-audio sfml-system sfml-window)
+# Qt
+target_link_libraries(Test PRIVATE Qt5::Widgets Qt5::OpenGL Qt5::Core Qt5::Gui)
+target_link_libraries(Client PRIVATE Qt5::Widgets Qt5::OpenGL Qt5::Core Qt5::Gui)
+target_link_libraries(Server PRIVATE Qt5::Widgets Qt5::OpenGL Qt5::Core Qt5::Gui)
