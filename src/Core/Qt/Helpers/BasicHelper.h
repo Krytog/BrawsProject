@@ -1,7 +1,9 @@
 #pragma once
 
+#include <concepts>
 #include <qpainter.h>
 #include <QPainter>
+#include "../PaintTemplates/VisibleObject.h"
 
 class IBasicHelper {
 public:

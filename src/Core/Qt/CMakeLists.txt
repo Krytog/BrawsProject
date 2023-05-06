@@ -13,9 +13,9 @@ add_executable(QtTest
     PaintTemplates/BasicSprite.cpp
     PaintTemplates/AnimatedSprite.cpp
     PaintTemplates/VisibleObject.cpp
-    MainWidget/MainWidget.cpp
     Helpers/CommonHelpers/DrawStaticImageHelper.cpp
-    Helpers/CommonHelpers/DrawRotatedImageHelper.cpp
+    Helpers/CommonHelpers/DrawAnimatedImageHelper.cpp
+    MainWidget/MainWidget.cpp
     ../GameObject.cpp
     ../Position.cpp
     ../Vector2D.cpp

@@ -1,9 +1,8 @@
 #include "AnimatedSprite.h"
+#include "../Helpers/CommonHelpers/DrawAnimatedImageHelper.h"
 #include <algorithm>
 #include <cstddef>
 #include "VisibleObject.h"
-#include "../Helpers/CommonHelpers/DrawStaticImageHelper.h"
-#include "../Helpers/CommonHelpers/DrawRotatedImageHelper.h"
 
 AnimatedSprite::AnimatedSprite(std::string_view image_src, const Position& position, const size_t& width,
                                const size_t& height, const size_t& ticks_per_frame,
@@ -17,8 +16,7 @@ AnimatedSprite::AnimatedSprite(std::string_view image_src, const Position& posit
 
 void AnimatedSprite::RenderItCustom(QPainter* painter) {
     Update(); /* Refactor using Events later */
-    DrawStaticImageHelper(this, pos_, Position(cur_frame_ * (this->width() / frames_count_), 0), this->width() / frames_count_, this->height())
-        .Paint(painter);
+    DrawAnimatedImageHelper(this, pos_).Paint(painter);
 }
 
 void AnimatedSprite::UpdateSrc(std::string_view image_src, const size_t& ticks_per_frame,

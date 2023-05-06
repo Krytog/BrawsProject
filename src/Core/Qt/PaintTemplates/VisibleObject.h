@@ -20,6 +20,10 @@ public:
     RenderLayers GetLayer() const;
     virtual bool IsDisplayed() const = 0;
 
+    Position GetPosition() const { 
+        return pos_;
+    }
+
     virtual ~IVisibleObject() = default;
 
 protected:
@@ -44,5 +48,5 @@ public:
 protected:
     virtual void RenderItCustom(QPainter* painter) = 0;
 
-    std::function<void(const QPainter*)> render_logic_;
+    std::function<void(QPainter*)> render_logic_;
 };

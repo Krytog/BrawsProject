@@ -1,12 +1,14 @@
 #pragma once
 
 #include "VisibleObject.h"
+#include "../Helpers/BasicHelper.h"
 
 #include <qimage.h>
 #include <QImage>
 #include <string_view>
 
 class AnimatedSprite: public IFlexibleVisibleObject, public QImage {
+    friend class DrawAnimatedImageHelper;
 public:
     AnimatedSprite(std::string_view image_src, const Position& position,
         const size_t& width, const size_t& height, const size_t& ticks_per_frame, const size_t& frames_count,
