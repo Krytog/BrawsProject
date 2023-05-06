@@ -4,7 +4,8 @@ project(QtTest)
 set(CMAKE_CXX_STANDARD 20)
 
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_PREFIX_PATH "/usr/local/opt/qt@5")
+set(CMAKE_PREFIX_PATH "/usr/include/x86_64-linux-gnu/qt5")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(Qt5 COMPONENTS Core Gui Widgets OpenGL REQUIRED)
 find_package(SFML 2.5 COMPONENTS graphics audio window REQUIRED)
 
@@ -20,6 +21,7 @@ add_executable(QtTest
     ../Position.cpp
     ../Vector2D.cpp
     ../MyTime.cpp
+    ../EventHandler.cpp
 )
 
 target_link_libraries(QtTest PRIVATE Qt5::Widgets Qt5::OpenGL Qt5::Core Qt5::Gui

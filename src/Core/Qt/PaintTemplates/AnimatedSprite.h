@@ -2,6 +2,7 @@
 
 #include "VisibleObject.h"
 #include "../Helpers/BasicHelper.h"
+#include "../../EventHandler.h"
 
 #include <qimage.h>
 #include <QImage>
@@ -18,19 +19,18 @@ public:
     void UpdateSrc(std::string_view image_src, const size_t& ticks_per_frame, const size_t& frames_count);
     bool IsDisplayed() const override;
 
-    virtual ~AnimatedSprite() = default;
+    virtual ~AnimatedSprite();
 
 private:
     size_t frames_count_;
-    size_t cur_frame_ = 0;
+    size_t ticks_per_frame_;
     bool is_cycled_;
 
-    /* Refactor using Events later */
-    size_t ticks_per_frame_;
-    size_t cur_tick_ = 0;
+    size_t cur_frame_ = 0;
+    Event* animation_event_ = nullptr;
 
 private:
-    void Update();
+    void ResetAnimationEvent();
 
     void Scale(const size_t& width, const size_t& height);
 };

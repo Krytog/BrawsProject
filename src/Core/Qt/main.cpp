@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     BasicSprite* back = new BasicSprite("../RecourcesForTesting/back.jpeg", {0, 0}, 1000, 700, IVisibleObject::RenderLayers::BaseLayer);
     main_window->AddToRender(new PersistentObject(), back);
 
-    AnimatedSprite* guy = new AnimatedSprite("../RecourcesForTesting/guuy.png", {-20, 0}, 300, 300, 25, 3, false);
+    AnimatedSprite* guy = new AnimatedSprite("../RecourcesForTesting/guuy.png", {-20, 0}, 300, 300, 25, 3);
     main_window->AddToRender(new PersistentObject(), guy);
 
     guy->ChangeRenderLogic([guy](QPainter* painter){
@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
         time.ResetTime();
         main_window->update();
         image->Translate({1, 1});
+        EventHandler::GetInstance().TryExecuteAll();
     }
 
     app.exit();
