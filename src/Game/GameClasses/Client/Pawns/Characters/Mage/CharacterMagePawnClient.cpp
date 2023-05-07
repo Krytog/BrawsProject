@@ -33,7 +33,7 @@ void CharacterMagePawnClient::ReceiveDamage() {
 }
 
 void CharacterMagePawnClient::OnUpdate() {
-    std::cout << position_->GetCoordinates().first << " " << position_->GetCoordinates().second << std::endl;
+    //std::cout << position_->GetCoordinates().first << " " << position_->GetCoordinates().second << std::endl;
 }
 
 const size_t CharacterMagePawnClient::kTypeId = TypeId_Character_Mage;

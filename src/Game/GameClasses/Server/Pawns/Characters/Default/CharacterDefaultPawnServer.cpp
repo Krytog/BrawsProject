@@ -47,7 +47,7 @@ void CharacterDefaultPawnServer::Shoot(const Position &position) {
 }
 
 void CharacterDefaultPawnServer::OnUpdate() {
-    std::cout << "DEFAULT: " << position_->GetCoordinates().first << " " << position_->GetCoordinates().second << std::endl;
+    //std::cout << "DEFAULT: " << position_->GetCoordinates().first << " " << position_->GetCoordinates().second << std::endl;
 }
 
 const size_t CharacterDefaultPawnServer::kTypeId = TypeId_Character_Default;

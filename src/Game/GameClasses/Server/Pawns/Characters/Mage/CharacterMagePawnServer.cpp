@@ -47,7 +47,7 @@ void CharacterMagePawnServer::Shoot(const Position &position) {
 }
 
 void CharacterMagePawnServer::OnUpdate() {
-    std::cout << "Mage: " << position_->GetCoordinates().first << " " << position_->GetCoordinates().second << std::endl;
+    //std::cout << "Mage: " << position_->GetCoordinates().first << " " << position_->GetCoordinates().second << std::endl;
 }
 
 const size_t CharacterMagePawnServer::kTypeId = TypeId_Character_Mage;

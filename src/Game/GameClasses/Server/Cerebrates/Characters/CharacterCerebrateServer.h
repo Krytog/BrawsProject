@@ -47,7 +47,7 @@ public:
         static bool to_capture_viewport = true; // TODO: Make it the proper way
         if (to_capture_viewport) {
             output += CharacterCommands::COMMAND_CAPTURE_VIEWPORT;
-            to_capture_viewport = false;
+            to_capture_viewport = true; // :/
         }
         return output;
     }

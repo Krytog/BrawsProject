@@ -26,7 +26,7 @@ void ServerGameManagement::InitGameServer(std::vector<uint64_t>& players_id) {
     engine->CreateGameObjectByDefault<MapsDefaultServer>();
     for (size_t i = 0; i < players_id.size(); ++i) {
         GameObject* player_pawn;
-        if (i % 2 != 0) {
+        if (i % 2 == 0) {
             player_pawn = engine->CreateGameObjectByDefault<CharacterMagePawnServer>();
             Overmind::GetInstance().RegisterNewPlayer(players_id[i], dynamic_cast<CharacterMagePawnServer*>(player_pawn)->GetCerebrateId());
         } else {
