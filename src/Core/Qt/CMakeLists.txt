@@ -14,8 +14,10 @@ add_executable(QtTest
     PaintTemplates/BasicSprite.cpp
     PaintTemplates/AnimatedSprite.cpp
     PaintTemplates/VisibleObject.cpp
+    PaintTemplates/TextSprite.cpp
     Helpers/CommonHelpers/DrawStaticImageHelper.cpp
     Helpers/CommonHelpers/DrawAnimatedImageHelper.cpp
+    Helpers/CommonHelpers/DrawTextHelper.cpp
     MainWidget/MainWidget.cpp
     MainWidget/Render.cpp
     ../GameObject.cpp

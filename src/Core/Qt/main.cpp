@@ -12,6 +12,7 @@
 #include "PaintTemplates/AnimatedSprite.h"
 #include "PaintTemplates/BasicSprite.h"
 #include "../MyTime.h"
+#include "PaintTemplates/TextSprite.h"
 #include "PaintTemplates/VisibleObject.h"
 #include "MainWidget/Render.h"
 #include <iostream>
@@ -19,10 +20,10 @@
 int main(int argc, char *argv[])
 {
     auto image_ptr = new PersistentObject();
-    BasicSprite* image = new BasicSprite("../RecourcesForTesting/soome.png", {0, 0}, 100, 100);
+    BasicSprite* image = new BasicSprite("../RecourcesForTesting/soome.png", {0, 200}, 100, 100);
     Render::GetInstance().AddToRender(image_ptr, image);
 
-    BasicSprite* back = new BasicSprite("../RecourcesForTesting/back.jpeg", {0, 0}, 1000, 700, IVisibleObject::RenderLayers::BaseLayer);
+    BasicSprite* back = new BasicSprite("../RecourcesForTesting/back.jpeg", {0, 0}, 1000, 700, IVisibleObject::RenderLayers::BackGround);
     Render::GetInstance().AddToRender(new PersistentObject(), back);
 
     AnimatedSprite* guy = new AnimatedSprite("../RecourcesForTesting/guuy.png", {-20, 0}, 300, 300, 25, 3);
@@ -32,6 +33,8 @@ int main(int argc, char *argv[])
         DrawAnimatedImageHelper(guy, guy->GetPosition(), 90).Paint(painter);
     });
 
+    TextSprite* text = new TextSprite("Bebra", {-100, 60}, 100, 200);
+    Render::GetInstance().AddToRender(new PersistentObject(), text);
     
     Render::GetInstance().SetCameraOn(image_ptr);
     
@@ -44,7 +47,7 @@ int main(int argc, char *argv[])
 
         ++counter;
         if (counter == 30) {
-            BasicSprite* image = new BasicSprite("../RecourcesForTesting/soome.png", {10, -20}, 100, 100);
+            BasicSprite* image = new BasicSprite("../RecourcesForTesting/soome.png", {0, 0}, 100, 100);
             Render::GetInstance().AddToRender(new PersistentObject(), image);
         }
 
@@ -53,7 +56,5 @@ int main(int argc, char *argv[])
         // image_ptr->Translate({1, 1});
         image->Translate({1, 1});
         EventHandler::GetInstance().TryExecuteAll();
-
-        std::cout << Render::GetInstance().mapFromGlobal(QCursor::pos()).rx() << " " << Render::GetInstance().mapFromGlobal(QCursor::pos()).ry() << "\n";
     }
 }

@@ -43,6 +43,7 @@ void TMainWidget::paintEvent(QPaintEvent *event) {
             object->RenderIt(&painter);
         }
     }
+
     painter.end();
 }
 
