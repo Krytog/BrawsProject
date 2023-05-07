@@ -1,4 +1,5 @@
 #include "InputSystem.h"
+#include "Position.h"
 #include "Qt/MainWidget/MainWidget.h"
 #include "Qt/MainWidget/Render.h"
 #include <qcursor.h>
@@ -32,9 +33,10 @@ void KeyboardInputSystem::ReadNewInput() {
         pressed = false;
     }
 
-    input_tokens_ = Render::GetInstance().GetKeyBoardInput();
-    auto cursor_pos =  Render::GetInstance().mapFromGlobal(QCursor::pos());
-    Position cursor_local_pos = {cursor_pos.rx() - (kWindowWidth / 2), (kWindowHeight / 2) - cursor_pos.ry()};
-    cursor_local_pos.Translate(Render::GetInstance().GetCameraPosition().GetCoordinatesAsVector2D());
+    auto& window = Render::GetInstance();
+    input_tokens_ = window.GetKeyBoardInput();
+    auto cursor_pos =  window.mapFromGlobal(QCursor::pos());
+    Position cursor_local_pos = Position(cursor_pos.rx() - (kWindowWidth / 2), (kWindowHeight / 2) - cursor_pos.ry());
+    cursor_local_pos.Translate(window.GetCameraPosition().GetCoordinatesAsVector2D());
     input_tokens_.insert(input_tokens_.begin(), MouseToken{mouse_key, cursor_local_pos});
 }
