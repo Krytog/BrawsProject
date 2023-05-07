@@ -132,9 +132,7 @@ void Engine::Update() {
     TryExecuteDelayedCallbacks();
     TryExecuteEvents();
 #ifndef __SERVER_ENGINE_MODE__
-    MyTime time;
     RenderAll();
-    std::cout << time.EvaluateTime() * 1000 << std::endl;
 #endif
     IncreaseTicksCount();
 }
