@@ -2,7 +2,7 @@
 
 #include "Core/Engine.h"
 
-class IMovable : public virtual GameObject {
+class IMovable : public GameObject {
 public:
     void Move(const Vector2D& direction);
 };

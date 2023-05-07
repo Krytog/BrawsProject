@@ -13,28 +13,42 @@ int main() {
     Engine& engine = Engine::GetInstance();
     Overmind& overmind = Overmind::GetInstance();
     Communicator& communicator = Communicator::GetInstance();
-    Profiler& profiler = Profiler::GetInstance();
-    uint64_t id = communicator.RegUser();
-    ServerGameManagement::InitGameServer();
+    std::vector<uint64_t> players_id;
+    uint64_t player1 = communicator.RegUser();
+    uint64_t player2 = 0;
+    while (!player2) {
+        player2 = communicator.RegUser();
+    }
+    players_id.push_back(player1);
+    players_id.push_back(player2);
+    ServerGameManagement::InitGameServer(players_id);
     MyTime time;
     engine.SetActiveOn();
+    MyTime breakdown;
     while (engine.IsActive()) {
         if (time.EvaluateTime() < static_cast<double>(1) / 60) {
             continue;
         }
         time.ResetTime();
 
-        auto from_client = communicator.ReceiveFromClient(id);
-        ServerGameManagement::HandleInput(1, from_client);
+        for (auto player : players_id) {
+            auto from_client = communicator.ReceiveFromClient(player);
+            ServerGameManagement::HandleInput(player, from_client);
+        }
 
+        Profiler::GetInstance().StartEngineFrame();
         engine.Update();
+        Profiler::GetInstance().FinishEngineFrame();
 
-        overmind.UpdateCelebratesInfo();
-        auto data_for_client = overmind.GetCerebratesInfoSerialized();
+        Profiler::GetInstance().StartSwarmSystemFrame();
+        for (auto player : players_id) {
+            ServerGameManagement::PrepareAndSendDataToClient(player);
+        }
+        Profiler::GetInstance().FinishSwarmSystemFrame();
 
-        profiler.AddTimeMark(&data_for_client);
-
-        communicator.SendToClient(id, data_for_client);
+        if (breakdown.EvaluateTime() > 90) {
+            engine.SetActiveOff();
+        }
     }
     return 0;
 }

@@ -3,13 +3,37 @@
 #include <Core/Engine.h>
 #include <Game/GameClasses/Server/Pawns/Maps/Default/MapsDefaultServer.h>
 #include <Game/GameClasses/Server/Pawns/Characters/Default/CharacterDefaultPawnServer.h>
+#include <Game/GameClasses/Server/Pawns/Characters/Mage/CharacterMagePawnServer.h>
 #include <SwarmSystem/Overmind.h>
+#include <Infrastructure/Server/Communicator.h>
 
-void ServerGameManagement::InitGameServer() {
+#include <SwarmSystem/Profiler/Profiler.h>
+
+namespace {
+    bool IsSeenByPlayer(Cerebrate* from, Cerebrate* other) {
+        auto character_pawn = static_cast<CharacterPawnServer*>(from->GetPossessed());
+        auto game_object = static_cast<GameObject*>(other->GetPossessed());
+        auto collision_info = Engine::GetInstance().CheckPhysicalCollision(character_pawn->GetFieldOfView(), game_object);
+        if (collision_info.has_value()) {
+            return true;
+        }
+        return false;
+    }
+}
+
+void ServerGameManagement::InitGameServer(std::vector<uint64_t>& players_id) {
     Engine* engine = &Engine::GetInstance();
     engine->CreateGameObjectByDefault<MapsDefaultServer>();
-    auto player_pawn = engine->CreateGameObjectByDefault<CharacterDefaultPawnServer>();
-    Overmind::GetInstance().RegisterNewPlayer(1, dynamic_cast<CharacterDefaultPawnServer*>(player_pawn)->GetCerebrateId());
+    for (size_t i = 0; i < players_id.size(); ++i) {
+        GameObject* player_pawn;
+        if (i % 2 != 0) {
+            player_pawn = engine->CreateGameObjectByDefault<CharacterMagePawnServer>();
+            Overmind::GetInstance().RegisterNewPlayer(players_id[i], dynamic_cast<CharacterMagePawnServer*>(player_pawn)->GetCerebrateId());
+        } else {
+            player_pawn = engine->CreateGameObjectByDefault<CharacterDefaultPawnServer>();
+            Overmind::GetInstance().RegisterNewPlayer(players_id[i], dynamic_cast<CharacterDefaultPawnServer*>(player_pawn)->GetCerebrateId());
+        }
+    }
 }
 
 void ServerGameManagement::HandleInput(uint64_t player_id, std::string_view input) {
@@ -17,4 +41,13 @@ void ServerGameManagement::HandleInput(uint64_t player_id, std::string_view inpu
     if (cerebrate) {
         cerebrate->ForcePossessedExecuteCommand(input);
     }
+}
+
+void ServerGameManagement::PrepareAndSendDataToClient(uint64_t player_id) {
+    Overmind& overmind = Overmind::GetInstance();
+    auto player_cerebrate = overmind.GetPlayersCerebrate(player_id);
+    overmind.UpdateCelebratesInfo(player_cerebrate, IsSeenByPlayer);
+    auto data = overmind.GetCerebratesInfoSerialized();
+    Profiler::GetInstance().AddTimeMark(&data);
+    Communicator::GetInstance().SendToClient(player_id, data);
 }

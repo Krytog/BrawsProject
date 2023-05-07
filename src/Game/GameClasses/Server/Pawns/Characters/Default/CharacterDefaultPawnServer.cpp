@@ -33,6 +33,7 @@ CharacterDefaultPawnServer::CharacterDefaultPawnServer(const CharacterPawnServer
     collider_ = std::make_unique<CircleCollider>(*position_, COLLIDER_RADIUS);
     visible_object_ = nullptr;
     tag_ = TAGS_CHARACTER_Default;
+    CharacterPawnServer::UpdatePosition(position);
 }
 
 CharacterDefaultPawnServer::~CharacterDefaultPawnServer() {
@@ -44,7 +45,7 @@ void CharacterDefaultPawnServer::Shoot(const Position &position) {
 }
 
 void CharacterDefaultPawnServer::OnUpdate() {
-    //Translate(Vector2D(2, 2));
+    std::cout << "DEFAULT: " << position_->GetCoordinates().first << " " << position_->GetCoordinates().second << std::endl;
 }
 
 const size_t CharacterDefaultPawnServer::kTypeId = TypeId_Character_Default;

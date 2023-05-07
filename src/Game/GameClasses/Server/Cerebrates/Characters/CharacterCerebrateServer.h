@@ -4,7 +4,8 @@
 #include <Core/Engine.h>
 #include <SwarmSystem/Serializer.h>
 #include <Core/Tools/Concepts.h>
-#include <Game/Tools/ControllerTools.cpp>
+#include "Game/GameClasses/Server/ParsingUtilities/ControllerTools.h"
+#include <Game/GameClasses/CommandsList.h>
 
 enum {
     MINIMAL_INPUT_SIZE = sizeof(Position) + 1
@@ -34,7 +35,7 @@ public:
         size_t pos_bytes = Serializer::Deserialize(aim_pos, serialized_command.substr(0, sizeof(aim_pos)));
         uint8_t mouse_key = serialized_command[pos_bytes];
         Vector2D input_vector = ControllerTools::ResultVector(serialized_command.substr(pos_bytes + 1, std::string_view::npos));
-        possessed_->Move(input_vector * possessed_->GetSpeed());
+        possessed_->Move(input_vector * possessed_->GetSpeed()); // TODO: the pawn should do the multiplication itself
     }
 
     std::string SerializeInfo() override {
@@ -43,6 +44,11 @@ public:
         actual_info.current_pos = possessed_->GetPosition();
         std::string output;
         Serializer::Serialize(actual_info, &output);
+        static bool to_capture_viewport = true; // TODO: Make it the proper way
+        if (to_capture_viewport) {
+            output += CharacterCommands::COMMAND_CAPTURE_VIEWPORT;
+            to_capture_viewport = false;
+        }
         return output;
     }
 

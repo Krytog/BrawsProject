@@ -4,6 +4,7 @@
 #include <Game/GameClasses/Client/Pawns/Maps/Default/MapsDefaultClient.h>
 #include <Game/GameClasses/Client/Cerebrates/Characters/CharacterCerebrateClient.h>
 #include <Game/GameClasses/Client/Pawns/Characters/Default/CharacterDefaultPawnClient.h>
+#include <Game/GameClasses/Client/Pawns/Characters/Mage/CharacterMagePawnClient.h>
 #include <SwarmSystem/Register.h>
 #include <SwarmSystem/TypeIdList.h>
 
@@ -15,6 +16,7 @@ void ClientGameManagement::InitGameClient() {
 void ClientGameManagement::InitRegistryForOvermind() {
     CerebrateRegistry& registry = CerebrateRegistry::GetInstance();
     registry.RegisterClass<CharacterCerebrateClient<CharacterDefaultPawnClient>>(TypeId_Character_Default);
+    registry.RegisterClass<CharacterCerebrateClient<CharacterMagePawnClient>>(TypeId_Character_Mage);
 }
 
 std::string ClientGameManagement::SerializeInput() {

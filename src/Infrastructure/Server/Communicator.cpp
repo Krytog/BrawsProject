@@ -58,6 +58,16 @@ int64_t Communicator::RegUser() {
         return 0;
     }
 
+    // temp trash
+
+    for (auto& [id, data] : register_) {
+        if (data.first->sin_port == cli_addr->sin_port) {
+            return 0;
+        }
+    }
+
+    //
+
     auto usr_id = GenId();
     char payload[sizeof(usr_id)];
     memcpy(payload, &usr_id, sizeof(usr_id));

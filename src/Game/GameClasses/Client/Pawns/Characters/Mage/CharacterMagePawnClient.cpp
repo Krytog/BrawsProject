@@ -31,7 +31,7 @@ void CharacterMagePawnClient::ReceiveDamage() {
 }
 
 void CharacterMagePawnClient::OnUpdate() {
-    Translate(Vector2D(-10, -10));
+    std::cout << position_->GetCoordinates().first << " " << position_->GetCoordinates().second << std::endl;
 }
 
 const size_t CharacterMagePawnClient::kTypeId = TypeId_Character_Mage;

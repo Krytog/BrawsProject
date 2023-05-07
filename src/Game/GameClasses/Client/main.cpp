@@ -14,7 +14,6 @@ int main() {
     Engine& engine = Engine::GetInstance();
     Overmind& overmind = Overmind::GetInstance();
     Communicator& communicator = Communicator::GetInstance();
-    Profiler& profiler = Profiler::GetInstance();
     communicator.RegOnServer();
     ClientGameManagement::InitGameClient();
     ClientGameManagement::InitRegistryForOvermind();
@@ -28,18 +27,18 @@ int main() {
         time.ResetTime();
 
         auto data = communicator.ReceiveFromServer();
-        {
-            auto time_mark = profiler.ExtractTimeMark(&data);
-            profiler.HandlePing(time_mark);
-        }
+        auto time_point = Profiler::GetInstance().ExtractTimeMark(&data);
+        Profiler::GetInstance().HandlePing(time_point);
+        std::chrono::duration<double> time_interval = std::chrono::steady_clock::now() - time_point;
+        std::cout << time_interval.count() * 1000 << "ms" << std::endl;
 
-        profiler.StartSwarmSystemFrame();
+        Profiler::GetInstance().StartSwarmSystemFrame();
         overmind.ForceCerebratesExecuteCommands(data);
-        profiler.FinishSwarmSystemFrame();
+        Profiler::GetInstance().FinishSwarmSystemFrame();
 
-        profiler.StartEngineFrame();
+        Profiler::GetInstance().StartEngineFrame();
         engine.Update();
-        profiler.FinishEngineFrame();
+        Profiler::GetInstance().FinishEngineFrame();
 
         auto for_server = ClientGameManagement::SerializeInput();
         communicator.SendToServer(for_server);

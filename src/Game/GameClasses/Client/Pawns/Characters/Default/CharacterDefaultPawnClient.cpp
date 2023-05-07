@@ -22,8 +22,6 @@ CharacterDefaultPawnClient::CharacterDefaultPawnClient(const Position &position)
     collider_ = std::make_unique<CircleCollider>(*position_, COLLIDER_RADIUS);
     visible_object_ = std::make_unique<StaticSprite>(*position_, SPRITE_WIDTH, SPRITE_HEIGHT, RES_PATH_CHARACTERS_DEFAULT, LEVELS::FIRST_USER_LEVEL);
     tag_ = TAGS_CHARACTER_Default;
-    /* if bot -> */ BotManagement::GetInstance().ObserveBot(this);
-    Engine::GetInstance().SetCameraOn(this);
 }
 
 void CharacterDefaultPawnClient::Shoot(const Position &position) {

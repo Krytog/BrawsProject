@@ -13,6 +13,8 @@ public:
     virtual void Shoot(const Position& position) = 0;
     virtual void ReceiveDamage() = 0;
 
+    void CaptureViewPort() const;
+
     double GetHealth() const;
     double GetDamage() const;
     double GetSpeed() const;

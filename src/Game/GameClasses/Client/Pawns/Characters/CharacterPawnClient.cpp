@@ -28,3 +28,7 @@ void CharacterPawnClient::SetDamage(double damage) {
 void CharacterPawnClient::SetSpeed(double speed) {
     speed_ = speed;
 }
+
+void CharacterPawnClient::CaptureViewPort() const {
+    Engine::GetInstance().SetCameraOn(this);
+}

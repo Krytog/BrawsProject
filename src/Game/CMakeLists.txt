@@ -1,18 +1,16 @@
 # client tools
 add_library(game_client_tools
         Tools/ClientGameManagement.cpp  # special for client
-        Tools/ControllerTools.cpp
         Tools/Decoy/ServerDecoy.cpp)
 # server tools
 add_library(game_server_tools
         Tools/ServerGameManagement.cpp  # special for server
-        Tools/ControllerTools.cpp
         Tools/Decoy/ServerDecoy.cpp)
 # test tools
 add_library(game_tools
         Tools/ClientGameManagement.cpp  # special for client
         Tools/ServerGameManagement.cpp  # special for server
-        Tools/ControllerTools.cpp)
+        )
 # game for client & server
 add_library(game_client
         GameClasses/Client/Pawns/Maps/Default/MapsDefaultClient.cpp
@@ -23,7 +21,9 @@ add_library(game_server
         GameClasses/Server/Pawns/Characters/CharacterPawnServer.cpp
         GameClasses/Server/Pawns/Characters/Default/CharacterDefaultPawnServer.cpp
         GameClasses/Server/Pawns/Interfaces/IMovable.cpp
-        GameClasses/Server/Pawns/Maps/Default/MapsDefaultServer.cpp)
+        GameClasses/Server/Pawns/Maps/Default/MapsDefaultServer.cpp
+        GameClasses/Server/Pawns/Characters/Mage/CharacterMagePawnServer.cpp
+        GameClasses/Server/ParsingUtilities/ControllerTools.cpp)
 
 target_link_libraries(game_client_tools game_client)
 target_link_libraries(game_server_tools game_server)

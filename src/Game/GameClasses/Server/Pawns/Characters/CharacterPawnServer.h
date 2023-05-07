@@ -14,9 +14,13 @@ public:
     CharacterPawnServer();
     CharacterPawnServer(const ArgPack& arg_pack);
     virtual ~CharacterPawnServer();
-    virtual void OnUpdate();
+
+    virtual void OnUpdate() override;
 
     virtual void Shoot(const Position& position) = 0;
+
+    virtual void Translate(const Vector2D& vector2d) override;
+    virtual void UpdatePosition(const Position& position) override;
 
     double GetHealth() const;
     double GetDamage() const;
@@ -27,9 +31,11 @@ public:
     void SetSpeed(double speed);
 
     size_t GetCerebrateId() const;
+    GameObject* GetFieldOfView() const;
 
 protected:
     size_t cerebrate_id;
+    GameObject* field_of_view_;
 
     double health_;
     double damage_;
