@@ -5,6 +5,8 @@
 #include <SwarmSystem/TypeIdList.h>
 #include <SwarmSystem/Overmind.h>
 
+#include <iostream>
+
 enum {
     START_X = -500,
     START_Y = -400,

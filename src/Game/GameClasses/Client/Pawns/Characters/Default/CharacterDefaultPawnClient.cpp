@@ -4,7 +4,8 @@
 #include <Game/Resources/ResourcesPaths.h>
 #include <SwarmSystem/TypeIdList.h>
 #include <Game/GameClasses/GameObjectTags.h>
-#include <BotAPI/BotManagement.h>
+
+#include <iostream>
 
 enum {
     START_X = 0,
@@ -20,7 +21,7 @@ CharacterDefaultPawnClient::CharacterDefaultPawnClient(const Position &position)
     auto pos = new Position(position);
     position_ = std::unique_ptr<Position>(pos);
     collider_ = std::make_unique<CircleCollider>(*position_, COLLIDER_RADIUS);
-    visible_object_ = std::make_unique<StaticSprite>(*position_, SPRITE_WIDTH, SPRITE_HEIGHT, RES_PATH_CHARACTERS_DEFAULT, LEVELS::FIRST_USER_LEVEL);
+    visible_object_ = std::make_unique<BasicSprite>(RES_PATH_CHARACTERS_DEFAULT, *position_, SPRITE_WIDTH, SPRITE_HEIGHT, IVisibleObject::RenderLayers::Objects);
     tag_ = TAGS_CHARACTER_Default;
 }
 
