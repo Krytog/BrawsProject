@@ -10,7 +10,7 @@ class DrawAnimatedImageHelper final: public IBasicHelper {
 public:
     DrawAnimatedImageHelper(AnimatedSprite* image, const Position&, const size_t& clockwise_angle = 0);
 
-    virtual void Paint(QPainter* painter) const override;
+    virtual void Paint(Painter* painter) const override;
 private:
     AnimatedSprite* image_;
     Position pos_;

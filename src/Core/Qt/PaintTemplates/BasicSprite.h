@@ -1,7 +1,6 @@
 #pragma once
 
 #include "VisibleObject.h"
-#include "../Helpers/BasicHelper.h"
 
 #include <qimage.h>
 #include <QImage>
@@ -13,7 +12,7 @@ public:
     BasicSprite(std::string_view image_src, const Position& position,
         const size_t& width, const size_t& height, const RenderLayers& layer = RenderLayers::CharactersLayer);
 
-    virtual void RenderIt(QPainter *painter) override;
+    virtual void RenderIt(Painter *painter) override;
     void UpdateSrc(std::string_view image_src);
     bool IsDisplayed() const override;
 

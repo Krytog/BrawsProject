@@ -15,7 +15,7 @@ public:
         const size_t& width, const size_t& height, const size_t& ticks_per_frame, const size_t& frames_count,
             bool is_cycled = true, const RenderLayers& layer = RenderLayers::CharactersLayer);
 
-    virtual void RenderItCustom(QPainter *painter) override;
+    virtual void RenderItCustom(Painter *painter) override;
     void UpdateSrc(std::string_view image_src, const size_t& ticks_per_frame, const size_t& frames_count);
     bool IsDisplayed() const override;
 

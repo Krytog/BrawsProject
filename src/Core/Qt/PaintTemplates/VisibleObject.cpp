@@ -19,7 +19,7 @@ void IFlexibleVisibleObject::SetDefaultLogic() {
     render_logic_ = nullptr;
 }
 
-void IFlexibleVisibleObject::RenderIt(QPainter *painter) {
+void IFlexibleVisibleObject::RenderIt(Painter *painter) {
     if (render_logic_) {
         render_logic_(painter);
         return;

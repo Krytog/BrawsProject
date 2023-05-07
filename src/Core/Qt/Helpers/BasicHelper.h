@@ -4,12 +4,13 @@
 #include <qpainter.h>
 #include <QPainter>
 #include "../PaintTemplates/VisibleObject.h"
+#include "../Painters/DummyPainter.h"
 
 class IBasicHelper {
 public:
     IBasicHelper() = default;
 
-    virtual void Paint(QPainter* painter) const = 0;
+    virtual void Paint(Painter* painter) const = 0;
 
     virtual ~IBasicHelper() = default;
 };

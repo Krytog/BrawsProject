@@ -11,7 +11,7 @@ public:
 
     DrawStaticImageHelper(BasicSprite* image, const Position& pos, const size_t& clockwise_angle = 0);
 
-    virtual void Paint(QPainter* painter) const override;
+    virtual void Paint(Painter* painter) const override;
 private:
     BasicSprite* image_;
     Position pos_;

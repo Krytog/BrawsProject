@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     AnimatedSprite* guy = new AnimatedSprite("../RecourcesForTesting/guuy.png", {-20, 0}, 300, 300, 25, 3);
     Render::GetInstance().AddToRender(new PersistentObject(), guy);
 
-    guy->ChangeRenderLogic([guy](QPainter* painter){
+    guy->ChangeRenderLogic([guy](Painter* painter){
         DrawAnimatedImageHelper(guy, guy->GetPosition(), 90).Paint(painter);
     });
 

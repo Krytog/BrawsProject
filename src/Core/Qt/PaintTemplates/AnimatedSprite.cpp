@@ -16,7 +16,7 @@ AnimatedSprite::AnimatedSprite(std::string_view image_src, const Position& posit
     ResetAnimationEvent();
 }
 
-void AnimatedSprite::RenderItCustom(QPainter* painter) {
+void AnimatedSprite::RenderItCustom(Painter* painter) {
     DrawAnimatedImageHelper(this, pos_).Paint(painter);
 }
 

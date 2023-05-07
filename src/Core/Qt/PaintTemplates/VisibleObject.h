@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../Position.h"
-#include <QPainter>
+#include "../Painters/DummyPainter.h"
 #include <functional>
 
 class IVisibleObject {
@@ -15,7 +15,7 @@ public:
     virtual void Translate(const Vector2D &vector2d);
     
     /* Не константный - можно будет менять свойства картинки(например цветовой канал) */
-    virtual void RenderIt(QPainter* painter) = 0;
+    virtual void RenderIt(Painter* painter) = 0;
     RenderLayers GetLayer() const;
     virtual bool IsDisplayed() const = 0;
 
@@ -41,11 +41,11 @@ public:
     }
 
     void SetDefaultLogic();
-    void RenderIt(QPainter* painter) override; /* Наследники должны переопределять кастомный рендеринг*/
+    void RenderIt(Painter* painter) override; /* Наследники должны переопределять кастомный рендеринг*/
     virtual bool IsDisplayed() const override = 0;
 
 protected:
-    virtual void RenderItCustom(QPainter* painter) = 0;
+    virtual void RenderItCustom(Painter* painter) = 0;
 
-    std::function<void(QPainter*)> render_logic_;
+    std::function<void(Painter*)> render_logic_;
 };

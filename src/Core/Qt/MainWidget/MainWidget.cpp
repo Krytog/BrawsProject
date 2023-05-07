@@ -1,4 +1,6 @@
 #include "MainWidget.h"
+#include "../Painters/QtPainter.h"
+
 #include <qopenglwidget.h>
 #include <QTimer>
 #include <deque>
@@ -24,7 +26,7 @@ void TMainWidget::RemoveFromRender(const GameObject *vis_obj) {
 }
 
 void TMainWidget::paintEvent(QPaintEvent *event) {
-    QPainter painter;
+    QtPainter painter;
     painter.begin(this);
     painter.translate(kWindowWidth / 2, kWindowHeight / 2);
 

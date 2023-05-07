@@ -12,7 +12,7 @@ BasicSprite::BasicSprite(std::string_view image_src, const Position& position,
     Scale(width, height);
 };
 
-void BasicSprite::RenderIt(QPainter *painter) {
+void BasicSprite::RenderIt(Painter *painter) {
     DrawStaticImageHelper(this, pos_).Paint(painter);
 }
 
