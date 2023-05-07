@@ -6,10 +6,18 @@
 
 class IVisibleObject {
 public:
-    enum RenderLayers { BaseLayer, TexturesLayer, CharactersLayer };
+    enum RenderLayers {
+        BackGround = 0,
+        Objects = 1,
+        Projectiles = 2,
+        Projectiles_extra = 3,
+        Effects = 4,
+        Effects_extra = 5,
+        UI = 6,
+        UI_extra = 7};
 public:
     IVisibleObject() = default;
-    IVisibleObject(const Position& position, const RenderLayers& layer = RenderLayers::CharactersLayer);
+    IVisibleObject(const Position& position, const RenderLayers& layer = RenderLayers::Objects);
 
     virtual void UpdatePosition(const Position &position);
     virtual void Translate(const Vector2D &vector2d);
@@ -33,7 +41,7 @@ protected:
 class IFlexibleVisibleObject: public IVisibleObject {
 public:
     IFlexibleVisibleObject() = default;
-    IFlexibleVisibleObject(const Position& position, const RenderLayers& layer = RenderLayers::CharactersLayer);
+    IFlexibleVisibleObject(const Position& position, const RenderLayers& layer = RenderLayers::Objects);
 
     template <typename Functor> /* Нахуячить проверок в стиле Ильи */
     void ChangeRenderLogic(Functor&& func) {
