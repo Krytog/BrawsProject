@@ -73,7 +73,7 @@ void TMainWidget::keyPressEvent(QKeyEvent *event) {
 }
 
 void TMainWidget::mouseMoveEvent(QMouseEvent *event) {
-    mouse_pressed_ |= (event->button() == Qt::LeftButton);
+    mouse_pressed_ = (event->button() == Qt::LeftButton);
 }
 
 InputSystem::InputTokensArray TMainWidget::GetKeyBoardInput() {
