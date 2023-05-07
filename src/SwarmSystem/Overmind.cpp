@@ -65,12 +65,13 @@ void Overmind::ForceCerebratesExecuteCommands(std::string_view serialized_comman
 
         if (cerebrates_.contains(id)) {
             if (cerebrates_.at(id)->GetType() != type_id) {
-                std::cout << "EXPECTED " << cerebrates_.at(id)->GetType() << " GOT " << type_id << std::endl;
+                std::cout << "AT " << id << " EXPECTED " << cerebrates_.at(id)->GetType() << " GOT " << type_id << std::endl;
                 throw std::runtime_error("SwarmSystem corrupted data: cerebrates type mismatch");
             }
             cerebrates_.at(id)->ForcePossessedExecuteCommand(
                 serialized_command.substr(beg + 2 + 3 * sizeof(size_t), cerebrate_info_size));
         } else {
+            std::cout << current_id_ << " CREATING AT INDEX " << id << " OF TYPE " << type_id << std::endl;
             auto new_cerebrate = CerebrateRegistry::GetInstance().GetCerebrate(type_id);
             if (new_cerebrate) {
                 cerebrates_[id] = new_cerebrate;

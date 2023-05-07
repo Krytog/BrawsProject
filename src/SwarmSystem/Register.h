@@ -13,9 +13,7 @@ template <typename T>
 class Factory : public IFactory {
 public:
     virtual Cerebrate* Create() override {
-        auto ptr = new T();
-        Overmind::GetInstance().RegisterNewCerebrate(ptr);
-        return ptr;
+        return new T();
     }
 
     ~Factory() = default;
