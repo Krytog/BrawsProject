@@ -1,7 +1,6 @@
 #pragma once
 
 #include <SwarmSystem/Cerebrate.h>
-#include <Core/Engine.h>
 #include <SwarmSystem/Serializer.h>
 #include <Core/Tools/Concepts.h>
 #include "Game/GameClasses/Server/ParsingUtilities/ControllerTools.h"

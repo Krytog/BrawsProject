@@ -31,4 +31,3 @@ target_include_directories(Server PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 # Qt
 target_link_libraries(Test PRIVATE Qt5::Widgets Qt5::OpenGL Qt5::Core Qt5::Gui)
 target_link_libraries(Client PRIVATE Qt5::Widgets Qt5::OpenGL Qt5::Core Qt5::Gui)
-target_link_libraries(Server PRIVATE Qt5::Widgets Qt5::OpenGL Qt5::Core Qt5::Gui)

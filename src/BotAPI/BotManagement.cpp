@@ -2,7 +2,7 @@
 #include <iostream>
 
 BotManagement::BotManagement() {
-    observer_ = dynamic_cast<Observer*>(Engine::GetInstance().CreateGameObject<Observer>());
+    observer_ = dynamic_cast<Observer*>(ClientEngine::GetInstance().CreateGameObject<Observer>());
 }
 
 BotManagement& BotManagement::GetInstance() {

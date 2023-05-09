@@ -1,10 +1,10 @@
 #pragma once
 
-#include "GameObject.h"
+#include "VisibleGameObject.h"
 #include "Colliders.h"
 #include "CollisionSystem.h"
 
-class Observer : public GameObject {
+class Observer : public VisibleGameObject {
 public:
     Observer();
 

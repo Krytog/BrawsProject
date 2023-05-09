@@ -1917,3 +1917,6 @@ auto erase_if(ankerl::unordered_dense::detail::table<Key, T, Hash, KeyEqual, All
 
 template <typename K, typename V>
 using FastHashMap = ankerl::unordered_dense::map<K, V>;
+
+template<typename K>
+using FastHashSet = ankerl::unordered_dense::set<K>;

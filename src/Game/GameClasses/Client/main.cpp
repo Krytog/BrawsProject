@@ -1,4 +1,4 @@
-#include <Core/Engine.h>
+#include <Core/ClientEngine.h>
 #include <Core/MyTime.h>
 #include <Game/Tools/ClientGameManagement.h>
 #include <SwarmSystem/Overmind.h>
@@ -10,7 +10,7 @@
 #include <iostream>
 
 int main() {
-    Engine& engine = Engine::GetInstance();
+    ClientEngine& engine = ClientEngine::GetInstance();
     Overmind& overmind = Overmind::GetInstance();
     Communicator& communicator = Communicator::GetInstance();
     communicator.RegOnServer();

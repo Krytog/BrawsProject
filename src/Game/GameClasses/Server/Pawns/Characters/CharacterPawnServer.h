@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Core/Engine.h>
+#include <Core/ServerEngine.h>
 #include <Game/GameClasses/Server/Pawns/Interfaces/IMovable.h>
 
 class CharacterPawnServer : public IMovable {

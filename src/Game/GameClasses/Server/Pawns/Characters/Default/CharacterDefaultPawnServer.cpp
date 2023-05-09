@@ -33,7 +33,6 @@ CharacterDefaultPawnServer::CharacterDefaultPawnServer(const CharacterPawnServer
     auto pos = new Position(position);
     position_ = std::unique_ptr<Position>(pos);
     collider_ = std::make_unique<CircleCollider>(*position_, COLLIDER_RADIUS);
-    visible_object_ = nullptr;
     tag_ = TAGS_CHARACTER_Default;
     CharacterPawnServer::UpdatePosition(position);
 }

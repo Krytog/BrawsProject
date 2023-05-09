@@ -1,9 +1,10 @@
 #include "Observer.h"
-#include "Engine.h"
+#include "ClientEngine.h"
 
 Observer::Observer()
-    : GameObject(ArgPack{.position = new Position(),
-                         .collider = new RectangleCollider(Position(), kWindowWidth, kWindowHeight, Collider::Technical)
+    : VisibleGameObject(ArgPack{.position = new Position(),
+                         .collider = new RectangleCollider(Position(), FIELD_OF_VIEW_WIDTH, FIELD_OF_VIEW_HEIGHT, Collider::Technical),
+                         .visible_object = nullptr  // Technical object
                          /* tag = ??? */}) {
 }
 
@@ -15,7 +16,7 @@ void Observer::Observe(GameObject* object_to_follow) {
 }
 
 CollisionSystem::CollisionsInfoArray Observer::GetScreenCollisions() {
-    return Engine::GetInstance().GetAllCollisions(object_to_follow_);
+    return ClientEngine::GetInstance().GetAllCollisions(object_to_follow_);
 }
 
 void Observer::OnUpdate() {

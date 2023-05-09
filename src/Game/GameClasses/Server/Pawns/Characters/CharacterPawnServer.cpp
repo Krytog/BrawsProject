@@ -1,13 +1,11 @@
 #include "CharacterPawnServer.h"
 
-#define FIELD_OF_VIEW_WIDTH 1280
-#define FIELD_OF_VIEW_HEIGHT 720
 #define FIELD_OF_VIEW_TAG "view_field"
 
 CharacterPawnServer::CharacterPawnServer(): CharacterPawnServer(ArgPack()) {}
 
 CharacterPawnServer::~CharacterPawnServer() {
-    Engine::GetInstance().Destroy(field_of_view_);
+    ServerEngine::GetInstance().Destroy(field_of_view_);
 }
 
 void CharacterPawnServer::OnUpdate() {}
@@ -43,9 +41,8 @@ CharacterPawnServer::CharacterPawnServer(const CharacterPawnServer::ArgPack &arg
     GameObject::ArgPack args;
     args.position = new Position(*position_);
     args.collider = new RectangleCollider(*position_, FIELD_OF_VIEW_WIDTH, FIELD_OF_VIEW_HEIGHT, Collider::Category::Technical);
-    args.visible_object = nullptr;
     args.tag = FIELD_OF_VIEW_TAG;
-    auto ptr = Engine::GetInstance().CreateGameObject<PersistentObject>(args);
+    auto ptr = ServerEngine::GetInstance().CreateGameObject<PersistentObject>(args);
     field_of_view_ = ptr;
 }
 

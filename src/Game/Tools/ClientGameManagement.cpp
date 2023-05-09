@@ -1,6 +1,6 @@
 #include "ClientGameManagement.h"
 
-#include <Core/Engine.h>
+#include <Core/ClientEngine.h>
 #include <Game/GameClasses/Client/Pawns/Maps/Default/MapsDefaultClient.h>
 #include <Game/GameClasses/Client/Cerebrates/Characters/CharacterCerebrateClient.h>
 #include <Game/GameClasses/Client/Pawns/Characters/Default/CharacterDefaultPawnClient.h>
@@ -9,7 +9,7 @@
 #include <SwarmSystem/TypeIdList.h>
 
 void ClientGameManagement::InitGameClient() {
-    Engine& engine = Engine::GetInstance();
+    ClientEngine& engine = ClientEngine::GetInstance();
     engine.CreateGameObjectByDefault<MapsDefaultClient>();
 }
 
@@ -20,7 +20,7 @@ void ClientGameManagement::InitRegistryForOvermind() {
 }
 
 std::string ClientGameManagement::SerializeInput() {
-    auto input = Engine::GetInstance().GetInput();
+    auto input = ClientEngine::GetInstance().GetInput();
     auto mouse_token = std::get<InputSystem::MouseToken>(*input.begin());
     input.erase(input.begin());
     Position pos = mouse_token.position;

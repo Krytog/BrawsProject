@@ -4,108 +4,66 @@
 #include <type_traits>
 #include <unordered_map>
 #include <vector>
+#include <cstdint>
+
+#define FIELD_OF_VIEW_WIDTH 1280
+#define FIELD_OF_VIEW_HEIGHT 720
 
 #include "CollisionSystem.h"
 #include "Colliders.h"
-#include "GameObject.h"
 #include "DelayQueue.h"
 #include "EventHandler.h"
 
-#ifndef __SERVER_ENGINE_MODE__
-#include "Qt/MainWidget/Render.h"
-#include "Qt/PaintTemplates/BasicSprite.h"
-#include "Qt/PaintTemplates/AnimatedSprite.h"
-#include "InputSystem.h"
-#endif
+class GameObject;         // for server engine  ~-~  without Visible part
+class VisibleGameObject;  // for client engine  ~-~  with Visible part
 
-/* Depending on the compile options - __SERVER_ENGINE_MODE__ - the functionality may vary */
-class Engine {
+/* Never to be used */
+enum __EngineCreation : uint8_t /* Hide */ {
+    Skeleton = 0,
+    Initialization = 1,
+};
+
+template <typename Object>
+concept EngineObject = std::is_same_v<Object, GameObject> || std::is_same_v<Object, VisibleGameObject>;
+
+template <EngineObject T, __EngineCreation status>
+class Engine;
+
+template <EngineObject T>
+class Engine<T, __EngineCreation::Skeleton> {
 public:
-    static Engine& GetInstance();
-
-    // Creating and destroying objects
-    ///////////////////////////////////////////////////////////////////////////////////////
-    template <class TObject, typename... Args>
-    GameObject* CreateGameObject(Args&&... args) {
-        static_assert(std::is_base_of<GameObject, TObject>(), "TObject must inherit from GameObject");
-
-        GameObject* object_ptr = new TObject(std::forward<Args>(args)...);
-        objects_.push_front(object_ptr);
-        cache_[object_ptr] = objects_.begin();
-
-        auto coll_ptr = object_ptr->GetPointerToCollider();
-        if (coll_ptr) {
-            collision_system_.RegisterColliderOf(object_ptr, coll_ptr);
-        }
-
-#ifndef __SERVER_ENGINE_MODE__
-        auto vis_ptr = object_ptr->GetPointerToVisibleObject();
-        if (vis_ptr) {
-            render_.AddToRender(object_ptr, vis_ptr);
-        }
-#endif
-        return object_ptr;
-    }
-
-    template <class TObject>
-    GameObject* CreateGameObjectByDefault() {
-        static_assert(std::is_base_of<GameObject, TObject>(), "TObject must inherit from GameObject");
-
-        GameObject* object_ptr = new TObject();
-        objects_.push_front(object_ptr);
-        cache_[object_ptr] = objects_.begin();
-
-        auto coll_ptr = object_ptr->GetPointerToCollider();
-        if (coll_ptr) {
-            collision_system_.RegisterColliderOf(object_ptr, coll_ptr);
-        }
-#ifndef __SERVER_ENGINE_MODE__
-        auto vis_ptr = object_ptr->GetPointerToVisibleObject();
-        if (vis_ptr) {
-            render_.AddToRender(object_ptr, vis_ptr);
-        }
-#endif
-        return object_ptr;
-    }
-
-    void Destroy(GameObject* object_ptr);
-    ///////////////////////////////////////////////////////////////////////////////////////
-
-#ifndef __SERVER_ENGINE_MODE__
-    // Camera controls
-    ///////////////////////////////////////////////////////////////////////////////////////
-    void SetCameraOn(const GameObject* object);
-    Position GetCameraPosition() const;
-    ///////////////////////////////////////////////////////////////////////////////////////
-
-    // Getting input
-    ///////////////////////////////////////////////////////////////////////////////////////
-    using DefaultInputSystem = KeyboardInputSystem;
-    InputSystem::InputTokensArray GetInput() const;
-
-    // Switch InputSystem
-    template <InputSystemDerived SomeInputSystem>
-    void SwitchInputSystem() {
-        input_system_ = InputSystem::GetInstance<SomeInputSystem>();
+    void DestroyEvent(Event* event) {
+        event_handler_.DestroyEvent(event);
     }
     ///////////////////////////////////////////////////////////////////////////////////////
-
-#endif
 
     // Collisions
     ///////////////////////////////////////////////////////////////////////////////////////
-    CollisionSystem::PossiblePosition CheckPhysicalCollision(GameObject* first,
-                                                             GameObject* second) const;
-    CollisionSystem::PossiblePosition CheckTriggerCollision(GameObject* first,
-                                                            GameObject* second) const;
+    CollisionSystem::PossiblePosition CheckPhysicalCollision(GameObject* first, GameObject* second) const {
+        return collision_system_.CheckPhysicalCollision(first, second);
+    }
+    CollisionSystem::PossiblePosition CheckTriggerCollision(GameObject* first, GameObject* second) const {
+        return collision_system_.CheckTriggerCollision(first, second);
+    }
 
-    CollisionSystem::CollisionsInfoArray GetAllCollisions(GameObject* game_object) const;
-    CollisionSystem::CollisionsInfoArray GetPhysicalCollisions(GameObject* game_object) const;
-    CollisionSystem::CollisionsInfoArray GetTriggerCollisions(GameObject* game_object) const;
+    CollisionSystem::CollisionsInfoArray GetAllCollisions(GameObject* game_object) const {
+        return collision_system_.GetAllCollisions(game_object);
+    }
+    CollisionSystem::CollisionsInfoArray GetPhysicalCollisions(GameObject* game_object) const {
+        return collision_system_.GetPhysicalCollisions(game_object);
+    }
+    CollisionSystem::CollisionsInfoArray GetTriggerCollisions(GameObject* game_object) const {
+        return collision_system_.GetTriggerCollisions(game_object);
+    }
     CollisionSystem::CollisionsInfoArray GetAllCollisionsWithTag(GameObject* game_object,
-                                                                 const std::string_view string) const;
-    template <typename T>
-    CollisionSystem::CollisionsInfoArray GetAllCollisionsWithType(GameObject* game_object) const;
+                                                                 std::string_view string) const {
+        return collision_system_.GetAllCollisionsWithTag(game_object, string);
+    }
+    template <typename U>
+    CollisionSystem::CollisionsInfoArray GetAllCollisionsWithType(GameObject* game_object) const {
+        return collision_system_.GetAllCollisionsWithType<U>(game_object);
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////
 
     // Delayed callbacks
@@ -148,52 +106,70 @@ public:
 
     // Ticks
     ///////////////////////////////////////////////////////////////////////////////////////
-    uint64_t GetTicksCount() const;
+    uint64_t GetTicksCount() const {
+        return ticks_count_;
+    }
     ///////////////////////////////////////////////////////////////////////////////////////
 
-    ~Engine();
+    ~Engine() {
+        ClearAll();
+    }
 
-    // This function should be called exactly once per game tick
-    void Update();
-
-    // The next functions can be used only if Update() is not called
+    // The next functions can be used only if Update() is called
     // The following order must be maintained
     ///////////////////////////////////////////////////////////////////////////////////////
-#ifndef __SERVER_ENGINE_MODE__
-    void ReadNewInput();
-#endif
-    void ExecuteUpdates();
-    void TryExecuteDelayedCallbacks();
-    void TryExecuteEvents();
-    void IncreaseTicksCount();
-#ifndef __SERVER_ENGINE_MODE__
-    void RenderAll();
-#endif
+    void ExecuteUpdates() {
+        for (const auto& object : objects_) {
+            object->OnUpdate();
+        }
+    }
+    void TryExecuteDelayedCallbacks() {
+        delay_queue_.TryExecute(std::chrono::steady_clock::now(), ticks_count_);
+    }
+    void TryExecuteEvents() {
+        event_handler_.TryExecuteAll();
+    }
+    void IncreaseTicksCount() {
+        ++ticks_count_;
+    }
     ///////////////////////////////////////////////////////////////////////////////////////
 
     // Status of engine
     ///////////////////////////////////////////////////////////////////////////////////////
-    bool IsActive() const;
-    void SetActiveOn();
-    void SetActiveOff();
+    bool IsActive() const {
+        return is_active_;
+    }
+    void SetActiveOn() {
+        is_active_ = true;
+    }
+    void SetActiveOff() {
+        is_active_ = false;
+    }
 
-private:
-    Engine();
-    void ClearAll();
+protected:
+    Engine()
+        : collision_system_(CollisionSystem::GetInstance()),
+          event_handler_(EventHandler::GetInstance()),
+          delay_queue_(DelayQueue::GetInstance()),
+          ticks_count_(0) {
+    }
+    void ClearAll() {
+        for (const auto& object_ptr : objects_) {
+            delete object_ptr;
+        }
+        cache_.clear();
+    }
+
     Engine(const Engine&) = delete;
     Engine& operator=(const Engine&) = delete;
 
-#ifndef __SERVER_ENGINE_MODE__
-    Render& render_;
-    InputSystem* input_system_;
-#endif
     CollisionSystem& collision_system_;
     EventHandler& event_handler_;
     DelayQueue& delay_queue_;
 
-    /// \brief Data structure to manage objects
+    // Data structure to manage objects
     std::list<GameObject*> objects_;
-    FastHashMap<GameObject*, std::list<GameObject*>::iterator> cache_;
+    FastHashMap<GameObject*, typename std::list<GameObject*>::iterator> cache_;
 
     uint64_t ticks_count_ = 0;
     bool is_active_ = true;

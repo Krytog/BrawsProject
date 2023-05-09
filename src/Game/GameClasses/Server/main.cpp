@@ -1,5 +1,4 @@
-#define __SERVER_ENGINE_MODE__
-#include <Core/Engine.h>
+#include <Core/ServerEngine.h>
 #include <Core/MyTime.h>
 #include <Game/Tools/ServerGameManagement.h>
 #include <SwarmSystem/Overmind.h>
@@ -9,7 +8,7 @@
 #include <iostream>
 
 int main() {
-    Engine& engine = Engine::GetInstance();
+    ServerEngine& engine = ServerEngine::GetInstance();
     Overmind& overmind = Overmind::GetInstance();
     Communicator& communicator = Communicator::GetInstance();
     std::vector<uint64_t> players_id;

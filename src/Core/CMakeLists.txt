@@ -10,9 +10,9 @@ add_library(core_lib
         Vector2D.cpp
         CollisionSystem.cpp
         GameObject.cpp
+        VisibleGameObject.cpp
         InputSystem.cpp
         MyTime.cpp
-        Engine.cpp
         Observer.cpp
         Tools/BasicGeometry.cpp
         Qt/PaintTemplates/AnimatedSprite.cpp

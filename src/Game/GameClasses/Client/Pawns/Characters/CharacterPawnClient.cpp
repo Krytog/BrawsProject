@@ -30,5 +30,5 @@ void CharacterPawnClient::SetSpeed(double speed) {
 }
 
 void CharacterPawnClient::CaptureViewPort() const {
-    Engine::GetInstance().SetCameraOn(this);
+    ClientEngine::GetInstance().SetCameraOn(this);
 }

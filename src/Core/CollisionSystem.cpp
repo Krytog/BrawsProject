@@ -123,27 +123,6 @@ CollisionSystem::CollisionsInfoArray CollisionSystem::GetAllCollisionsWithTag(
     return output;
 }
 
-template <typename T>
-CollisionSystem::CollisionsInfoArray CollisionSystem::GetAllCollisionsWithType(
-    GameObject* game_object) const {
-    if (!registered_colliders_.contains(game_object)) {
-        return {};
-    }
-    std::vector<CollisionInfo> output;
-    for (const auto& [object, collider] : registered_colliders_) {
-        if (!dynamic_cast<T*>(object) || collider->IsTechnical()) {
-            continue;
-        }
-        if (object == game_object) {
-            continue;
-        }
-        if (auto position = registered_colliders_.at(game_object)->GetIntersectionPosition(collider)) {
-            output.emplace_back(object, object->GetTag(), position.value(), collider->GetCategory());
-        }
-    }
-    return output;
-}
-
 CollisionSystem& CollisionSystem::GetInstance() {
     static CollisionSystem instance;
     return instance;

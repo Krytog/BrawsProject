@@ -1,6 +1,6 @@
 #include "ServerGameManagement.h"
 
-#include <Core/Engine.h>
+#include <Core/ServerEngine.h>
 #include <Game/GameClasses/Server/Pawns/Maps/Default/MapsDefaultServer.h>
 #include <Game/GameClasses/Server/Pawns/Characters/Default/CharacterDefaultPawnServer.h>
 #include <Game/GameClasses/Server/Pawns/Characters/Mage/CharacterMagePawnServer.h>
@@ -13,7 +13,7 @@ namespace {
     bool IsSeenByPlayer(Cerebrate* from, Cerebrate* other) {
         auto character_pawn = static_cast<CharacterPawnServer*>(from->GetPossessed());
         auto game_object = static_cast<GameObject*>(other->GetPossessed());
-        auto collision_info = Engine::GetInstance().CheckPhysicalCollision(character_pawn->GetFieldOfView(), game_object);
+        auto collision_info = ServerEngine::GetInstance().CheckPhysicalCollision(character_pawn->GetFieldOfView(), game_object);
         if (collision_info.has_value()) {
             return true;
         }
@@ -22,15 +22,15 @@ namespace {
 }
 
 void ServerGameManagement::InitGameServer(std::vector<uint64_t>& players_id) {
-    Engine* engine = &Engine::GetInstance();
-    engine->CreateGameObjectByDefault<MapsDefaultServer>();
+    ServerEngine& engine = ServerEngine::GetInstance();
+    engine.CreateGameObjectByDefault<MapsDefaultServer>();
     for (size_t i = 0; i < players_id.size(); ++i) {
         GameObject* player_pawn;
         if (i % 2 == 0) {
-            player_pawn = engine->CreateGameObjectByDefault<CharacterMagePawnServer>();
+            player_pawn = engine.CreateGameObjectByDefault<CharacterMagePawnServer>();
             Overmind::GetInstance().RegisterNewPlayer(players_id[i], dynamic_cast<CharacterMagePawnServer*>(player_pawn)->GetCerebrateId());
         } else {
-            player_pawn = engine->CreateGameObjectByDefault<CharacterDefaultPawnServer>();
+            player_pawn = engine.CreateGameObjectByDefault<CharacterDefaultPawnServer>();
             Overmind::GetInstance().RegisterNewPlayer(players_id[i], dynamic_cast<CharacterDefaultPawnServer*>(player_pawn)->GetCerebrateId());
         }
     }

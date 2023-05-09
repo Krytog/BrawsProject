@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SwarmSystem/Cerebrate.h>
-#include <Core/Engine.h>
+#include <Core/ClientEngine.h>
 #include <SwarmSystem/Serializer.h>
 #include <Core/Tools/Concepts.h>
 #include <Game/GameClasses/CommandsList.h>
@@ -15,12 +15,12 @@ public:
     };
 
     CharacterCerebrateClient() : Cerebrate(TPawn::kTypeId) {
-        auto ptr = Engine::GetInstance().CreateGameObjectByDefault<TPawn>();
+        auto ptr = ClientEngine::GetInstance().CreateGameObjectByDefault<TPawn>();
         possessed_ = dynamic_cast<TPawn*>(ptr);
     }
 
     virtual ~CharacterCerebrateClient() {
-        Engine::GetInstance().Destroy(possessed_);
+        ClientEngine::GetInstance().Destroy(possessed_);
     }
 
     void* GetPossessed() const override {

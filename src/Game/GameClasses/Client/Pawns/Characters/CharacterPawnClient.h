@@ -1,9 +1,9 @@
 #pragma once
 
-#include <Core/Engine.h>
+#include <Core/ClientEngine.h>
 #include "SwarmSystem/TypeIdList.h"
 
-class CharacterPawnClient : public GameObject {
+class CharacterPawnClient : public VisibleGameObject {
 public:
     CharacterPawnClient();
     virtual ~CharacterPawnClient();

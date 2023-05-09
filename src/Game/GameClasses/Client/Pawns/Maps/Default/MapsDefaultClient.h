@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Core/Engine.h>
+#include <Core/ClientEngine.h>
 
-class MapsDefaultClient : public PersistentObject {
+class MapsDefaultClient : public PersistentVisibleObject {
 public:
     MapsDefaultClient();
 };

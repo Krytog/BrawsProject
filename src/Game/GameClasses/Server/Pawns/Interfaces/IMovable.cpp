@@ -1,6 +1,6 @@
 #include "IMovable.h"
 
-#include "../../../../GameClasses/GameObjectTags.h"
+#include <Game/GameClasses/GameObjectTags.h>
 
 void IMovable::Move(const Vector2D &direction) {
     Vector2D projections[4];
@@ -13,7 +13,7 @@ void IMovable::Move(const Vector2D &direction) {
             continue;
         }
         collider_->Translate(projections[i]);
-        auto collisions = Engine::GetInstance().GetPhysicalCollisions(this);
+        auto collisions = ServerEngine::GetInstance().GetPhysicalCollisions(this);
         collider_->Translate(projections[i] * -1);
         if (collisions.empty()) {
             Translate(projections[i]);

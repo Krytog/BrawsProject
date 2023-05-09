@@ -2,7 +2,7 @@
 
 #include <string>
 #include <Core/Observer.h>
-#include <Core/Engine.h>
+#include <Core/ClientEngine.h>
 
 class BotManagement {
 public:
