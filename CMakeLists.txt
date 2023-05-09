@@ -3,8 +3,6 @@ project(BrawlStars)
 
 set(CMAKE_CXX_STANDARD 20)
 
-find_package(SFML 2.5 COMPONENTS graphics audio window REQUIRED)
-
 # targets and sources
 add_executable(Test src/Game/main.cpp)
 add_executable(Client src/Game/GameClasses/Client/main.cpp)
