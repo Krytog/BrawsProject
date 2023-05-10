@@ -3,7 +3,6 @@
 #include "Qt/MainWidget/MainWidget.h"
 #include "Qt/MainWidget/Render.h"
 #include <qcursor.h>
-#include <qt5/QtCore/qnamespace.h>
 
 InputSystem::~InputSystem() = default;
 
