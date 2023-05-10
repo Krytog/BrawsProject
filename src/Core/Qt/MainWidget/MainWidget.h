@@ -34,6 +34,7 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
     void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
@@ -42,5 +43,6 @@ private:
 
     const GameObject* objects_to_follow_ = nullptr;
     InputSystem::InputTokensArray key_buffer_;
+    std::unordered_map<int64_t, bool> key_pressed_;
     bool mouse_pressed_ = false;
 };
