@@ -4,5 +4,5 @@
 
 class IMovable : public GameObject {
 public:
-    void Move(const Vector2D& direction);
+    virtual void Move(const Vector2D& direction);
 };

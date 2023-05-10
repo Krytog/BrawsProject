@@ -63,3 +63,7 @@ void CharacterPawnServer::UpdatePosition(const Position &position) {
 GameObject *CharacterPawnServer::GetFieldOfView() const {
     return field_of_view_;
 }
+
+void CharacterPawnServer::Move(const Vector2D &direction) {
+    IMovable::Move(direction * speed_);
+}

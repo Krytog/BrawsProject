@@ -6,10 +6,11 @@
 #include "Game/GameClasses/Server/ParsingUtilities/ControllerTools.h"
 
 enum {
-    MINIMAL_INPUT_SIZE = sizeof(Position) + 1
+    MINIMAL_INPUT_SIZE = sizeof(Position) + 1,
+    SHOOT_KEY = 1,
 };
 
-template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, Move, GetSpeed, GetHealth, GetPosition)>
+template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, Move, Shoot, GetHealth, GetPosition)>
 class CharacterCerebrateServer : public Cerebrate {
 public:
     struct Info {
@@ -31,9 +32,12 @@ public:
         }
         Position aim_pos;
         size_t pos_bytes = Serializer::Deserialize(aim_pos, serialized_command.substr(0, sizeof(aim_pos)));
-        uint8_t mouse_key = serialized_command[pos_bytes];
+        uint8_t mouse_key = (serialized_command[pos_bytes] - '0');
+        if (mouse_key == SHOOT_KEY) {
+            possessed_->Shoot(aim_pos);
+        }
         Vector2D input_vector = ControllerTools::ResultVector(serialized_command.substr(pos_bytes + 1, std::string_view::npos));
-        possessed_->Move(input_vector * possessed_->GetSpeed()); // TODO: the pawn should do the multiplication itself
+        possessed_->Move(input_vector);
     }
 
     std::string SerializeInfo() override {
@@ -45,7 +49,7 @@ public:
         return output;
     }
 
-    void UsePossessedApi(std::string_view serialized_command) const {} // TODO
+    void UsePossessedApi(std::string_view serialized_command) const {}
 
 protected:
     TPawn* possessed_;

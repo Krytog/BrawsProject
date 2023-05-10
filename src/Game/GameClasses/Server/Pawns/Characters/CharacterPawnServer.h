@@ -22,6 +22,8 @@ public:
     virtual void Translate(const Vector2D& vector2d) override;
     virtual void UpdatePosition(const Position& position) override;
 
+    virtual void Move(const Vector2D& direction) override;
+
     double GetHealth() const;
     double GetDamage() const;
     double GetSpeed() const;

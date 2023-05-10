@@ -28,7 +28,7 @@ std::string ClientGameManagement::SerializeInput() {
     Position pos = mouse_token.position;
     std::string output;
     Serializer::Serialize(pos, &output);
-    output += std::to_string(mouse_token.key);
+    output += ('0' + mouse_token.key);
     for (auto& token : input) {
         auto keyboard_token = std::get<InputSystem::KeyboardToken>(token);
         output += keyboard_token.symbol;
