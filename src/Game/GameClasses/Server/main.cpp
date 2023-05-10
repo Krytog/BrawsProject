@@ -13,12 +13,12 @@ int main() {
     Communicator& communicator = Communicator::GetInstance();
     std::vector<uint64_t> players_id;
     uint64_t player1 = communicator.RegUser();
-    uint64_t player2 = 0;
-    while (!player2) {
-        player2 = communicator.RegUser();
-    }
+//    uint64_t player2 = 0;
+//    while (!player2) {
+//        player2 = communicator.RegUser();
+//    }
     players_id.push_back(player1);
-    players_id.push_back(player2);
+    //players_id.push_back(player2);
     ServerGameManagement::InitGameServer(players_id);
     MyTime time;
     engine.SetActiveOn();

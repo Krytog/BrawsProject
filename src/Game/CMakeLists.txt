@@ -16,7 +16,8 @@ add_library(game_client
         GameClasses/Client/Pawns/Maps/Default/MapsDefaultClient.cpp
         GameClasses/Client/Pawns/Characters/CharacterPawnClient.cpp
         GameClasses/Client/Pawns/Characters/Default/CharacterDefaultPawnClient.cpp
-        GameClasses/Client/Pawns/Characters/Mage/CharacterMagePawnClient.cpp)
+        GameClasses/Client/Pawns/Characters/Mage/CharacterMagePawnClient.cpp
+        GameClasses/Client/Pawns/UI/Cursor.cpp)
 add_library(game_server
         GameClasses/Server/Pawns/Characters/CharacterPawnServer.cpp
         GameClasses/Server/Pawns/Characters/Default/CharacterDefaultPawnServer.cpp

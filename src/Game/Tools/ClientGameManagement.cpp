@@ -5,12 +5,14 @@
 #include <Game/GameClasses/Client/Cerebrates/Characters/CharacterCerebrateClient.h>
 #include <Game/GameClasses/Client/Pawns/Characters/Default/CharacterDefaultPawnClient.h>
 #include <Game/GameClasses/Client/Pawns/Characters/Mage/CharacterMagePawnClient.h>
+#include <Game/GameClasses/Client/Pawns/UI/Cursor.h>
 #include <SwarmSystem/Register.h>
 #include <SwarmSystem/TypeIdList.h>
 
 void ClientGameManagement::InitGameClient() {
     ClientEngine& engine = ClientEngine::GetInstance();
     engine.CreateGameObjectByDefault<MapsDefaultClient>();
+    engine.CreateGameObjectByDefault<Cursor>();
 }
 
 void ClientGameManagement::InitRegistryForOvermind() {
