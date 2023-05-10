@@ -6,6 +6,7 @@
 #include <Game/GameClasses/Server/Pawns/Characters/Mage/CharacterMagePawnServer.h>
 #include <SwarmSystem/Overmind.h>
 #include <Infrastructure/Server/Communicator.h>
+#include <Game/GameClasses/CommandsList.h>
 
 #include <SwarmSystem/Profiler/Profiler.h>
 
@@ -44,8 +45,15 @@ void ServerGameManagement::HandleInput(uint64_t player_id, std::string_view inpu
 }
 
 void ServerGameManagement::PrepareAndSendDataToClient(uint64_t player_id) {
+    static std::unordered_map<uint64_t, bool> viewport_captured;
     Overmind& overmind = Overmind::GetInstance();
     auto player_cerebrate = overmind.GetPlayersCerebrate(player_id);
+    if (!viewport_captured[player_id]) {
+        std::string to_capture_viewport;
+        to_capture_viewport += CharacterCommands::COMMAND_CAPTURE_VIEWPORT;
+        player_cerebrate->AddCommandToBuffer(to_capture_viewport);
+        viewport_captured[player_id] = true;
+    }
     overmind.UpdateCelebratesInfo(player_cerebrate, IsSeenByPlayer);
     auto data = overmind.GetCerebratesInfoSerialized();
     Profiler::GetInstance().AddTimeMark(&data);

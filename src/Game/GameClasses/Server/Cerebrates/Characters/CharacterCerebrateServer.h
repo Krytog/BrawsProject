@@ -4,7 +4,6 @@
 #include <SwarmSystem/Serializer.h>
 #include <Core/Tools/Concepts.h>
 #include "Game/GameClasses/Server/ParsingUtilities/ControllerTools.h"
-#include <Game/GameClasses/CommandsList.h>
 
 enum {
     MINIMAL_INPUT_SIZE = sizeof(Position) + 1
@@ -43,11 +42,6 @@ public:
         actual_info.current_pos = possessed_->GetPosition();
         std::string output;
         Serializer::Serialize(actual_info, &output);
-        static bool to_capture_viewport = true; // TODO: Make it the proper way
-        if (to_capture_viewport) {
-            output += CharacterCommands::COMMAND_CAPTURE_VIEWPORT;
-            to_capture_viewport = true; // :/
-        }
         return output;
     }
 
