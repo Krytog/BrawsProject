@@ -17,6 +17,7 @@ const static std::unordered_map<char, int64_t> kKeyMap = {{'A', Qt::Key_A}, {'S'
 TMainWidget::TMainWidget(QWidget* parent) : QOpenGLWidget(parent) {
     setFixedSize(kWindowWidth, kWindowHeight);
     setAutoFillBackground(true);
+    setCursor(Qt::BlankCursor);
 }
 
 void TMainWidget::AddToRender(const GameObject* game_object, IVisibleObject* vis_obj) {
