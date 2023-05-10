@@ -37,5 +37,5 @@ void KeyboardInputSystem::ReadNewInput() {
     auto cursor_pos =  window.mapFromGlobal(QCursor::pos());
     Position cursor_local_pos = Position(cursor_pos.rx() - (kWindowWidth / 2), (kWindowHeight / 2) - cursor_pos.ry());
     cursor_local_pos.Translate(window.GetCameraPosition().GetCoordinatesAsVector2D());
-    input_tokens_.insert(input_tokens_.begin(), MouseToken{mouse_key, cursor_local_pos});
+    input_tokens_.push_front(MouseToken{mouse_key, cursor_local_pos});
 }
