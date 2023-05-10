@@ -9,8 +9,8 @@ class Overmind {
 public:
     static Overmind& GetInstance();
 
-    void UpdateCelebratesInfo();
-    void UpdateCelebratesInfo(Cerebrate* target, bool functor(Cerebrate*, Cerebrate*));
+    void UpdateCerebratesInfo();
+    void UpdateCerebratesInfo(Cerebrate* target, bool functor(Cerebrate*, Cerebrate*));
     const std::string& GetCerebratesInfoSerialized();
     void ForceCerebratesExecuteCommands(std::string_view serialized_command);
     size_t RegisterNewCerebrate(Cerebrate* cerebrate);

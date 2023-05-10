@@ -54,7 +54,7 @@ void ServerGameManagement::PrepareAndSendDataToClient(uint64_t player_id) {
         player_cerebrate->AddCommandToBuffer(to_capture_viewport);
         viewport_captured[player_id] = true;
     }
-    overmind.UpdateCelebratesInfo(player_cerebrate, IsSeenByPlayer);
+    overmind.UpdateCerebratesInfo(player_cerebrate, IsSeenByPlayer);
     auto data = overmind.GetCerebratesInfoSerialized();
     Profiler::GetInstance().AddTimeMark(&data);
     Communicator::GetInstance().SendToClient(player_id, data);

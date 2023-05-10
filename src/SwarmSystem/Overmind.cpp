@@ -28,8 +28,8 @@ const std::string& Overmind::GetCerebratesInfoSerialized() {
     return cerebrates_info_serialized_;
 }
 
-void Overmind::UpdateCelebratesInfo() {
-    UpdateCelebratesInfo(nullptr, FunctorAlwaysTrue);
+void Overmind::UpdateCerebratesInfo() {
+    UpdateCerebratesInfo(nullptr, FunctorAlwaysTrue);
 }
 
 size_t Overmind::RegisterNewCerebrate(Cerebrate* cerebrate) {
@@ -138,7 +138,7 @@ void Overmind::DeletePlayerFromRegistry(uint64_t id) {
     players_cerebrate_.erase(id);
 }
 
-void Overmind::UpdateCelebratesInfo(Cerebrate* target, bool (*functor)(Cerebrate*, Cerebrate*)) {
+void Overmind::UpdateCerebratesInfo(Cerebrate* target, bool (*functor)(Cerebrate*, Cerebrate*)) {
     std::string buffer;
     buffer.reserve(3 * sizeof(size_t) + 3 + AVG_GETINFO_STRLEN);
 
