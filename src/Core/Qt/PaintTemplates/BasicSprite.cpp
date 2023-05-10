@@ -6,14 +6,14 @@
 #include <iostream>
 
 BasicSprite::BasicSprite(std::string_view image_src, const Position& position,
-        const size_t& width, const size_t& height, const RenderLayers& layer):
-            IVisibleObject(position, layer), QImage(image_src.data()) 
+        const size_t& width, const size_t& height, const double& angle, const RenderLayers& layer):
+            IVisibleObject(position, angle, layer), QImage(image_src.data()) 
 {
     Scale(width, height);
 };
 
 void BasicSprite::RenderIt(Painter *painter) {
-    DrawStaticImageHelper(this, pos_).Paint(painter);
+    DrawStaticImageHelper(this, pos_, angle_).Paint(painter);
 }
 
 void BasicSprite::UpdateSrc(std::string_view image_src) {

@@ -1,7 +1,7 @@
 #include "VisibleObject.h"
 
-IVisibleObject::IVisibleObject(const Position& position, const RenderLayers& layer):
-    pos_(position), layer_(layer) {}
+IVisibleObject::IVisibleObject(const Position& position, const double& angle, const RenderLayers& layer):
+    pos_(position), angle_(angle), layer_(layer) {}
 
 void IVisibleObject::Translate(const Vector2D &vector2d) {
     pos_.Translate(vector2d);
@@ -29,5 +29,6 @@ void IFlexibleVisibleObject::RenderIt(Painter *painter) {
 
 IFlexibleVisibleObject::IFlexibleVisibleObject(
     const Position& position,
+    const double& angle,
     const RenderLayers& layer
-): IVisibleObject(position, layer) {};
+): IVisibleObject(position, angle, layer) {};

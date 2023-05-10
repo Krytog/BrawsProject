@@ -4,13 +4,15 @@
 
 #include <qimage.h>
 #include <QImage>
+#include <cstddef>
 #include <string_view>
 
 class BasicSprite: public IVisibleObject, public QImage{
 
 public:
     BasicSprite(std::string_view image_src, const Position& position,
-        const size_t& width, const size_t& height, const RenderLayers& layer = RenderLayers::Objects);
+        const size_t& width, const size_t& height, const double& angle = 0,
+             const RenderLayers& layer = RenderLayers::Objects);
 
     virtual void RenderIt(Painter *painter) override;
     void UpdateSrc(std::string_view image_src);

@@ -4,11 +4,11 @@
 #include "../Helpers/CommonHelpers/DrawTextHelper.h"
 
 TextSprite::TextSprite(std::string_view text, const Position& position,
-    const size_t& width, const size_t& height, const RenderLayers& layer):
-         IVisibleObject(position, layer), text_(text), width_(width), height_(height) {}
+    const size_t& width, const size_t& height, const double& angle, const RenderLayers& layer):
+         IVisibleObject(position, angle, layer), text_(text), width_(width), height_(height) {}
 
 void TextSprite::RenderIt(Painter *painter) {
-    DrawTextHelper(this).Paint(painter);
+    DrawTextHelper(this, angle_).Paint(painter);
 }
 
 /* Мб потом просто в IVisible сделать такую реализацию */

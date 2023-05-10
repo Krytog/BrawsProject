@@ -7,7 +7,8 @@
 class TextSprite: public IVisibleObject {
 public:
     TextSprite(std::string_view text, const Position& position,
-        const size_t& width, const size_t& height, const RenderLayers& layer = RenderLayers::Objects);
+        const size_t& width, const size_t& height, const double& angle = 0,
+            const RenderLayers& layer = RenderLayers::Objects);
 
     void RenderIt(Painter *painter) override;
     bool IsDisplayed() const override;

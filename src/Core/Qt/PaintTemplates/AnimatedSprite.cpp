@@ -7,8 +7,8 @@
 
 AnimatedSprite::AnimatedSprite(std::string_view image_src, const Position& position, const size_t& width,
                                const size_t& height, const size_t& ticks_per_frame,
-                               const size_t& frames_count, bool is_cycled, const RenderLayers& layer)
-    : IFlexibleVisibleObject(position, layer), QImage(image_src.data()), 
+                               const size_t& frames_count, bool is_cycled, const double& angle, const RenderLayers& layer)
+    : IFlexibleVisibleObject(position, angle, layer), QImage(image_src.data()), 
       ticks_per_frame_(ticks_per_frame),
       frames_count_(frames_count),
       is_cycled_(is_cycled) {
@@ -17,7 +17,7 @@ AnimatedSprite::AnimatedSprite(std::string_view image_src, const Position& posit
 }
 
 void AnimatedSprite::RenderItCustom(Painter* painter) {
-    DrawAnimatedImageHelper(this, pos_).Paint(painter);
+    DrawAnimatedImageHelper(this, pos_, angle_).Paint(painter);
 }
 
 void AnimatedSprite::UpdateSrc(std::string_view image_src, const size_t& ticks_per_frame,

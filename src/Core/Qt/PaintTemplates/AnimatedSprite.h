@@ -13,7 +13,7 @@ class AnimatedSprite: public IFlexibleVisibleObject, public QImage {
 public:
     AnimatedSprite(std::string_view image_src, const Position& position,
         const size_t& width, const size_t& height, const size_t& ticks_per_frame, const size_t& frames_count,
-            bool is_cycled = true, const RenderLayers& layer = RenderLayers::Objects);
+            bool is_cycled = true, const double& angle = 0, const RenderLayers& layer = RenderLayers::Objects);
 
     virtual void RenderItCustom(Painter *painter) override;
     void UpdateSrc(std::string_view image_src, const size_t& ticks_per_frame, const size_t& frames_count);

@@ -17,7 +17,7 @@ public:
         UI_extra = 7};
 public:
     IVisibleObject() = default;
-    IVisibleObject(const Position& position, const RenderLayers& layer = RenderLayers::Objects);
+    IVisibleObject(const Position& position, const double& angle = 0, const RenderLayers& layer = RenderLayers::Objects);
 
     virtual void UpdatePosition(const Position &position);
     virtual void Translate(const Vector2D &vector2d);
@@ -35,13 +35,14 @@ public:
 
 protected:
     Position pos_;
+    double angle_;
     RenderLayers layer_;
 };
 
 class IFlexibleVisibleObject: public IVisibleObject {
 public:
     IFlexibleVisibleObject() = default;
-    IFlexibleVisibleObject(const Position& position, const RenderLayers& layer = RenderLayers::Objects);
+    IFlexibleVisibleObject(const Position& position, const double& angle = 0, const RenderLayers& layer = RenderLayers::Objects);
 
     template <typename Functor> /* Нахуячить проверок в стиле Ильи */
     void ChangeRenderLogic(Functor&& func) {

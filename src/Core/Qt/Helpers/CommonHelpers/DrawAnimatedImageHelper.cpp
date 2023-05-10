@@ -1,4 +1,6 @@
 #include "DrawAnimatedImageHelper.h"
+#include <iostream>
+#include <ostream>
 #include "../../Painters/QtPainter.h"
 
 DrawAnimatedImageHelper::DrawAnimatedImageHelper(AnimatedSprite* image, const Position& pos,
@@ -9,11 +11,16 @@ DrawAnimatedImageHelper::DrawAnimatedImageHelper(AnimatedSprite* image, const Po
 void DrawAnimatedImageHelper::Paint(Painter* painter) const {
     auto real_painter = dynamic_cast<QPainter*>(painter);
     real_painter->save();
-    real_painter->rotate(angle_);
+
     auto coords = pos_.GetCoordinates();
-    size_t frame_width = image_->width() / image_->frames_count_;
+    int64_t frame_width = image_->width() / image_->frames_count_;
+
+    real_painter->translate(coords.first, -coords.second);
+    real_painter->rotate(angle_);
+    real_painter->translate(- (frame_width / 2), - (image_->height() / 2));
+
     real_painter->drawImage(
-        QRect{QPoint(coords.first - (frame_width / 2), -coords.second - (image_->height() / 2)),
+        QRect{QPoint(0, 0),
               QSize(frame_width, image_->height())},
         *image_,
         QRect{QPoint(frame_width * image_->cur_frame_, 0), QSize(frame_width, image_->height())});

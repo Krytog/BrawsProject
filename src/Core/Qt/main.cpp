@@ -19,21 +19,22 @@
 
 int main(int argc, char *argv[])
 {
-    auto image_ptr = new PersistentObject();
-    BasicSprite* image = new BasicSprite("../RecourcesForTesting/soome.png", {0, 200}, 100, 100);
-    Render::GetInstance().AddToRender(image_ptr, image);
 
-    BasicSprite* back = new BasicSprite("../RecourcesForTesting/back.jpeg", {0, 0}, 1000, 700, IVisibleObject::RenderLayers::BackGround);
-    Render::GetInstance().AddToRender(new PersistentObject(), back);
-
-    AnimatedSprite* guy = new AnimatedSprite("../RecourcesForTesting/guuy.png", {-20, 0}, 300, 300, 25, 3);
+    AnimatedSprite* guy = new AnimatedSprite("../RecourcesForTesting/guuy.png", {0, 0}, 300, 300, 25, 3, true, 180, IVisibleObject::RenderLayers::Objects);
     Render::GetInstance().AddToRender(new PersistentObject(), guy);
 
-    guy->ChangeRenderLogic([guy](Painter* painter){
-        DrawAnimatedImageHelper(guy, guy->GetPosition(), 90).Paint(painter);
-    });
+    auto image_ptr = new PersistentObject();
+    BasicSprite* image = new BasicSprite("../RecourcesForTesting/soome.png", {0, 0}, 100, 100, 180);
+    Render::GetInstance().AddToRender(image_ptr, image);
 
-    TextSprite* text = new TextSprite("Bebra", {-100, 60}, 100, 200);
+    BasicSprite* back = new BasicSprite("../RecourcesForTesting/back.jpeg", {0, 0}, 1000, 700, 0, IVisibleObject::RenderLayers::BackGround);
+    Render::GetInstance().AddToRender(new PersistentObject(), back);
+
+    // guy->ChangeRenderLogic([guy](Painter* painter){
+    //     DrawAnimatedImageHelper(guy, guy->GetPosition(), 90).Paint(painter);
+    // });
+
+    TextSprite* text = new TextSprite("Bebra", {-100, 60}, 100, 200, 0);
     Render::GetInstance().AddToRender(new PersistentObject(), text);
     
     Render::GetInstance().SetCameraOn(image_ptr);
