@@ -15,6 +15,14 @@ IVisibleObject::RenderLayers IVisibleObject::GetLayer() const {
     return layer_;
 }
 
+void IVisibleObject::UpdateAngle(const double& angle) {
+    angle_ = angle;
+}
+
+void IVisibleObject::TranslateOnAngle(const double& angle) {
+    angle_ += angle;
+}
+
 void IFlexibleVisibleObject::SetDefaultLogic() {
     render_logic_ = nullptr;
 }
@@ -32,3 +40,4 @@ IFlexibleVisibleObject::IFlexibleVisibleObject(
     const double& angle,
     const RenderLayers& layer
 ): IVisibleObject(position, angle, layer) {};
+

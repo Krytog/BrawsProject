@@ -21,8 +21,10 @@ public:
 
     virtual void UpdatePosition(const Position &position);
     virtual void Translate(const Vector2D &vector2d);
-    
-    /* Не константный - можно будет менять свойства картинки(например цветовой канал) */
+
+    void UpdateAngle(const double& angle);
+    void TranslateOnAngle(const double& angle);
+
     virtual void RenderIt(Painter* painter) = 0;
     RenderLayers GetLayer() const;
     virtual bool IsDisplayed() const = 0;

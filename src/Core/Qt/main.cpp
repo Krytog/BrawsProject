@@ -20,7 +20,7 @@
 int main(int argc, char *argv[])
 {
 
-    AnimatedSprite* guy = new AnimatedSprite("../RecourcesForTesting/guuy.png", {0, 0}, 300, 300, 25, 3, true, 180, IVisibleObject::RenderLayers::Objects);
+    AnimatedSprite* guy = new AnimatedSprite("../RecourcesForTesting/guuy.png", {0, 0}, 300, 300, 25, 3, true, 90, IVisibleObject::RenderLayers::Objects);
     Render::GetInstance().AddToRender(new PersistentObject(), guy);
 
     auto image_ptr = new PersistentObject();
@@ -55,7 +55,9 @@ int main(int argc, char *argv[])
         time.ResetTime();
         Render::GetInstance().RenderAll();
         // image_ptr->Translate({1, 1});
-        image->Translate({1, 1});
+        // image->Translate({1, 1});
+        image_ptr->Translate({1, 1});
+        image->TranslateOnAngle(5);
         EventHandler::GetInstance().TryExecuteAll();
     }
 }
