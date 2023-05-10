@@ -15,6 +15,7 @@ void DrawAnimatedImageHelper::Paint(Painter* painter) const {
     auto coords = pos_.GetCoordinates();
     int64_t frame_width = image_->width() / image_->frames_count_;
 
+    /* Вынести потом куда-то */
     real_painter->translate(coords.first, -coords.second);
     real_painter->rotate(angle_);
     real_painter->translate(- (frame_width / 2), - (image_->height() / 2));

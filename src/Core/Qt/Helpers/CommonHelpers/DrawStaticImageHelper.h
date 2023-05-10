@@ -9,11 +9,11 @@
 class DrawStaticImageHelper final: public IBasicHelper {
 public:
 
-    DrawStaticImageHelper(BasicSprite* image, const Position& pos, const size_t& clockwise_angle = 0);
+    DrawStaticImageHelper(BasicSprite* image, const Position& pos, const double& clockwise_angle = 0);
 
     virtual void Paint(Painter* painter) const override;
 private:
     BasicSprite* image_;
     Position pos_;
-    size_t angle_;
+    double angle_;
 };

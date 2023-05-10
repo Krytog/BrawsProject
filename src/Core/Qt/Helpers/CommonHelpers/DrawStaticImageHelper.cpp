@@ -2,7 +2,7 @@
 #include "../../Painters/QtPainter.h"
 
 DrawStaticImageHelper::DrawStaticImageHelper(BasicSprite* image, const Position& pos,
-                                             const size_t& clockwise_angle)
+                                             const double& clockwise_angle)
     : image_(image), pos_(pos), angle_(clockwise_angle){};
 
 void DrawStaticImageHelper::Paint(Painter* painter) const {
@@ -14,7 +14,7 @@ void DrawStaticImageHelper::Paint(Painter* painter) const {
     real_painter->translate(coords.first, -coords.second);
     real_painter->rotate(angle_);
     real_painter->translate(- (image_->width() / 2), - (image_->height() / 2));
-    
+
     real_painter->drawImage(
         QRect{QPoint(0, 0), QSize(image_->width(), image_->height())},
         *image_, QRect{QPoint(0, 0), QSize(image_->width(), image_->height())});
