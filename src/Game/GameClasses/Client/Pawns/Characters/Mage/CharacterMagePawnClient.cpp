@@ -37,3 +37,7 @@ void CharacterMagePawnClient::OnUpdate() {
 }
 
 const size_t CharacterMagePawnClient::kTypeId = TypeId_Character_Mage;
+
+CharacterMagePawnClient::~CharacterMagePawnClient() {
+    std::cout << "MAGE DEAD!" << std::endl;
+}

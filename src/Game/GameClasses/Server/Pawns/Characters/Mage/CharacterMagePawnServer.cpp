@@ -41,7 +41,7 @@ CharacterMagePawnServer::CharacterMagePawnServer(const CharacterPawnServer::ArgP
 }
 
 CharacterMagePawnServer::~CharacterMagePawnServer() {
-    Overmind::GetInstance().DestroyCerebrate(cerebrate_id);
+    Overmind::GetInstance().GetCerebrateWithId(cerebrate_id)->MarkDeprecated();
 }
 
 void CharacterMagePawnServer::Shoot(const Position &position) {
@@ -56,7 +56,7 @@ void CharacterMagePawnServer::Shoot(const Position &position) {
 }
 
 void CharacterMagePawnServer::OnUpdate() {
-    Shoot(Position());
+    //Shoot(Position());
 }
 
 const size_t CharacterMagePawnServer::kTypeId = TypeId_Character_Mage;

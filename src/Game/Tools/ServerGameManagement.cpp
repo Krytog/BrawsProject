@@ -8,8 +8,6 @@
 #include <Infrastructure/Server/Communicator.h>
 #include <Game/GameClasses/CommandsList.h>
 
-#include <SwarmSystem/Profiler/Profiler.h>
-
 namespace {
     bool IsSeenByPlayer(Cerebrate* from, Cerebrate* other) {
         auto character_pawn = static_cast<CharacterPawnServer*>(from->GetPossessed());
@@ -48,6 +46,8 @@ void ServerGameManagement::HandleInput(uint64_t player_id, std::string_view inpu
     }
 }
 
+#include <iostream>
+
 void ServerGameManagement::PrepareAndSendDataToClient(uint64_t player_id) {
     static std::unordered_map<uint64_t, bool> viewport_captured;
     Overmind& overmind = Overmind::GetInstance();
@@ -60,6 +60,6 @@ void ServerGameManagement::PrepareAndSendDataToClient(uint64_t player_id) {
     }
     overmind.UpdateCerebratesInfo(player_cerebrate, IsSeenByPlayer);
     auto data = overmind.GetCerebratesInfoSerialized();
-    Profiler::GetInstance().AddTimeMark(&data);
+    std::cout << data.size() << std::endl;
     Communicator::GetInstance().SendToClient(player_id, data);
 }

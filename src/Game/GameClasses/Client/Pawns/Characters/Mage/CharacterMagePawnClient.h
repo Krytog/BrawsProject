@@ -6,6 +6,7 @@ class CharacterMagePawnClient : public CharacterPawnClient {
 public:
     CharacterMagePawnClient();
     CharacterMagePawnClient(const Position& position);
+    ~CharacterMagePawnClient() override;
 
     void Shoot() override;
     void ReceiveDamage() override;

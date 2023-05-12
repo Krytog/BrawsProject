@@ -38,7 +38,7 @@ CharacterDefaultPawnServer::CharacterDefaultPawnServer(const CharacterPawnServer
 }
 
 CharacterDefaultPawnServer::~CharacterDefaultPawnServer() {
-    Overmind::GetInstance().DestroyCerebrate(cerebrate_id);
+    Overmind::GetInstance().GetCerebrateWithId(cerebrate_id)->MarkDeprecated();
 }
 
 void CharacterDefaultPawnServer::Shoot(const Position &position) {

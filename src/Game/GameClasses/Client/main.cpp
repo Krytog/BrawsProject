@@ -26,11 +26,14 @@ int main() {
 
         auto data = communicator.ReceiveFromServer();
         overmind.ForceCerebratesExecuteCommands(data);
-//        std::cout << "in" << std::endl;
-//        overmind.ActualizeCerebrates(data);
-//        std::cout << "out" << std::endl;
+        std::cout << "in " << data.size() << " " << data << std::endl;
+        overmind.ActualizeCerebrates(data);
+        std::cout << "out" << std::endl;
 
+
+        std::cout << "Engine in" << std::endl;
         engine.Update();
+        std::cout << "Engine out" << std::endl;
 
         auto for_server = ClientGameManagement::SerializeInput();
         communicator.SendToServer(for_server);
