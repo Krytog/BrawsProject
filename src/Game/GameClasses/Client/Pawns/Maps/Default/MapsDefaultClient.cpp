@@ -9,6 +9,6 @@ enum {
 };
 
 MapsDefaultClient::MapsDefaultClient(): PersistentVisibleObject(new Position(0, 0), nullptr, nullptr, TAGS_MAPS_Default) {
-    IVisibleObject* visible_object = new BasicSprite(RES_PATH_MAPS_DEFAULT_BACKGROUND, Position(0, 0), MAP_WIDTH, MAP_HEIGHT, IVisibleObject::RenderLayers::BackGround);
+    IVisibleObject* visible_object = new BasicSprite(RES_PATH_MAPS_DEFAULT_BACKGROUND, Position(0, 0), MAP_WIDTH, MAP_HEIGHT, 0, IVisibleObject::RenderLayers::BackGround);
     visible_object_ = std::unique_ptr<IVisibleObject>(visible_object);
 }

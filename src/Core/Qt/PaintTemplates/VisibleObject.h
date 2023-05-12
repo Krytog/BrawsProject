@@ -22,8 +22,9 @@ public:
     virtual void UpdatePosition(const Position &position);
     virtual void Translate(const Vector2D &vector2d);
 
-    void UpdateAngle(const double& angle);
-    void TranslateOnAngle(const double& angle);
+    void UpdateRotation(const double& angle);
+    void UpdateRotation(const Vector2D& rotator);
+    void Rotate(const double& angle);
 
     virtual void RenderIt(Painter* painter) = 0;
     RenderLayers GetLayer() const;
@@ -32,6 +33,9 @@ public:
     Position GetPosition() const { 
         return pos_;
     }
+
+    double GetRotationAngle() const;
+    Vector2D GetRotator() const;
 
     virtual ~IVisibleObject() = default;
 
