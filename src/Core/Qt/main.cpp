@@ -57,7 +57,8 @@ int main(int argc, char *argv[])
         // image_ptr->Translate({1, 1});
         // image->Translate({1, 1});
         image_ptr->Translate({1, 1});
-        image->TranslateOnAngle(5);
+        image->Rotate(5);
+        std::cout << Render::GetInstance().OnMousePressed() << std::endl;
         EventHandler::GetInstance().TryExecuteAll();
     }
 }

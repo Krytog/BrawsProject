@@ -76,9 +76,19 @@ void TMainWidget::keyReleaseEvent(QKeyEvent* event) {
     QOpenGLWidget::keyPressEvent(event);
 }
 
-void TMainWidget::mouseMoveEvent(QMouseEvent* event) {
-    mouse_pressed_ = (event->button() == Qt::LeftButton);
+void TMainWidget::mousePressEvent(QMouseEvent *event) {
+    if (event->button() != Qt::LeftButton) {
+        return;
+    }
+    mouse_pressed_ = true;
 }
+
+void TMainWidget::mouseReleaseEvent(QMouseEvent *event) {
+    if (event->button() != Qt::LeftButton) {
+        return;
+    }
+    mouse_pressed_ = false;
+};
 
 InputSystem::InputTokensArray TMainWidget::GetKeyBoardInput() {
     for (const auto& [symb, key] : kKeyMap) {
