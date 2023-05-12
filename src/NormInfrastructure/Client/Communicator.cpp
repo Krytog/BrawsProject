@@ -7,7 +7,7 @@ namespace {
     char host[] = "localhost";
     char random_port[] = "10010";
     char reg_port[] = "10011";
-    size_t k_max_dtgrm_len = 1024;
+    size_t k_max_dtgrm_len = 32000;
 }
 
 Communicator::Communicator(): socket_(io_context_, udp::endpoint(udp::v4(), 0)) {
@@ -35,14 +35,15 @@ uint64_t Communicator::RegOnServer() {
         RegOnServer();
     }
 
-    ////////////
-    // std::cout << "Registered with id: " << user_id_ << std::endl;
-    ///////////
+    //////////
+     std::cout << "Registered with id: " << user_id_ << std::endl;
+    /////////
 
     return user_id_;
 }
 
 std::string Communicator::ReceiveFromServer() {
+    DoRecieve();
     if (packages_.empty()) {
         return "";
     }

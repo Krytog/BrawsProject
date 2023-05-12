@@ -9,7 +9,7 @@
 #include <deque>
 
 namespace {
-    const int kMaxDtgrmLen = 1024;
+    const int kMaxDtgrmLen = 32000;
 }
 
 using boost::asio::ip::udp;

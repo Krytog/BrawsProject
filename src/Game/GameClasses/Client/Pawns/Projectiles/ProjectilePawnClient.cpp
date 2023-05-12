@@ -11,5 +11,5 @@ void ProjectilePawnClient::UpdateRotation(const Vector2D &rotator) {
 #include <iostream>
 
 void ProjectilePawnClient::OnUpdate() {
-    std::cout << position_->GetCoordinates().first << " " << position_->GetCoordinates().second << std::endl;
+    // bruh
 }

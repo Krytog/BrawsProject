@@ -42,9 +42,9 @@ uint64_t Communicator::RegUser() {
                 actual_message_[usr_id].clear();
                 return;
             }
-            ////////////
-            // std::cout << "Registered user with id: " << usr_id << std::endl;
-            ///////////
+            //////////
+             std::cout << "Registered user with id: " << usr_id << std::endl;
+            /////////
             
             users_data_[usr_id].resize(10);
             // id_by_connection_[connections_[usr_id]] = usr_id;

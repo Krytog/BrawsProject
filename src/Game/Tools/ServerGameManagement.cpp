@@ -58,10 +58,9 @@ void ServerGameManagement::PrepareAndSendDataToClient(uint64_t player_id) {
         std::string to_capture_viewport;
         to_capture_viewport += CharacterCommands::COMMAND_CAPTURE_VIEWPORT;
         player_cerebrate->AddCommandToBuffer(to_capture_viewport);
-        viewport_captured[player_id] = true;
+        viewport_captured[player_id] = false;
     }
     overmind.UpdateCerebratesInfo(player_cerebrate, IsSeenByPlayer);
     auto data = overmind.GetCerebratesInfoSerialized();
-    std::cout << "DATA SIZE: " << data.size() << std::endl;
     Communicator::GetInstance().SendToClient(player_id, data);
 }
