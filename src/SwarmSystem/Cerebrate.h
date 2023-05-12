@@ -10,6 +10,8 @@ public:
     std::string GetInfoForOvermind();
     virtual std::string SerializeInfo() = 0;
     void AddCommandToBuffer(std::string_view serialized_command);
+    void MarkDeprecated();
+    bool IsDeprecated() const;
     size_t GetType() const;
 
     virtual ~Cerebrate();
@@ -17,4 +19,5 @@ public:
 private:
     size_t type_;
     std::string buffer_;
+    bool is_deprecated_ = false;
 };

@@ -38,10 +38,7 @@ size_t Overmind::RegisterNewCerebrate(Cerebrate* cerebrate) {
     return out;
 }
 
-#include <iostream>
-
 void Overmind::ForceCerebratesExecuteCommands(std::string_view serialized_command) {
-    std::cout << cerebrates_.size() << std::endl;
     size_t beg = 0, ptr = 1;
     while (ptr < serialized_command.size()) {
         while (ptr < serialized_command.size() && serialized_command[ptr] != BEGIN_ENTITY_TOKEN) {
@@ -66,13 +63,11 @@ void Overmind::ForceCerebratesExecuteCommands(std::string_view serialized_comman
 
         if (cerebrates_.contains(id)) {
             if (cerebrates_.at(id)->GetType() != type_id) {
-                std::cout << "AT " << id << " EXPECTED " << cerebrates_.at(id)->GetType() << " GOT " << type_id << std::endl;
                 throw std::runtime_error("SwarmSystem corrupted data: cerebrates type mismatch");
             }
             cerebrates_.at(id)->ForcePossessedExecuteCommand(
                 serialized_command.substr(beg + 2 + 3 * sizeof(size_t), cerebrate_info_size));
         } else {
-            std::cout << current_id_ << " CREATING AT INDEX " << id << " OF TYPE " << type_id << std::endl;
             auto new_cerebrate = CerebrateRegistry::GetInstance().GetCerebrate(type_id);
             if (new_cerebrate) {
                 cerebrates_[id] = new_cerebrate;
@@ -173,6 +168,12 @@ void Overmind::UpdateCerebratesInfo(Cerebrate* target, bool (*functor)(Cerebrate
         buffer += CLOSE_INFO_TOKEN;
     }
     cerebrates_info_serialized_ = std::move(buffer);
+    std::erase_if(cerebrates_, [](const std::pair<size_t, Cerebrate*>& elem){
+        if (elem.second->IsDeprecated()) {
+            return true;
+        }
+        return false;
+    });
 }
 
 Cerebrate* Overmind::GetCerebrateWithId(size_t id) const {

@@ -17,3 +17,11 @@ void Cerebrate::AddCommandToBuffer(std::string_view serialized_command) {
 }
 
 Cerebrate::~Cerebrate() = default;
+
+void Cerebrate::MarkDeprecated() {
+    is_deprecated_ = true;
+}
+
+bool Cerebrate::IsDeprecated() const {
+    return is_deprecated_;
+}
