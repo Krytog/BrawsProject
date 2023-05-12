@@ -25,12 +25,14 @@ void TMainWidget::AddToRender(const GameObject* game_object, IVisibleObject* vis
     if (!layer_to_object_.count(vis_obj->GetLayer())) {
         layer_to_object_[vis_obj->GetLayer()] = {};
     }
-    layer_to_object_[vis_obj->GetLayer()].push_back(vis_obj);
+    layer_to_object_[vis_obj->GetLayer()].insert(vis_obj);
 }
 
-void TMainWidget::RemoveFromRender(const GameObject* vis_obj) {
-    layer_to_object_.erase(objects_.at(vis_obj)->GetLayer());
-    objects_.erase(vis_obj);
+void TMainWidget::RemoveFromRender(const GameObject* game_obj) {
+    auto visible = objects_.at(game_obj);
+    auto it = layer_to_object_[visible->GetLayer()].find(visible);
+    layer_to_object_[visible->GetLayer()].erase(it);
+    objects_.erase(game_obj);
 }
 
 void TMainWidget::paintEvent(QPaintEvent* event) {

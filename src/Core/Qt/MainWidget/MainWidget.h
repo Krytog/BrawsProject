@@ -7,6 +7,7 @@
 #include <qopenglwidget.h>
 #include <QOpenGLWidget>
 #include <unordered_map>
+#include <unordered_set>
 #include <deque>
 #include <list>
 
@@ -19,7 +20,7 @@ public:
     TMainWidget(QWidget* parent = nullptr);
 
     void AddToRender(const GameObject *game_object, IVisibleObject *vis_obj);
-    void RemoveFromRender(const GameObject *vis_obj);
+    void RemoveFromRender(const GameObject *game_obj);
 
     void SetCameraOn(const GameObject *object);
     Position GetCameraPosition() const;
@@ -39,7 +40,7 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
 
 private:
-    std::map<IVisibleObject::RenderLayers, std::deque<IVisibleObject*>> layer_to_object_;
+    std::map<IVisibleObject::RenderLayers, std::unordered_set<IVisibleObject*>> layer_to_object_;
     std::unordered_map<const GameObject*, IVisibleObject*> objects_;
 
     const GameObject* objects_to_follow_ = nullptr;
