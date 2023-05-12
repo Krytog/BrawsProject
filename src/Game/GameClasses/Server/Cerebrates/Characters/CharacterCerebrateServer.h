@@ -26,7 +26,7 @@ public:
         return possessed_;
     }
 
-    void ForcePossessedExecuteCommand(std::string_view serialized_command) const override {
+    void ForcePossessedExecuteCommand(std::string_view serialized_command) override {
         if (serialized_command.size() < MINIMAL_INPUT_SIZE) {
             return;
         }
@@ -48,8 +48,6 @@ public:
         Serializer::Serialize(actual_info, &output);
         return output;
     }
-
-    void UsePossessedApi(std::string_view serialized_command) const {}
 
 protected:
     TPawn* possessed_;

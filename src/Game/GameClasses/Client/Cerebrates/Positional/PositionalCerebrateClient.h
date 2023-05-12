@@ -6,6 +6,8 @@
 #include <Core/Tools/Concepts.h>
 #include <Game/GameClasses/CommandsList.h>
 
+#include <iostream>
+
 template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, UpdatePosition, UpdateRotation)>
 class PositionalCerebrateClient : public Cerebrate {
 public:
@@ -27,7 +29,7 @@ public:
         return possessed_;
     }
 
-    void ForcePossessedExecuteCommand(std::string_view serialized_command) const override {
+    void ForcePossessedExecuteCommand(std::string_view serialized_command) override {
         if (serialized_command.size() < sizeof(Info)) {
             return;
         }
@@ -40,10 +42,6 @@ public:
 
     std::string SerializeInfo() override {
         return {};
-    }
-
-    void UsePossessedApi(std::string_view serialized_command) const {
-        // no api
     }
 
 protected:

@@ -5,3 +5,7 @@ enum CharacterCommands {
     COMMAND_RECEIVE_DAMAGE = 'D',
     COMMAND_SHOOT = 'S',
 };
+
+enum ProjectileCommands {
+    COMMAND_DELETE = 'D',
+};

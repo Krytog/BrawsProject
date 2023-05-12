@@ -1,7 +1,8 @@
 #include "ProjectilePawnServer.h"
 #include <Core/ServerEngine.h>
 #include <Game/GameClasses/Server/Pawns/Characters/CharacterPawnServer.h>
-
+#include <SwarmSystem/Overmind.h>
+#include <Game/GameClasses/CommandsList.h>
 
 ProjectilePawnServer::ProjectilePawnServer(const ArgPack& argpack): speed_(argpack.speed), damage_(argpack.damage), direction_(argpack.direction) {
     *position_ = argpack.position;
@@ -26,4 +27,6 @@ void ProjectilePawnServer::OnUpdate() {
     }
 }
 
-ProjectilePawnServer::~ProjectilePawnServer() = default;
+ProjectilePawnServer::~ProjectilePawnServer() {
+    Overmind::GetInstance().DestroyCerebrate(cerebrate_id_);
+}

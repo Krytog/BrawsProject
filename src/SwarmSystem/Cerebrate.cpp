@@ -25,3 +25,7 @@ void Cerebrate::MarkDeprecated() {
 bool Cerebrate::IsDeprecated() const {
     return is_deprecated_;
 }
+
+bool Cerebrate::IsInManualMode() const {
+    return false;
+}

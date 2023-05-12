@@ -22,7 +22,7 @@ public:
         return possessed_;
     }
 
-    void ForcePossessedExecuteCommand(std::string_view serialized_command) const override {
+    void ForcePossessedExecuteCommand(std::string_view serialized_command) override {
         // these objects can't accept any input
         throw std::runtime_error("Projectiles cerebrate forces pawn to do something");
     }
@@ -34,10 +34,6 @@ public:
         std::string output;
         Serializer::Serialize(info, &output);
         return output;
-    }
-
-    void UsePossessedApi(std::string_view serialized_command) const {
-        // these objects can't have api
     }
 
 protected:

@@ -27,14 +27,14 @@ public:
         return possessed_;
     }
 
-    void ForcePossessedExecuteCommand(std::string_view serialized_command) const override {
+    void ForcePossessedExecuteCommand(std::string_view serialized_command) override {
         if (serialized_command.size() < sizeof(Info)) {
             return;
         }
         Info actual_info;
         auto info_size = sizeof(actual_info);
         Serializer::Deserialize(actual_info, serialized_command.substr(0, info_size));
-        UsePossessedApi(serialized_command.substr(info_size));
+        HandleCommands(serialized_command.substr(info_size));
         possessed_->UpdatePosition(actual_info.current_pos);
         possessed_->SetHealth(actual_info.current_health);
     }
@@ -44,11 +44,12 @@ public:
         return {};
     }
 
-    void UsePossessedApi(std::string_view serialized_command) const {
+    void HandleCommands(std::string_view serialized_command) {
         for (auto command : serialized_command) {
             switch (command) {
                 case CharacterCommands::COMMAND_CAPTURE_VIEWPORT: {
                     possessed_->CaptureViewPort();
+                    is_controlled_ = true;
                     break;
                 }
                 case CharacterCommands::COMMAND_RECEIVE_DAMAGE: {
@@ -63,6 +64,11 @@ public:
         }
     }
 
+    bool IsInManualMode() const override {
+        return is_controlled_;
+    }
+
 protected:
     TPawn* possessed_;
+    bool is_controlled_ = false;
 };

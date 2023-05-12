@@ -15,6 +15,9 @@ public:
     void ForceCerebratesExecuteCommands(std::string_view serialized_command);
     size_t RegisterNewCerebrate(Cerebrate* cerebrate);
     void ActualizeCerebrates(std::string_view serialized_command);
+
+    void RemoveDeprecated();
+
     void DestroyCerebrate(size_t cerebrate_id);
 
     template <typename TCerebrate, typename TPawn>

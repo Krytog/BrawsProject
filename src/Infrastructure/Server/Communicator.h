@@ -9,7 +9,7 @@
 
 namespace {
     char client_port[] = "31337";
-    const int kMaxDtgrmLen = 1024;
+    const int kMaxDtgrmLen = 10240;
 }
 
 using SockaddrInfo = std::pair<std::unique_ptr<struct sockaddr_in>, socklen_t>;

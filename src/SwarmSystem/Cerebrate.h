@@ -5,7 +5,7 @@
 class Cerebrate {
 public:
     Cerebrate(size_t type);
-    virtual void ForcePossessedExecuteCommand(std::string_view serialized_command) const = 0;
+    virtual void ForcePossessedExecuteCommand(std::string_view serialized_command) = 0;
     virtual void* GetPossessed() const = 0; // We can replicate different types
     std::string GetInfoForOvermind();
     virtual std::string SerializeInfo() = 0;
@@ -13,6 +13,8 @@ public:
     void MarkDeprecated();
     bool IsDeprecated() const;
     size_t GetType() const;
+
+    virtual bool IsInManualMode() const; // If cerebrate is in manual mode, then ActualizeCerebrates and RemoveDeprecated won't affect it
 
     virtual ~Cerebrate();
 

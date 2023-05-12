@@ -14,7 +14,7 @@ namespace {
 
     int server_port_num = 31337;
     struct sockaddr_in server_addr = {.sin_family = AF_INET, .sin_port = htons(server_port_num)};
-    const int kMaxDtgrmLen = 1024;
+    const int kMaxDtgrmLen = 10240;
     const socklen_t socklen = sizeof(struct sockaddr_in);
 }
 

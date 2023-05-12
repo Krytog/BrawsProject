@@ -4,10 +4,6 @@
 #include <SwarmSystem/Overmind.h>
 
 #include <Infrastructure/Client/Communicator.h>
-#include <BotAPI/BotInputSystem.h>
-#include <BotAPI/BotManagement.h>
-
-#include <iostream>
 
 int main() {
     ClientEngine& engine = ClientEngine::GetInstance();
@@ -25,15 +21,10 @@ int main() {
         time.ResetTime();
 
         auto data = communicator.ReceiveFromServer();
-        overmind.ForceCerebratesExecuteCommands(data);
-        std::cout << "in " << data.size() << " " << data << std::endl;
         overmind.ActualizeCerebrates(data);
-        std::cout << "out" << std::endl;
+        overmind.ForceCerebratesExecuteCommands(data);
 
-
-        std::cout << "Engine in" << std::endl;
         engine.Update();
-        std::cout << "Engine out" << std::endl;
 
         auto for_server = ClientGameManagement::SerializeInput();
         communicator.SendToServer(for_server);

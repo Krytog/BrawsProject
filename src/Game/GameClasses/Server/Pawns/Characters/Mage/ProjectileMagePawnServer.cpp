@@ -15,8 +15,4 @@ ProjectileMagePawnServer::ProjectileMagePawnServer(const ProjectilePawnServer::A
     tag_ = TAGS_PROJECTILE_MAGE;
 }
 
-ProjectileMagePawnServer::~ProjectileMagePawnServer() {
-    Overmind::GetInstance().GetCerebrateWithId(cerebrate_id_)->MarkDeprecated();
-}
-
 const size_t ProjectileMagePawnServer::kTypeId = TypeId_Projectile_Mage;

@@ -95,7 +95,7 @@ void Overmind::ActualizeCerebrates(std::string_view serialized_command) {
         }
     }
     std::erase_if(cerebrates_, [&set](const std::pair<size_t, Cerebrate*>& elem){
-        if (!set.contains(elem.first)) {
+        if (!set.contains(elem.first) && !elem.second->IsInManualMode()) {
             delete elem.second;
             return true;
         }
@@ -144,6 +144,8 @@ void Overmind::UpdateCerebratesInfo(Cerebrate* target, bool (*functor)(Cerebrate
             continue;
         }
 
+        std::string cringe;
+
         buffer += BEGIN_ENTITY_TOKEN;
 
         auto buffer_sz = buffer.size();
@@ -166,14 +168,9 @@ void Overmind::UpdateCerebratesInfo(Cerebrate* target, bool (*functor)(Cerebrate
         buffer += OPEN_INFO_TOKEN;
         buffer += cerebrate_info;
         buffer += CLOSE_INFO_TOKEN;
+
     }
     cerebrates_info_serialized_ = std::move(buffer);
-    std::erase_if(cerebrates_, [](const std::pair<size_t, Cerebrate*>& elem){
-        if (elem.second->IsDeprecated()) {
-            return true;
-        }
-        return false;
-    });
 }
 
 Cerebrate* Overmind::GetCerebrateWithId(size_t id) const {
@@ -181,4 +178,14 @@ Cerebrate* Overmind::GetCerebrateWithId(size_t id) const {
         return cerebrates_.at(id);
     }
     return nullptr;
+}
+
+void Overmind::RemoveDeprecated() {
+    std::erase_if(cerebrates_, [](const std::pair<size_t, Cerebrate*>& elem){
+        if (elem.second->IsDeprecated() && !elem.second->IsInManualMode()) {
+            delete elem.second;
+            return true;
+        }
+        return false;
+    });
 }
