@@ -99,12 +99,13 @@ void Overmind::ActualizeCerebrates(std::string_view serialized_command) {
             set.insert(id);
         }
     }
-    for (auto& elem : cerebrates_) {
+    std::erase_if(cerebrates_, [&set](const std::pair<size_t, Cerebrate*>& elem){
         if (!set.contains(elem.first)) {
-            cerebrates_.erase(elem.first);
             delete elem.second;
+            return true;
         }
-    }
+        return false;
+    });
 }
 
 Overmind::~Overmind() {
