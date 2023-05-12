@@ -172,3 +172,10 @@ void Overmind::UpdateCerebratesInfo(Cerebrate* target, bool (*functor)(Cerebrate
     }
     cerebrates_info_serialized_ = std::move(buffer);
 }
+
+Cerebrate* Overmind::GetCerebrateWithId(size_t id) const {
+    if (cerebrates_.contains(id)) {
+        return cerebrates_.at(id);
+    }
+    return nullptr;
+}

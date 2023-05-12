@@ -27,6 +27,8 @@ public:
     Cerebrate* GetPlayersCerebrate(uint64_t id);
     void DeletePlayerFromRegistry(uint64_t id);
 
+    Cerebrate* GetCerebrateWithId(size_t id) const;
+
 private:
     Overmind();
     Overmind(const Overmind&) = delete;
