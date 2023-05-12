@@ -24,20 +24,14 @@ CharacterMagePawnClient::CharacterMagePawnClient(const Position &position) {
     tag_ = TAGS_CHARACTER_Mage;
 }
 
-void CharacterMagePawnClient::Shoot() {
-    //std::cout << "I shoot!" << std::endl;
-}
+void CharacterMagePawnClient::Shoot() {}
 
 void CharacterMagePawnClient::ReceiveDamage() {
     std::cout << "I receive damage!" << std::endl;
 }
 
-void CharacterMagePawnClient::OnUpdate() {
-    //std::cout << position_->GetCoordinates().first << " " << position_->GetCoordinates().second << std::endl;
-}
+void CharacterMagePawnClient::OnUpdate() {}
 
 const size_t CharacterMagePawnClient::kTypeId = TypeId_Character_Mage;
 
-CharacterMagePawnClient::~CharacterMagePawnClient() {
-    std::cout << "MAGE DEAD!" << std::endl;
-}
+CharacterMagePawnClient::~CharacterMagePawnClient() {}
