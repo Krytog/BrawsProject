@@ -26,6 +26,9 @@ int main() {
 
         auto data = communicator.ReceiveFromServer();
         overmind.ForceCerebratesExecuteCommands(data);
+//        std::cout << "in" << std::endl;
+//        overmind.ActualizeCerebrates(data);
+//        std::cout << "out" << std::endl;
 
         engine.Update();
 

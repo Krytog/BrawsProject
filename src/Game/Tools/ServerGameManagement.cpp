@@ -18,6 +18,10 @@ namespace {
         if (collision_info.has_value()) {
             return true;
         }
+        collision_info = ServerEngine::GetInstance().CheckTriggerCollision(character_pawn->GetFieldOfView(), game_object);
+        if (collision_info.has_value()) {
+            return true;
+        }
         return false;
     }
 }

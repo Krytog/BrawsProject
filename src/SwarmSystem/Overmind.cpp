@@ -41,6 +41,7 @@ size_t Overmind::RegisterNewCerebrate(Cerebrate* cerebrate) {
 #include <iostream>
 
 void Overmind::ForceCerebratesExecuteCommands(std::string_view serialized_command) {
+    std::cout << cerebrates_.size() << std::endl;
     size_t beg = 0, ptr = 1;
     while (ptr < serialized_command.size()) {
         while (ptr < serialized_command.size() && serialized_command[ptr] != BEGIN_ENTITY_TOKEN) {
