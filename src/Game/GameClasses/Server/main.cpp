@@ -3,7 +3,7 @@
 #include <Game/Tools/ServerGameManagement.h>
 #include <SwarmSystem/Overmind.h>
 
-#include <Infrastructure/Server/Communicator.h>
+#include <NormInfrastructure/Server/Communicator.h>
 
 #include <iostream>
 

@@ -4,7 +4,7 @@ find_package(Qt5 COMPONENTS Core Gui Widgets OpenGL REQUIRED)
 add_subdirectory("Core")
 add_subdirectory("Game")
 add_subdirectory("SwarmSystem")
-add_subdirectory("Infrastructure")
+add_subdirectory("NormInfrastructure")
 add_subdirectory("BotAPI")
 
 # game depends on core

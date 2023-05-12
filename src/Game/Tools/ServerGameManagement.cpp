@@ -5,7 +5,7 @@
 #include <Game/GameClasses/Server/Pawns/Characters/Default/CharacterDefaultPawnServer.h>
 #include <Game/GameClasses/Server/Pawns/Characters/Mage/CharacterMagePawnServer.h>
 #include <SwarmSystem/Overmind.h>
-#include <Infrastructure/Server/Communicator.h>
+#include <NormInfrastructure/Server/Communicator.h>
 #include <Game/GameClasses/CommandsList.h>
 
 namespace {
