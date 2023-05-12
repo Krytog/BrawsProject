@@ -18,18 +18,16 @@ using boost::asio::ip::udp;
 class Communicator {
     using DataQueue = std::deque<std::string>;
 public:
-    Communicator(boost::asio::io_context& io_context);
-    // static Communicator &GetInstance();
+    static Communicator &GetInstance();
 
     int64_t RegUser();
-    std::string ReceiveFromClient(uint64_t client_id);
-    void SendToClient(uint64_t client_id, std::string_view data);
+    std::string ReceiveFromClient(int64_t client_id);
+    void SendToClient(int64_t client_id, std::string_view data);
+    void RunFor(size_t milliseconds);
 
-    ~Communicator() {
-        io_context_.run();
-    } /* сокет тут закрывать не надо */
+    ~Communicator() = default;
 private:
-    // Communicator();
+    Communicator();
 
     Communicator(const Communicator &other) = delete;
     Communicator(Communicator &&other) = delete;
@@ -41,10 +39,9 @@ private:
     void DoRecieve(size_t thread_id);
     bool IsValidData(std::string_view data, int64_t client_id) const;
 
-    boost::asio::io_context io_context_;
+    boost::asio::io_service io_context_;
     udp::socket socket_;
     udp::socket reg_socket_;
-    // udp::socket reg_socket_;
 
     std::unordered_map<int64_t, udp::endpoint> connections_;
     std::unordered_map<udp::endpoint, int64_t> id_by_connection_;

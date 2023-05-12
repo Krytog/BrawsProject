@@ -1,9 +1,14 @@
 #include "Communicator.h"
 #include <iostream>
 
+
+void Func() {
+    while (true) {
+        std::cout << "some" << std::endl;
+    }
+}
+
 int main() {
-    boost::asio::io_context io_context;
-    Communicator server(io_context);
     // int one = server.RegUser();
     // int two = server.RegUser();
     // int three = server.RegUser();
@@ -12,10 +17,27 @@ int main() {
     // while (true) {
     //     server.ReceiveFromClient(one);
     // }
+    int64_t one = Communicator::GetInstance().RegUser();
+    int64_t two = Communicator::GetInstance().RegUser();
+
     while (true) {
-        int two = server.RegUser();
-        io_context.run();
+        auto message = Communicator::GetInstance().ReceiveFromClient(one);
+        if (!message.empty()) {
+            std::cout << message << " " << one << std::endl;
+        }
+
+        auto message2 = Communicator::GetInstance().ReceiveFromClient(two);
+        if (!message2.empty()) {
+            std::cout << message2 << " " << two << std::endl;
+        }
+        
+        Communicator::GetInstance().RunFor(5);
     }
+    // while (true) {
+    //     int two = server.RegUser();
+
+    //     std::cout << "safasdf";
+    // }
     // io_context.run();
 
     // while (true) {
