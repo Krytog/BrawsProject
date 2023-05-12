@@ -17,6 +17,7 @@ public:
 
     std::string ReceiveFromServer();
     void SendToServer(std::string_view data);
+    void RunFor(size_t milliseconds);
 
     ~Communicator() = default;
 private:
