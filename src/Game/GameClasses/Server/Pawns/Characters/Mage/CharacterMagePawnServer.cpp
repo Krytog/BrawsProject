@@ -4,6 +4,7 @@
 #include <Game/GameClasses/GameObjectTags.h>
 #include <SwarmSystem/TypeIdList.h>
 #include <SwarmSystem/Overmind.h>
+#include <Game/GameClasses/Server/Pawns/Characters/Mage/ProjectileMagePawnServer.h>
 
 #include <iostream>
 
@@ -18,6 +19,9 @@ enum {
 #define START_HEALTH 100
 #define START_DAMAGE 25
 #define START_SPEED 10
+#define PROJECTILE_SPEED 15
+
+static const Vector2D kShootPos(100, 100);
 
 CharacterMagePawnServer::CharacterMagePawnServer() : CharacterMagePawnServer(Position(START_X, START_Y)) {}
 
@@ -30,8 +34,7 @@ CharacterMagePawnServer::CharacterMagePawnServer(const Position &position) : Cha
 CharacterMagePawnServer::CharacterMagePawnServer(const CharacterPawnServer::ArgPack& base_arg_pack, const Position &position):
         CharacterPawnServer(base_arg_pack) {
     cerebrate_id = Overmind::GetInstance().CreateCerebrateToPossess<CharacterCerebrateServer<CharacterMagePawnServer>>(this);
-    auto pos = new Position(position);
-    position_ = std::unique_ptr<Position>(pos);
+    position_ = std::make_unique<Position>(position);
     collider_ = std::make_unique<CircleCollider>(*position_, COLLIDER_RADIUS);
     tag_ = TAGS_CHARACTER_Mage;
     CharacterPawnServer::UpdatePosition(position);
@@ -42,11 +45,18 @@ CharacterMagePawnServer::~CharacterMagePawnServer() {
 }
 
 void CharacterMagePawnServer::Shoot(const Position &position) {
-    std::cout << "I shoot!" << std::endl;
+    CharacterPawnServer::Shoot(position);
+    ProjectilePawnServer::ArgPack argpack;
+    argpack.position = *position_;
+    argpack.position.Translate(kShootPos);
+    argpack.damage = damage_;
+    argpack.speed = PROJECTILE_SPEED;
+    argpack.direction = (position.GetCoordinatesAsVector2D() - argpack.position.GetCoordinatesAsVector2D());
+    ServerEngine::GetInstance().CreateGameObject<ProjectileMagePawnServer>(argpack);
 }
 
 void CharacterMagePawnServer::OnUpdate() {
-    //std::cout << "Mage: " << position_->GetCoordinates().first << " " << position_->GetCoordinates().second << std::endl;
+    Shoot(Position());
 }
 
 const size_t CharacterMagePawnServer::kTypeId = TypeId_Character_Mage;

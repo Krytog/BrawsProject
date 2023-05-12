@@ -1,4 +1,6 @@
 #include "CharacterPawnServer.h"
+#include <SwarmSystem/Overmind.h>
+#include <Game/GameClasses/CommandsList.h>
 
 #define FIELD_OF_VIEW_TAG "view_field"
 
@@ -66,4 +68,17 @@ GameObject *CharacterPawnServer::GetFieldOfView() const {
 
 void CharacterPawnServer::Move(const Vector2D &direction) {
     IMovable::Move(direction * speed_);
+}
+
+void CharacterPawnServer::ReceiveDamage(double damage) {
+    health_ -= damage;
+    std::string command;
+    command.push_back(CharacterCommands::COMMAND_RECEIVE_DAMAGE);
+    Overmind::GetInstance().GetCerebrateWithId(cerebrate_id)->AddCommandToBuffer(command);
+}
+
+void CharacterPawnServer::Shoot(const Position &position) {
+    std::string command;
+    command.push_back(CharacterCommands::COMMAND_SHOOT);
+    Overmind::GetInstance().GetCerebrateWithId(cerebrate_id)->AddCommandToBuffer(command);
 }

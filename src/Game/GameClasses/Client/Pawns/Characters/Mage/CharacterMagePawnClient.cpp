@@ -20,12 +20,12 @@ CharacterMagePawnClient::CharacterMagePawnClient(const Position &position) {
     auto pos = new Position(position);
     position_ = std::unique_ptr<Position>(pos);
     collider_ = std::make_unique<CircleCollider>(*position_, COLLIDER_RADIUS);
-    visible_object_ = std::make_unique<BasicSprite>(RES_PATH_CHARACTERS_MAGE, *position_, SPRITE_WIDTH, SPRITE_HEIGHT, 0, IVisibleObject::RenderLayers::Objects);
+    visible_object_ = std::make_unique<BasicSprite>(RES_PATH_CHARACTERS_MAGE, *position_, SPRITE_WIDTH, SPRITE_HEIGHT, IVisibleObject::RenderLayers::Objects);
     tag_ = TAGS_CHARACTER_Mage;
 }
 
-void CharacterMagePawnClient::Shoot(const Position &position) {
-    std::cout << "I shoot!" << std::endl;
+void CharacterMagePawnClient::Shoot() {
+    //std::cout << "I shoot!" << std::endl;
 }
 
 void CharacterMagePawnClient::ReceiveDamage() {

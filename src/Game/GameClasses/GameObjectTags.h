@@ -12,3 +12,6 @@
 
 // MAPS TAGS
 #define TAGS_MAPS_Default "__maps_default"
+
+// PROJECTILES TAGS
+#define TAGS_PROJECTILE_MAGE "__projectile_mage"

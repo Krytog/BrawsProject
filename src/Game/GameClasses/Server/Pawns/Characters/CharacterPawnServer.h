@@ -17,12 +17,13 @@ public:
 
     virtual void OnUpdate() override;
 
-    virtual void Shoot(const Position& position) = 0;
+    virtual void Shoot(const Position& position);
 
     virtual void Translate(const Vector2D& vector2d) override;
     virtual void UpdatePosition(const Position& position) override;
 
     virtual void Move(const Vector2D& direction) override;
+    virtual void ReceiveDamage(double damage);
 
     double GetHealth() const;
     double GetDamage() const;

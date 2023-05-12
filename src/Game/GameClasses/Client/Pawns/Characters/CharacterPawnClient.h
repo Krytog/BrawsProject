@@ -10,7 +10,7 @@ public:
     virtual void OnUpdate();
 
 
-    virtual void Shoot(const Position& position) = 0;
+    virtual void Shoot() = 0;
     virtual void ReceiveDamage() = 0;
 
     void CaptureViewPort() const;

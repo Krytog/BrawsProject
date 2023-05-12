@@ -7,7 +7,7 @@ public:
     CharacterMagePawnClient();
     CharacterMagePawnClient(const Position& position);
 
-    void Shoot(const Position& position) override;
+    void Shoot() override;
     void ReceiveDamage() override;
 
     void OnUpdate() override;

@@ -25,7 +25,7 @@ CharacterDefaultPawnClient::CharacterDefaultPawnClient(const Position &position)
     tag_ = TAGS_CHARACTER_Default;
 }
 
-void CharacterDefaultPawnClient::Shoot(const Position &position) {
+void CharacterDefaultPawnClient::Shoot() {
     std::cout << "I shoot!" << std::endl;
 }
 

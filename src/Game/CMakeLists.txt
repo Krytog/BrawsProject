@@ -15,15 +15,19 @@ add_library(game_tools
 add_library(game_client
         GameClasses/Client/Pawns/Maps/Default/MapsDefaultClient.cpp
         GameClasses/Client/Pawns/Characters/CharacterPawnClient.cpp
+        GameClasses/Client/Pawns/Projectiles/ProjectilePawnClient.cpp
         GameClasses/Client/Pawns/Characters/Default/CharacterDefaultPawnClient.cpp
         GameClasses/Client/Pawns/Characters/Mage/CharacterMagePawnClient.cpp
+        GameClasses/Client/Pawns/Characters/Mage/ProjectileMagePawnClient.cpp
         GameClasses/Client/Pawns/UI/Cursor.cpp)
 add_library(game_server
         GameClasses/Server/Pawns/Characters/CharacterPawnServer.cpp
+        GameClasses/Server/Pawns/Projectiles/ProjectilePawnServer.cpp
         GameClasses/Server/Pawns/Characters/Default/CharacterDefaultPawnServer.cpp
         GameClasses/Server/Pawns/Interfaces/IMovable.cpp
         GameClasses/Server/Pawns/Maps/Default/MapsDefaultServer.cpp
         GameClasses/Server/Pawns/Characters/Mage/CharacterMagePawnServer.cpp
+        GameClasses/Server/Pawns/Characters/Mage/ProjectileMagePawnServer.cpp
         GameClasses/Server/ParsingUtilities/ControllerTools.cpp)
 
 target_link_libraries(game_client_tools game_client)
