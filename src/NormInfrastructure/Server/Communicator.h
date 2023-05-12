@@ -1,6 +1,5 @@
 #pragma once
 
-#include <sys/_types/_int64_t.h>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -44,7 +43,7 @@ private:
     udp::socket reg_socket_;
 
     std::unordered_map<int64_t, udp::endpoint> connections_;
-    std::unordered_map<udp::endpoint, int64_t> id_by_connection_;
+    // std::unordered_map<udp::endpoint, int64_t> id_by_connection_;
     std::unordered_map<int64_t, DataQueue> users_data_;
     std::mt19937_64 rand_gen_;
 
