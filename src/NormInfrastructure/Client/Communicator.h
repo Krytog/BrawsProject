@@ -13,7 +13,7 @@ class Communicator {
 public:
     static Communicator &GetInstance();
 
-    int64_t RegOnServer();
+    uint64_t RegOnServer();
 
     std::string ReceiveFromServer();
     void SendToServer(std::string_view data);
@@ -30,7 +30,7 @@ private:
 
     std::deque<std::string> packages_;
 
-    int64_t user_id_;
+    uint64_t user_id_;
 
     boost::asio::io_service io_context_;
     udp::socket socket_;

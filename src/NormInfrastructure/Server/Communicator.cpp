@@ -10,7 +10,8 @@ namespace  {
 }
 
 Communicator::Communicator(): socket_(io_context_, udp::endpoint(udp::v4(), random_port)),
-            reg_socket_(io_context_, udp::endpoint(udp::v4(), reg_port)) {}
+            reg_socket_(io_context_, udp::endpoint(udp::v4(), reg_port)), rd_(), gen_(rd_()), dis_() {
+}
 
 Communicator &Communicator::GetInstance() {
     static Communicator instance;
@@ -19,15 +20,15 @@ Communicator &Communicator::GetInstance() {
 
 uint64_t Communicator::RegId() {
     do {
-        uint64_t num = rand_gen_();
+        uint64_t num = dis_(gen_);
         if (!connections_.contains(num)) {
             return num;
         }
     } while (true);
 }
 
-int64_t Communicator::RegUser() {
-    int64_t usr_id = RegId();
+uint64_t Communicator::RegUser() {
+    uint64_t usr_id = RegId();
 
     actual_message_[usr_id].resize(kMaxDtgrmLen);
     reg_socket_.async_receive_from(
@@ -58,7 +59,7 @@ int64_t Communicator::RegUser() {
     return usr_id;
 }
 
-void Communicator::SendToClient(int64_t client_id, std::string_view data) {
+void Communicator::SendToClient(uint64_t client_id, std::string_view data) {
     socket_.async_send_to(boost::asio::buffer(data.data(), data.size()), connections_[client_id],
                     [this](boost::system::error_code, std::size_t) { /* do nothing yet */ });
 }
@@ -74,7 +75,7 @@ void Communicator::DoRecieve(size_t thread_id) {
             //     return;
             // }
             
-            int64_t usr_id;
+            uint64_t usr_id;
             std::memcpy(&usr_id, actual_message_[thread_id].data(), sizeof(usr_id));
             users_data_[usr_id].push_back(std::move(actual_message_[thread_id]));
         
@@ -87,8 +88,8 @@ void Communicator::DoRecieve(size_t thread_id) {
     );
 }
 
-bool Communicator::IsValidData(std::string_view data, int64_t client_id) const {
-    int64_t id;
+bool Communicator::IsValidData(std::string_view data, uint64_t client_id) const {
+    uint64_t id;
     std::memcpy(&id, data.data(), sizeof(id));
     if (id == client_id) {
         return true;
@@ -96,7 +97,7 @@ bool Communicator::IsValidData(std::string_view data, int64_t client_id) const {
     return false;
 }
 
-std::string Communicator::ReceiveFromClient(int64_t client_id) {
+std::string Communicator::ReceiveFromClient(uint64_t client_id) {
     if (users_data_[client_id].empty() || !IsValidData(users_data_[client_id].front().data(), client_id)) {
         if (!users_data_[client_id].empty()) {
             users_data_[client_id].pop_front();

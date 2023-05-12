@@ -27,7 +27,7 @@ void Communicator::DoRecieve() {
     socket_.receive_from(boost::asio::buffer(packages_.back(), k_max_dtgrm_len), connection_);
 }
 
-int64_t Communicator::RegOnServer() {
+uint64_t Communicator::RegOnServer() {
     char greeting[] = "register";
     socket_.send_to(boost::asio::buffer(greeting, strlen(greeting)), *reg_endpoints_.begin());
     int bytes_recvd = socket_.receive_from(boost::asio::buffer(&user_id_, sizeof(user_id_)), connection_);
