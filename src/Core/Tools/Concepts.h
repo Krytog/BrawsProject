@@ -1,3 +1,5 @@
+#pragma once
+
 #define PARENS ()
 /* Never to use! Use MACRO_CONCAT instead! */
 #define MACRO_CONCAT_IMPL(x, y) x##y
