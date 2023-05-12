@@ -6,7 +6,7 @@
 #include <Core/Tools/Concepts.h>
 #include <Game/GameClasses/CommandsList.h>
 
-template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, UpdatePosition, SetHealth, CaptureViewPort)>
+template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, UpdatePosition, SetHealth, CaptureViewPort, ReceiveDamage, Shoot)>
 class CharacterCerebrateClient : public Cerebrate {
 public:
     struct Info {
@@ -49,6 +49,14 @@ public:
             switch (command) {
                 case CharacterCommands::COMMAND_CAPTURE_VIEWPORT: {
                     possessed_->CaptureViewPort();
+                    break;
+                }
+                case CharacterCommands::COMMAND_RECEIVE_DAMAGE: {
+                    possessed_->ReceiveDamage();
+                    break;
+                }
+                case CharacterCommands::COMMAND_SHOOT: {
+                    possessed_->Shoot();
                     break;
                 }
             }

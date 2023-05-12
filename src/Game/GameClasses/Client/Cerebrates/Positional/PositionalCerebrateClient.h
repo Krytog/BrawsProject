@@ -6,7 +6,7 @@
 #include <Core/Tools/Concepts.h>
 #include <Game/GameClasses/CommandsList.h>
 
-template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, UpdatePosition, SetRotation)>
+template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, UpdatePosition, UpdateRotation)>
 class PositionalCerebrateClient : public Cerebrate {
 public:
     struct Info {
@@ -34,7 +34,7 @@ public:
         Info current_info;
         Serializer::Deserialize(current_info, serialized_command.substr(0, sizeof(Info)));
         possessed_->UpdatePosition(current_info.position);
-        possessed_->SetRotation(current_info.rotator);
+        possessed_->UpdateRotation(current_info.rotator);
     }
 
 

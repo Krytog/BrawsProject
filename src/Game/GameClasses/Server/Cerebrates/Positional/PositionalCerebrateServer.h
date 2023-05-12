@@ -24,13 +24,13 @@ public:
 
     void ForcePossessedExecuteCommand(std::string_view serialized_command) const override {
         // these objects can't accept any input
-        throw std::runtime_error("Positional cerebrate forces pawn to do something");
+        throw std::runtime_error("Projectiles cerebrate forces pawn to do something");
     }
 
     std::string SerializeInfo() override {
         Info info;
         info.position = possessed_->GetPosition();
-        info.rotator = possessed_->GetRotatator();
+        info.rotator = possessed_->GetRotator();
         std::string output;
         Serializer::Serialize(info, &output);
         return output;
