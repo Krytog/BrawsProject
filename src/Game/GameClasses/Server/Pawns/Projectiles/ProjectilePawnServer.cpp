@@ -6,7 +6,7 @@
 
 ProjectilePawnServer::ProjectilePawnServer(const ArgPack& argpack): speed_(argpack.speed), damage_(argpack.damage), direction_(argpack.direction) {
     *position_ = argpack.position;
-    ServerEngine::GetInstance().Invoke(std::chrono::milliseconds(5000), &ServerEngine::Destroy, &ServerEngine::GetInstance(), this);
+    ServerEngine::GetInstance().Invoke(std::chrono::milliseconds(15000), &ServerEngine::Destroy, &ServerEngine::GetInstance(), this);
 }
 
 
@@ -25,7 +25,7 @@ void ProjectilePawnServer::OnUpdate() {
 //        //ServerEngine::GetInstance().Invoke(0, &ServerEngine::Destroy, &ServerEngine::GetInstance(), this);
 //        return;
 //    }
-    Translate(direction_ * speed_);
+    //Translate(direction_ * speed_);
 }
 
 ProjectilePawnServer::~ProjectilePawnServer() {

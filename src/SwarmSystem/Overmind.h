@@ -32,6 +32,8 @@ public:
 
     Cerebrate* GetCerebrateWithId(size_t id) const;
 
+    void DebugInfo() const; // Debugging
+
 private:
     Overmind();
     Overmind(const Overmind&) = delete;

@@ -8,6 +8,8 @@ void ProjectilePawnClient::UpdateRotation(const Vector2D &rotator) {
     visible_object_->Rotate(-start_rotation);
 }
 
+#include <iostream>
+
 void ProjectilePawnClient::OnUpdate() {
-    // bruh
+    std::cout << position_->GetCoordinates().first << " " << position_->GetCoordinates().second << std::endl;
 }

@@ -82,3 +82,11 @@ void CharacterPawnServer::Shoot(const Position &position) {
     command.push_back(CharacterCommands::COMMAND_SHOOT);
     Overmind::GetInstance().GetCerebrateWithId(cerebrate_id)->AddCommandToBuffer(command);
 }
+
+void CharacterPawnServer::BlockShooting() {
+    can_shoot_ = false;
+}
+
+void CharacterPawnServer::UnblockShooting() {
+    can_shoot_ = true;
+}

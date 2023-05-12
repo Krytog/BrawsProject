@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <vector>
 #include <cstdint>
+#include <iostream>
 
 #define FIELD_OF_VIEW_WIDTH 1280
 #define FIELD_OF_VIEW_HEIGHT 720
@@ -144,6 +145,10 @@ public:
     }
     void SetActiveOff() {
         is_active_ = false;
+    }
+
+    void DebugInfo() const {
+        std::cout << "ENGINE OBJECTS: " << objects_.size() << std::endl;
     }
 
 protected:

@@ -45,6 +45,9 @@ CharacterMagePawnServer::~CharacterMagePawnServer() {
 }
 
 void CharacterMagePawnServer::Shoot(const Position &position) {
+    if (!can_shoot_) {
+        return;
+    }
     CharacterPawnServer::Shoot(position);
     ProjectilePawnServer::ArgPack argpack;
     argpack.position = *position_;

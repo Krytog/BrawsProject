@@ -22,6 +22,10 @@ namespace {
         }
         return false;
     }
+
+    bool Kostil(Cerebrate* from, Cerebrate* other) {
+        return true;
+    }
 }
 
 void ServerGameManagement::InitGameServer(std::vector<uint64_t>& players_id) {
@@ -58,5 +62,6 @@ void ServerGameManagement::PrepareAndSendDataToClient(uint64_t player_id) {
     }
     overmind.UpdateCerebratesInfo(player_cerebrate, IsSeenByPlayer);
     auto data = overmind.GetCerebratesInfoSerialized();
+    std::cout << "DATA SIZE: " << data.size() << std::endl;
     Communicator::GetInstance().SendToClient(player_id, data);
 }

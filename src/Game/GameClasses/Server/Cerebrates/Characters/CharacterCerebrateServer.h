@@ -10,7 +10,7 @@ enum {
     SHOOT_KEY = 1,
 };
 
-template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, Move, Shoot, GetHealth, GetPosition)>
+template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, Move, Shoot, GetHealth, GetPosition, BlockShooting, UnblockShooting)>
 class CharacterCerebrateServer : public Cerebrate {
 public:
     struct Info {
@@ -35,6 +35,9 @@ public:
         uint8_t mouse_key = (serialized_command[pos_bytes] - '0');
         if (mouse_key == SHOOT_KEY) {
             possessed_->Shoot(aim_pos);
+            possessed_->BlockShooting();
+        } else {
+            possessed_->UnblockShooting();
         }
         Vector2D input_vector = ControllerTools::ResultVector(serialized_command.substr(pos_bytes + 1, std::string_view::npos));
         possessed_->Move(input_vector);

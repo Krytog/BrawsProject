@@ -36,6 +36,9 @@ public:
     size_t GetCerebrateId() const;
     GameObject* GetFieldOfView() const;
 
+    void BlockShooting();
+    void UnblockShooting();
+
 protected:
     size_t cerebrate_id;
     GameObject* field_of_view_;
@@ -43,4 +46,6 @@ protected:
     double health_;
     double damage_;
     double speed_;
+
+    bool can_shoot_ = true;
 };

@@ -35,6 +35,9 @@ int main() {
 
         engine.Update();
 
+        overmind.DebugInfo();
+        engine.DebugInfo();
+
         for (auto player : players_id) {
             ServerGameManagement::PrepareAndSendDataToClient(player);
         }

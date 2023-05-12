@@ -1,6 +1,7 @@
 #include "Overmind.h"
 #include <cstring>
 #include <unordered_set>
+#include <iostream>
 
 #include "Register.h"
 
@@ -188,4 +189,8 @@ void Overmind::RemoveDeprecated() {
         }
         return false;
     });
+}
+
+void Overmind::DebugInfo() const {
+    std::cout << "Total cerebrates: " << cerebrates_.size() << std::endl;
 }
