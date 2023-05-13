@@ -58,7 +58,8 @@ uint64_t Communicator::RegUser() {
 }
 
 void Communicator::SendToClient(uint64_t client_id, std::string_view data) {
-    socket_.send_to(boost::asio::buffer(data.data(), data.size()), connections_[client_id]);
+    socket_.async_send_to(boost::asio::buffer(data.data(), data.size()), connections_[client_id],
+                    [this](boost::system::error_code, std::size_t) { /* do nothing yet */ });
 }
 
 void Communicator::DoRecieve(size_t thread_id) {
