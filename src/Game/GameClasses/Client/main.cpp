@@ -3,7 +3,7 @@
 #include <Game/Tools/ClientGameManagement.h>
 #include <SwarmSystem/Overmind.h>
 
-#include <Infrastructure/Client/Communicator.h>
+#include <NormInfrastructure/Client/Communicator.h>
 
 int main() {
     ClientEngine& engine = ClientEngine::GetInstance();
@@ -15,9 +15,6 @@ int main() {
     MyTime time;
     engine.SetActiveOn();
     while (engine.IsActive()) {
-        if (time.EvaluateTime() < static_cast<double>(1) / 60) {
-            continue;
-        }
         time.ResetTime();
 
         auto data = communicator.ReceiveFromServer();
@@ -31,6 +28,8 @@ int main() {
 
         auto for_server = ClientGameManagement::SerializeInput();
         communicator.SendToServer(for_server);
+
+        communicator.RunFor(1000 * (static_cast<double>(1) / 60 - time.EvaluateTime() - 0.00005));
     }
     return 0;
 }

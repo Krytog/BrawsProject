@@ -31,30 +31,28 @@ uint64_t Communicator::RegUser() {
     uint64_t usr_id = RegId();
 
     actual_message_[usr_id].resize(kMaxDtgrmLen);
-    reg_socket_.async_receive_from(
-        boost::asio::buffer(actual_message_[usr_id], kMaxDtgrmLen), connections_[usr_id],
-        [this, usr_id](boost::system::error_code error_code, std::size_t bytes_recvd) {
-            std::string reg_message = "register";
-            if (error_code || (bytes_recvd != reg_message.size()) || 
-                    (reg_message != actual_message_[usr_id].substr(0, reg_message.size()))) {
-                char bad_reg[] = "";
-                reg_socket_.send_to(boost::asio::buffer(bad_reg, strlen(bad_reg)), connections_[usr_id]); 
-                actual_message_[usr_id].clear();
-                return;
-            }
-            //////////
-             std::cout << "Registered user with id: " << usr_id << std::endl;
-            /////////
-            
-            users_data_[usr_id].resize(10);
-            // id_by_connection_[connections_[usr_id]] = usr_id;
-            char payload[sizeof(usr_id)];
-            memcpy(payload, &usr_id, sizeof(usr_id));
-            reg_socket_.send_to(boost::asio::buffer(payload, strlen(payload)), connections_[usr_id]);
+    uint64_t bytes_recvd = reg_socket_.receive_from(
+        boost::asio::buffer(actual_message_[usr_id], kMaxDtgrmLen), connections_[usr_id]);
 
-            DoRecieve(usr_id);
-        }
-    );
+    std::string reg_message = "register";
+    if ((bytes_recvd != reg_message.size()) ||
+        (reg_message != actual_message_[usr_id].substr(0, reg_message.size()))) {
+        char bad_reg[] = "";
+        reg_socket_.send_to(boost::asio::buffer(bad_reg, strlen(bad_reg)), connections_[usr_id]);
+        actual_message_[usr_id].clear();
+        return RegUser();
+    }
+    //////////
+    std::cout << "Registered user with id: " << usr_id << std::endl;
+    /////////
+
+    users_data_[usr_id].resize(10);
+    // id_by_connection_[connections_[usr_id]] = usr_id;
+    char payload[sizeof(usr_id)];
+    memcpy(payload, &usr_id, sizeof(usr_id));
+    reg_socket_.send_to(boost::asio::buffer(payload, strlen(payload)), connections_[usr_id]);
+
+    DoRecieve(usr_id);
 
     return usr_id;
 }
