@@ -9,8 +9,6 @@ void CharacterPawnClient::OnUpdate() {
         auto mouse_token = std::get<InputSystem::MouseToken>(*input.begin());
         Vector2D rotator = mouse_token.position.GetCoordinatesAsVector2D() - position_->GetCoordinatesAsVector2D();
         visible_object_->UpdateRotation(rotator);
-        rotator.Normalize();
-        std::cout << rotator.GetCoordinates().first << " " << rotator.GetCoordinates().second << std::endl;
     }
 }
 
