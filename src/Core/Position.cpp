@@ -45,3 +45,9 @@ void Position::Translate(const Vector2D& other) {
     x_ += pair.first;
     y_ += pair.second;
 }
+
+Vector2D Position::GetDirection(const Position &from, const Position &to) {
+    Vector2D output = to.GetCoordinatesAsVector2D() - from.GetCoordinatesAsVector2D();
+    output.Normalize();
+    return output;
+}

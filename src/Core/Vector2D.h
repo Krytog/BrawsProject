@@ -28,6 +28,11 @@ public:
     static double ScalarMultiply(const Vector2D& first, const Vector2D& second);
     static double Det(const Vector2D& first, const Vector2D& second);
 
+    Vector2D Rotate(const Vector2D& rotator) const;
+    Vector2D Rotate(double angle) const;
+
+    double GetAngle() const;
+
     double Length() const;
 
     static Vector2D Up;

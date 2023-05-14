@@ -32,8 +32,6 @@ Vector2D IVisibleObject::GetRotator() const {
     return Vector2D(std::cos(angle_), std::sin(angle_));
 }
 
-#include <iostream>
-
 void IVisibleObject::UpdateRotation(const Vector2D &rotator) {
     const double sin_of_angle = rotator.GetCoordinates().second / rotator.Length();
     double raw_angle = std::asin(sin_of_angle);

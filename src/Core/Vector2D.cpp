@@ -87,3 +87,29 @@ void Vector2D::Normalize() {
 bool Vector2D::IsZero() const {
     return Length() < PRECISION;
 }
+
+Vector2D Vector2D::Rotate(const Vector2D &rotator) const {
+    const double sin_of_angle = rotator.GetCoordinates().second / rotator.Length();
+    double angle = std::asin(sin_of_angle);
+    if (rotator.GetCoordinates().first < 0) {
+        angle = M_PI - angle;
+    }
+    const double x = x_ * std::cos(angle) - y_ * std::sin(angle);
+    const double y = x_ * std::sin(angle) + y_ * std::cos(angle);
+    return Vector2D(x, y);
+}
+
+Vector2D Vector2D::Rotate(double angle) const {
+    const double x = x_ * std::cos(angle) - y_ * std::sin(angle);
+    const double y = x_ * std::sin(angle) + y_ * std::cos(angle);
+    return Vector2D(x, y);
+}
+
+double Vector2D::GetAngle() const {
+    const double sin_of_angle = y_ / Length();
+    double angle = std::asin(sin_of_angle);
+    if (x_ < 0) {
+        angle = M_PI - angle;
+    }
+    return angle;
+}

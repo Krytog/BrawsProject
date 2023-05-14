@@ -18,6 +18,8 @@ public:
 
     void Translate(const Vector2D& other);
 
+    static Vector2D GetDirection(const Position& from, const Position& to);
+
 private:
     double x_;
     double y_;
