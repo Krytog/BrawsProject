@@ -14,7 +14,7 @@ void DrawTextHelper::Paint(Painter *painter) const {
     real_painter->save();
 
     real_painter->translate(pos.first, -pos.second);
-    real_painter->rotate(angle_);
+    real_painter->rotate(360 - angle_);
     real_painter->translate(- (static_cast<int64_t>(size.first) / 2),
          - (static_cast<int64_t>(size.second) / 2));
 

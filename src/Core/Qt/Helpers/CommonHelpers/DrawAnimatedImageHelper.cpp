@@ -17,7 +17,7 @@ void DrawAnimatedImageHelper::Paint(Painter* painter) const {
 
     /* Вынести потом куда-то */
     real_painter->translate(coords.first, -coords.second);
-    real_painter->rotate(angle_);
+    real_painter->rotate(360 - angle_);
     real_painter->translate(- (frame_width / 2), - (image_->height() / 2));
 
     real_painter->drawImage(

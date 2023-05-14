@@ -12,7 +12,7 @@ void DrawStaticImageHelper::Paint(Painter* painter) const {
     const auto& coords = pos_.GetCoordinates();
 
     real_painter->translate(coords.first, -coords.second);
-    real_painter->rotate(angle_);
+    real_painter->rotate(360 - angle_);
     real_painter->translate(- (image_->width() / 2), - (image_->height() / 2));
 
     real_painter->drawImage(
