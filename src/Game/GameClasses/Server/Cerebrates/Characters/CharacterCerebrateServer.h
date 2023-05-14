@@ -10,7 +10,8 @@ enum {
     SHOOT_KEY = 1,
 };
 
-template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, Move, Shoot, GetHealth, GetPosition, BlockShooting, UnblockShooting)>
+template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, Move, Shoot, GetHealth, GetPosition,
+        SetDirection, BlockShooting, UnblockShooting)>
 class CharacterCerebrateServer : public Cerebrate {
 public:
     struct Info {
@@ -33,6 +34,7 @@ public:
         Position aim_pos;
         size_t pos_bytes = Serializer::Deserialize(aim_pos, serialized_command.substr(0, sizeof(aim_pos)));
         uint8_t mouse_key = (serialized_command[pos_bytes] - '0');
+        possessed_->SetDirection(aim_pos);
         if (mouse_key == SHOOT_KEY) {
             possessed_->Shoot(aim_pos);
             possessed_->BlockShooting();

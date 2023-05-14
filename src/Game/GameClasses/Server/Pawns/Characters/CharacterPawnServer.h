@@ -21,6 +21,7 @@ public:
 
     virtual void Translate(const Vector2D& vector2d) override;
     virtual void UpdatePosition(const Position& position) override;
+    virtual void SetDirection(const Position& looking_at);
 
     virtual void Move(const Vector2D& direction) override;
     virtual void ReceiveDamage(double damage);
@@ -46,6 +47,7 @@ protected:
     double health_;
     double damage_;
     double speed_;
+    Vector2D direction_;
 
     bool can_shoot_ = true;
 };

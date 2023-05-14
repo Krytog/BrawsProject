@@ -4,8 +4,8 @@
 #include <Game/Resources/ResourcesPaths.h>
 
 enum {
-    SPRITE_WIDTH = 64,
-    SPRITE_HEIGHT = 64
+    SPRITE_WIDTH = 128,
+    SPRITE_HEIGHT = 128
 };
 
 Cursor::Cursor() : VisibleGameObject() {

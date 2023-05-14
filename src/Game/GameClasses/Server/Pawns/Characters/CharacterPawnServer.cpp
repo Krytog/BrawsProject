@@ -90,3 +90,8 @@ void CharacterPawnServer::BlockShooting() {
 void CharacterPawnServer::UnblockShooting() {
     can_shoot_ = true;
 }
+
+void CharacterPawnServer::SetDirection(const Position& looking_at) {
+    Vector2D direction = Position::GetDirection(*position_, looking_at);
+    direction_ = direction;
+}

@@ -25,7 +25,7 @@ void ProjectilePawnServer::OnUpdate() {
 //        //ServerEngine::GetInstance().Invoke(0, &ServerEngine::Destroy, &ServerEngine::GetInstance(), this);
 //        return;
 //    }
-    //Translate(direction_ * speed_);
+    Translate(direction_ * speed_);
 }
 
 ProjectilePawnServer::~ProjectilePawnServer() {

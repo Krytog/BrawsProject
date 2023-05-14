@@ -11,17 +11,17 @@
 enum {
     START_X = -500,
     START_Y = -400,
-    COLLIDER_RADIUS = 35,
-    SPRITE_WIDTH = 100,
-    SPRITE_HEIGHT = 100
+    COLLIDER_RADIUS = 70,
 };
 
 #define START_HEALTH 100
 #define START_DAMAGE 25
-#define START_SPEED 10
-#define PROJECTILE_SPEED 0.005
+#define START_SPEED 7.5
+#define PROJECTILE_SPEED 15
 
-static const Vector2D kShootPos(0, 0);
+#define SCALE 0.390625
+#define BASIC_ANGLE (M_PI / 2)
+static const Vector2D kShootPos(152 * SCALE, -171 * SCALE);
 
 CharacterMagePawnServer::CharacterMagePawnServer() : CharacterMagePawnServer(Position(START_X, START_Y)) {}
 
@@ -51,10 +51,11 @@ void CharacterMagePawnServer::Shoot(const Position &position) {
     CharacterPawnServer::Shoot(position);
     ProjectilePawnServer::ArgPack argpack;
     argpack.position = *position_;
-    argpack.position.Translate(kShootPos);
+    argpack.position.Translate(kShootPos.Rotate(direction_));
     argpack.damage = damage_;
     argpack.speed = PROJECTILE_SPEED;
-    argpack.direction = (position.GetCoordinatesAsVector2D() - position_->GetCoordinatesAsVector2D());
+    argpack.direction = (position.GetCoordinatesAsVector2D() - argpack.position.GetCoordinatesAsVector2D());
+    argpack.direction.Normalize();
     ServerEngine::GetInstance().CreateGameObject<ProjectileMagePawnServer>(argpack);
 }
 

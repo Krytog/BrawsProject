@@ -5,9 +5,7 @@
 #include <Core/ServerEngine.h>
 #include <Game/GameClasses/GameObjectTags.h>
 
-enum {
-    COLLIDER_RADIUS = 50,
-};
+#define COLLIDER_RADIUS 17.5
 
 ProjectileMagePawnServer::ProjectileMagePawnServer(const ProjectilePawnServer::ArgPack& argpack): ProjectilePawnServer(argpack) {
     cerebrate_id_ = Overmind::GetInstance().CreateCerebrateToPossess<PositionalCerebrateServer<ProjectileMagePawnServer>>(this);
