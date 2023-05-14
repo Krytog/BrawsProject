@@ -10,8 +10,8 @@ enum {
     START_X = -50,
     START_Y = -50,
     COLLIDER_RADIUS = 35,
-    SPRITE_WIDTH = 100,
-    SPRITE_HEIGHT = 100
+    SPRITE_WIDTH = 200,
+    SPRITE_HEIGHT = 200
 };
 
 CharacterMagePawnClient::CharacterMagePawnClient() : CharacterMagePawnClient(Position(START_X, START_Y)) {}
@@ -30,7 +30,9 @@ void CharacterMagePawnClient::ReceiveDamage() {
     std::cout << "I receive damage!" << std::endl;
 }
 
-void CharacterMagePawnClient::OnUpdate() {}
+void CharacterMagePawnClient::OnUpdate() {
+    CharacterPawnClient::OnUpdate();
+}
 
 const size_t CharacterMagePawnClient::kTypeId = TypeId_Character_Mage;
 

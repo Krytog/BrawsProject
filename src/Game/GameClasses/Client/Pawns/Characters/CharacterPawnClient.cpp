@@ -3,7 +3,16 @@
 CharacterPawnClient::CharacterPawnClient() = default;
 CharacterPawnClient::~CharacterPawnClient() = default;
 
-void CharacterPawnClient::OnUpdate() {}
+void CharacterPawnClient::OnUpdate() {
+    if (is_controlled_) {
+        auto input = ClientEngine::GetInstance().GetInput();
+        auto mouse_token = std::get<InputSystem::MouseToken>(*input.begin());
+        Vector2D rotator = mouse_token.position.GetCoordinatesAsVector2D() - position_->GetCoordinatesAsVector2D();
+        visible_object_->UpdateRotation(rotator);
+        rotator.Normalize();
+        std::cout << rotator.GetCoordinates().first << " " << rotator.GetCoordinates().second << std::endl;
+    }
+}
 
 double CharacterPawnClient::GetDamage() const {
     return damage_;
@@ -29,6 +38,11 @@ void CharacterPawnClient::SetSpeed(double speed) {
     speed_ = speed;
 }
 
-void CharacterPawnClient::CaptureViewPort() const {
+void CharacterPawnClient::CaptureViewPort() {
     ClientEngine::GetInstance().SetCameraOn(this);
+    is_controlled_ = true;
+}
+
+void CharacterPawnClient::SetRotation(const Vector2D &rotator) {
+    visible_object_->UpdateRotation(rotator);
 }

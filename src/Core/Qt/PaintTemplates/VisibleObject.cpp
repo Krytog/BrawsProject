@@ -34,7 +34,11 @@ Vector2D IVisibleObject::GetRotator() const {
 
 void IVisibleObject::UpdateRotation(const Vector2D &rotator) {
     const double sin_of_angle = rotator.GetCoordinates().second / rotator.Length();
-    angle_ = std::asin(sin_of_angle);
+    double raw_angle = std::asin(sin_of_angle);
+    if (rotator.GetCoordinates().first < 0) {
+        angle_ = M_PI - raw_angle;
+    }
+    angle_ *= 180; // radians into degrees
 }
 
 void IFlexibleVisibleObject::SetDefaultLogic() {

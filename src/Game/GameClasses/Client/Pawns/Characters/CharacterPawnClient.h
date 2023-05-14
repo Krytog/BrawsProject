@@ -13,7 +13,9 @@ public:
     virtual void Shoot() = 0;
     virtual void ReceiveDamage() = 0;
 
-    void CaptureViewPort() const;
+    void SetRotation(const Vector2D& rotator);
+
+    void CaptureViewPort();
 
     double GetHealth() const;
     double GetDamage() const;
@@ -27,4 +29,6 @@ protected:
     double health_;
     double damage_;
     double speed_;
+
+    bool is_controlled_;
 };
