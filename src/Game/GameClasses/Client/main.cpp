@@ -20,14 +20,17 @@ int main() {
         }
         time.ResetTime();
 
+        MyTime timer;
+
+        timer.ResetTime();
         auto data = communicator.ReceiveFromServer();
         overmind.ActualizeCerebrates(data);
         overmind.ForceCerebratesExecuteCommands(data);
 
         engine.Update();
 
-        // overmind.DebugInfo();
-        // engine.DebugInfo();
+        //overmind.DebugInfo();
+        //engine.DebugInfo();
 
         auto for_server = ClientGameManagement::SerializeInput();
         communicator.SendToServer(for_server);

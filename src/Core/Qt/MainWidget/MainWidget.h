@@ -11,8 +11,8 @@
 #include <deque>
 #include <list>
 
-constexpr static int64_t kWindowWidth = 1280;
-constexpr static int64_t kWindowHeight = 720;
+constexpr static int64_t kWindowWidth = 1600;
+constexpr static int64_t kWindowHeight = 1200;
 
 class TMainWidget : public QOpenGLWidget {
     Q_OBJECT

@@ -7,8 +7,8 @@
 #include <cstdint>
 #include <iostream>
 
-#define FIELD_OF_VIEW_WIDTH 1280
-#define FIELD_OF_VIEW_HEIGHT 720
+#define FIELD_OF_VIEW_WIDTH 1600
+#define FIELD_OF_VIEW_HEIGHT 1200
 
 #include "CollisionSystem.h"
 #include "Colliders.h"
