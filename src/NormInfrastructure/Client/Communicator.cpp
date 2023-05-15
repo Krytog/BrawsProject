@@ -14,6 +14,7 @@ Communicator::Communicator(): socket_(io_context_, udp::endpoint(udp::v4(), 0)) 
     udp::resolver resolver(io_context_);
     endpoints_ = resolver.resolve(udp::v4(), host, random_port);
     reg_endpoints_ = resolver.resolve(udp::v4(), host, reg_port);
+    package_.resize(k_max_dtgrm_len);
 }
 
 Communicator &Communicator::GetInstance() {
@@ -22,9 +23,7 @@ Communicator &Communicator::GetInstance() {
 }
 
 void Communicator::DoRecieve() {
-    packages_.emplace_back();
-    packages_.back().resize(k_max_dtgrm_len);
-    socket_.async_receive_from(boost::asio::buffer(packages_.back(), k_max_dtgrm_len), connection_,
+    socket_.async_receive_from(boost::asio::buffer(package_, k_max_dtgrm_len), connection_,
                                [this](boost::system::error_code error_code, std::size_t bytes_recvd) { DoRecieve(); });
 }
 
@@ -45,13 +44,8 @@ uint64_t Communicator::RegOnServer() {
     return user_id_;
 }
 
-std::string Communicator::ReceiveFromServer() {
-    if (packages_.empty()) {
-        return "";
-    }
-    std::string message = std::move(packages_.front());
-    packages_.pop_front();
-    return std::move(message);
+std::string& Communicator::ReceiveFromServer() {
+    return package_;
 }
 
 void Communicator::SendToServer(std::string_view data) {

@@ -15,7 +15,7 @@ public:
 
     uint64_t RegOnServer();
 
-    std::string ReceiveFromServer();
+    std::string& ReceiveFromServer();
     void SendToServer(std::string_view data);
 
     void RunFor(size_t milliseconds);
@@ -32,7 +32,7 @@ private:
     Communicator &operator=(const Communicator &other) = delete;
     Communicator &operator=(Communicator &&other) = delete;
 
-    std::deque<std::string> packages_;
+    std::string package_;
 
     uint64_t user_id_;
 
