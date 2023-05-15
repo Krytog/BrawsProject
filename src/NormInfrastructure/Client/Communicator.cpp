@@ -24,7 +24,8 @@ Communicator &Communicator::GetInstance() {
 void Communicator::DoRecieve() {
     packages_.emplace_back();
     packages_.back().resize(k_max_dtgrm_len);
-    socket_.receive_from(boost::asio::buffer(packages_.back(), k_max_dtgrm_len), connection_);
+    socket_.async_receive_from(boost::asio::buffer(packages_.back(), k_max_dtgrm_len), connection_,
+                               [this](boost::system::error_code error_code, std::size_t bytes_recvd) { DoRecieve(); });
 }
 
 uint64_t Communicator::RegOnServer() {
@@ -39,11 +40,12 @@ uint64_t Communicator::RegOnServer() {
      std::cout << "Registered with id: " << user_id_ << std::endl;
     /////////
 
+    DoRecieve();
+
     return user_id_;
 }
 
 std::string Communicator::ReceiveFromServer() {
-    DoRecieve();
     if (packages_.empty()) {
         return "";
     }
@@ -58,4 +60,19 @@ void Communicator::SendToServer(std::string_view data) {
     memcpy(&valid_data[0], &user_id_, sizeof(user_id_));
     memcpy(&valid_data[0 + sizeof(user_id_)], data.data(), data.size());
     socket_.send_to(boost::asio::buffer(valid_data.data(), valid_data.size()), *endpoints_.begin());
+}
+
+void Communicator::RunFor(size_t milliseconds) {
+    io_context_.run_for(std::chrono::milliseconds(milliseconds));
+}
+
+void Communicator::Run() {
+    accept_thread_ = std::thread([this]{ io_context_.run(); });
+}
+
+void Communicator::Stop() {
+    io_context_.stop();
+    if (accept_thread_.joinable()) {
+        accept_thread_.join();
+    }
 }

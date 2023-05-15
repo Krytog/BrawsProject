@@ -34,8 +34,7 @@ uint64_t Communicator::RegUser() {
     actual_message_[usr_id].resize(kMaxDtgrmLen);
     size_t bytes_recvd = reg_socket_.receive_from(
         boost::asio::buffer(actual_message_[usr_id], kMaxDtgrmLen), connections_[usr_id]);
-            std::string reg_message = "register";
-
+    std::string reg_message = "register";
     if ((bytes_recvd != reg_message.size()) || 
             (reg_message != actual_message_[usr_id].substr(0, reg_message.size()))) {
         char bad_reg[] = "";
@@ -58,8 +57,7 @@ uint64_t Communicator::RegUser() {
 }
 
 void Communicator::SendToClient(uint64_t client_id, std::string_view data) {
-    socket_.async_send_to(boost::asio::buffer(data.data(), data.size()), connections_[client_id],
-                    [this](boost::system::error_code, std::size_t) { /* do nothing yet */ });
+    socket_.send_to(boost::asio::buffer(data.data(), data.size()), connections_[client_id]);
 }
 
 void Communicator::DoRecieve(size_t thread_id) {
@@ -108,5 +106,12 @@ void Communicator::RunFor(size_t milliseconds) {
 }
 
 void Communicator::Run() {
-    accept_thread_ = std::make_unique<std::thread>([this]() { io_context_.run(); });
+    accept_thread_ = std::thread([this]{ io_context_.run(); });
+}
+
+void Communicator::Stop() {
+    io_context_.stop();
+    if (accept_thread_.joinable()) {
+        accept_thread_.join();
+    }
 }

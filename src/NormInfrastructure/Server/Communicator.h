@@ -25,6 +25,7 @@ public:
     void SendToClient(uint64_t client_id, std::string_view data);
     void RunFor(size_t milliseconds);
     void Run();
+    void Stop();
 
     ~Communicator() = default;
 private:
@@ -40,7 +41,7 @@ private:
     void DoRecieve(size_t thread_id);
     bool IsValidData(std::string_view data, uint64_t client_id) const;
 
-    boost::asio::io_service io_context_;
+    boost::asio::io_context io_context_;
     udp::socket socket_;
     udp::socket reg_socket_;
 
@@ -55,5 +56,5 @@ private:
     size_t user_counter_ = 0;
     std::unordered_map<uint64_t, udp::endpoint> actual_connections_;
     std::unordered_map<uint64_t, std::string> actual_message_;
-    std::unique_ptr<std::thread> accept_thread_;
+    std::thread accept_thread_;
 };

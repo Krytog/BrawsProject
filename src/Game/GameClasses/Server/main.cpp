@@ -7,12 +7,15 @@
 
 #include <iostream>
 
+using namespace std::chrono_literals;
+
 int main() {
     ServerEngine& engine = ServerEngine::GetInstance();
     Overmind& overmind = Overmind::GetInstance();
     Communicator& communicator = Communicator::GetInstance();
     std::vector<uint64_t> players_id;
     uint64_t player1 = communicator.RegUser();
+    communicator.Run();
     //uint64_t player2 = communicator.RegUser();
     players_id.push_back(player1);
     //players_id.push_back(player2);
@@ -29,14 +32,15 @@ int main() {
 
         engine.Update();
 
-        // overmind.DebugInfo();
-        // engine.DebugInfo();
+//         overmind.DebugInfo();
+//         engine.DebugInfo();
 
         for (auto player : players_id) {
             ServerGameManagement::PrepareAndSendDataToClient(player);
         }
+//        Profiler::GetInstance().PrintResults();
 
-        communicator.RunFor(1000 * (static_cast<double>(1) / 60 - time.EvaluateTime() - 0.00005));
+        std::this_thread::sleep_for(15ms);
     }
     return 0;
 }

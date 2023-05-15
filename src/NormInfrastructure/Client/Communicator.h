@@ -18,6 +18,10 @@ public:
     std::string ReceiveFromServer();
     void SendToServer(std::string_view data);
 
+    void RunFor(size_t milliseconds);
+    void Run();
+    void Stop();
+
     ~Communicator() = default;
 private:
     Communicator();
@@ -32,8 +36,9 @@ private:
 
     uint64_t user_id_;
 
-    boost::asio::io_service io_context_;
+    boost::asio::io_context io_context_;
     udp::socket socket_;
+    std::thread accept_thread_;
 
     udp::resolver::results_type endpoints_;
     udp::resolver::results_type reg_endpoints_;
