@@ -4,6 +4,7 @@
 #include <SwarmSystem/Overmind.h>
 
 #include <NormInfrastructure/Server/Communicator.h>
+#include <SwarmSystem/Profiler/Profiler.h>
 
 #include <iostream>
 
@@ -22,11 +23,19 @@ int main() {
     ServerGameManagement::InitGameServer(players_id);
     MyTime time;
     engine.SetActiveOn();
+
+    Profiler& profiler = Profiler::GetInstance();
+
     while (engine.IsActive()) {
+//        if (time.EvaluateTime() < 1.0 / 30) {
+//            continue;
+//        }
         time.ResetTime();
 
         for (auto player : players_id) {
             auto from_client = communicator.ReceiveFromClient(player);
+            std::chrono::duration<double> time_interval = std::chrono::steady_clock::now() - profiler.ExtractTimeMark(&from_client);
+            std::cout << "FROM CLIENT " << time_interval.count() * 1000 << "ms" << std::endl;
             ServerGameManagement::HandleInput(player, from_client);
         }
 
@@ -40,7 +49,30 @@ int main() {
         }
 //        Profiler::GetInstance().PrintResults();
 
-        std::this_thread::sleep_for(15ms);
+        std::this_thread::sleep_for (std::chrono::microseconds(int(1000000 * (1.0 / 30 - time.EvaluateTime()))));
+
     }
-    return 0;
 }
+
+//int main() {
+//    Communicator& communicator = Communicator::GetInstance();
+//    Profiler& profiler = Profiler::GetInstance();
+//    auto id = communicator.RegUser();
+//    MyTime time;
+//    const std::string data = "bebrabebrabebra";
+//    while (true) {
+//        if (time.EvaluateTime() < 1.0 / 60) {
+//            continue;
+//        }
+//        time.ResetTime();
+//        std::string from = communicator.ReceiveFromClient(id);
+//        std::chrono::duration<double> time_interval = std::chrono::steady_clock::now() - profiler.ExtractTimeMark(&from);
+//        std::cout << "FROM CLIENT " << time_interval.count() * 1000 << "ms" << std::endl;
+//
+//        auto package = data;
+//        profiler.AddTimeMark(&package);
+//        communicator.SendToClient(id, package);
+//
+//        communicator.RunFor(15);
+//    }
+//}

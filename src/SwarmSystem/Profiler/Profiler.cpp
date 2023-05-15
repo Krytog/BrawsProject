@@ -10,18 +10,17 @@ Profiler &Profiler::GetInstance() {
 
 void Profiler::AddTimeMark(std::string *dist) {
     std::chrono::time_point<std::chrono::steady_clock> time_point = std::chrono::steady_clock::now();
-    Serializer::Serialize(time_point, dist, dist->size());
+    std::string out;
+    Serializer::Serialize(time_point, &out);
+    *dist = out + *dist;
 }
 
 std::chrono::time_point<std::chrono::steady_clock> Profiler::ExtractTimeMark(std::string *from) {
     if (from->size() < sizeof(std::chrono::time_point<std::chrono::steady_clock>)) {
         return std::chrono::steady_clock::now() + std::chrono::hours(1);
     }
-    size_t start = from->size() - sizeof(std::chrono::time_point<std::chrono::steady_clock>);
-    std::string time_point_bytes = from->substr(start);
-    for (size_t i = 0; i < sizeof(std::chrono::time_point<std::chrono::steady_clock>); ++i) {
-        from->pop_back();
-    }
+    std::string time_point_bytes = from->substr(0, sizeof(std::chrono::time_point<std::chrono::steady_clock>));
+    *from = from->substr(sizeof(std::chrono::time_point<std::chrono::steady_clock>));
     std::chrono::time_point<std::chrono::steady_clock> result;
     Serializer::Deserialize(result, time_point_bytes);
     return result;

@@ -7,6 +7,7 @@
 #include <SwarmSystem/Overmind.h>
 #include <NormInfrastructure/Server/Communicator.h>
 #include <Game/GameClasses/CommandsList.h>
+#include <SwarmSystem/Profiler/Profiler.h>
 
 namespace {
     bool IsSeenByPlayer(Cerebrate* from, Cerebrate* other) {
@@ -62,5 +63,6 @@ void ServerGameManagement::PrepareAndSendDataToClient(uint64_t player_id) {
     }
     overmind.UpdateCerebratesInfo(player_cerebrate, IsSeenByPlayer);
     auto data = overmind.GetCerebratesInfoSerialized();
+    Profiler::GetInstance().AddTimeMark(&data);
     Communicator::GetInstance().SendToClient(player_id, data);
 }
