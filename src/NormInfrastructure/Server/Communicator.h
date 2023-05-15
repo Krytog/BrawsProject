@@ -7,6 +7,7 @@
 #include <random>
 #include <boost/asio.hpp>
 #include <deque>
+#include <thread>
 
 namespace {
     const int kMaxDtgrmLen = 32000;
@@ -23,6 +24,7 @@ public:
     std::string ReceiveFromClient(uint64_t client_id);
     void SendToClient(uint64_t client_id, std::string_view data);
     void RunFor(size_t milliseconds);
+    void Run();
 
     ~Communicator() = default;
 private:
@@ -53,4 +55,5 @@ private:
     size_t user_counter_ = 0;
     std::unordered_map<uint64_t, udp::endpoint> actual_connections_;
     std::unordered_map<uint64_t, std::string> actual_message_;
+    std::unique_ptr<std::thread> accept_thread_;
 };

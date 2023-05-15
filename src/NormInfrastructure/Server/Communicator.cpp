@@ -1,4 +1,5 @@
 #include "Communicator.h"
+#include <cstddef>
 #include <cstring>
 #include <iostream>
 #include <ostream>
@@ -31,30 +32,27 @@ uint64_t Communicator::RegUser() {
     uint64_t usr_id = RegId();
 
     actual_message_[usr_id].resize(kMaxDtgrmLen);
-    reg_socket_.async_receive_from(
-        boost::asio::buffer(actual_message_[usr_id], kMaxDtgrmLen), connections_[usr_id],
-        [this, usr_id](boost::system::error_code error_code, std::size_t bytes_recvd) {
+    size_t bytes_recvd = reg_socket_.receive_from(
+        boost::asio::buffer(actual_message_[usr_id], kMaxDtgrmLen), connections_[usr_id]);
             std::string reg_message = "register";
-            if (error_code || (bytes_recvd != reg_message.size()) || 
-                    (reg_message != actual_message_[usr_id].substr(0, reg_message.size()))) {
-                char bad_reg[] = "";
-                reg_socket_.send_to(boost::asio::buffer(bad_reg, strlen(bad_reg)), connections_[usr_id]); 
-                actual_message_[usr_id].clear();
-                return;
-            }
-            //////////
-             std::cout << "Registered user with id: " << usr_id << std::endl;
-            /////////
-            
-            users_data_[usr_id].resize(10);
-            // id_by_connection_[connections_[usr_id]] = usr_id;
-            char payload[sizeof(usr_id)];
-            memcpy(payload, &usr_id, sizeof(usr_id));
-            reg_socket_.send_to(boost::asio::buffer(payload, strlen(payload)), connections_[usr_id]);
 
-            DoRecieve(usr_id);
-        }
-    );
+    if ((bytes_recvd != reg_message.size()) || 
+            (reg_message != actual_message_[usr_id].substr(0, reg_message.size()))) {
+        char bad_reg[] = "";
+        reg_socket_.send_to(boost::asio::buffer(bad_reg, strlen(bad_reg)), connections_[usr_id]); 
+        actual_message_[usr_id].clear();
+        return RegUser();
+    }
+    //////////
+        std::cout << "Registered user with id: " << usr_id << std::endl;
+    /////////
+    
+    users_data_[usr_id].resize(10);
+    char payload[sizeof(usr_id)];
+    memcpy(payload, &usr_id, sizeof(usr_id));
+    reg_socket_.send_to(boost::asio::buffer(payload, strlen(payload)), connections_[usr_id]);
+
+    DoRecieve(usr_id);
 
     return usr_id;
 }
@@ -70,11 +68,6 @@ void Communicator::DoRecieve(size_t thread_id) {
     socket_.async_receive_from(
         boost::asio::buffer(actual_message_[thread_id], kMaxDtgrmLen), actual_connections_[thread_id],
         [this, thread_id](boost::system::error_code error_code, std::size_t bytes_recvd) {
-            // if (!id_by_connection_.contains(actual_connections_[thread_id])) { /* Кто-то левый шлёт */
-            //     socket_.send_to(boost::asio::buffer("", 0), actual_connections_[thread_id]);
-            //     return;
-            // }
-            
             uint64_t usr_id;
             std::memcpy(&usr_id, actual_message_[thread_id].data(), sizeof(usr_id));
             users_data_[usr_id].push_back(std::move(actual_message_[thread_id]));
@@ -112,4 +105,8 @@ std::string Communicator::ReceiveFromClient(uint64_t client_id) {
 
 void Communicator::RunFor(size_t milliseconds) {
      io_context_.run_for(std::chrono::milliseconds(milliseconds));
+}
+
+void Communicator::Run() {
+    accept_thread_ = std::make_unique<std::thread>([this]() { io_context_.run(); });
 }
