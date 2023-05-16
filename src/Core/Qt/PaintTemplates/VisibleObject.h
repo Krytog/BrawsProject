@@ -57,10 +57,10 @@ public:
 
     void SetDefaultLogic();
     void RenderIt(Painter* painter) override; /* Наследники должны переопределять кастомный рендеринг*/
-    virtual bool IsDisplayed() const override = 0;
+    virtual bool IsDisplayed() const override;
 
 protected:
-    virtual void RenderItCustom(Painter* painter) = 0;
+    virtual void RenderItCustom(Painter* painter);
 
     std::function<void(Painter*)> render_logic_;
 };

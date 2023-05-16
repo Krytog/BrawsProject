@@ -59,3 +59,10 @@ IFlexibleVisibleObject::IFlexibleVisibleObject(
     const RenderLayers& layer
 ): IVisibleObject(position, angle, layer) {};
 
+bool IFlexibleVisibleObject::IsDisplayed() const {
+    return true;
+}
+
+void IFlexibleVisibleObject::RenderItCustom(Painter* painter) {
+    /*   ¯\_(ツ)_/¯   */
+}

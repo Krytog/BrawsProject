@@ -1,7 +1,7 @@
 #include "DrawStaticImageHelper.h"
 #include "../../Painters/QtPainter.h"
 
-DrawStaticImageHelper::DrawStaticImageHelper(BasicSprite* image, const Position& pos,
+DrawStaticImageHelper::DrawStaticImageHelper(QImage* image, const Position& pos,
                                              const double& clockwise_angle)
     : image_(image), pos_(pos), angle_(clockwise_angle){};
 
