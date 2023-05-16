@@ -18,17 +18,17 @@ public:
     void CaptureViewPort();
 
     double GetHealth() const;
-    double GetDamage() const;
-    double GetSpeed() const;
+    int8_t GetAmmoLeft() const;
+    double GetCooldown() const;
 
     void SetHealth(double health);
-    void SetDamage(double damage);
-    void SetSpeed(double speed);
+    void SetAmmoLeft(int8_t ammo);
+    void SetCooldown(double cooldown);
 
 protected:
     double health_;
-    double damage_;
-    double speed_;
+    int8_t ammo_left_;
+    double cooldown_;
 
     bool is_controlled_ = false;
 };

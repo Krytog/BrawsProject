@@ -12,28 +12,28 @@ void CharacterPawnClient::OnUpdate() {
     }
 }
 
-double CharacterPawnClient::GetDamage() const {
-    return damage_;
+int8_t CharacterPawnClient::GetAmmoLeft() const {
+    return ammo_left_;
 }
 
 double CharacterPawnClient::GetHealth() const {
     return health_;
 }
 
-double CharacterPawnClient::GetSpeed() const {
-    return speed_;
+double CharacterPawnClient::GetCooldown() const {
+    return cooldown_;
 }
 
 void CharacterPawnClient::SetHealth(double health) {
     health_ = health;
 }
 
-void CharacterPawnClient::SetDamage(double damage) {
-    damage_ = damage;
+void CharacterPawnClient::SetAmmoLeft(int8_t ammo) {
+    ammo_left_ = ammo;
 }
 
-void CharacterPawnClient::SetSpeed(double speed) {
-    speed_ = speed;
+void CharacterPawnClient::SetCooldown(double cooldown) {
+    cooldown_ = cooldown;
 }
 
 void CharacterPawnClient::CaptureViewPort() {
