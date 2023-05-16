@@ -25,6 +25,7 @@ int main() {
         time.ResetTime();
 
         auto data = communicator.ReceiveFromServer();
+        std::cout << "PACKET SIZE: " << data.size() << std::endl;
         std::chrono::duration<double> time_interval = std::chrono::steady_clock::now() - profiler.ExtractTimeMark(&data);
         std::cout << "FROM SERVER " << time_interval.count() * 1000 << "ms" << std::endl;
 
@@ -41,7 +42,7 @@ int main() {
         profiler.AddTimeMark(&for_server);
         communicator.SendToServer(for_server);
 
-        std::this_thread::sleep_for (std::chrono::microseconds(int(1000000 * (1.0 / 30 - time.EvaluateTime()))));
+        std::this_thread::sleep_for (std::chrono::microseconds(int(1000000 * (1.0 / 60 - time.EvaluateTime()))));
     }
     return 0;
 }

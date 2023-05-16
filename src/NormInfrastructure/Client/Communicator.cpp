@@ -7,7 +7,7 @@ namespace {
     char host[] = "localhost";
     char random_port[] = "10010";
     char reg_port[] = "10011";
-    size_t k_max_dtgrm_len = 32000;
+    size_t k_max_dtgrm_len = 3200;
 }
 
 Communicator::Communicator(): socket_(io_context_, udp::endpoint(udp::v4(), 0)) {
@@ -44,8 +44,11 @@ uint64_t Communicator::RegOnServer() {
     return user_id_;
 }
 
-std::string& Communicator::ReceiveFromServer() {
-    return package_;
+std::string Communicator::ReceiveFromServer() {
+    std::string temp = package_;
+    package_.clear();
+    package_.resize(k_max_dtgrm_len);
+    return temp;
 }
 
 void Communicator::SendToServer(std::string_view data) {

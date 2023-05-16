@@ -10,7 +10,7 @@
 #include <thread>
 
 namespace {
-    const int kMaxDtgrmLen = 32000;
+    const int kMaxDtgrmLen = 3200;
 }
 
 using boost::asio::ip::udp;
