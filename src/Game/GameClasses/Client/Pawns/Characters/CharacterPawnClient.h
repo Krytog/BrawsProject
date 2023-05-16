@@ -30,5 +30,5 @@ protected:
     double damage_;
     double speed_;
 
-    bool is_controlled_;
+    bool is_controlled_ = false;
 };

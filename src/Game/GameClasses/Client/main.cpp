@@ -29,9 +29,10 @@ int main() {
         std::chrono::duration<double> time_interval = std::chrono::steady_clock::now() - profiler.ExtractTimeMark(&data);
         std::cout << "FROM SERVER " << time_interval.count() * 1000 << "ms" << std::endl;
 
-
-        overmind.ActualizeCerebrates(data);
-        overmind.ForceCerebratesExecuteCommands(data);
+        if (data[0] == '#') { // means that we probably have a good package
+            overmind.ActualizeCerebrates(data);
+            overmind.ForceCerebratesExecuteCommands(data);
+        }
 
         engine.Update();
 
