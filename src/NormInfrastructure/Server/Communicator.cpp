@@ -50,6 +50,7 @@ uint64_t Communicator::RegUser() {
 
     DoReceive(usr_id);
 
+    ++user_counter_;
     return usr_id;
 }
 
