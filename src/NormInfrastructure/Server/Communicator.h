@@ -5,18 +5,24 @@
 #include <unordered_set>
 #include <memory>
 #include <random>
-#include <boost/asio.hpp>
 #include <deque>
+#include <queue>
 #include <thread>
 
-namespace {
-    const int kMaxDtgrmLen = 3200;
-}
+#include <boost/asio.hpp>
+#include <boost/circular_buffer.hpp>
 
 using boost::asio::ip::udp;
 
 class Communicator {
-    using DataQueue = std::deque<std::string>;
+    static constexpr uint16_t kMaxDtgrmLen = 3200;
+    static constexpr size_t kQueueSize = 5;
+
+    template <typename T, size_t QueueSize>
+    class FixedQueue : public std::queue<T, boost::circular_buffer<T>> {
+    public:
+        FixedQueue() : std::queue<T, boost::circular_buffer<T>>(boost::circular_buffer<T>(QueueSize)) {}
+    };
 public:
     static Communicator &GetInstance();
 
@@ -26,6 +32,7 @@ public:
     void RunFor(size_t milliseconds);
     void Run();
     void Stop();
+    size_t GetUserNumber();
 
     ~Communicator() = default;
 private:
@@ -38,7 +45,7 @@ private:
     Communicator &operator=(Communicator &&other) = delete;
 
     uint64_t RegId();
-    void DoRecieve(size_t thread_id);
+    void DoReceive(uint64_t thread_id);
     bool IsValidData(std::string_view data, uint64_t client_id) const;
 
     boost::asio::io_context io_context_;
@@ -46,7 +53,7 @@ private:
     udp::socket reg_socket_;
 
     std::unordered_map<uint64_t, udp::endpoint> connections_;
-    std::unordered_map<uint64_t, DataQueue> users_data_;
+    std::unordered_map<uint64_t, FixedQueue<std::string, kQueueSize>> users_data_;
 
     // ID randomizer
     std::random_device rd_;

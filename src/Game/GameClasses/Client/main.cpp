@@ -40,7 +40,7 @@ int main() {
 //        engine.DebugInfo();
 
         auto for_server = ClientGameManagement::SerializeInput();
-        profiler.AddTimeMark(&for_server);
+//        profiler.AddTimeMark(&for_server);
         communicator.SendToServer(for_server);
 
         std::this_thread::sleep_for (std::chrono::microseconds(int(1000000 * (1.0 / 60 - time.EvaluateTime()))));

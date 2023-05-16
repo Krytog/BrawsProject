@@ -6,12 +6,12 @@
 #include <utility>
 
 namespace  {
-    size_t random_port = 10010;
-    size_t reg_port = 10011;
+size_t random_port = 10010;
+size_t reg_port = 10011;
 }
 
 Communicator::Communicator(): socket_(io_context_, udp::endpoint(udp::v4(), random_port)),
-            reg_socket_(io_context_, udp::endpoint(udp::v4(), reg_port)), rd_(), gen_(rd_()), dis_() {
+      reg_socket_(io_context_, udp::endpoint(udp::v4(), reg_port)), rd_(), gen_(rd_()), dis_() {
 }
 
 Communicator &Communicator::GetInstance() {
@@ -31,27 +31,24 @@ uint64_t Communicator::RegId() {
 uint64_t Communicator::RegUser() {
     uint64_t usr_id = RegId();
 
-    actual_message_[usr_id].resize(kMaxDtgrmLen);
+    char message[kMaxDtgrmLen];
     size_t bytes_recvd = reg_socket_.receive_from(
-        boost::asio::buffer(actual_message_[usr_id], kMaxDtgrmLen), connections_[usr_id]);
-    std::string reg_message = "register";
-    if ((bytes_recvd != reg_message.size()) || 
-            (reg_message != actual_message_[usr_id].substr(0, reg_message.size()))) {
+        boost::asio::buffer(message, kMaxDtgrmLen), connections_[usr_id]);
+    std::string_view reg_message = "register";
+    if ((bytes_recvd != reg_message.size()) /* || (reg_message != actual_message_[usr_id].substr(0, reg_message.size())) */) {
         char bad_reg[] = "";
-        reg_socket_.send_to(boost::asio::buffer(bad_reg, strlen(bad_reg)), connections_[usr_id]); 
-        actual_message_[usr_id].clear();
+        reg_socket_.send_to(boost::asio::buffer(bad_reg, strlen(bad_reg)), connections_[usr_id]);
         return RegUser();
     }
     //////////
-        std::cout << "Registered user with id: " << usr_id << std::endl;
+    std::cout << "Registered user with id: " << usr_id << std::endl;
     /////////
-    
-    users_data_[usr_id].resize(10);
+
     char payload[sizeof(usr_id)];
     memcpy(payload, &usr_id, sizeof(usr_id));
     reg_socket_.send_to(boost::asio::buffer(payload, strlen(payload)), connections_[usr_id]);
 
-    DoRecieve(usr_id);
+    DoReceive(usr_id);
 
     return usr_id;
 }
@@ -60,7 +57,7 @@ void Communicator::SendToClient(uint64_t client_id, std::string_view data) {
     socket_.send_to(boost::asio::buffer(data.data(), data.size()), connections_[client_id]);
 }
 
-void Communicator::DoRecieve(size_t thread_id) {
+void Communicator::DoReceive(uint64_t thread_id) {
     actual_message_[thread_id].resize(kMaxDtgrmLen); /* убрать потом  */
 
     socket_.async_receive_from(
@@ -68,13 +65,8 @@ void Communicator::DoRecieve(size_t thread_id) {
         [this, thread_id](boost::system::error_code error_code, std::size_t bytes_recvd) {
             uint64_t usr_id;
             std::memcpy(&usr_id, actual_message_[thread_id].data(), sizeof(usr_id));
-            users_data_[usr_id].push_back(std::move(actual_message_[thread_id]));
-        
-            //////////////////////
-            // std::cout << user_id << " " << bytes_recvd << " " <<  users_data_[user_id].back() << std::endl;
-            //////////////////////
-
-            DoRecieve(thread_id);
+            users_data_[usr_id].push(std::move(actual_message_[thread_id]));
+          DoReceive(thread_id);
         }
     );
 }
@@ -89,20 +81,20 @@ bool Communicator::IsValidData(std::string_view data, uint64_t client_id) const 
 }
 
 std::string Communicator::ReceiveFromClient(uint64_t client_id) {
-    if (users_data_[client_id].empty() || !IsValidData(users_data_[client_id].front().data(), client_id)) {
+    if (users_data_[client_id].empty() || !IsValidData(users_data_[client_id].front(), client_id)) {
         if (!users_data_[client_id].empty()) {
-            users_data_[client_id].pop_front();
+            users_data_[client_id].pop();
         }
         return "";
     }
 
     std::string message = std::move(users_data_[client_id].front());
-    users_data_[client_id].pop_front();
+    users_data_[client_id].pop();
     return std::move(message.substr(sizeof(client_id)));
 }
 
 void Communicator::RunFor(size_t milliseconds) {
-     io_context_.run_for(std::chrono::milliseconds(milliseconds));
+    io_context_.run_for(std::chrono::milliseconds(milliseconds));
 }
 
 void Communicator::Run() {
@@ -114,4 +106,8 @@ void Communicator::Stop() {
     if (accept_thread_.joinable()) {
         accept_thread_.join();
     }
+}
+
+size_t Communicator::GetUserNumber() {
+    return user_counter_;
 }

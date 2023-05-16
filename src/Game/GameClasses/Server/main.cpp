@@ -16,10 +16,10 @@ int main() {
     Communicator& communicator = Communicator::GetInstance();
     std::vector<uint64_t> players_id;
     uint64_t player1 = communicator.RegUser();
-    uint64_t player2 = communicator.RegUser();
+//    uint64_t player2 = communicator.RegUser();
     communicator.Run();
     players_id.push_back(player1);
-    players_id.push_back(player2);
+//    players_id.push_back(player2);
     ServerGameManagement::InitGameServer(players_id);
     MyTime time;
     engine.SetActiveOn();
@@ -34,8 +34,8 @@ int main() {
 
         for (auto player : players_id) {
             auto from_client = communicator.ReceiveFromClient(player);
-            std::chrono::duration<double> time_interval = std::chrono::steady_clock::now() - profiler.ExtractTimeMark(&from_client);
-            std::cout << "FROM CLIENT " << time_interval.count() * 1000 << "ms" << std::endl;
+//            std::chrono::duration<double> time_interval = std::chrono::steady_clock::now() - profiler.ExtractTimeMark(&from_client);
+//            std::cout << "FROM CLIENT " << time_interval.count() * 1000 << "ms" << std::endl;
             ServerGameManagement::HandleInput(player, from_client);
         }
 
