@@ -1,5 +1,6 @@
 #include "AnimatedSprite.h"
 #include "../Helpers/CommonHelpers/DrawAnimatedImageHelper.h"
+#include "../RecourcesInitializer/RecourcesInitializer.h"
 #include <algorithm>
 #include <cstddef>
 #include "VisibleObject.h"
@@ -8,7 +9,7 @@
 AnimatedSprite::AnimatedSprite(std::string_view image_src, const Position& position, const size_t& width,
                                const size_t& height, const size_t& ticks_per_frame,
                                const size_t& frames_count, bool is_cycled, const double& angle, const RenderLayers& layer)
-    : IFlexibleVisibleObject(position, angle, layer), QImage(image_src.data()), 
+    : IFlexibleVisibleObject(position, angle, layer), QImage(RecourcesInitializer::GetInstance().GetImage(image_src.data())), 
       ticks_per_frame_(ticks_per_frame),
       frames_count_(frames_count),
       is_cycled_(is_cycled) {
@@ -25,7 +26,7 @@ void AnimatedSprite::UpdateSrc(std::string_view image_src, const size_t& ticks_p
     const size_t& width = this->width() / frames_count_;
     const size_t& height = this->height();
 
-    this->load(image_src.data());
+    load(image_src.data());
     ticks_per_frame_ = ticks_per_frame;
     frames_count_ = frames_count;
 

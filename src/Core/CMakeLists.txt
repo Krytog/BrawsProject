@@ -24,6 +24,7 @@ add_library(core_lib
         Qt/Helpers/CommonHelpers/DrawAnimatedImageHelper.cpp
         Qt/Helpers/CommonHelpers/DrawStaticImageHelper.cpp
         Qt/Helpers/CommonHelpers/DrawTextHelper.cpp
-        Qt/Helpers/CommonHelpers/RotateHelper.cpp)
+        Qt/Helpers/CommonHelpers/RotateHelper.cpp
+        Qt/RecourcesInitializer/RecourcesInitializer.cpp)
 
 target_link_libraries(core_lib Qt5::Widgets Qt5::OpenGL Qt5::Core Qt5::Gui)
