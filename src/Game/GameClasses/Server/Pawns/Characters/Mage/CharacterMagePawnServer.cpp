@@ -54,6 +54,9 @@ void CharacterMagePawnServer::Shoot(const Position &position) {
     if (!can_shoot_) {
         return;
     }
+    if (ammo_cur_ == 0) {
+        return;
+    }
     CharacterPawnServer::Shoot(position);
     ProjectilePawnServer::ArgPack argpack;
     argpack.position = *position_;
@@ -66,6 +69,7 @@ void CharacterMagePawnServer::Shoot(const Position &position) {
 }
 
 void CharacterMagePawnServer::OnUpdate() {
+    CharacterPawnServer::OnUpdate();
 }
 
 const size_t CharacterMagePawnServer::kTypeId = TypeId_Character_Mage;

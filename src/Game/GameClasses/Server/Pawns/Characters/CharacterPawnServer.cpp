@@ -97,7 +97,7 @@ void CharacterPawnServer::Shoot(const Position &position) {
 }
 
 void CharacterPawnServer::Heal(double health) {
-    health_cur_ = std::max(health_max_, health_cur_ + health);
+    health_cur_ = std::min(health_max_, health_cur_ + health);
 }
 
 double CharacterPawnServer::GetHealthCur() const {
