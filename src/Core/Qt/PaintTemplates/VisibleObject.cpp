@@ -1,5 +1,6 @@
 #include "VisibleObject.h"
 #include <cmath>
+#include <iostream>
 
 IVisibleObject::IVisibleObject(const Position& position, const double& angle, const RenderLayers& layer):
     pos_(position), angle_(angle), layer_(layer) {}
@@ -48,7 +49,6 @@ void IFlexibleVisibleObject::SetDefaultLogic() {
 void IFlexibleVisibleObject::RenderIt(Painter *painter) {
     if (render_logic_) {
         render_logic_(painter);
-        return;
     }
     RenderItCustom(painter);
 }

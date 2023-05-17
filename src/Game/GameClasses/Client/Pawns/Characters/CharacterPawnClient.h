@@ -26,6 +26,9 @@ public:
     void SetCooldown(double cooldown);
 
 protected:
+    virtual void AddStatsVisualization() const;
+
+protected:
     double health_;
     int8_t ammo_left_;
     double cooldown_;

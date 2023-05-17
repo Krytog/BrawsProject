@@ -5,6 +5,7 @@
 #include <Game/GameClasses/GameObjectTags.h>
 
 #include <iostream>
+#include "Core/Qt/PaintTemplates/BasicSprite.h"
 
 enum {
     START_X = -50,
@@ -20,7 +21,11 @@ CharacterMagePawnClient::CharacterMagePawnClient(const Position &position) {
     auto pos = new Position(position);
     position_ = std::unique_ptr<Position>(pos);
     collider_ = std::make_unique<CircleCollider>(*position_, COLLIDER_RADIUS);
-    visible_object_ = std::make_unique<BasicSprite>(RES_PATH_CHARACTERS_MAGE, *position_, SPRITE_WIDTH, SPRITE_HEIGHT, IVisibleObject::RenderLayers::Objects);
+    visible_object_ = std::make_unique<BasicFlexibleSprite>(RES_PATH_CHARACTERS_MAGE, *position_, SPRITE_WIDTH, SPRITE_HEIGHT, IVisibleObject::RenderLayers::Objects);
+    health_ = 100;
+    cooldown_ = 50;
+    ammo_left_ = 20;
+    AddStatsVisualization();
     tag_ = TAGS_CHARACTER_Mage;
 }
 

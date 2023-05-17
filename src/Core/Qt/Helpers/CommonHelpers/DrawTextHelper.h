@@ -6,10 +6,11 @@
 
 class DrawTextHelper final: public IBasicHelper {
 public:
-    DrawTextHelper(TextSprite* text, const size_t& clockwise_angle = 0);
+    DrawTextHelper(TextSprite* text, Position pos, const size_t& clockwise_angle = 0);
     void Paint(Painter *painter) const override;
 
 private:
+    Position pos_;
     TextSprite* text_;
     size_t angle_;
 };

@@ -3,12 +3,12 @@
 #include "VisibleObject.h"
 #include "../Helpers/CommonHelpers/DrawTextHelper.h"
 
-TextSprite::TextSprite(std::string_view text, const Position& position,
+TextSprite::TextSprite(std::string text, const Position& position,
     const size_t& width, const size_t& height, const double& angle, const RenderLayers& layer):
          IVisibleObject(position, angle, layer), text_(text), width_(width), height_(height) {}
 
 void TextSprite::RenderIt(Painter *painter) {
-    DrawTextHelper(this, angle_).Paint(painter);
+    DrawTextHelper(this, pos_, angle_).Paint(painter);
 }
 
 /* Мб потом просто в IVisible сделать такую реализацию */
@@ -16,7 +16,7 @@ bool TextSprite::IsDisplayed() const {
     return true;
 }
 
-void TextSprite::ResetText(std::string_view text) {
+void TextSprite::ResetText(std::string text) {
     text_ = text;
 }
 
