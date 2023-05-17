@@ -74,9 +74,9 @@ void CharacterPawnClient::AddStatsVisualization() const {
 
         visible->ChangeRenderLogic(
             [this, health, ammo_left, cooldown] (Painter* painter) {
-                health->ResetText(std::to_string(health_));
-                ammo_left->ResetText(std::to_string(ammo_left_));
-                cooldown->ResetText(std::to_string(cooldown_));
+                health->ResetText(std::to_string(int64_t(health_)));
+                ammo_left->ResetText(std::to_string(int64_t(ammo_left_)));
+                cooldown->ResetText(std::to_string(int64_t(cooldown_)));
 
                 auto text_pos = this->GetPosition();
                 text_pos.Translate({-DIST_BETWEEN, DIST_FROM_CENTER});
