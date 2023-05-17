@@ -1,7 +1,7 @@
 #include "GameRuler.h"
 
 #include <Game/GameClasses/CommandsList.h>
-#include <Core/ServerEngine.h>
+#include <SwarmSystem/Overmind.h>
 
 GameRuler &GameRuler::GetInstance() {
     static GameRuler instance;
@@ -16,29 +16,26 @@ bool GameRuler::IsGameEnded() const {
     return has_begun_ && players_.size() <= 1;
 }
 
-void GameRuler::AddPlayer(Cerebrate* player_cerebrate) {
-    players_.insert(player_cerebrate);
+void GameRuler::AddPlayer(const CharacterPawnServer* player) {
+    players_.insert(player);
 }
 
-void GameRuler::PlayerLoses(Cerebrate* player_cerebrate) {
+void GameRuler::PlayerLoses(const CharacterPawnServer* player) {
     std::string command;
     command.push_back(CharacterCommands::COMMAND_ON_LOSE);
-    player_cerebrate->AddCommandToBuffer(command);
-    players_.erase(player_cerebrate);
+    Overmind::GetInstance().GetCerebrateWithId(player->GetCerebrateId())->AddCommandToBuffer(command);
+    players_.erase(player);
 }
 
-void GameRuler::PlayerWins(Cerebrate *player_cerebrate) {
+void GameRuler::PlayerWins(const CharacterPawnServer* player) {
     std::string command;
     command.push_back(CharacterCommands::COMMAND_ON_WIN);
-    player_cerebrate->AddCommandToBuffer(command);
-    players_.erase(player_cerebrate);
+    Overmind::GetInstance().GetCerebrateWithId(player->GetCerebrateId())->AddCommandToBuffer(command);
+    players_.erase(player);
 
-    std::string lose_command;
-    lose_command.push_back(CharacterCommands::COMMAND_ON_LOSE);
     while (!players_.empty()) {
-        auto cerebrate = players_.begin();
-        (*cerebrate)->AddCommandToBuffer(lose_command);
-        players_.erase(cerebrate);
+        auto player_to_lose = players_.begin();
+        PlayerLoses(*player_to_lose);
     }
 }
 

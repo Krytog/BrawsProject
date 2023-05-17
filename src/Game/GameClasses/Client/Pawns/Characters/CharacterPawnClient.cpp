@@ -16,6 +16,15 @@ enum {
     DIST_BETWEEN = 60
 };
 
+namespace {
+    std::string StringFromDouble(double value) {
+        int64_t to_int = value * 100;
+        int64_t second = to_int % 100;
+        int64_t first = to_int / 100;
+        return std::to_string(first) + '.' + std::to_string(second);
+    }
+}
+
 CharacterPawnClient::CharacterPawnClient() = default;
 
 CharacterPawnClient::~CharacterPawnClient() = default;
@@ -69,14 +78,14 @@ void CharacterPawnClient::AddStatsVisualization() const {
              Position(0, 0), TEXT_WIDTH, TEXT_HEIGHT);
         std::shared_ptr<TextSprite> ammo_left = std::make_shared<TextSprite>(std::to_string(int64_t(ammo_left_)),
              Position(0, 0), TEXT_WIDTH, TEXT_HEIGHT);
-        std::shared_ptr<TextSprite> cooldown = std::make_shared<TextSprite>(std::to_string(int64_t(cooldown_)),
+        std::shared_ptr<TextSprite> cooldown = std::make_shared<TextSprite>(StringFromDouble(cooldown_),
              Position(0, 0), TEXT_WIDTH, TEXT_HEIGHT);
 
         visible->ChangeRenderLogic(
             [this, health, ammo_left, cooldown] (Painter* painter) {
                 health->ResetText(std::to_string(int64_t(health_)));
                 ammo_left->ResetText(std::to_string(int64_t(ammo_left_)));
-                cooldown->ResetText(std::to_string(int64_t(cooldown_)));
+                cooldown->ResetText(StringFromDouble(cooldown_));
 
                 auto text_pos = this->GetPosition();
                 text_pos.Translate({-DIST_BETWEEN, DIST_FROM_CENTER});

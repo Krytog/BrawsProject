@@ -33,8 +33,7 @@ CharacterPawnServer::CharacterPawnServer(const CharacterPawnServer::ArgPack &arg
 Event* CharacterPawnServer::CreateIsDeadEvent() const {
     return ServerEngine::GetInstance().CreateEvent(&CharacterPawnServer::IsDead, std::make_tuple(this),
                                             &GameRuler::PlayerLoses, std::make_tuple(&GameRuler::GetInstance(),
-                                            Overmind::GetInstance().GetCerebrateWithId(cerebrate_id)),
-                                            EventStatus::Disposable);
+                                            this), EventStatus::Disposable);
 }
 
 size_t CharacterPawnServer::GetCerebrateId() const {
