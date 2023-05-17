@@ -17,7 +17,6 @@ enum {
 ExplosionParticles::ExplosionParticles() : ExplosionParticles(Position()) {}
 
 ExplosionParticles::ExplosionParticles(const Position &position) {
-    std::cout << "Hello my friend" << std::endl;
     Particles::ArgPack pack;
     pack.pos = position;
     pack.ticks = TICKS;

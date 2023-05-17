@@ -1,14 +1,16 @@
 #pragma once
 
 #include <Core/ServerEngine.h>
-#include <Game/GameClasses/Server/Pawns/Interfaces/IMovable.h>
+#include <Core/MyTime.h>
 
-class CharacterPawnServer : public IMovable {
+class CharacterPawnServer : public GameObject {
 public:
     struct ArgPack {
-        double health;
+        double health_max;
         double damage;
         double speed;
+        uint8_t ammo_max;
+        double cooldown_duration;
     };
 
     CharacterPawnServer();
@@ -23,14 +25,24 @@ public:
     virtual void UpdatePosition(const Position& position) override;
     virtual void SetDirection(const Position& looking_at);
 
-    virtual void Move(const Vector2D& direction) override;
+    void Move(const Vector2D& direction);
     virtual void ReceiveDamage(double damage);
+    virtual void Heal(double health);
 
-    double GetHealth() const;
+    double GetHealthCur() const;
+    double GetHealthMax() const;
+    uint8_t GetAmmoLeft() const;
+    uint8_t GetAmmoMax() const;
+    double GetCooldownDuration() const;
+    double GetCooldown() const;
     double GetDamage() const;
     double GetSpeed() const;
 
-    void SetHealth(double health);
+    void SetHealthCur(double health);
+    void SetHealthMax(double max_health);
+    void SetAmmoLeft(uint8_t ammo_left);
+    void SetAmmoMax(uint8_t ammo_max);
+    void SetCooldownDuration(double duration);
     void SetDamage(double damage);
     void SetSpeed(double speed);
 
@@ -40,14 +52,36 @@ public:
     void BlockShooting();
     void UnblockShooting();
 
+    bool IsDead() const;
+
 protected:
     size_t cerebrate_id;
     GameObject* field_of_view_;
+    Event* is_dead_event_;
 
-    double health_;
+    double health_cur_;
+    double health_max_;
     double damage_;
     double speed_;
     Vector2D direction_;
 
+    uint8_t ammo_cur_;
+    uint8_t ammo_max_;
+    double cooldown_duration_;
+    MyTime cooldown_timer_;
+
+    MyTime heal_timer_;
+    double heal_rate_ = 0.1;
+
     bool can_shoot_ = true;
+
+    virtual void MoveImplementation(const Vector2D& direction);
+
+private:
+    Event* CreateIsDeadEvent() const;
+
+    void HandleOverTimeHealing();
+    void HandleReloading();
+
+    void Reload();
 };

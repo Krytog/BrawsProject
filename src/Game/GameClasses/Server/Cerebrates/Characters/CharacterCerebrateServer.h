@@ -16,7 +16,10 @@ class CharacterCerebrateServer : public Cerebrate {
 public:
     struct Info {
         Position current_pos;
+        Vector2D rotator;
         double current_health;
+        double cooldown;
+        int8_t ammo;
     };
 
     CharacterCerebrateServer(TPawn* pawn_to_possess) : Cerebrate(TPawn::kTypeId), possessed_(pawn_to_possess) {}

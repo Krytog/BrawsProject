@@ -6,12 +6,17 @@
 #include <Core/Tools/Concepts.h>
 #include <Game/GameClasses/CommandsList.h>
 
-template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, UpdatePosition, SetHealth, CaptureViewPort, ReceiveDamage, Shoot)>
+template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, UpdatePosition, SetRotation,
+                                                                CaptureViewPort, ReceiveDamage, Shoot,
+                                                                SetAmmoLeft, SetCooldown, SetHealth)>
 class CharacterCerebrateClient : public Cerebrate {
 public:
     struct Info {
         Position current_pos;
+        Vector2D rotator;
         double current_health;
+        double cooldown;
+        int8_t ammo;
     };
 
     CharacterCerebrateClient() : Cerebrate(TPawn::kTypeId) {
@@ -36,7 +41,12 @@ public:
         Serializer::Deserialize(actual_info, serialized_command.substr(0, info_size));
         HandleCommands(serialized_command.substr(info_size));
         possessed_->UpdatePosition(actual_info.current_pos);
+        if (!is_controlled_) {
+            possessed_->SetRotation(actual_info.rotator);
+        }
         possessed_->SetHealth(actual_info.current_health);
+        possessed_->SetAmmoLeft(actual_info.ammo);
+        possessed_->SetCooldown(actual_info.cooldown);
     }
 
 
