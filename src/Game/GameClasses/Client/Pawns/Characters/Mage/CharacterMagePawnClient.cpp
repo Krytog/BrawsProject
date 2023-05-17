@@ -10,7 +10,7 @@
 enum {
     START_X = -50,
     START_Y = -50,
-    COLLIDER_RADIUS = 35,
+    COLLIDER_RADIUS = 70,
     SPRITE_WIDTH = 200,
     SPRITE_HEIGHT = 200
 };

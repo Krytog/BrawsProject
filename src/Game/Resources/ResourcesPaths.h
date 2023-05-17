@@ -5,3 +5,4 @@
 #define RES_PATH_CHARACTERS_MAGE "../src/Game/Resources/Characters/Mage.png"
 #define RES_PATH_UI_AIM "../src/Game/Resources/UI/Aim.png"
 #define RES_PATH_PROJECTILES_MAGE "../src/Game/Resources/Projectiles/Fireball.png"
+#define RES_PATH_PARTICLES_EXPLOSION "../src/Game/Resources/Particles/Explosion.png"

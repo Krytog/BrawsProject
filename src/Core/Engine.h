@@ -76,7 +76,7 @@ public:
     }
     template <typename Callable, typename... Args>
     void Invoke(const uint64_t ticks_count, Callable&& cb, Args&&... args) {
-        delay_queue_.PushTicks(ticks_count, std::forward<Callable>(cb), std::forward<Args>(args)...);
+        delay_queue_.PushTicks(ticks_count_ + ticks_count, std::forward<Callable>(cb), std::forward<Args>(args)...);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////

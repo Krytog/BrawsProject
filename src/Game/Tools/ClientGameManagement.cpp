@@ -4,10 +4,12 @@
 #include <Game/GameClasses/Client/Pawns/Maps/Default/MapsDefaultClient.h>
 #include <Game/GameClasses/Client/Cerebrates/Characters/CharacterCerebrateClient.h>
 #include <Game/GameClasses/Client/Cerebrates/Positional/PositionalCerebrateClient.h>
+#include <Game/GameClasses/Client/Cerebrates/HitSynchronizer/HitSynchronizerCerebrateClient.h>
 #include <Game/GameClasses/Client/Pawns/Characters/Default/CharacterDefaultPawnClient.h>
 #include <Game/GameClasses/Client/Pawns/Characters/Mage/CharacterMagePawnClient.h>
 #include <Game/GameClasses/Client/Pawns/Characters/Mage/ProjectileMagePawnClient.h>
 #include <Game/GameClasses/Client/Pawns/UI/Cursor.h>
+#include <Game/GameClasses/Client/Pawns/Particles/ExplosionParticles.h>
 #include <SwarmSystem/Register.h>
 #include <SwarmSystem/TypeIdList.h>
 
@@ -22,6 +24,7 @@ void ClientGameManagement::InitRegistryForOvermind() {
     registry.RegisterClass<CharacterCerebrateClient<CharacterDefaultPawnClient>>(TypeId_Character_Default);
     registry.RegisterClass<CharacterCerebrateClient<CharacterMagePawnClient>>(TypeId_Character_Mage);
     registry.RegisterClass<PositionalCerebrateClient<ProjectileMagePawnClient>>(TypeId_Projectile_Mage);
+    registry.RegisterClass<HitSynchronizerCerebrateClient<ExplosionParticles>>(TypeId_Trail_Explosion);
 }
 
 std::string ClientGameManagement::SerializeInput() {

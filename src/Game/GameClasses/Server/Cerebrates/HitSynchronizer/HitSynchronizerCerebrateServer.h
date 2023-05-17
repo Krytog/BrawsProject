@@ -6,19 +6,16 @@
 #include <Core/Tools/Concepts.h>
 #include <stdexcept>
 
-#include <iostream>
-
-template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, GetPosition, GetRotator)>
-class PositionalCerebrateServer : public Cerebrate {
+template <typename TPawn, HasMethods(TPawn, GetType, GetPosition)>
+class HitSynchronizerCerebrateServer : public Cerebrate {
 public:
     struct Info {
         Position position;
-        Vector2D rotator;
     };
 
-    PositionalCerebrateServer(TPawn* pawn_to_possess) : Cerebrate(TPawn::kTypeId), possessed_(pawn_to_possess) {}
+    HitSynchronizerCerebrateServer(TPawn* pawn_to_possess) : Cerebrate(pawn_to_possess->GetType()), possessed_(pawn_to_possess) {}
 
-    ~PositionalCerebrateServer() override = default;
+    ~HitSynchronizerCerebrateServer() override = default;
 
     void* GetPossessed() const override {
         return possessed_;
@@ -26,13 +23,12 @@ public:
 
     void ForcePossessedExecuteCommand(std::string_view serialized_command) override {
         // these objects can't accept any input
-        throw std::runtime_error("Projectiles cerebrate forces pawn to do something");
+        throw std::runtime_error("Hit cerebrate forces pawn to do something");
     }
 
     std::string SerializeInfo() override {
         Info info;
         info.position = possessed_->GetPosition();
-        info.rotator = possessed_->GetRotator();
         std::string output;
         Serializer::Serialize(info, &output);
         return output;

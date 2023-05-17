@@ -63,7 +63,7 @@ void ServerGameManagement::PrepareAndSendDataToClient(uint64_t player_id) {
     }
     overmind.UpdateCerebratesInfo(player_cerebrate, IsSeenByPlayer);
     auto data = overmind.GetCerebratesInfoSerialized();
-    std::cout << "PACKET SIZE: " << data.size() << std::endl;
-    Profiler::GetInstance().AddTimeMark(&data);
+//    std::cout << "PACKET SIZE: " << data.size() << std::endl;
+//    Profiler::GetInstance().AddTimeMark(&data);
     Communicator::GetInstance().SendToClient(player_id, data);
 }

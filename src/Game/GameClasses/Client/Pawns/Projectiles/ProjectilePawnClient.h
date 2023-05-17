@@ -9,8 +9,5 @@ public:
 
     void UpdateRotation(const Vector2D& rotator);
     void OnUpdate() override;
-
-protected:
-    double start_rotation; // by default, we think that projectile is flying according to Vector2D::RIGHT
 };
 

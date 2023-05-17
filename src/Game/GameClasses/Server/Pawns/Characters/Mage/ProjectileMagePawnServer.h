@@ -7,4 +7,6 @@ public:
     ProjectileMagePawnServer(const ProjectilePawnServer::ArgPack& argpack);
 
     static const size_t kTypeId;
+private:
+    void LeaveHitTrail() const override;
 };

@@ -14,7 +14,7 @@ public:
     ProjectilePawnServer(const ArgPack& argpack);
     virtual ~ProjectilePawnServer();
 
-    void OnUpdate() override;
+    virtual void OnUpdate() override;
 
     Vector2D GetRotator() const;
 
@@ -23,4 +23,9 @@ protected:
     double speed_;
     double damage_;
     Vector2D direction_;
+
+    virtual void LeaveHitTrail() const = 0;
+
+private:
+    void CorrectSelfDestroy();
 };

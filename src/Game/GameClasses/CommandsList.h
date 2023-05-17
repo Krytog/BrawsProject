@@ -7,5 +7,5 @@ enum CharacterCommands {
 };
 
 enum ProjectileCommands {
-    COMMAND_DELETE = 'D',
+    COMMAND_HIT_DESTROY = 'H',
 };

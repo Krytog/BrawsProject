@@ -4,9 +4,10 @@
 #include <SwarmSystem/Overmind.h>
 #include <Game/GameClasses/CommandsList.h>
 
+
 ProjectilePawnServer::ProjectilePawnServer(const ArgPack& argpack): speed_(argpack.speed), damage_(argpack.damage), direction_(argpack.direction) {
     *position_ = argpack.position;
-    ServerEngine::GetInstance().Invoke(std::chrono::milliseconds(15000), &ServerEngine::Destroy, &ServerEngine::GetInstance(), this);
+    //ServerEngine::GetInstance().Invoke(std::chrono::milliseconds(15000), &ServerEngine::Destroy, &ServerEngine::GetInstance(), this);
 }
 
 
@@ -16,18 +17,23 @@ Vector2D ProjectilePawnServer::GetRotator() const {
 
 void ProjectilePawnServer::OnUpdate() {
     auto collisions = ServerEngine::GetInstance().GetPhysicalCollisions(this);
-//    for (auto& collision : collisions) {
-//        if (auto character = dynamic_cast<CharacterPawnServer*>(collision.game_object)) {
-//            character->ReceiveDamage(damage_);
-//            //ServerEngine::GetInstance().Invoke(0, &ServerEngine::Destroy, &ServerEngine::GetInstance(), this);
-//            return;
-//        }
-//        //ServerEngine::GetInstance().Invoke(0, &ServerEngine::Destroy, &ServerEngine::GetInstance(), this);
-//        return;
-//    }
+    for (auto& collision : collisions) {
+        if (auto character = dynamic_cast<CharacterPawnServer*>(collision.game_object)) {
+            character->ReceiveDamage(damage_);
+        }
+        LeaveHitTrail();
+        CorrectSelfDestroy();
+        return;
+    }
     Translate(direction_ * speed_);
 }
 
 ProjectilePawnServer::~ProjectilePawnServer() {
-    Overmind::GetInstance().DestroyCerebrate(cerebrate_id_);
+    if (!Overmind::GetInstance().GetCerebrateWithId(cerebrate_id_)->IsDeprecated()) {
+        Overmind::GetInstance().DestroyCerebrate(cerebrate_id_);
+    }
+}
+
+void ProjectilePawnServer::CorrectSelfDestroy() {
+    ServerEngine::GetInstance().Invoke(0, &ServerEngine::Destroy, &ServerEngine::GetInstance(), this);
 }
