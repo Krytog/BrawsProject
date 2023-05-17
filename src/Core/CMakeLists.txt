@@ -18,6 +18,7 @@ add_library(core_lib
         Qt/PaintTemplates/AnimatedSprite.cpp
         Qt/PaintTemplates/BasicSprite.cpp
         Qt/PaintTemplates/VisibleObject.cpp
+        Qt/PaintTemplates/TextSprite.cpp
         Qt/MainWidget/MainWidget.cpp
         Qt/MainWidget/Render.cpp
         Qt/Helpers/CommonHelpers/DrawAnimatedImageHelper.cpp
