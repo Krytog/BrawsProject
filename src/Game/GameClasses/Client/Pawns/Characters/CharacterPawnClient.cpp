@@ -67,13 +67,17 @@ void CharacterPawnClient::AddStatsVisualization() const {
     if ((visible = dynamic_cast<IFlexibleVisibleObject*>(visible_object_.get()))) {
         std::shared_ptr<TextSprite> health = std::make_shared<TextSprite>(std::to_string(int64_t(health_)),
              Position(0, 0), TEXT_WIDTH, TEXT_HEIGHT);
-        std::shared_ptr<TextSprite> amo_left = std::make_shared<TextSprite>(std::to_string(int64_t(ammo_left_)),
+        std::shared_ptr<TextSprite> ammo_left = std::make_shared<TextSprite>(std::to_string(int64_t(ammo_left_)),
              Position(0, 0), TEXT_WIDTH, TEXT_HEIGHT);
         std::shared_ptr<TextSprite> cooldown = std::make_shared<TextSprite>(std::to_string(int64_t(cooldown_)),
              Position(0, 0), TEXT_WIDTH, TEXT_HEIGHT);
 
         visible->ChangeRenderLogic(
-            [this, health, amo_left, cooldown] (Painter* painter) {
+            [this, health, ammo_left, cooldown] (Painter* painter) {
+                health->ResetText(std::to_string(health_));
+                ammo_left->ResetText(std::to_string(ammo_left_));
+                cooldown->ResetText(std::to_string(cooldown_));
+
                 auto text_pos = this->GetPosition();
                 text_pos.Translate({-DIST_BETWEEN, DIST_FROM_CENTER});
 
@@ -84,7 +88,7 @@ void CharacterPawnClient::AddStatsVisualization() const {
                 cooldown_pos.Translate({DIST_BETWEEN, DIST_FROM_CENTER});
 
                 DrawTextHelper(health.get(), text_pos).Paint(painter);
-                DrawTextHelper(amo_left.get(), amo_left_pos).Paint(painter);
+                DrawTextHelper(ammo_left.get(), amo_left_pos).Paint(painter);
                 DrawTextHelper(cooldown.get(), cooldown_pos).Paint(painter);
             }
         );
