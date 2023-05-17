@@ -4,11 +4,10 @@
 #include <SwarmSystem/Overmind.h>
 
 #include <NormInfrastructure/Server/Communicator.h>
-#include <SwarmSystem/Profiler/Profiler.h>
 
 #include <iostream>
 
-using namespace std::chrono_literals;
+#define SLEEP_TIME std::chrono::microseconds(int(1000000 * (1.0 / 60 - time.EvaluateTime())))
 
 int main() {
     ServerEngine& engine = ServerEngine::GetInstance();
@@ -24,15 +23,11 @@ int main() {
     MyTime time;
     engine.SetActiveOn();
 
-    Profiler& profiler = Profiler::GetInstance();
-
     while (engine.IsActive()) {
         time.ResetTime();
 
         for (auto player : players_id) {
             auto from_client = communicator.ReceiveFromClient(player);
-//            std::chrono::duration<double> time_interval = std::chrono::steady_clock::now() - profiler.ExtractTimeMark(&from_client);
-//            std::cout << "FROM CLIENT " << time_interval.count() * 1000 << "ms" << std::endl;
             ServerGameManagement::HandleInput(player, from_client);
         }
 
@@ -42,8 +37,7 @@ int main() {
             ServerGameManagement::PrepareAndSendDataToClient(player);
         }
 
-        std::this_thread::sleep_for (std::chrono::microseconds(int(1000000 * (1.0 / 60 - time.EvaluateTime()))));
-
+        std::this_thread::sleep_for(SLEEP_TIME);
     }
 }
 

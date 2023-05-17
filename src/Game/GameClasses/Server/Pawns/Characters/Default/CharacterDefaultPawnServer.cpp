@@ -22,7 +22,7 @@ enum {
 CharacterDefaultPawnServer::CharacterDefaultPawnServer() : CharacterDefaultPawnServer(Position(START_X, START_Y)) {}
 
 CharacterDefaultPawnServer::CharacterDefaultPawnServer(const Position &position) : CharacterDefaultPawnServer(CharacterPawnServer::ArgPack(), position) {
-    health_ = START_HEALTH;
+    health_cur_ = START_HEALTH;
     damage_ = START_DAMAGE;
     speed_ = START_SPEED;
 }

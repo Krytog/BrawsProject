@@ -5,8 +5,8 @@
 #include <SwarmSystem/Profiler/Profiler.h>
 
 #include <NormInfrastructure/Client/Communicator.h>
-#include <SwarmSystem/Profiler/Profiler.h>
 
+#define SLEEP_TIME std::chrono::microseconds(int(1000000 * (1.0 / 60 - time.EvaluateTime())))
 
 int main() {
     ClientEngine& engine = ClientEngine::GetInstance();
@@ -19,15 +19,10 @@ int main() {
     MyTime time;
     engine.SetActiveOn();
 
-    Profiler& profiler = Profiler::GetInstance();
-
     while (engine.IsActive()) {
         time.ResetTime();
 
         auto data = communicator.ReceiveFromServer();
-//        std::cout << "PACKET SIZE: " << data.size() << std::endl;
-//        std::chrono::duration<double> time_interval = std::chrono::steady_clock::now() - profiler.ExtractTimeMark(&data);
-//        std::cout << "FROM SERVER " << time_interval.count() * 1000 << "ms" << std::endl;
 
         if (data[0] == '#') { // means that we probably have a good package
             overmind.ActualizeCerebrates(data);
@@ -37,10 +32,9 @@ int main() {
         engine.Update();
 
         auto for_server = ClientGameManagement::SerializeInput();
-//        profiler.AddTimeMark(&for_server);
         communicator.SendToServer(for_server);
 
-        std::this_thread::sleep_for (std::chrono::microseconds(int(1000000 * (1.0 / 60 - time.EvaluateTime()))));
+        std::this_thread::sleep_for(SLEEP_TIME);
     }
     return 0;
 }

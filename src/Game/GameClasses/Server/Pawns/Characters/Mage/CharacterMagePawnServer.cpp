@@ -14,10 +14,12 @@ enum {
     COLLIDER_RADIUS = 70,
 };
 
-#define START_HEALTH 100
+#define START_HEALTH 150
 #define START_DAMAGE 25
 #define START_SPEED 7.5
 #define PROJECTILE_SPEED 15
+#define START_AMMO 8
+#define COOLDOWN_DURATION 2
 
 #define SCALE 0.390625
 #define BASIC_ANGLE (M_PI / 2)
@@ -26,9 +28,13 @@ static const Vector2D kShootPos(152 * SCALE, -171 * SCALE);
 CharacterMagePawnServer::CharacterMagePawnServer() : CharacterMagePawnServer(Position(START_X, START_Y)) {}
 
 CharacterMagePawnServer::CharacterMagePawnServer(const Position &position) : CharacterMagePawnServer(CharacterPawnServer::ArgPack(), position) {
-    health_ = START_HEALTH;
+    health_cur_ = START_HEALTH;
+    health_max_ = START_HEALTH;
     damage_ = START_DAMAGE;
     speed_ = START_SPEED;
+    ammo_cur_ = START_AMMO;
+    ammo_max_ = START_AMMO;
+    cooldown_duration_ = COOLDOWN_DURATION;
 }
 
 CharacterMagePawnServer::CharacterMagePawnServer(const CharacterPawnServer::ArgPack& base_arg_pack, const Position &position):

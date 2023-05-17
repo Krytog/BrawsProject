@@ -26,12 +26,12 @@ add_library(game_server
         GameClasses/Server/Pawns/Characters/CharacterPawnServer.cpp
         GameClasses/Server/Pawns/Projectiles/ProjectilePawnServer.cpp
         GameClasses/Server/Pawns/Characters/Default/CharacterDefaultPawnServer.cpp
-        GameClasses/Server/Pawns/Interfaces/IMovable.cpp
         GameClasses/Server/Pawns/Maps/Default/MapsDefaultServer.cpp
         GameClasses/Server/Pawns/Characters/Mage/CharacterMagePawnServer.cpp
         GameClasses/Server/Pawns/Characters/Mage/ProjectileMagePawnServer.cpp
         GameClasses/Server/ParsingUtilities/ControllerTools.cpp
-        GameClasses/Server/Pawns/Projectiles/HitTrail.cpp)
+        GameClasses/Server/Pawns/Projectiles/HitTrail.cpp
+        GameClasses/Server/GameRulers/GameRuler.cpp)
 
 target_link_libraries(game_client_tools game_client)
 target_link_libraries(game_server_tools game_server)

@@ -23,7 +23,9 @@ public:
 
     virtual void Translate(const Vector2D& vector2d) override;
     virtual void UpdatePosition(const Position& position) override;
+
     virtual void SetDirection(const Position& looking_at);
+    Vector2D GetDirection() const;
 
     void Move(const Vector2D& direction);
     virtual void ReceiveDamage(double damage);

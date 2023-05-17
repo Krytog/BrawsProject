@@ -205,6 +205,10 @@ void CharacterPawnServer::HandleOverTimeHealing() {
     }
 }
 
+Vector2D CharacterPawnServer::GetDirection() const {
+    return direction_;
+}
+
 void CharacterPawnServer::OnUpdate() {
     HandleReloading();
     HandleOverTimeHealing();

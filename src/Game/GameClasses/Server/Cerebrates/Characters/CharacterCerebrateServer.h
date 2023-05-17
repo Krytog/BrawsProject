@@ -10,8 +10,10 @@ enum {
     SHOOT_KEY = 1,
 };
 
-template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, Move, Shoot, GetHealth, GetPosition,
-        SetDirection, BlockShooting, UnblockShooting)>
+template <typename TPawn, HasMember(TPawn, kTypeId), HasMethods(TPawn, Move, Shoot, SetDirection,
+                                                                BlockShooting, UnblockShooting,
+                                                                GetPosition, GetDirection, GetHealthCur,
+                                                                GetAmmoLeft, GetCooldown)>
 class CharacterCerebrateServer : public Cerebrate {
 public:
     struct Info {
@@ -50,8 +52,11 @@ public:
 
     std::string SerializeInfo() override {
         Info actual_info;
-        actual_info.current_health = possessed_->GetHealth();
         actual_info.current_pos = possessed_->GetPosition();
+        actual_info.rotator = possessed_->GetDirection();
+        actual_info.current_health = possessed_->GetHealthCur();
+        actual_info.ammo = possessed_->GetAmmoLeft();
+        actual_info.cooldown = possessed_->GetCooldown();
         std::string output;
         Serializer::Serialize(actual_info, &output);
         return output;
