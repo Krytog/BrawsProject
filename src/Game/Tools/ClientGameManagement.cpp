@@ -9,10 +9,30 @@
 #include <Game/GameClasses/Client/Pawns/Characters/Mage/CharacterMagePawnClient.h>
 #include <Game/GameClasses/Client/Pawns/Characters/Mage/ProjectileMagePawnClient.h>
 #include <Game/GameClasses/Client/Pawns/UI/Cursor.h>
+#include <Game/GameClasses/Client/Pawns/UI/EndGameWidget.h>
 #include <Game/GameClasses/Client/Pawns/Particles/ExplosionParticles.h>
 #include <SwarmSystem/Register.h>
 #include <SwarmSystem/TypeIdList.h>
 #include <NormInfrastructure/Client/Communicator.h>
+
+#define WIN_STRING "!WIN!"
+#define LOSE_STRING "!LOSE!"
+#define WIN_LENGTH 5
+#define LOSE_LENGTH 6
+
+namespace {
+    std::string_view DataPreprocessing(std::string_view data) {
+        if (data.starts_with(WIN_STRING)) {
+            ClientEngine::GetInstance().CreateGameObject<EndGameWidget>(EndGameWidget::Status::WIN);
+            return data.substr(WIN_LENGTH);
+        }
+        if (data.starts_with(LOSE_STRING)) {
+            ClientEngine::GetInstance().CreateGameObject<EndGameWidget>(EndGameWidget::Status::LOSE);
+            return data.substr(LOSE_LENGTH);
+        }
+        return data;
+    }
+}
 
 void ClientGameManagement::InitGameClient() {
     ClientEngine& engine = ClientEngine::GetInstance();
@@ -43,30 +63,12 @@ std::string ClientGameManagement::SerializeInput() {
     return output;
 }
 
-#define WIN_STRING "!WIN!"
-#define LOSE_STRING "!LOSE!"
-#define WIN_LENGTH 5
-#define LOSE_LENGTH 6
-
 void ClientGameManagement::ReceiveAndHandleFromServer() {
     static Overmind& overmind = Overmind::GetInstance();
     static Communicator& communicator = Communicator::GetInstance();
     auto raw_data = communicator.ReceiveFromServer();
     std::string_view data(raw_data);
-    if (data.starts_with(WIN_STRING)) {
-        std::cout << "WIN!" << std::endl;
-        ClientEngine::GetInstance().Invoke(std::chrono::milliseconds(1000), &ClientEngine::SetActiveOff, &ClientEngine::GetInstance());
-        overmind.ActualizeCerebrates(data.substr(WIN_LENGTH));
-        overmind.ForceCerebratesExecuteCommands(data.substr(WIN_LENGTH));
-        return;
-    }
-    if (data.starts_with(LOSE_STRING)) {
-        std::cout << "LOSE!" << std::endl;
-        ClientEngine::GetInstance().Invoke(std::chrono::milliseconds(1000), &ClientEngine::SetActiveOff, &ClientEngine::GetInstance());
-        overmind.ActualizeCerebrates(data.substr(LOSE_LENGTH));
-        overmind.ForceCerebratesExecuteCommands(data.substr(LOSE_LENGTH));
-        return;
-    }
+    data = DataPreprocessing(data);
     if (data[0] == '#') { // means that we probably have a good package
         overmind.ActualizeCerebrates(data);
         overmind.ForceCerebratesExecuteCommands(data);

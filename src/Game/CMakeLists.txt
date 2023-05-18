@@ -20,6 +20,7 @@ add_library(game_client
         GameClasses/Client/Pawns/Characters/Mage/CharacterMagePawnClient.cpp
         GameClasses/Client/Pawns/Characters/Mage/ProjectileMagePawnClient.cpp
         GameClasses/Client/Pawns/UI/Cursor.cpp
+        GameClasses/Client/Pawns/UI/EndGameWidget.cpp
         GameClasses/Client/Pawns/Particles/Particles.cpp
         GameClasses/Client/Pawns/Particles/ExplosionParticles.cpp)
 add_library(game_server

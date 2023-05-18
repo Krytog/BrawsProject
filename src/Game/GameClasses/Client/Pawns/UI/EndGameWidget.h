@@ -4,5 +4,9 @@
 
 class EndGameWidget : public PersistentVisibleObject {
 public:
-    EndGameWidget();
+    enum Status {
+        WIN, LOSE
+    };
+
+    EndGameWidget(EndGameWidget::Status status);
 };
