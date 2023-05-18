@@ -1,7 +1,14 @@
 #pragma once
 
 #define TypeId_UNDEFINED 0
-#define TypeId_Character_Default 1
+#define TypeId_Character_Default 999
 #define TypeId_Character_Mage 2
-#define TypeId_Projectile_Mage 3
-#define TypeId_Trail_Explosion 4
+#define TypeId_Character_Pirate 3
+#define TypeId_Character_Bully 4
+#define TypeId_Projectile_Mage 5
+#define TypeId_Projectile_Pirate 6
+#define TypeId_Projectile_Bully 7
+#define TypeId_Trail_Explosion 8
+#define TypeId_Trail_Hit 9
+#define TypeId_Trail_Mark 10
+#define TypeId_Trail_Smoke 11

@@ -25,7 +25,5 @@ protected:
     Vector2D direction_;
 
     virtual void LeaveHitTrail() const = 0;
-
-private:
     void CorrectSelfDestroy();
 };
