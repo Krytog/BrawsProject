@@ -34,7 +34,7 @@ public:
     void Stop();
     size_t GetUserNumber();
 
-    ~Communicator() = default;
+    ~Communicator();
 private:
     Communicator();
 

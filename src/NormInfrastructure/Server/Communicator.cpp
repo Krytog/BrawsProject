@@ -14,6 +14,13 @@ Communicator::Communicator(): socket_(io_context_, udp::endpoint(udp::v4(), rand
       reg_socket_(io_context_, udp::endpoint(udp::v4(), reg_port)), rd_(), gen_(rd_()), dis_() {
 }
 
+Communicator::~Communicator() {
+    if (!io_context_.stopped()) {
+        std::cout << "bebra" << std::endl;
+        Stop();
+    }
+}
+
 Communicator &Communicator::GetInstance() {
     static Communicator instance;
     return instance;
@@ -104,9 +111,9 @@ void Communicator::Run() {
 
 void Communicator::Stop() {
     io_context_.stop();
-    if (accept_thread_.joinable()) {
+//    if (accept_thread_.joinable()) {
         accept_thread_.join();
-    }
+//    }
 }
 
 size_t Communicator::GetUserNumber() {
