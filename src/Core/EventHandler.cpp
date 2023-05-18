@@ -21,8 +21,10 @@ EventStatus Event::GetStatus() const {
 }
 
 void EventHandler::DestroyEvent(Event* event) {  /* Safety of erasure is guaranteed */
-    events_.erase(cache_[event]);
-    cache_.erase(event);
+    if (cache_.contains(event)) {
+        events_.erase(cache_[event]);
+        cache_.erase(event);
+    }
 }
 
 void EventHandler::TryExecuteAll() {
