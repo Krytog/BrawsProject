@@ -10,7 +10,7 @@
 #include <iostream>
 #include <thread>
 
-using boost::asio::ip::udp;
+using boost::asio::ip::tcp;
 
 enum Character {
     MAGE,
@@ -20,7 +20,7 @@ enum Character {
 
 struct Player {
     uint64_t id;
-    udp::endpoint connection;
+    tcp::endpoint connection;
     Character character;
 };
 
@@ -52,6 +52,7 @@ private:
         size_t users_count_;
     };
 
+    using LobbyId = uint64_t; 
 public:
     static Porter &GetInstance();
 
@@ -71,17 +72,14 @@ private:
     uint64_t RegId();
     void DoRecieve(size_t thread_id);
 
-
 private:
-    std::unordered_map<uint64_t, Lobby> lobbies_;
+    std::unordered_map<LobbyId, Lobby> lobbies_; 
     boost::asio::io_service io_context_;
-    udp::socket reg_socket_;
-    std::unordered_map<uint64_t, udp::endpoint> connections_;
+    tcp::acceptor acceptor_;
+    std::unordered_map<uint64_t, tcp::endpoint> connections_;
 
     // ID randomizer
     std::random_device rd_;
     std::mt19937_64 gen_;
     std::uniform_int_distribution<uint64_t> dis_;
-
-    size_t user_counter_ = 0;
 };
