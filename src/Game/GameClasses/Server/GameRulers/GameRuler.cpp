@@ -3,6 +3,26 @@
 #include <Game/GameClasses/CommandsList.h>
 #include <SwarmSystem/Overmind.h>
 
+#define END_DELAY 2000
+
+namespace {
+    bool AlwaysTrue() {
+        return true;
+    }
+
+    void SendCommand(const CharacterPawnServer* player, char to_send) {
+        std::string command;
+        command.push_back(to_send);
+        Overmind::GetInstance().GetCerebrateWithId(player->GetCerebrateId())->AddCommandToBuffer(command);
+
+    }
+
+    void SendCommandForTime(const CharacterPawnServer* player, char to_send, uint64_t milliseconds) {
+        Event* event = ServerEngine::GetInstance().CreateEvent(AlwaysTrue, {}, SendCommand, std::make_tuple(player, to_send), EventStatus::Reusable);
+        ServerEngine::GetInstance().Invoke(std::chrono::milliseconds(milliseconds), &ServerEngine::DestroyEvent, &ServerEngine::GetInstance(), event);
+    }
+}
+
 GameRuler &GameRuler::GetInstance() {
     static GameRuler instance;
     return instance;
@@ -21,27 +41,18 @@ void GameRuler::AddPlayer(const CharacterPawnServer* player) {
 }
 
 void GameRuler::PlayerLoses(const CharacterPawnServer* player) {
-    std::string command;
-    command.push_back(CharacterCommands::COMMAND_ON_LOSE);
-    Overmind::GetInstance().GetCerebrateWithId(player->GetCerebrateId())->AddCommandToBuffer(command);
+    //SendCommandForTime(player, CharacterCommands::COMMAND_ON_LOSE, END_DELAY);
     players_.erase(player);
 }
 
 void GameRuler::PlayerWins(const CharacterPawnServer* player) {
-    std::string command;
-    command.push_back(CharacterCommands::COMMAND_ON_WIN);
-    Overmind::GetInstance().GetCerebrateWithId(player->GetCerebrateId())->AddCommandToBuffer(command);
-    players_.erase(player);
-
-    while (!players_.empty()) {
-        auto player_to_lose = players_.begin();
-        PlayerLoses(*player_to_lose);
-    }
+    //SendCommandForTime(player, CharacterCommands::COMMAND_ON_WIN, END_DELAY);
+    //players_.erase(player);
 }
 
-void GameRuler::MakeEventForStoppingGame() const {
+void GameRuler::MakeEventForStoppingGame() {
     ServerEngine::GetInstance().CreateEvent(&GameRuler::IsGameEnded, std::make_tuple(this),
-                                            &ServerEngine::SetActiveOff, std::make_tuple(&ServerEngine::GetInstance()),
+                                            &GameRuler::EndGame, std::make_tuple(this),
                                             EventStatus::Disposable);
 }
 
@@ -49,4 +60,16 @@ GameRuler::~GameRuler() = default;
 
 void GameRuler::BeginGame() {
     has_begun_ = true;
+}
+
+void GameRuler::EndGame() {
+    if (!players_.empty()) {
+        auto winner = *players_.begin();
+        PlayerWins(winner);
+    }
+    ServerEngine::GetInstance().Invoke(std::chrono::milliseconds(END_DELAY), &ServerEngine::SetActiveOff, &ServerEngine::GetInstance());
+}
+
+bool GameRuler::IsPlayerAlive(const CharacterPawnServer* player) {
+    return players_.contains(player);
 }

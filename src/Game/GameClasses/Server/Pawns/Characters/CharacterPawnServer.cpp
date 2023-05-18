@@ -28,6 +28,7 @@ CharacterPawnServer::CharacterPawnServer(const CharacterPawnServer::ArgPack &arg
     auto ptr = ServerEngine::GetInstance().CreateGameObject<PersistentObject>(args);
     field_of_view_ = ptr;
     is_dead_event_ = CreateIsDeadEvent();
+    GameRuler::GetInstance().AddPlayer(this);
 }
 
 Event* CharacterPawnServer::CreateIsDeadEvent() const {
@@ -195,7 +196,7 @@ void CharacterPawnServer::HandleReloading() {
     }
 }
 
-#define HEAL_COOLDOWN 1.5
+#define HEAL_COOLDOWN 3
 
 void CharacterPawnServer::HandleOverTimeHealing() {
     if (heal_timer_.EvaluateTime() > HEAL_COOLDOWN) {

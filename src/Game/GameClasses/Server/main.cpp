@@ -39,5 +39,8 @@ int main() {
 
         std::this_thread::sleep_for(SLEEP_TIME);
     }
+    communicator.Stop();
+    std::cout << "KINDA CORRECT OUT" << std::endl;
+    return 0;
 }
 

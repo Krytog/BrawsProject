@@ -15,6 +15,10 @@ public:
     bool IsGameEnded() const;
     void BeginGame();
 
+    void EndGame();
+
+    bool IsPlayerAlive(const CharacterPawnServer* player);
+
 private:
     GameRuler();
     GameRuler(const GameRuler&) = delete;
@@ -23,5 +27,5 @@ private:
     std::unordered_set<const CharacterPawnServer*> players_;
     bool has_begun_ = false;
 
-    void MakeEventForStoppingGame() const;
+    void MakeEventForStoppingGame();
 };

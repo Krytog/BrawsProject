@@ -10,7 +10,6 @@
 
 int main() {
     ClientEngine& engine = ClientEngine::GetInstance();
-    Overmind& overmind = Overmind::GetInstance();
     Communicator& communicator = Communicator::GetInstance();
     communicator.RegOnServer();
     communicator.Run();
@@ -22,12 +21,7 @@ int main() {
     while (engine.IsActive()) {
         time.ResetTime();
 
-        auto data = communicator.ReceiveFromServer();
-
-        if (data[0] == '#') { // means that we probably have a good package
-            overmind.ActualizeCerebrates(data);
-            overmind.ForceCerebratesExecuteCommands(data);
-        }
+        ClientGameManagement::ReceiveAndHandleFromServer();
 
         engine.Update();
 
@@ -36,5 +30,6 @@ int main() {
 
         std::this_thread::sleep_for(SLEEP_TIME);
     }
+    communicator.Stop();
     return 0;
 }

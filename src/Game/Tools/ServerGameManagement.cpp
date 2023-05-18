@@ -7,7 +7,9 @@
 #include <SwarmSystem/Overmind.h>
 #include <NormInfrastructure/Server/Communicator.h>
 #include <Game/GameClasses/CommandsList.h>
-#include <SwarmSystem/Profiler/Profiler.h>
+#include <Game/GameClasses/Server/GameRulers/GameRuler.h>
+
+
 
 namespace {
     bool IsSeenByPlayer(Cerebrate* from, Cerebrate* other) {
@@ -35,13 +37,14 @@ void ServerGameManagement::InitGameServer(std::vector<uint64_t>& players_id) {
     for (size_t i = 0; i < players_id.size(); ++i) {
         GameObject* player_pawn;
         if (i % 2 == 0) {
-            player_pawn = engine.CreateGameObjectByDefault<CharacterMagePawnServer>();
+            player_pawn = engine.CreateGameObject<CharacterMagePawnServer>(Position(-500, 0));
             Overmind::GetInstance().RegisterNewPlayer(players_id[i], dynamic_cast<CharacterMagePawnServer*>(player_pawn)->GetCerebrateId());
         } else {
-            player_pawn = engine.CreateGameObjectByDefault<CharacterDefaultPawnServer>();
-            Overmind::GetInstance().RegisterNewPlayer(players_id[i], dynamic_cast<CharacterDefaultPawnServer*>(player_pawn)->GetCerebrateId());
+            player_pawn = engine.CreateGameObject<CharacterMagePawnServer>(Position(500, 0));
+            Overmind::GetInstance().RegisterNewPlayer(players_id[i], dynamic_cast<CharacterMagePawnServer*>(player_pawn)->GetCerebrateId());
         }
     }
+    GameRuler::GetInstance().BeginGame();
 }
 
 void ServerGameManagement::HandleInput(uint64_t player_id, std::string_view input) {
@@ -51,10 +54,23 @@ void ServerGameManagement::HandleInput(uint64_t player_id, std::string_view inpu
     }
 }
 
+#define WIN_STRING "!WIN!"
+#define LOSE_STRING "!LOSE!"
+
 void ServerGameManagement::PrepareAndSendDataToClient(uint64_t player_id) {
     static std::unordered_map<uint64_t, bool> viewport_captured;
-    Overmind& overmind = Overmind::GetInstance();
+    static Overmind& overmind = Overmind::GetInstance();
+    static GameRuler& gameruler = GameRuler::GetInstance();
     auto player_cerebrate = overmind.GetPlayersCerebrate(player_id);
+    auto player_pawn = static_cast<CharacterPawnServer*>(player_cerebrate->GetPossessed());
+    std::string data;
+    if (gameruler.IsGameEnded()) {
+        if (gameruler.IsPlayerAlive(player_pawn)) {
+            data = WIN_STRING;
+        } else {
+            data = LOSE_STRING;
+        }
+    }
     if (!viewport_captured[player_id]) {
         std::string to_capture_viewport;
         to_capture_viewport += CharacterCommands::COMMAND_CAPTURE_VIEWPORT;
@@ -62,8 +78,6 @@ void ServerGameManagement::PrepareAndSendDataToClient(uint64_t player_id) {
         viewport_captured[player_id] = false;
     }
     overmind.UpdateCerebratesInfo(player_cerebrate, IsSeenByPlayer);
-    auto data = overmind.GetCerebratesInfoSerialized();
-//    std::cout << "PACKET SIZE: " << data.size() << std::endl;
-//    Profiler::GetInstance().AddTimeMark(&data);
+    data += overmind.GetCerebratesInfoSerialized();
     Communicator::GetInstance().SendToClient(player_id, data);
 }
