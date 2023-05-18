@@ -112,8 +112,18 @@ public:
     }
     ///////////////////////////////////////////////////////////////////////////////////////
 
+    void ClearAll() {
+        for (const auto& object_ptr : objects_) {
+            delete object_ptr;
+        }
+        objects_.clear();
+        cache_.clear();
+        delay_queue_.Clear();
+        event_handler_.Clear();
+    }
+
     ~Engine() {
-        ClearAll();
+        ClearAll();  // Extra safety
     }
 
     // The next functions can be used only if Update() is called
@@ -157,12 +167,6 @@ protected:
           event_handler_(EventHandler::GetInstance()),
           delay_queue_(DelayQueue::GetInstance()),
           ticks_count_(0) {
-    }
-    void ClearAll() {
-        for (const auto& object_ptr : objects_) {
-            delete object_ptr;
-        }
-        cache_.clear();
     }
 
     Engine(const Engine&) = delete;

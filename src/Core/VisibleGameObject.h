@@ -42,5 +42,6 @@ public:
     PersistentVisibleObject(Position* position, Collider* collider, IVisibleObject* visible_object,
                      std::string_view tag);
     PersistentVisibleObject(const ArgPack& pack);
+    virtual ~PersistentVisibleObject() = default;
     void OnUpdate() override;
 };

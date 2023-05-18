@@ -14,6 +14,10 @@ void DelayQueue::DelayQueueTime::TryExecute(const TimePoint& time_point) {
     }
 }
 
+void DelayQueue::DelayQueueTime::Clear() {
+    queue_ = {};
+}
+
 bool DelayQueue::DelayQueueTime::Empty() const {
     return queue_.empty();
 }
@@ -25,6 +29,10 @@ void DelayQueue::DelayQueueTicks::TryExecute(const uint64_t ticks_count) {
     }
 }
 
+void DelayQueue::DelayQueueTicks::Clear() {
+    queue_ = {};
+}
+
 bool DelayQueue::DelayQueueTicks::Empty() const {
     return queue_.empty();
 }
@@ -32,6 +40,11 @@ bool DelayQueue::DelayQueueTicks::Empty() const {
 void DelayQueue::TryExecute(const TimePoint& time_point, const uint64_t ticks_count) {
     queue_time_.TryExecute(time_point);
     queue_ticks_.TryExecute(ticks_count);
+}
+
+void DelayQueue::Clear() {
+    queue_time_.Clear();
+    queue_ticks_.Clear();
 }
 
 bool DelayQueue::Empty() const {

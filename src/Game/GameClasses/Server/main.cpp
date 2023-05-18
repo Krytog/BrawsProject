@@ -15,10 +15,10 @@ int main() {
     Communicator& communicator = Communicator::GetInstance();
     std::vector<uint64_t> players_id;
     uint64_t player1 = communicator.RegUser();
-    uint64_t player2 = communicator.RegUser();
+//    uint64_t player2 = communicator.RegUser();
     communicator.Run();
     players_id.push_back(player1);
-    players_id.push_back(player2);
+//    players_id.push_back(player2);
     ServerGameManagement::InitGameServer(players_id);
     MyTime time;
     engine.SetActiveOn();
@@ -40,7 +40,7 @@ int main() {
         std::this_thread::sleep_for(SLEEP_TIME);
     }
     communicator.Stop();
-    std::cout << "KINDA CORRECT OUT" << std::endl;
+    engine.ClearAll();
     return 0;
 }
 

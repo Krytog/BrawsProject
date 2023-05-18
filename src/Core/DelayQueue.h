@@ -23,6 +23,8 @@ public:
 
     void TryExecute(const TimePoint& time_point, const uint64_t ticks_count);
 
+    void Clear();
+
     bool Empty() const;
 
 private:
@@ -46,6 +48,8 @@ private:
 
         void TryExecute(const TimePoint& time_point);
 
+        void Clear();
+
         bool Empty() const;
 
     private:
@@ -67,6 +71,8 @@ private:
         }
 
         void TryExecute(const uint64_t time_point);
+
+        void Clear();
 
         bool Empty() const;
 

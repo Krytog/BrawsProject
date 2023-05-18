@@ -45,5 +45,6 @@ public:
     PersistentObject(Position* position, Collider* collider,
                      std::string_view tag);
     PersistentObject(const ArgPack& pack);
+    virtual ~PersistentObject() = default;
     void OnUpdate() override;
 };
