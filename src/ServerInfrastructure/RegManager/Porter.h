@@ -1,7 +1,6 @@
 #pragma once
 
-#pragma once
-
+#include <_types/_uint64_t.h>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -10,44 +9,39 @@
 #include <boost/asio.hpp>
 #include <deque>
 #include <thread>
-
-namespace {
-    const int kMaxDtgrmLen = 32000;
-}
+#include "../Lobby/Lobby.h"
 
 using boost::asio::ip::udp;
 
 class Porter {
-    using DataQueue = std::deque<std::string>;
+    static constexpr uint16_t kMaxDtgrmLen = 3200;
 public:
     static Porter &GetInstance();
 
     uint64_t RegUser();
     std::string ReceiveFromClient(uint64_t client_id);
     void SendToClient(uint64_t client_id, std::string_view data);
-    void RunFor(size_t milliseconds);
     void Run();
 
-    ~Communicator() = default;
+    ~Porter() = default;
 private:
-    Communicator();
+    Porter();
 
-    Communicator(const Communicator &other) = delete;
-    Communicator(Communicator &&other) = delete;
+    Porter(const Porter &other) = delete;
+    Porter(Porter &&other) = delete;
 
-    Communicator &operator=(const Communicator &other) = delete;
-    Communicator &operator=(Communicator &&other) = delete;
+    Porter &operator=(const Porter &other) = delete;
+    Porter &operator=(Porter &&other) = delete;
 
     uint64_t RegId();
     void DoRecieve(size_t thread_id);
-    bool IsValidData(std::string_view data, uint64_t client_id) const;
 
+
+private:
+    std::unordered_map<uint64_t, > 
     boost::asio::io_service io_context_;
-    udp::socket socket_;
     udp::socket reg_socket_;
-
     std::unordered_map<uint64_t, udp::endpoint> connections_;
-    std::unordered_map<uint64_t, DataQueue> users_data_;
 
     // ID randomizer
     std::random_device rd_;
