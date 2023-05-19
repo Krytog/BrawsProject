@@ -8,9 +8,12 @@
 #include <Game/GameClasses/Client/Pawns/Characters/Default/CharacterDefaultPawnClient.h>
 #include <Game/GameClasses/Client/Pawns/Characters/Mage/CharacterMagePawnClient.h>
 #include <Game/GameClasses/Client/Pawns/Characters/Mage/ProjectileMagePawnClient.h>
+#include <Game/GameClasses/Client/Pawns/Characters/Pirate/CharacterPiratePawnClient.h>
+#include <Game/GameClasses/Client/Pawns/Characters/Pirate/ProjectilePiratePawnClient.h>
 #include <Game/GameClasses/Client/Pawns/UI/Cursor.h>
 #include <Game/GameClasses/Client/Pawns/UI/EndGameWidget.h>
 #include <Game/GameClasses/Client/Pawns/Particles/ExplosionParticles.h>
+#include <Game/GameClasses/Client/Pawns/Particles/SmokeParticles.h>
 #include <SwarmSystem/Register.h>
 #include <SwarmSystem/TypeIdList.h>
 #include <NormInfrastructure/Client/Communicator.h>
@@ -44,8 +47,12 @@ void ClientGameManagement::InitRegistryForOvermind() {
     CerebrateRegistry& registry = CerebrateRegistry::GetInstance();
     registry.RegisterClass<CharacterCerebrateClient<CharacterDefaultPawnClient>>(TypeId_Character_Default);
     registry.RegisterClass<CharacterCerebrateClient<CharacterMagePawnClient>>(TypeId_Character_Mage);
+    registry.RegisterClass<CharacterCerebrateClient<CharacterPiratePawnClient>>(TypeId_Character_Pirate);
     registry.RegisterClass<PositionalCerebrateClient<ProjectileMagePawnClient>>(TypeId_Projectile_Mage);
+    registry.RegisterClass<PositionalCerebrateClient<ProjectilePiratePawnClient>>(TypeId_Projectile_Pirate);
+    registry.RegisterClass<PositionalCerebrateClient<ProjectilePiratePawnClient::Mark>>(TypeId_Projectile_Mark);
     registry.RegisterClass<HitSynchronizerCerebrateClient<ExplosionParticles>>(TypeId_Trail_Explosion);
+    registry.RegisterClass<HitSynchronizerCerebrateClient<SmokeParticles>>(TypeId_Trail_Smoke);
 }
 
 std::string ClientGameManagement::SerializeInput() {

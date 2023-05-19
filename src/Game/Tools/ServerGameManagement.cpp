@@ -4,6 +4,7 @@
 #include <Game/GameClasses/Server/Pawns/Maps/Default/MapsDefaultServer.h>
 #include <Game/GameClasses/Server/Pawns/Characters/Default/CharacterDefaultPawnServer.h>
 #include <Game/GameClasses/Server/Pawns/Characters/Mage/CharacterMagePawnServer.h>
+#include <Game/GameClasses/Server/Pawns/Characters/Pirate/CharacterPiratePawnServer.h>
 #include <SwarmSystem/Overmind.h>
 #include <NormInfrastructure/Server/Communicator.h>
 #include <Game/GameClasses/CommandsList.h>
@@ -40,8 +41,8 @@ void ServerGameManagement::InitGameServer(std::vector<uint64_t>& players_id) {
             player_pawn = engine.CreateGameObject<CharacterMagePawnServer>(Position(-500, 0));
             Overmind::GetInstance().RegisterNewPlayer(players_id[i], dynamic_cast<CharacterMagePawnServer*>(player_pawn)->GetCerebrateId());
         } else {
-            player_pawn = engine.CreateGameObject<CharacterMagePawnServer>(Position(500, 0));
-            Overmind::GetInstance().RegisterNewPlayer(players_id[i], dynamic_cast<CharacterMagePawnServer*>(player_pawn)->GetCerebrateId());
+            player_pawn = engine.CreateGameObject<CharacterPiratePawnServer>(Position(500, 0));
+            Overmind::GetInstance().RegisterNewPlayer(players_id[i], dynamic_cast<CharacterPiratePawnServer*>(player_pawn)->GetCerebrateId());
         }
     }
     GameRuler::GetInstance().BeginGame();

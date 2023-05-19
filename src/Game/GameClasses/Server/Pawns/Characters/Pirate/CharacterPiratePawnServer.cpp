@@ -65,7 +65,7 @@ void CharacterPiratePawnServer::Shoot(const Position &position) {
     argpack.speed = PROJECTILE_SPEED;
     argpack.direction = (position.GetCoordinatesAsVector2D() - argpack.position.GetCoordinatesAsVector2D());
     argpack.direction.Normalize();
-    ServerEngine::GetInstance().CreateGameObject<ProjectilePiratePawnServer>(argpack);
+    ServerEngine::GetInstance().CreateGameObject<ProjectilePiratePawnServer>(argpack, position);
 }
 
 void CharacterPiratePawnServer::OnUpdate() {

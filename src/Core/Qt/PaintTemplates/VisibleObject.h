@@ -7,14 +7,16 @@
 class IVisibleObject {
 public:
     enum RenderLayers {
-        BackGround = 0,
-        Objects = 1,
-        Projectiles = 2,
-        Projectiles_extra = 3,
-        Effects = 4,
-        Effects_extra = 5,
-        UI = 6,
-        UI_extra = 7};
+        BackGround,
+        BackGround_extra,
+        Objects,
+        Objects_extra,
+        Projectiles,
+        Projectiles_extra,
+        Effects,
+        Effects_extra,
+        UI,
+        UI_extra};
 public:
     IVisibleObject() = default;
     IVisibleObject(const Position& position, const double& angle = 0, const RenderLayers& layer = RenderLayers::Objects);
