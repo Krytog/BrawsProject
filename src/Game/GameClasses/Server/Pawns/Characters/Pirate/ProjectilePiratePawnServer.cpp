@@ -10,7 +10,7 @@
 
 #define COLLIDER_RADIUS 15.5
 #define DAMAGE_RADIUS 150
-#define TRAIL_STAYS_TICKS 30
+#define TRAIL_STAYS_TICKS 10
 
 ProjectilePiratePawnServer::ProjectilePiratePawnServer(const ProjectilePawnServer::ArgPack& argpack, const Position& destination): ProjectilePawnServer(argpack) {
     cerebrate_id_ = Overmind::GetInstance().CreateCerebrateToPossess<PositionalCerebrateServer<ProjectilePiratePawnServer>>(this);
@@ -61,7 +61,7 @@ ProjectilePiratePawnServer::DestinationPoint::DestinationPoint(const Position &p
 const size_t ProjectilePiratePawnServer::DestinationPoint::kTypeId = TypeId_Projectile_Mark;
 
 Vector2D ProjectilePiratePawnServer::DestinationPoint::GetRotator() const {
-    return Vector2D();
+    return Vector2D::Down;
 }
 
 ProjectilePiratePawnServer::DestinationPoint::~DestinationPoint() {

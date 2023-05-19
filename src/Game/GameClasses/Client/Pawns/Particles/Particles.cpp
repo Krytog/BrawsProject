@@ -9,7 +9,7 @@ Particles::Particles(const Particles::ArgPack &pack) : Particles() {
 void Particles::PrepareParticles(const Particles::ArgPack &pack) {
     visible_object_ = std::make_unique<AnimatedSprite>(pack.path, Position(),
                                                        pack.width, pack.height, pack.ticks, pack.frames,
-                                                       true, 0, IVisibleObject::RenderLayers::Effects);
+                                                       false, 0, IVisibleObject::RenderLayers::Effects);
     VisibleGameObject::UpdatePosition(pack.pos);
 }
 

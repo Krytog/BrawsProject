@@ -38,6 +38,8 @@ ProjectilePiratePawnClient::Mark::Mark() {
 
 ProjectilePiratePawnClient::Mark::~Mark() = default;
 
-void ProjectilePiratePawnClient::Mark::UpdateRotation(const Vector2D& rotator) {}
+void ProjectilePiratePawnClient::Mark::UpdateRotation(const Vector2D& rotator) {
+    visible_object_->UpdateRotation(rotator);
+}
 
 const size_t ProjectilePiratePawnClient::Mark::kTypeId = TypeId_Projectile_Mark;

@@ -7,7 +7,7 @@
 #include <Game/GameClasses/Server/Pawns/Projectiles/HitTrail.h>
 
 #define COLLIDER_RADIUS 17.5
-#define TRAIL_STAYS_TICKS 60
+#define TRAIL_STAYS_TICKS 10
 
 ProjectileMagePawnServer::ProjectileMagePawnServer(const ProjectilePawnServer::ArgPack& argpack): ProjectilePawnServer(argpack) {
     cerebrate_id_ = Overmind::GetInstance().CreateCerebrateToPossess<PositionalCerebrateServer<ProjectileMagePawnServer>>(this);
