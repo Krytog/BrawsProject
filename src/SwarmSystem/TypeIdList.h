@@ -12,3 +12,4 @@
 #define TypeId_Trail_Explosion 9
 #define TypeId_Trail_Hit 10
 #define TypeId_Trail_Smoke 11
+#define TypeId_Zone_Damage 12

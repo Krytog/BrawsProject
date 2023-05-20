@@ -9,6 +9,7 @@
 #include <NormInfrastructure/Server/Communicator.h>
 #include <Game/GameClasses/CommandsList.h>
 #include <Game/GameClasses/Server/GameRulers/GameRuler.h>
+#include <Game/GameClasses/Server/Pawns/Zones/HazardZoneManager.h>
 
 
 
@@ -46,6 +47,7 @@ void ServerGameManagement::InitGameServer(std::vector<uint64_t>& players_id) {
         }
     }
     GameRuler::GetInstance().BeginGame();
+    engine.CreateGameObject<HazardZoneManager>(4000, 2000, 30, 5, 20);
 }
 
 void ServerGameManagement::HandleInput(uint64_t player_id, std::string_view input) {

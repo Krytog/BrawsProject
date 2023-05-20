@@ -23,3 +23,7 @@ EndGameWidget::EndGameWidget(Status status) {
         }
     }
 }
+
+void EndGameWidget::OnUpdate() {
+    *position_ = ClientEngine::GetInstance().GetCameraPosition();
+}

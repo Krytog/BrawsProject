@@ -5,6 +5,7 @@
 #include <Game/GameClasses/Client/Cerebrates/Characters/CharacterCerebrateClient.h>
 #include <Game/GameClasses/Client/Cerebrates/Positional/PositionalCerebrateClient.h>
 #include <Game/GameClasses/Client/Cerebrates/HitSynchronizer/HitSynchronizerCerebrateClient.h>
+#include <Game/GameClasses/Client/Cerebrates/Zone/ZoneCerebrateClient.h>
 #include <Game/GameClasses/Client/Pawns/Characters/Default/CharacterDefaultPawnClient.h>
 #include <Game/GameClasses/Client/Pawns/Characters/Mage/CharacterMagePawnClient.h>
 #include <Game/GameClasses/Client/Pawns/Characters/Mage/ProjectileMagePawnClient.h>
@@ -14,6 +15,7 @@
 #include <Game/GameClasses/Client/Pawns/UI/EndGameWidget.h>
 #include <Game/GameClasses/Client/Pawns/Particles/ExplosionParticles.h>
 #include <Game/GameClasses/Client/Pawns/Particles/SmokeParticles.h>
+#include <Game/GameClasses/Client/Pawns/Zones/DamageZonePawnClient.h>
 #include <SwarmSystem/Register.h>
 #include <SwarmSystem/TypeIdList.h>
 #include <NormInfrastructure/Client/Communicator.h>
@@ -25,12 +27,19 @@
 
 namespace {
     std::string_view DataPreprocessing(std::string_view data) {
+        static bool widget_created = false;
         if (data.starts_with(WIN_STRING)) {
-            ClientEngine::GetInstance().CreateGameObject<EndGameWidget>(EndGameWidget::Status::WIN);
+            if (!widget_created) {
+                ClientEngine::GetInstance().CreateGameObject<EndGameWidget>(EndGameWidget::Status::WIN);
+                widget_created = true;
+            }
             return data.substr(WIN_LENGTH);
         }
         if (data.starts_with(LOSE_STRING)) {
-            ClientEngine::GetInstance().CreateGameObject<EndGameWidget>(EndGameWidget::Status::LOSE);
+            if (!widget_created) {
+                ClientEngine::GetInstance().CreateGameObject<EndGameWidget>(EndGameWidget::Status::LOSE);
+                widget_created = true;
+            }
             return data.substr(LOSE_LENGTH);
         }
         return data;
@@ -53,6 +62,7 @@ void ClientGameManagement::InitRegistryForOvermind() {
     registry.RegisterClass<PositionalCerebrateClient<ProjectilePiratePawnClient::Mark>>(TypeId_Projectile_Mark);
     registry.RegisterClass<HitSynchronizerCerebrateClient<ExplosionParticles>>(TypeId_Trail_Explosion);
     registry.RegisterClass<HitSynchronizerCerebrateClient<SmokeParticles>>(TypeId_Trail_Smoke);
+    registry.RegisterClass<ZoneCerebrateClient<DamageZonePawnClient>>(TypeId_Zone_Damage);
 }
 
 std::string ClientGameManagement::SerializeInput() {

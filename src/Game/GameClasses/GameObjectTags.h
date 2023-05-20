@@ -20,3 +20,7 @@
 #define TAGS_PROJECTILE_PIRATE "projectile_pirate"
 #define TAGS_PROJECTILE_BULLY "projectile_bully"
 #define TAGS_PROJECTILE_MARK "projectile_mark"
+
+// ZONES TAGS
+#define TAGS_ZONES_HAZARDZONEMANAGER "zones_manager"
+#define TAGS_ZONES_HAZARD "zones_hazardzone"

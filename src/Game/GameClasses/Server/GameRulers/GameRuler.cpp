@@ -3,7 +3,7 @@
 #include <Game/GameClasses/CommandsList.h>
 #include <SwarmSystem/Overmind.h>
 
-#define END_DELAY 2000
+#define END_DELAY 0
 
 namespace {
     bool AlwaysTrue() {

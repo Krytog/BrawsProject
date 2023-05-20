@@ -25,7 +25,8 @@ add_library(game_client
         GameClasses/Client/Pawns/UI/EndGameWidget.cpp
         GameClasses/Client/Pawns/Particles/Particles.cpp
         GameClasses/Client/Pawns/Particles/ExplosionParticles.cpp
-        GameClasses/Client/Pawns/Particles/SmokeParticles.cpp)
+        GameClasses/Client/Pawns/Particles/SmokeParticles.cpp
+        GameClasses/Client/Pawns/Zones/DamageZonePawnClient.cpp)
 add_library(game_server
         GameClasses/Server/Pawns/Characters/CharacterPawnServer.cpp
         GameClasses/Server/Pawns/Projectiles/ProjectilePawnServer.cpp
@@ -37,7 +38,9 @@ add_library(game_server
         GameClasses/Server/Pawns/Characters/Pirate/ProjectilePiratePawnServer.cpp
         GameClasses/Server/ParsingUtilities/ControllerTools.cpp
         GameClasses/Server/Pawns/Projectiles/HitTrail.cpp
-        GameClasses/Server/GameRulers/GameRuler.cpp)
+        GameClasses/Server/GameRulers/GameRuler.cpp
+        GameClasses/Server/Pawns/Zones/DamageZonePawnServer.cpp
+        GameClasses/Server/Pawns/Zones/HazardZoneManager.cpp)
 
 target_link_libraries(game_client_tools game_client)
 target_link_libraries(game_server_tools game_server)
