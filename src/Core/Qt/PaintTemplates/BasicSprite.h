@@ -19,7 +19,6 @@ public:
 
     virtual ~BasicSprite() = default;
 
-protected:
     void Scale(const size_t& width, const size_t& height); /* TODO: вынести это в VisibleObject.h */
 };
 
@@ -34,6 +33,5 @@ public:
 
     virtual ~BasicFlexibleSprite() = default;
 
-protected:
     void Scale(const size_t& width, const size_t& height); /* TODO: вынести это в VisibleObject.h */
 };
