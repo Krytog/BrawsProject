@@ -40,7 +40,7 @@ bool AnimatedSprite::IsDisplayed() const {
 
 void AnimatedSprite::Scale(const size_t& width, const size_t& height) {
     if (width != this->width() || height != this->height()) {
-        *dynamic_cast<QImage*>(this) = std::move(this->scaled(width, height, Qt::KeepAspectRatio));
+        *dynamic_cast<QImage*>(this) = std::move(this->scaled(width, height, Qt::IgnoreAspectRatio));
     }
 }
 
