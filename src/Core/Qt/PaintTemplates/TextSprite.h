@@ -18,6 +18,8 @@ public:
     std::string_view GetText() const;
     std::pair<size_t, size_t> GetSize() const;
 
+    void Scale(const size_t& width, const size_t& height) override;
+
     ~TextSprite() = default;
 private:
     std::string text_;

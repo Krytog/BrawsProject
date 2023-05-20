@@ -19,7 +19,7 @@ public:
 
     virtual ~BasicSprite() = default;
 
-    void Scale(const size_t& width, const size_t& height); /* TODO: вынести это в VisibleObject.h */
+    void Scale(const size_t& width, const size_t& height) override; /* TODO: вынести это в VisibleObject.h */
 };
 
 class BasicFlexibleSprite: public IFlexibleVisibleObject, public QImage {
@@ -33,5 +33,5 @@ public:
 
     virtual ~BasicFlexibleSprite() = default;
 
-    void Scale(const size_t& width, const size_t& height); /* TODO: вынести это в VisibleObject.h */
+    void Scale(const size_t& width, const size_t& height) override; /* TODO: вынести это в VisibleObject.h */
 };

@@ -27,6 +27,7 @@ public:
     void UpdateRotation(const double& angle);
     void UpdateRotation(const Vector2D& rotator);
     void Rotate(const double& angle);
+    virtual void Scale(const size_t& width, const size_t& height) = 0;
 
     virtual void RenderIt(Painter* painter) = 0;
     RenderLayers GetLayer() const;

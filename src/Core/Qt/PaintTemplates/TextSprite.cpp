@@ -27,3 +27,7 @@ std::pair<size_t, size_t> TextSprite::GetSize() const {
 std::string_view TextSprite::GetText() const {
     return text_;
 }
+
+void TextSprite::Scale(const size_t& width, const size_t& height) {
+    /*   ¯\_(ツ)_/¯   */
+}

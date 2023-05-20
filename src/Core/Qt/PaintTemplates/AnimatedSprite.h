@@ -19,7 +19,7 @@ public:
     void UpdateSrc(std::string_view image_src, const size_t& ticks_per_frame, const size_t& frames_count);
     bool IsDisplayed() const override;
 
-    void Scale(const size_t& width, const size_t& height);
+    void Scale(const size_t& width, const size_t& height) override;
 
     virtual ~AnimatedSprite();
 
