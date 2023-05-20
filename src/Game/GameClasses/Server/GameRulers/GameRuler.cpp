@@ -28,26 +28,39 @@ GameRuler &GameRuler::GetInstance() {
     return instance;
 }
 
-GameRuler::GameRuler() {
+GameRuler::GameRuler(): alive_players_(0) {
     MakeEventForStoppingGame();
 }
 
 bool GameRuler::IsGameEnded() const {
-    return has_begun_ && players_.size() <= 1;
+    return has_begun_ && alive_players_ <= 1;
 }
 
 void GameRuler::AddPlayer(const CharacterPawnServer* player) {
-    players_.insert(player);
+    if (!is_alive_.contains(player)) {
+        is_alive_[player] = true;
+        ++alive_players_;
+    }
+
 }
 
 void GameRuler::PlayerLoses(const CharacterPawnServer* player) {
-    //SendCommandForTime(player, CharacterCommands::COMMAND_ON_LOSE, END_DELAY);
-    players_.erase(player);
+    if (is_alive_.contains(player) && is_alive_.at(player)) {
+        is_alive_[player] = false;
+        --alive_players_;
+    }
 }
 
 void GameRuler::PlayerWins(const CharacterPawnServer* player) {
-    //SendCommandForTime(player, CharacterCommands::COMMAND_ON_WIN, END_DELAY);
-    //players_.erase(player);
+    if (!is_alive_.contains(player)) {
+        return;
+    }
+    is_alive_[player] = true; // post mortem
+    for (auto& pr : is_alive_) {
+        if (pr.second && pr.first != player) {
+            pr.second = false;
+        }
+    }
 }
 
 void GameRuler::MakeEventForStoppingGame() {
@@ -63,13 +76,9 @@ void GameRuler::BeginGame() {
 }
 
 void GameRuler::EndGame() {
-    if (!players_.empty()) {
-        auto winner = *players_.begin();
-        PlayerWins(winner);
-    }
     ServerEngine::GetInstance().Invoke(std::chrono::milliseconds(END_DELAY), &ServerEngine::SetActiveOff, &ServerEngine::GetInstance());
 }
 
 bool GameRuler::IsPlayerAlive(const CharacterPawnServer* player) {
-    return players_.contains(player);
+    return is_alive_[player];
 }

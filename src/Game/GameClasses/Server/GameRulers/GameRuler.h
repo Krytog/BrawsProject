@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Game/GameClasses/Server/Pawns/Characters/CharacterPawnServer.h>
-#include <unordered_set>
+#include <unordered_map>
 
 class GameRuler {
 public:
@@ -24,7 +24,8 @@ private:
     GameRuler(const GameRuler&) = delete;
     GameRuler& operator=(const GameRuler&) = delete;
 
-    std::unordered_set<const CharacterPawnServer*> players_;
+    std::unordered_map<const CharacterPawnServer*, bool> is_alive_;
+    size_t alive_players_;
     bool has_begun_ = false;
 
     void MakeEventForStoppingGame();
