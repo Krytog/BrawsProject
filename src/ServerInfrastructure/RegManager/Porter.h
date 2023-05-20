@@ -1,5 +1,7 @@
 #pragma once
 
+#include <_types/_uint16_t.h>
+#include <_types/_uint64_t.h>
 #include <string>
 #include <unordered_map>
 #include <memory>
@@ -9,8 +11,15 @@
 #include <cstdint>
 #include <iostream>
 #include <thread>
+#include <atomic>
 
 using boost::asio::ip::tcp;
+using boost::asio::ip::udp;
+
+enum RequestType: uint32_t {
+    ConnectToGame = 1,
+    CreateNewGame = 2
+};
 
 enum Character {
     MAGE,
@@ -20,8 +29,18 @@ enum Character {
 
 struct Player {
     uint64_t id;
-    tcp::endpoint connection;
+    udp::endpoint endpoint;
     Character character;
+};
+
+struct Request {
+    RequestType type;
+    uint64_t id;
+    Character character_type;
+};
+
+struct LobbySettings {
+    uint64_t users_count;
 };
 
 class Porter {
@@ -30,6 +49,7 @@ private:
     public:
         enum Status : uint8_t {
             Waiting,
+            IsReady,
             Running,
             Finished
         };
@@ -37,27 +57,28 @@ private:
         Lobby(size_t users_count);
 
         void SetPlayerCount(size_t users_count);
-        void AddPlayer(const Player& player);
+        void AddPlayer(Player player);
         bool RemovePlayer(uint64_t id);
-        bool Ready() const;
         void Clear();
 
         Status GetStatus() const;
         void SetStatus(Status status);
 
-        ~Lobby();
     private:
         Status status_;
         std::unordered_map<uint64_t, Player> players_;
         size_t users_count_;
+        size_t registered_ = 0;
     };
 
-    using LobbyId = uint64_t; 
+public:
+    static constexpr uint16_t kMaxPackageLen = 3200;
+
 public:
     static Porter &GetInstance();
 
-    uint64_t RegUser();
-    void Run();
+    void StartRegistration();
+    void CheckLobbiesState();
 
     ~Porter() = default;
 private:
@@ -70,16 +91,22 @@ private:
     Porter &operator=(Porter &&other) = delete;
 
     uint64_t RegId();
-    void DoRecieve(size_t thread_id);
+    void RegUser();
+    uint64_t RegLobbyId();
 
 private:
-    std::unordered_map<LobbyId, Lobby> lobbies_; 
+    std::unordered_map<uint64_t, Lobby> lobbies_; 
     boost::asio::io_service io_context_;
     tcp::acceptor acceptor_;
-    std::unordered_map<uint64_t, tcp::endpoint> connections_;
+    std::unordered_map<uint64_t, tcp::socket> connections_;
 
     // ID randomizer
     std::random_device rd_;
     std::mt19937_64 gen_;
     std::uniform_int_distribution<uint64_t> dis_;
+
+    //Synchrone
+    std::mutex wait_reg_;
+    std::atomic<bool> has_incoming_users_ = false;
+    std::thread reg_thread_;
 };
