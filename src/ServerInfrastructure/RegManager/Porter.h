@@ -1,43 +1,15 @@
 #pragma once
 
-#include <_types/_uint16_t.h>
-#include <_types/_uint64_t.h>
 #include <string>
 #include <unordered_map>
-#include <memory>
 #include <random>
-#include <boost/asio.hpp>
-#include <deque>
 #include <cstdint>
 #include <iostream>
 #include <thread>
 #include <atomic>
 
-using boost::asio::ip::tcp;
-using boost::asio::ip::udp;
-
-enum RequestType: uint32_t {
-    ConnectToGame = 1,
-    CreateNewGame = 2
-};
-
-enum Character {
-    MAGE,
-    TANK,
-    PIRATE
-};
-
-struct Player {
-    uint64_t id;
-    udp::endpoint endpoint;
-    Character character;
-};
-
-struct Request {
-    RequestType type;
-    uint64_t id;
-    Character character_type;
-};
+#include <boost/asio.hpp>
+#include "GameInfo.h"
 
 struct LobbySettings {
     uint64_t users_count;
@@ -49,7 +21,6 @@ private:
     public:
         enum Status : uint8_t {
             Waiting,
-            IsReady,
             Running,
             Finished
         };
@@ -59,16 +30,16 @@ private:
         void SetPlayerCount(size_t users_count);
         void AddPlayer(Player player);
         bool RemovePlayer(uint64_t id);
+        bool Ready() const;
         void Clear();
 
         Status GetStatus() const;
         void SetStatus(Status status);
 
     private:
-        Status status_;
+        Status status_ = Waiting;
         std::unordered_map<uint64_t, Player> players_;
         size_t users_count_;
-        size_t registered_ = 0;
     };
 
 public:

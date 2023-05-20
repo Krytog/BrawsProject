@@ -1,12 +1,6 @@
 #include "Porter.h"
-#include <sys/_endian.h>
-#include <cstddef>
-#include <cstring>
 #include <iostream>
 #include <thread>
-#include <boost/smart_ptr.hpp>
-#include <boost/asio.hpp>
-#include <boost/thread/thread.hpp>
 
 using boost::asio::ip::tcp;
 
@@ -25,10 +19,11 @@ void Porter::Lobby::AddPlayer(Player player) {
         std::cout << "Cannot register player twice" << std::endl;
     } else {
         players_[player.id] = std::move(player);
-        if (++registered_ == users_count_) {
-            SetStatus(IsReady);
-        }
     }
+}
+
+bool Porter::Lobby::Ready() const {
+    return players_.size() == users_count_;
 }
 
 bool Porter::Lobby::RemovePlayer(uint64_t id) {
@@ -129,7 +124,7 @@ void Porter::CheckLobbiesState() {
     if (has_incoming_users_.load()) {
         wait_reg_.lock();
         for (auto& [lobby_id, lobby]: lobbies_) {
-            if (lobby.GetStatus() == Lobby::IsReady) {
+            if (lobby.Ready()) {
                 /* тут где то надо форкаться */
             } else if (lobby.GetStatus() == Lobby::Finished) {
                 lobby.Clear();
