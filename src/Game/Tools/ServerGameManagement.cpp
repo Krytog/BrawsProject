@@ -47,7 +47,7 @@ void ServerGameManagement::InitGameServer(std::vector<uint64_t>& players_id) {
         }
     }
     GameRuler::GetInstance().BeginGame();
-    engine.CreateGameObject<HazardZoneManager>(4000, 2000, 30, 5, 20);
+    engine.CreateGameObject<HazardZoneManager>(4000, 2000, 60, 2, 20);
 }
 
 void ServerGameManagement::HandleInput(uint64_t player_id, std::string_view input) {
