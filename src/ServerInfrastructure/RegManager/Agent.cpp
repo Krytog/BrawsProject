@@ -17,7 +17,7 @@ Agent::Agent() : socket_(io_context_) {
 }
 
 uint64_t Agent::CreateGame(Character character, const GameSettings& settings) {
-    Request request{.type = RequestType::CreateNewGame, .id = 10, .character_type = character};
+    Request request{.type = RequestType::CreateNewGame, .id = 0, .character_type = character};
     Write(&request);
     Write(&settings);
 
@@ -30,10 +30,6 @@ void Agent::JoinGame(Character character, uint64_t game_id) {
     Request request{.type = RequestType::ConnectToGame, .id = game_id, .character_type = character};
     Write(&request);
 }
-
-//void Agent::JoinGame() {
-//
-//}
 
 uint64_t Agent::GetUserID() {
     return player_id;
