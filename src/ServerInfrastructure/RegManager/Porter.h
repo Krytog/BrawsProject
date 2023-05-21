@@ -11,10 +11,6 @@
 #include <boost/asio.hpp>
 #include "GameInfo.h"
 
-struct LobbySettings {
-    uint64_t users_count;
-};
-
 class Porter {
 private:
     class Lobby {
@@ -67,7 +63,7 @@ private:
 
 private:
     std::unordered_map<uint64_t, Lobby> lobbies_; 
-    boost::asio::io_service io_context_;
+    boost::asio::io_context io_context_;
     tcp::acceptor acceptor_;
     std::unordered_map<uint64_t, tcp::socket> connections_;
 

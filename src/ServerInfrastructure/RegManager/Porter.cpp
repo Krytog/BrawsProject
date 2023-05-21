@@ -4,10 +4,6 @@
 
 using boost::asio::ip::tcp;
 
-namespace {
-    uint64_t random_port = 10000;
-}
-
 Porter::Lobby::Lobby(size_t users_count) : users_count_(users_count) {}
 
 void Porter::Lobby::SetPlayerCount(size_t users_count) {
@@ -47,7 +43,7 @@ Porter &Porter::GetInstance() {
     return instance;
 }
 
-Porter::Porter(): acceptor_(io_context_, tcp::endpoint(tcp::v4(), random_port)),
+Porter::Porter(): acceptor_(io_context_, tcp::endpoint(tcp::v4(), GAME_PORT)),
     rd_(), gen_(rd_()), dis_() {}
 
 
@@ -76,7 +72,7 @@ void Porter::RegUser() {
         wait_reg_.lock();
         uint64_t lobby_id = RegLobbyId();
         std::cout << lobby_id << std::endl;
-        LobbySettings settings;
+        GameSettings settings;
         boost::asio::read(connection, boost::asio::buffer(&settings, sizeof(settings)));
         lobbies_.emplace(lobby_id, settings.users_count);
 

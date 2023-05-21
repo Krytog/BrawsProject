@@ -1,5 +1,13 @@
+#pragma once
+
 #include <boost/asio.hpp>
 #include <cstdint>
+
+#define STR(EXPR) STR_IMPL(EXPR)
+#define STR_IMPL(EXPR) #EXPR
+
+#define GAME_HOST "localhost"
+#define GAME_PORT 10000
 
 using boost::asio::ip::tcp;
 using boost::asio::ip::udp;
@@ -25,4 +33,8 @@ struct Request {
     RequestType type;
     uint64_t id;
     Character character_type;
+};
+
+struct GameSettings {
+    uint64_t users_count;
 };
