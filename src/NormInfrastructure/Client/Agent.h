@@ -2,6 +2,8 @@
 
 #include "../GameInfo.h"
 
+void Game();
+
 class Agent {
 public:
     static Agent &GetInstance();
