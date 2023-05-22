@@ -13,6 +13,8 @@
 #include <boost/asio.hpp>
 #include "../GameInfo.h"
 
+void Game(const std::unordered_map<uint64_t, Player>&);
+
 class Porter {
 private:
     class Lobby {

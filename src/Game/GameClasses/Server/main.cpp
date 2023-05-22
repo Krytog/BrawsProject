@@ -3,22 +3,19 @@
 #include <Game/Tools/ServerGameManagement.h>
 #include <SwarmSystem/Overmind.h>
 
+#include <NormInfrastructure/Server/Porter.h>
 #include <NormInfrastructure/Server/Communicator.h>
 
 #include <iostream>
 
 #define SLEEP_TIME std::chrono::microseconds(int(1000000 * (1.0 / 60 - time.EvaluateTime())))
 
-int main() {
+void Game(const std::unordered_map<uint64_t, Player>& players) {
     ServerEngine& engine = ServerEngine::GetInstance();
     Overmind& overmind = Overmind::GetInstance();
     Communicator& communicator = Communicator::GetInstance();
-    std::vector<uint64_t> players_id;
-    uint64_t player1 = communicator.RegUser();
-    uint64_t player2 = communicator.RegUser();
+    std::vector<uint64_t> players_id = communicator.SetClients(players);
     communicator.Run();
-    players_id.push_back(player1);
-    players_id.push_back(player2);
     ServerGameManagement::InitGameServer(players_id);
     MyTime time;
     engine.SetActiveOn();
@@ -41,6 +38,16 @@ int main() {
     }
     communicator.Stop();
     engine.ClearAll();
-    return 0;
 }
+
+int main() {
+    Porter& porter = Porter::GetInstance();
+
+    porter.StartRegistration();
+    porter.StartHandling();
+    while (true) {
+        porter.CheckLobbiesState();
+    }
+}
+
 

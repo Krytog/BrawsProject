@@ -29,10 +29,12 @@ public:
 
     std::string ReceiveFromClient(uint64_t client_id);
     void SendToClient(uint64_t client_id, std::string_view data);
-    void SetClients(const std::unordered_map<uint64_t, Player>& players);
     void Run();
     void Stop();
     size_t GetUserNumber();
+
+    // Returns vector of clients' IDs
+    std::vector<uint64_t> SetClients(const std::unordered_map<uint64_t, Player>& players);
 
     ~Communicator();
 private:

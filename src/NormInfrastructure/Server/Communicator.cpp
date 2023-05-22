@@ -83,6 +83,11 @@ size_t Communicator::GetUserNumber() {
     return user_counter_;
 }
 
-void Communicator::SetClients(const std::unordered_map<uint64_t, Player>& players) {
+std::vector<uint64_t> Communicator::SetClients(const std::unordered_map<uint64_t, Player>& players) {
     players_ = players;
+    std::vector<uint64_t> init_players;
+    for (const auto& [player_id, player]: players_) {
+        init_players.push_back(player_id);
+    }
+    return init_players;
 }
