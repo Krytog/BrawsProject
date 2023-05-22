@@ -1,4 +1,5 @@
 #include "Porter.h"
+#include <boost/asio/write.hpp>
 #include <iostream>
 #include <mutex>
 
@@ -183,12 +184,22 @@ void Porter::CheckLobbiesState() {
 }
 
 void Porter::InitGame(Porter::Lobby& lobby) {
+    SendInitGamePackages(lobby);
     if (!fork()) {
         Game(lobby.GetPlayers());
         lobby.SetStatus(Lobby::Finished);
         /* Collect statistics */
     }
 }
+
+void Porter::SendInitGamePackages(const Lobby& lobby) {
+    const auto& players = lobby.GetPlayers();
+    std::string message = "start";
+    for (const auto& [id, player]: players) {
+        boost::asio::write(connections_[id], boost::asio::buffer(message.data(), message.size()));
+    }
+}
+
 
 Porter::~Porter() {
     reg_thread_.join();

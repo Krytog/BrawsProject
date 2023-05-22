@@ -51,6 +51,8 @@ public:
 
     void StartRegistration();
     void StartHandling();
+    void SendInitGamePackages(const Lobby& lobby);
+
 
     void CheckLobbiesState();
     void InitGame(Lobby& lobby);
