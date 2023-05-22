@@ -1,7 +1,6 @@
 #include "Porter.h"
 #include <iostream>
 #include <mutex>
-#include <thread>
 
 using boost::asio::ip::tcp;
 
@@ -175,6 +174,7 @@ void Porter::CheckLobbiesState() {
     std::scoped_lock guard(wait_requests_);
     for (auto& [lobby_id, lobby] : lobbies_) {
         if (lobby.Ready()) {
+            lobby.SetStatus(Lobby::Running);
             InitGame(lobby);
         } else if (lobby.GetStatus() == Lobby::Finished) {
             lobby.Clear();

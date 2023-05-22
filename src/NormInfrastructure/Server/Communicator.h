@@ -11,7 +11,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/circular_buffer.hpp>
-#include "../../ServerInfrastructure/RegManager/GameInfo.h"
+#include "../GameInfo.h"
 
 using boost::asio::ip::udp;
 

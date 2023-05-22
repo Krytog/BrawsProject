@@ -8,9 +8,10 @@
 #include <iostream>
 #include <thread>
 #include <atomic>
+#include <unistd.h>
 
 #include <boost/asio.hpp>
-#include "GameInfo.h"
+#include "../GameInfo.h"
 
 class Porter {
 private:

@@ -1,12 +1,12 @@
 #include <boost/asio.hpp>
 
-#include "GameInfo.h"
+#include "../GameInfo.h"
 
 class Agent {
 public:
     static Agent &GetInstance();
 
-    // Returns lobby's ID
+    // Returns lobby ID
     uint64_t CreateGame(Character character, const GameSettings& settings = {.users_count = 2});
     void JoinGame(Character character, uint64_t game_id = 0); // id == 0 <=> join any game
     void LeaveGame();
