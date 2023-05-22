@@ -32,6 +32,7 @@ private:
 
         Status GetStatus() const;
         void SetStatus(Status status);
+        std::unordered_map<uint64_t, Player> GetPlayers() const;
 
     private:
         Status status_ = Waiting;
@@ -49,6 +50,7 @@ public:
     void StartHandling();
 
     void CheckLobbiesState();
+    void InitGame(Lobby& lobby);
 
     ~Porter();
 private:

@@ -40,6 +40,10 @@ void Porter::Lobby::SetStatus(Porter::Lobby::Status status) {
     status_ = status;
 }
 
+std::unordered_map<uint64_t, Player> Porter::Lobby::GetPlayers() const {
+    return players_;
+}
+
 Porter& Porter::GetInstance() {
     static Porter instance;
     return instance;
@@ -171,10 +175,18 @@ void Porter::CheckLobbiesState() {
     std::scoped_lock guard(wait_requests_);
     for (auto& [lobby_id, lobby] : lobbies_) {
         if (lobby.Ready()) {
-            /* тут где то надо форкаться */
+            InitGame(lobby);
         } else if (lobby.GetStatus() == Lobby::Finished) {
             lobby.Clear();
         }
+    }
+}
+
+void Porter::InitGame(Porter::Lobby& lobby) {
+    if (!fork()) {
+        Game(lobby.GetPlayers());
+        lobby.SetStatus(Lobby::Finished);
+        /* Collect statistics */
     }
 }
 
