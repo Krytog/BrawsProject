@@ -84,5 +84,5 @@ size_t Communicator::GetUserNumber() {
 }
 
 void Communicator::SetClients(const std::unordered_map<uint64_t, Player>& players) {
-    
+    players_ = players;
 }
