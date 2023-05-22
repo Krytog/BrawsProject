@@ -33,7 +33,7 @@ private:
 
     boost::asio::io_context io_context_;
     tcp::socket socket_;
-    uint64_t player_id;
+    uint64_t player_id_;
 
 };
 

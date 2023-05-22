@@ -1,5 +1,6 @@
 #include "Porter.h"
 #include <iostream>
+#include <mutex>
 #include <thread>
 
 using boost::asio::ip::tcp;
@@ -44,56 +45,86 @@ Porter &Porter::GetInstance() {
 }
 
 Porter::Porter(): acceptor_(io_context_, tcp::endpoint(tcp::v4(), GAME_PORT)),
-    rd_(), gen_(rd_()), dis_() {}
+        rd_(), gen_(rd_()), dis_() {}
 
 
 void Porter::RegUser() {
     tcp::socket connection(io_context_);
-    uint64_t user_id = RegId();
+    uint64_t user_id = RegId(); 
     acceptor_.accept(connection);
-
     boost::asio::write(connection, boost::asio::buffer(&user_id, sizeof(user_id)));
+    std::cout << user_id << std::endl;
 
-    Request header;
-    boost::asio::read(connection, boost::asio::buffer(&header, sizeof(header)));
-    udp::endpoint endpoint(connection.local_endpoint().address(),
-        connection.local_endpoint().port());
+    connection.non_blocking(true);
 
-    if (header.type == RequestType::ConnectToGame) {
-        wait_reg_.lock();
-        lobbies_.at(header.id).AddPlayer({
-            .id = header.id,
-            .endpoint = endpoint,
-            .character = header.character_type   
-        });
-        has_incoming_users_.store(true);
-        wait_reg_.unlock();
-    } else if (header.type == RequestType::CreateNewGame) {
-        wait_reg_.lock();
-        uint64_t lobby_id = RegLobbyId();
-        std::cout << lobby_id << std::endl;
-        GameSettings settings;
-        boost::asio::read(connection, boost::asio::buffer(&settings, sizeof(settings)));
-        lobbies_.emplace(lobby_id, settings.users_count);
+    std::scoped_lock guard(reg_mutex_);
+    incoming_users_.emplace(user_id, std::move(connection));   
+    has_incoming_users_.store(true);
+}
 
-        lobbies_.at(lobby_id).AddPlayer({
-            .id = header.id,
-            .endpoint = endpoint,
-            .character = header.character_type   
-        });
-
-        boost::asio::write(connection, boost::asio::buffer(&lobby_id, sizeof(lobby_id)));
-        has_incoming_users_.store(true);
-        wait_reg_.unlock();
-    } else {
-        /* Кинуть наверное челу ошибку */
+void Porter::HandleRequest() {
+    if (has_incoming_users_) {
+        std::scoped_lock guard(reg_mutex_);
+        for (auto& [user_id, connection]: incoming_users_) {
+            connections_.emplace(user_id, std::move(connection));
+        }
+        incoming_users_.clear();
+        has_incoming_users_.store(false);
     }
+
+    for (auto& [user_id, connection]: connections_) {
+        Request header;
+
+        boost::system::error_code er;
+        boost::asio::read(connection,
+            boost::asio::buffer(&header, sizeof(header)), er);
+        if (er == boost::asio::error::would_block || er == boost::asio::error::eof) {
+            continue;
+        }
+
+        udp::endpoint endpoint(connection.local_endpoint().address(),
+            connection.local_endpoint().port());
+
+        if (header.type == RequestType::ConnectToGame) {
+            std::scoped_lock guard(wait_requests_);
+            lobbies_.at(header.id).AddPlayer({
+                .id = header.id,
+                .endpoint = endpoint,
+                .character = header.character_type   
+            });
+        } else if (header.type == RequestType::CreateNewGame) {
+            uint64_t lobby_id = RegLobbyId();
+            std::cout << lobby_id << std::endl;
+            GameSettings settings;
+            boost::asio::read(connection, boost::asio::buffer(&settings, sizeof(settings)));
+            boost::asio::write(connection, boost::asio::buffer(&lobby_id, sizeof(lobby_id)));
+
+            std::scoped_lock guard(wait_requests_);
+            lobbies_.emplace(lobby_id, settings.users_count);
+            lobbies_.at(lobby_id).AddPlayer({
+                .id = header.id,
+                .endpoint = endpoint,
+                .character = header.character_type   
+            });
+        } else {
+            /* Кинуть наверное челу ошибку */
+        }
+        
+    }    
 }
 
 void Porter::StartRegistration() {
-    reg_thread_ = std::thread([this]() {
+    reg_thread_ = std::thread([this](){
         while (true) {
             RegUser();
+        }
+    });
+}
+
+void Porter::StartHandling() {
+    accept_thread_ = std::thread([this] {
+        while (true) {
+            HandleRequest();
         }
     });
 }
@@ -101,7 +132,8 @@ void Porter::StartRegistration() {
 uint64_t Porter::RegId() {
     do {
         uint64_t num = dis_(gen_);
-        if (!connections_.contains(num)) {
+        if (!used_user_ids_.contains(num)) {
+            used_user_ids_.insert(num);
             return num;
         }
     } while (true);
@@ -118,7 +150,7 @@ uint64_t Porter::RegLobbyId() { /* избавиться от копипасты 
 
 void Porter::CheckLobbiesState() {
     if (has_incoming_users_.load()) {
-        wait_reg_.lock();
+        std::scoped_lock guard(wait_requests_);
         for (auto& [lobby_id, lobby]: lobbies_) {
             if (lobby.Ready()) {
                 /* тут где то надо форкаться */
@@ -126,7 +158,10 @@ void Porter::CheckLobbiesState() {
                 lobby.Clear();
             }
         }
-        has_incoming_users_.store(false);
-        wait_reg_.unlock();
     }
+}
+
+Porter::~Porter() {
+    reg_thread_.join();
+    accept_thread_.join();
 }

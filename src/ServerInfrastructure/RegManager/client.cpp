@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
     Agent& agent = Agent::GetInstance();
     uint64_t id = agent.GetUserID();
 
+    std::cout << id << std::endl;
     std::cout << agent.CreateGame(Character::PIRATE) << std::endl;
-
     return 0;
 }

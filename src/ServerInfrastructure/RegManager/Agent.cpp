@@ -13,7 +13,7 @@ Agent::Agent() : socket_(io_context_) {
     boost::asio::connect(socket_, iterator);
 
     // Get ID from Server
-    Read(&player_id);
+    Read(&player_id_);
 }
 
 uint64_t Agent::CreateGame(Character character, const GameSettings& settings) {
@@ -32,6 +32,6 @@ void Agent::JoinGame(Character character, uint64_t game_id) {
 }
 
 uint64_t Agent::GetUserID() {
-    return player_id;
+    return player_id_;
 }
 
