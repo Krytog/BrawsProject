@@ -149,14 +149,12 @@ uint64_t Porter::RegLobbyId() { /* избавиться от копипасты 
 }
 
 void Porter::CheckLobbiesState() {
-    if (has_incoming_users_.load()) {
-        std::scoped_lock guard(wait_requests_);
-        for (auto& [lobby_id, lobby]: lobbies_) {
-            if (lobby.Ready()) {
-                /* тут где то надо форкаться */
-            } else if (lobby.GetStatus() == Lobby::Finished) {
-                lobby.Clear();
-            }
+    std::scoped_lock guard(wait_requests_);
+    for (auto& [lobby_id, lobby]: lobbies_) {
+        if (lobby.Ready()) {
+            /* тут где то надо форкаться */
+        } else if (lobby.GetStatus() == Lobby::Finished) {
+            lobby.Clear();
         }
     }
 }
