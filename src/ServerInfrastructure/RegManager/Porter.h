@@ -67,7 +67,8 @@ private:
     void HandleRequest();
 
 private:
-    std::unordered_map<uint64_t, Lobby> lobbies_; 
+    std::unordered_map<uint64_t, Lobby> lobbies_;  // lobby ID -> lobby
+    std::unordered_map<uint64_t, uint64_t> players_;   // player ID -> player's lobby ID
     boost::asio::io_context io_context_;
     tcp::acceptor acceptor_;
 

@@ -14,7 +14,8 @@ using boost::asio::ip::udp;
 
 enum RequestType: uint32_t {
     ConnectToGame = 1,
-    CreateNewGame = 2
+    CreateNewGame = 2,
+    LeaveGame = 3
 };
 
 enum Character {

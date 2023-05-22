@@ -20,7 +20,6 @@ uint64_t Agent::CreateGame(Character character, const GameSettings& settings) {
     Request request{.type = RequestType::CreateNewGame, .id = 0, .character_type = character};
     Write(&request);
     Write(&settings);
-
     uint64_t game_id;
     Read(&game_id);
     return game_id;
@@ -28,6 +27,11 @@ uint64_t Agent::CreateGame(Character character, const GameSettings& settings) {
 }
 void Agent::JoinGame(Character character, uint64_t game_id) {
     Request request{.type = RequestType::ConnectToGame, .id = game_id, .character_type = character};
+    Write(&request);
+}
+
+void Agent::LeaveGame() {
+    Request request{.type = RequestType::LeaveGame};
     Write(&request);
 }
 
