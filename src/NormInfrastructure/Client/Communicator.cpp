@@ -21,9 +21,9 @@ Communicator &Communicator::GetInstance() {
     return instance;
 }
 
-void Communicator::DoRecieve() {
+void Communicator::DoReceive() {
     socket_.async_receive_from(boost::asio::buffer(package_, k_max_dtgrm_len), connection_,
-                               [this](boost::system::error_code error_code, std::size_t bytes_recvd) { DoRecieve(); });
+                               [this](boost::system::error_code error_code, std::size_t bytes_recvd) { DoReceive(); });
 }
 
 std::string Communicator::ReceiveFromServer() {
@@ -42,7 +42,7 @@ void Communicator::SendToServer(std::string_view data) {
 }
 
 void Communicator::Run() {
-    DoRecieve();
+    DoReceive();
     accept_thread_ = std::thread([this]{ io_context_.run(); });
 }
 

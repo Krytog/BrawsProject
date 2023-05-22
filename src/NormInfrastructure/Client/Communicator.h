@@ -42,5 +42,5 @@ private:
     udp::endpoint connection_;
 
 private:
-    void DoRecieve();
+    void DoReceive();
 };
