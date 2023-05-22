@@ -13,12 +13,9 @@ class Communicator {
 public:
     static Communicator &GetInstance();
 
-    uint64_t RegOnServer();
-
     std::string ReceiveFromServer();
     void SendToServer(std::string_view data);
 
-    void RunFor(size_t milliseconds);
     void Run();
     void Stop();
 
@@ -41,7 +38,6 @@ private:
     std::thread accept_thread_;
 
     udp::resolver::results_type endpoints_;
-    udp::resolver::results_type reg_endpoints_;
 
     udp::endpoint connection_;
 
