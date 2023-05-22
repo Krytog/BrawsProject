@@ -26,11 +26,11 @@ CharacterDefaultPawnClient::CharacterDefaultPawnClient(const Position &position)
 }
 
 void CharacterDefaultPawnClient::Shoot() {
-    std::cout << "I shoot!" << std::endl;
+//    std::cout << "I shoot!" << std::endl;
 }
 
 void CharacterDefaultPawnClient::ReceiveDamage() {
-    std::cout << "I receive damage!" << std::endl;
+//    std::cout << "I receive damage!" << std::endl;
 }
 
 void CharacterDefaultPawnClient::OnUpdate() {

@@ -34,7 +34,7 @@ CharacterMagePawnClient::CharacterMagePawnClient(const Position &position) {
 void CharacterMagePawnClient::Shoot() {}
 
 void CharacterMagePawnClient::ReceiveDamage() {
-    std::cout << "I receive damage!" << std::endl;
+//    std::cout << "I receive damage!" << std::endl;
 }
 
 void CharacterMagePawnClient::OnUpdate() {

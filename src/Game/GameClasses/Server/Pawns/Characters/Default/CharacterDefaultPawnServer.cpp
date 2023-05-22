@@ -42,7 +42,7 @@ CharacterDefaultPawnServer::~CharacterDefaultPawnServer() {
 }
 
 void CharacterDefaultPawnServer::Shoot(const Position &position) {
-    std::cout << "I shoot!" << std::endl;
+//    std::cout << "I shoot!" << std::endl;
 }
 
 void CharacterDefaultPawnServer::OnUpdate() {

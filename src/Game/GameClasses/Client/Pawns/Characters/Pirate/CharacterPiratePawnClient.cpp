@@ -32,7 +32,7 @@ CharacterPiratePawnClient::CharacterPiratePawnClient(const Position &position) {
 void CharacterPiratePawnClient::Shoot() {}
 
 void CharacterPiratePawnClient::ReceiveDamage() {
-    std::cout << "I receive damage!" << std::endl;
+//    std::cout << "I receive damage!" << std::endl;
 }
 
 void CharacterPiratePawnClient::OnUpdate() {
