@@ -52,11 +52,11 @@ int main(int argc, char* argv[]) {
     while (true) {
         if (agent.ApproveGame()) {
             std::cout << "Game Approved" << std::endl;
-            if (!fork()) {
-                Game();
-                return 0;
-            }
-            wait(NULL);
+//            if (!fork()) {
+////                Game();
+//                return 0;
+//            }
+//            wait(NULL);
             return 0;
         }
     }

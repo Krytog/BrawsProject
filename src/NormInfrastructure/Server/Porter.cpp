@@ -77,6 +77,7 @@ void Porter::HandleRequest() {
     }
 
     for (auto& [user_id, connection] : connections_) {
+//        std::cout << "iterating" << std::endl;
         Request header;
 
         boost::system::error_code er;
@@ -88,6 +89,7 @@ void Porter::HandleRequest() {
         udp::endpoint endpoint(connection.local_endpoint().address(), connection.local_endpoint().port());
 
         if (header.type == RequestType::ConnectToGame) {
+            std::cout << "connect " << user_id << std::endl;
             std::scoped_lock guard(wait_requests_);
             if (players_[user_id] != 0) {  // user is in another lobby
                 lobbies_.at(players_[user_id]).RemovePlayer(user_id);
@@ -107,6 +109,7 @@ void Porter::HandleRequest() {
                 players_[user_id] = header.id;
             }
         } else if (header.type == RequestType::CreateNewGame) {
+            std::cout << "Create" << std::endl;
             if (players_[user_id] != 0) {  // user is in another lobby
                 std::scoped_lock guard(wait_requests_);
                 lobbies_.at(players_[user_id]).RemovePlayer(user_id);
@@ -126,6 +129,7 @@ void Porter::HandleRequest() {
                 {.id = user_id, .endpoint = endpoint, .character = header.character_type});
             players_[user_id] = lobby_id;
         } else if (header.type == RequestType::LeaveGame) {
+            std::cout << "disk" << std::endl;
             std::scoped_lock guard(wait_requests_);
             lobbies_.at(players_[user_id]).RemovePlayer(user_id);
             players_.erase(user_id);  // need faster
@@ -146,7 +150,11 @@ void Porter::StartRegistration() {
 void Porter::StartHandling() {
     accept_thread_ = std::thread([this] {
         while (true) {
-            HandleRequest();
+//            try {
+                HandleRequest();
+//            } catch(...) {
+//                std::cout << "hui" << std::endl;
+//            }
         }
     });
 }
@@ -173,29 +181,38 @@ uint64_t Porter::RegLobbyId() { /* избавиться от копипасты 
 
 void Porter::CheckLobbiesState() {
     std::scoped_lock guard(wait_requests_);
-    for (auto& [lobby_id, lobby] : lobbies_) {
+    for (auto& [lobby_id, lobby]: lobbies_) {
         if (lobby.Ready()) {
             lobby.SetStatus(Lobby::Running);
             InitGame(lobby);
-        } else if (lobby.GetStatus() == Lobby::Finished) {
-            lobby.Clear();
         }
     }
+    std::erase_if(lobbies_, [this](const std::pair<uint64_t, Lobby>& p) {
+        if (p.second.GetStatus() == Lobby::Finished) {
+            for (const auto& [id, player]: p.second.GetPlayers()) {
+                players_.erase(id);
+            }
+            return true;
+        }
+        return false;
+    });
 }
 
 void Porter::InitGame(Porter::Lobby& lobby) {
     SendInitGamePackages(lobby);
-    if (!fork()) {
-        Game(lobby.GetPlayers());
+//    if (!fork()) {
+////        Game(lobby.GetPlayers());
         lobby.SetStatus(Lobby::Finished);
-        /* Collect statistics */
-    }
+//        /* Collect statistics */
+//    }
 }
 
 void Porter::SendInitGamePackages(const Lobby& lobby) {
     const auto& players = lobby.GetPlayers();
     for (const auto& [id, player]: players) {
+//        connections_.at(id).non_blocking(false);
         boost::asio::write(connections_.at(id), boost::asio::buffer(GAME_APPROVE));
+//        connections_.at(id).non_blocking(true);
     }
 }
 

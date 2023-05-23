@@ -1,4 +1,5 @@
 #include "Agent.h"
+#include <iostream>
 
 Agent& Agent::GetInstance() {
     static Agent instance;
@@ -26,6 +27,7 @@ uint64_t Agent::CreateGame(Character character, const GameSettings& settings) {
 
 }
 void Agent::JoinGame(Character character, uint64_t game_id) {
+    std::cout << "JoinGame " << game_id << std::endl;
     Request request{.type = RequestType::ConnectToGame, .id = game_id, .character_type = character};
     Write(&request);
 }
