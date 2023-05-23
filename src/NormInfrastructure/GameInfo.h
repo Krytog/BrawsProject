@@ -9,6 +9,8 @@
 #define GAME_HOST "localhost"
 #define GAME_PORT 10000
 
+#define GAME_APPROVE "start"
+
 using boost::asio::ip::tcp;
 using boost::asio::ip::udp;
 

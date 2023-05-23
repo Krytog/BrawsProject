@@ -39,3 +39,16 @@ uint64_t Agent::GetUserID() {
     return player_id_;
 }
 
+bool Agent::ApproveGame() {
+    boost::system::error_code error;
+    socket_.non_blocking(true);
+    char message[strlen(GAME_APPROVE)];
+    boost::asio::read(socket_, boost::asio::buffer(message, sizeof(message)), error);
+    if (error == boost::asio::error::eof) {
+        return false;
+    }
+    socket_.non_blocking(false);
+    return true;
+}
+
+
