@@ -194,7 +194,7 @@ void Porter::InitGame(Porter::Lobby& lobby) {
 
 void Porter::SendInitGamePackages(const Lobby& lobby) {
     const auto& players = lobby.GetPlayers();
-    for (const auto& [id, player]: players) {
+    for (auto& [id, player]: players) {
         boost::asio::write(connections_[id], boost::asio::buffer(GAME_APPROVE));
     }
 }
