@@ -44,7 +44,7 @@ bool Agent::ApproveGame() {
     socket_.non_blocking(true);
     char message[strlen(GAME_APPROVE)];
     boost::asio::read(socket_, boost::asio::buffer(message, sizeof(message)), error);
-    if (error == boost::asio::error::eof) {
+    if (error == boost::asio::error::would_block) {
         return false;
     }
     socket_.non_blocking(false);

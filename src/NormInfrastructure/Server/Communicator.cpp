@@ -7,7 +7,6 @@
 
 namespace  {
     size_t random_port = 10010;
-    size_t reg_port = 10011;
 }
 
 Communicator::Communicator(): socket_(io_context_, udp::endpoint(udp::v4(), random_port)), 

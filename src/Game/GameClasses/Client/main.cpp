@@ -41,17 +41,28 @@ int main(int argc, char* argv[]) {
 //
 //    }
     uint64_t id = agent.GetUserID();
-
     std::cout << "Our ID " <<  id << std::endl;
-    std::cout << "Lobby ID " << agent.CreateGame(Character::PIRATE) << std::endl;
+    if (argc == 1)  {  // creator
+        std::cout << "Lobby ID " << agent.CreateGame(Character::PIRATE) << std::endl;
+    } else {
+        uint64_t lobby = strtoull(argv[1], NULL, 10);
+        std::cout << lobby << std::endl;
+        agent.JoinGame(Character::MAGE, lobby);
+    }
+    while (true) {
+        if (agent.ApproveGame()) {
+            std::cout << "Game Approved" << std::endl;
+            if (!fork()) {
+                Game();
+                return 0;
+            }
+            wait(NULL);
+            return 0;
+        }
+    }
     //    agent.LeaveGame();
 //    std::cout << "Lobby ID " << agent.CreateGame(Character::PIRATE) << std::endl;
 
     // zaprosi
-
-//    if (!fork()) {
-//        Game();
-//    }
-//    wait(NULL);
     return 0;
 }
