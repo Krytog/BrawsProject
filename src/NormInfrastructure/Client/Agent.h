@@ -26,8 +26,10 @@ private:
     std::size_t Write(Buf* buffer) {
         return boost::asio::write(socket_, boost::asio::buffer(buffer, sizeof(*buffer)));
     }
+    void EndGameSession();
 
     Agent();
+    ~Agent();
 
     Agent(const Agent &other) = delete;
     Agent(Agent &&other) = delete;

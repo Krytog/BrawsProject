@@ -11,18 +11,21 @@
 #define SLEEP_TIME std::chrono::microseconds(int(1000000 * (1.0 / 60 - time.EvaluateTime())))
 
 void Game(const std::unordered_map<uint64_t, Player>& players) {
+    sleep(1);
+    std::cout << "her" << std::endl;
     ServerEngine& engine = ServerEngine::GetInstance();
+    std::cout << "hui" << std::endl;
     Overmind& overmind = Overmind::GetInstance();
     Communicator& communicator = Communicator::GetInstance();
     std::vector<uint64_t> players_id = communicator.SetClients(players);
+    std::cout << "clients" << std::endl;
     communicator.Run();
     ServerGameManagement::InitGameServer(players_id);
     MyTime time;
     engine.SetActiveOn();
-
     while (engine.IsActive()) {
         time.ResetTime();
-
+//        overmind.DebugInfo();
         for (auto player : players_id) {
             auto from_client = communicator.ReceiveFromClient(player);
             ServerGameManagement::HandleInput(player, from_client);

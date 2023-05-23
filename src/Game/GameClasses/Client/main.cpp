@@ -12,18 +12,20 @@
 #define SLEEP_TIME std::chrono::microseconds(int(1000000 * (1.0 / 60 - time.EvaluateTime())))
 
 void Game() {
-    std::cout << "Game Client";
+    std::cout << "Game Client" << std::endl;
     ClientEngine& engine = ClientEngine::GetInstance();
+    std::cout << "bebra" << std::endl;
     Communicator& communicator = Communicator::GetInstance();
+    std::cout << "before run" << std::endl;
     communicator.Run();
+    std::cout << "after run" << std::endl;
     ClientGameManagement::InitGameClient();
     ClientGameManagement::InitRegistryForOvermind();
     MyTime time;
     engine.SetActiveOn();
-
     while (engine.IsActive()) {
         time.ResetTime();
-
+//        Overmind::GetInstance().DebugInfo();
         ClientGameManagement::ReceiveAndHandleFromServer();
 
         engine.Update();
@@ -52,16 +54,20 @@ int main(int argc, char* argv[]) {
     while (true) {
         if (agent.ApproveGame()) {
             std::cout << "Game Approved" << std::endl;
-            if (!fork()) {
+//            if (!fork()) {
+                std::cout << "before Game" << std::endl;
                 Game();
-                return 0;
-            }
-            wait(NULL);
-            return 0;
+//                return 0;
+//            }
+//            wait(NULL);
+            break;
         }
     }
+//    while (true) {
+//
+//    }
 
-    agent.LeaveGame();
+//    agent.LeaveGame();
 //    std::cout << "Lobby ID " << agent.CreateGame(Character::PIRATE) << std::endl;
 
     // zaprosi

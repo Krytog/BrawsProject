@@ -17,6 +17,10 @@ Agent::Agent() : socket_(io_context_) {
     Read(&player_id_);
 }
 
+Agent::~Agent() {
+    EndGameSession();
+}
+
 uint64_t Agent::CreateGame(Character character, const GameSettings& settings) {
     Request request{.type = RequestType::CreateNewGame, .id = 0, .character_type = character};
     Write(&request);
@@ -34,6 +38,11 @@ void Agent::JoinGame(Character character, uint64_t game_id) {
 
 void Agent::LeaveGame() {
     Request request{.type = RequestType::LeaveGame};
+    Write(&request);
+}
+
+void Agent::EndGameSession() {
+    Request request{.type = RequestType::EndGameSession};
     Write(&request);
 }
 

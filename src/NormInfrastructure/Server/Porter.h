@@ -71,7 +71,8 @@ private:
     uint64_t RegLobbyId();
 
     void RegUser();
-    void HandleRequest();
+    void HandleRequests();
+    void HandleConnection(uint64_t user_id, tcp::socket& connection, const Request& request);
 
 private:
     std::unordered_map<uint64_t, Lobby> lobbies_;  // lobby ID -> lobby

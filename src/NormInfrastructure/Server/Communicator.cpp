@@ -25,7 +25,10 @@ Communicator &Communicator::GetInstance() {
 }
 
 void Communicator::SendToClient(uint64_t client_id, std::string_view data) {
+    std::cout << "before send" << std::endl;
     socket_.send_to(boost::asio::buffer(data.data(), data.size()), players_[client_id].endpoint);
+    std::cout << players_[client_id].endpoint.port() << " " << players_[client_id].endpoint.address() << std::endl;
+    std::cout << "after send" << std::endl;
 }
 
 void Communicator::DoReceive(uint64_t thread_id) {
