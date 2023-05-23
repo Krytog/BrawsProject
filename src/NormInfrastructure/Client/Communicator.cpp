@@ -1,4 +1,5 @@
 #include "Communicator.h"
+#include <boost/asio/ip/udp.hpp>
 #include <cstddef>
 #include <cstring>
 #include <iostream>
@@ -9,7 +10,7 @@ namespace {
     size_t k_max_dtgrm_len = 3200;
 }
 
-Communicator::Communicator(): socket_(io_context_, udp::endpoint(udp::v4(), 0)) {
+Communicator::Communicator(): socket_(io_context_) {
     udp::resolver resolver(io_context_);
     endpoints_ = resolver.resolve(udp::v4(), host, random_port);
     package_.resize(k_max_dtgrm_len);
@@ -50,4 +51,9 @@ void Communicator::Stop() {
     if (accept_thread_.joinable()) {
         accept_thread_.join();
     }
+}
+
+void Communicator::BindOnPort(uint64_t port) {
+    udp::endpoint endpoint(udp::v4(), port);
+    socket_.bind(endpoint);
 }

@@ -15,6 +15,7 @@ public:
 
     std::string ReceiveFromServer();
     void SendToServer(std::string_view data);
+    void BindOnPort(uint64_t port);
 
     void Run();
     void Stop();
