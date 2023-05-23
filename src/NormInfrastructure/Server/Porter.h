@@ -81,6 +81,7 @@ private:
     tcp::acceptor acceptor_;
 
     std::unordered_map<uint64_t, tcp::socket> connections_;
+    std::unordered_map<uint64_t, uint16_t> ports_;
 
     // ID randomizer
     std::random_device rd_;

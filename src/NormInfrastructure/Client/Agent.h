@@ -12,6 +12,7 @@ public:
     uint64_t CreateGame(Character character, const GameSettings& settings = {.users_count = 2});
     void JoinGame(Character character, uint64_t game_id = 0); // id == 0 <=> join any game
     void LeaveGame();
+
     bool ApproveGame();
 
     // Returns user's ID

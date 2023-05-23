@@ -13,8 +13,12 @@ Agent::Agent() : socket_(io_context_) {
     tcp::resolver::iterator iterator = resolver.resolve(query);
     boost::asio::connect(socket_, iterator);
 
+    udp::endpoint ep(udp::v4(), 0);
+    uint16_t port = ep.port();
     // Get ID from Server
     Read(&player_id_);
+    // Send available port
+    Write(&port);
 }
 
 Agent::~Agent() {

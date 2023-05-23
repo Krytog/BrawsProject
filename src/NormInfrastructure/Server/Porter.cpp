@@ -55,9 +55,12 @@ Porter::Porter() : acceptor_(io_context_, tcp::endpoint(tcp::v4(), GAME_PORT)), 
 void Porter::RegUser() {
     tcp::socket connection(io_context_);
     uint64_t user_id = RegId();
+    uint16_t user_port;
     acceptor_.accept(connection);
+
     boost::asio::write(connection, boost::asio::buffer(&user_id, sizeof(user_id)));
-    std::cout << user_id << std::endl;
+    boost::asio::read(connection, boost::asio::buffer(&user_port, sizeof(user_port)));
+    ports_[user_id] = user_port;
 
     connection.non_blocking(true);
 
@@ -67,7 +70,7 @@ void Porter::RegUser() {
 }
 
 void Porter::HandleConnection(uint64_t user_id, tcp::socket& connection, const Request& header) {
-    udp::endpoint endpoint(connection.local_endpoint().address(), 10010);
+    udp::endpoint endpoint(connection.local_endpoint().address(), ports_[user_id]);
 
     if (header.type == RequestType::ConnectToGame) {
         std::cout << "connect " << user_id << std::endl;
