@@ -42,11 +42,11 @@ uint64_t Agent::GetUserID() {
 }
 
 bool Agent::ApproveGame() {
-    boost::system::error_code error;
     socket_.non_blocking(true);
     char message[strlen(GAME_APPROVE)];
-    boost::asio::read(socket_, boost::asio::buffer(message, sizeof(message)), error);
-    if (error == boost::asio::error::would_block) {
+    try {
+        boost::asio::read(socket_, boost::asio::buffer(message, sizeof(message)));
+    } catch (...) {
         return false;
     }
     socket_.non_blocking(false);

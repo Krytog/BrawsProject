@@ -12,6 +12,7 @@
 #define SLEEP_TIME std::chrono::microseconds(int(1000000 * (1.0 / 60 - time.EvaluateTime())))
 
 void Game() {
+    std::cout << "Game Client";
     ClientEngine& engine = ClientEngine::GetInstance();
     Communicator& communicator = Communicator::GetInstance();
     communicator.Run();
@@ -37,11 +38,9 @@ void Game() {
 
 int main(int argc, char* argv[]) {
     Agent& agent = Agent::GetInstance();
-//    while (true) {
-//
-//    }
     uint64_t id = agent.GetUserID();
     std::cout << "Our ID " <<  id << std::endl;
+
     if (argc == 1)  {  // creator
         std::cout << "Lobby ID " << agent.CreateGame(Character::PIRATE) << std::endl;
     } else {
@@ -49,18 +48,20 @@ int main(int argc, char* argv[]) {
         std::cout << lobby << std::endl;
         agent.JoinGame(Character::MAGE, lobby);
     }
+
     while (true) {
         if (agent.ApproveGame()) {
             std::cout << "Game Approved" << std::endl;
-//            if (!fork()) {
-////                Game();
-//                return 0;
-//            }
-//            wait(NULL);
+            if (!fork()) {
+                Game();
+                return 0;
+            }
+            wait(NULL);
             return 0;
         }
     }
-    //    agent.LeaveGame();
+
+    agent.LeaveGame();
 //    std::cout << "Lobby ID " << agent.CreateGame(Character::PIRATE) << std::endl;
 
     // zaprosi

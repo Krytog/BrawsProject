@@ -46,11 +46,7 @@ int main() {
     porter.StartRegistration();
     porter.StartHandling();
     while (true) {
-        try {
-            porter.CheckLobbiesState();
-        } catch(...) {
-            std::cout << "eblan" << std::endl;
-        }
+        porter.CheckLobbiesState();
     }
 }
 

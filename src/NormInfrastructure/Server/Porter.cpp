@@ -77,12 +77,11 @@ void Porter::HandleRequest() {
     }
 
     for (auto& [user_id, connection] : connections_) {
-//        std::cout << "iterating" << std::endl;
         Request header;
 
-        boost::system::error_code er;
-        boost::asio::read(connection, boost::asio::buffer(&header, sizeof(header)), er);
-        if (er == boost::asio::error::would_block || er == boost::asio::error::eof) {
+        try {
+            boost::asio::read(connection, boost::asio::buffer(&header, sizeof(header)));
+        } catch (...) {
             continue;
         }
 
@@ -170,6 +169,7 @@ uint64_t Porter::RegId() {
 }
 
 uint64_t Porter::RegLobbyId() { /* избавиться от копипасты потом */
+    return 1;
     do {
         uint64_t num = dis_(gen_);
         if (!num || lobbies_.contains(num)) {
@@ -182,29 +182,31 @@ uint64_t Porter::RegLobbyId() { /* избавиться от копипасты 
 void Porter::CheckLobbiesState() {
     std::scoped_lock guard(wait_requests_);
     for (auto& [lobby_id, lobby]: lobbies_) {
-        if (lobby.Ready()) {
+        std::cout << "what" << std::endl;
+        if (lobby.Ready() && lobby.GetStatus() == Lobby::Waiting) { // Тут точно ещё статус чекать надо
             lobby.SetStatus(Lobby::Running);
             InitGame(lobby);
         }
     }
-    std::erase_if(lobbies_, [this](const std::pair<uint64_t, Lobby>& p) {
-        if (p.second.GetStatus() == Lobby::Finished) {
-            for (const auto& [id, player]: p.second.GetPlayers()) {
-                players_.erase(id);
-            }
-            return true;
-        }
-        return false;
-    });
+    // std::erase_if(lobbies_, [this](const std::pair<uint64_t, Lobby>& p) {
+    //     if (p.second.GetStatus() == Lobby::Finished) {
+    //         for (const auto& [id, player]: p.second.GetPlayers()) {
+    //             players_.erase(id);
+    //         }
+    //         return true;
+    //     }
+    //     return false;
+    // });
 }
 
 void Porter::InitGame(Porter::Lobby& lobby) {
+    std::cout << "Start" << std::endl;
     SendInitGamePackages(lobby);
-//    if (!fork()) {
-////        Game(lobby.GetPlayers());
+   if (!fork()) {
+       Game(lobby.GetPlayers());
         lobby.SetStatus(Lobby::Finished);
 //        /* Collect statistics */
-//    }
+   }
 }
 
 void Porter::SendInitGamePackages(const Lobby& lobby) {
