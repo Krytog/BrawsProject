@@ -47,5 +47,5 @@ private:
     // Random
     std::random_device rd_;
     std::mt19937_64 gen_;
-    std::uniform_int_distribution<uint64_t> dis_;
+    std::uniform_int_distribution<> dis_;
 };

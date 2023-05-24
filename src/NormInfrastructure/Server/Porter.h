@@ -90,7 +90,7 @@ private:
     std::uniform_int_distribution<uint64_t> dis_;
 
     // Synchronization
-    std::mutex wait_requests_;
+    std::mutex lobby_lock_;
     std::mutex reg_mutex_;
 
     std::atomic<bool> has_incoming_users_ = false;

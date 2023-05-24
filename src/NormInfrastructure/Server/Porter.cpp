@@ -77,7 +77,7 @@ void Porter::HandleConnection(uint64_t user_id, tcp::socket& connection, const R
     udp::endpoint endpoint(connection.local_endpoint().address(), ports_[user_id]);
 
     if (header.type == RequestType::ConnectToGame) {
-        std::scoped_lock guard(wait_requests_);
+        std::scoped_lock guard(lobby_lock_);
         if (players_[user_id] != 0) {  // user is in another lobby
             lobbies_.at(players_[user_id]).RemovePlayer(user_id);
             players_.erase(user_id);
@@ -98,7 +98,7 @@ void Porter::HandleConnection(uint64_t user_id, tcp::socket& connection, const R
         }
     } else if (header.type == RequestType::CreateNewGame) {
         if (players_[user_id] != 0) {  // user is in another lobby
-            std::scoped_lock guard(wait_requests_);
+            std::scoped_lock guard(lobby_lock_);
             lobbies_.at(players_[user_id]).RemovePlayer(user_id);
         }
         uint64_t lobby_id = RegLobbyId();
@@ -110,13 +110,13 @@ void Porter::HandleConnection(uint64_t user_id, tcp::socket& connection, const R
         boost::asio::write(connection, boost::asio::buffer(&lobby_id, sizeof(lobby_id)));
         connection.non_blocking(true);  // unblock for further request handling
 
-        std::scoped_lock guard(wait_requests_);
+        std::scoped_lock guard(lobby_lock_);
         lobbies_.emplace(lobby_id, settings);
         lobbies_.at(lobby_id).AddPlayer(
             {.id = user_id, .endpoint = endpoint, .character = header.character_type});
         players_[user_id] = lobby_id;
     } else if (header.type == RequestType::LeaveGame) {
-        std::scoped_lock guard(wait_requests_);
+        std::scoped_lock guard(lobby_lock_);
         lobbies_.at(players_[user_id]).RemovePlayer(user_id);
         players_.erase(user_id);  // need faster
     } else {
@@ -147,7 +147,7 @@ void Porter::HandleRequests() {
 
         if (header.type == RequestType::EndGameSession) {  // final package
             if (players_[user_id] != 0) {                  // user is still in lobby
-                std::scoped_lock guard(wait_requests_);
+                std::scoped_lock guard(lobby_lock_);
                 lobbies_.at(players_[user_id]).RemovePlayer(user_id);
             }
             players_.erase(user_id);
@@ -197,7 +197,7 @@ uint64_t Porter::RegLobbyId() { /* избавиться от копипасты 
 }
 
 void Porter::CheckLobbiesState() {
-    std::scoped_lock guard(wait_requests_);
+    std::scoped_lock guard(lobby_lock_);
     std::erase_if(lobbies_, [this](std::pair<const uint64_t, Lobby>& p) {
         Lobby& lobby = p.second;
         if (lobby.GetStatus() == Lobby::Finished) {
