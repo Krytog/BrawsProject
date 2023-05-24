@@ -72,7 +72,6 @@ void Communicator::DoReceive(uint64_t thread_id) {
         [this, thread_id](boost::system::error_code error_code, std::size_t bytes_recvd) {
             uint64_t usr_id;
             std::memcpy(&usr_id, actual_message_[thread_id].data(), sizeof(usr_id));
-            // std::cout << usr_id << " " << actual_message_[thread_id] << std::endl;
             users_data_[usr_id].push(std::move(actual_message_[thread_id]));
           DoReceive(thread_id);
         }
@@ -83,7 +82,6 @@ bool Communicator::IsValidData(std::string_view data, uint64_t client_id) const 
     uint64_t id;
     std::memcpy(&id, data.data(), sizeof(id));
     if (id == client_id) {
-        std::cout << "okaaay" << std::endl;
         return true;
     }
     return false;
@@ -127,7 +125,6 @@ std::vector<uint64_t> Communicator::SetClients(const std::unordered_map<uint64_t
     std::vector<uint64_t> res;
     for (const auto& [id, player]: players_) {
         res.push_back(id);
-        std::cout << player.id << std::endl;
     }
     return res;
 }

@@ -5,10 +5,14 @@
 
 using boost::asio::ip::tcp;
 
-Porter::Lobby::Lobby(size_t users_count) : users_count_(users_count) {
+Porter::Lobby::Lobby(uint64_t users_count) : users_count_(users_count) {
 }
 
-void Porter::Lobby::SetPlayerCount(size_t users_count) {
+Porter::Lobby::Lobby(const GameSettings& settings) : Lobby(settings.users_count) {
+    /* Handle other settings somehow */
+}
+
+void Porter::Lobby::SetPlayerCount(uint64_t users_count) {
     users_count_ = users_count;
 }
 
@@ -73,7 +77,6 @@ void Porter::HandleConnection(uint64_t user_id, tcp::socket& connection, const R
     udp::endpoint endpoint(connection.local_endpoint().address(), ports_[user_id]);
 
     if (header.type == RequestType::ConnectToGame) {
-        std::cout << "connect " << user_id << std::endl;
         std::scoped_lock guard(wait_requests_);
         if (players_[user_id] != 0) {  // user is in another lobby
             lobbies_.at(players_[user_id]).RemovePlayer(user_id);
@@ -88,20 +91,18 @@ void Porter::HandleConnection(uint64_t user_id, tcp::socket& connection, const R
                 }
             }
         } else {
-            if (lobbies_.at(header.id).Ready())
-                return;  // cannot connect to Ready lobby
+            if (lobbies_.at(header.id).Ready()) return;  // cannot connect to Ready lobby
             lobbies_.at(header.id).AddPlayer(
                 {.id = user_id, .endpoint = endpoint, .character = header.character_type});
             players_[user_id] = header.id;
         }
     } else if (header.type == RequestType::CreateNewGame) {
-        std::cout << "Create" << std::endl;
         if (players_[user_id] != 0) {  // user is in another lobby
             std::scoped_lock guard(wait_requests_);
             lobbies_.at(players_[user_id]).RemovePlayer(user_id);
         }
         uint64_t lobby_id = RegLobbyId();
-        std::cout << lobby_id << std::endl;
+        std::cout << "Your lobby ID is " << lobby_id << std::endl;
 
         GameSettings settings;
         connection.non_blocking(false);  // block until user sends all data
@@ -110,7 +111,7 @@ void Porter::HandleConnection(uint64_t user_id, tcp::socket& connection, const R
         connection.non_blocking(true);  // unblock for further request handling
 
         std::scoped_lock guard(wait_requests_);
-        lobbies_.emplace(lobby_id, settings.users_count);
+        lobbies_.emplace(lobby_id, settings);
         lobbies_.at(lobby_id).AddPlayer(
             {.id = user_id, .endpoint = endpoint, .character = header.character_type});
         players_[user_id] = lobby_id;
@@ -135,17 +136,25 @@ void Porter::HandleRequests() {
 
     std::erase_if(connections_, [this](std::pair<const uint64_t, tcp::socket>& p) {
         Request header;
+        const uint64_t& user_id = p.first;
+        tcp::socket& connection = p.second;
 
         try {
-            boost::asio::read(p.second, boost::asio::buffer(&header, sizeof(header)));
-        } catch (...) {
+            boost::asio::read(connection, boost::asio::buffer(&header, sizeof(header)));
+        } catch (...) {  // empty socket or connection errors
             return false;
         }
 
         if (header.type == RequestType::EndGameSession) {  // final package
+            if (players_[user_id] != 0) {                  // user is still in lobby
+                std::scoped_lock guard(wait_requests_);
+                lobbies_.at(players_[user_id]).RemovePlayer(user_id);
+            }
+            players_.erase(user_id);
+            ports_.erase(user_id);
             return true;
         }
-        HandleConnection(p.first, p.second, header);
+        HandleConnection(user_id, connection, header);
         return false;
     });
 }
@@ -161,11 +170,7 @@ void Porter::StartRegistration() {
 void Porter::StartHandling() {
     accept_thread_ = std::thread([this] {
         while (true) {
-            //            try {
             HandleRequests();
-            //            } catch(...) {
-            //                std::cout << "hui" << std::endl;
-            //            }
         }
     });
 }
@@ -211,7 +216,6 @@ void Porter::CheckLobbiesState() {
 
 void Porter::InitGame(Porter::Lobby& lobby) {
     // not working trash
-    std::cout << "Start" << std::endl;
     SendInitGamePackages(lobby);
     if (!fork()) {
         Game(lobby.GetPlayers());
@@ -223,9 +227,7 @@ void Porter::InitGame(Porter::Lobby& lobby) {
 void Porter::SendInitGamePackages(const Lobby& lobby) {
     const auto& players = lobby.GetPlayers();
     for (const auto& [id, player] : players) {
-        //        connections_.at(id).non_blocking(false);
         boost::asio::write(connections_.at(id), boost::asio::buffer(GAME_APPROVE));
-        //        connections_.at(id).non_blocking(true);
     }
 }
 

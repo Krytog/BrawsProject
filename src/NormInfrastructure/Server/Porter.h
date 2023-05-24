@@ -25,9 +25,10 @@ private:
             Finished
         };
 
-        Lobby(size_t users_count);
+        Lobby(uint64_t users_count);
+        Lobby(const GameSettings& settings);
 
-        void SetPlayerCount(size_t users_count);
+        void SetPlayerCount(uint64_t users_count);
         void AddPlayer(Player player);
         bool RemovePlayer(uint64_t id);
         bool Ready() const;
@@ -40,7 +41,7 @@ private:
     private:
         Status status_ = Waiting;
         std::unordered_map<uint64_t, Player> players_;
-        size_t users_count_;
+        uint64_t users_count_;
     };
 
 public:
@@ -88,7 +89,7 @@ private:
     std::mt19937_64 gen_;
     std::uniform_int_distribution<uint64_t> dis_;
 
-    //Synchrone
+    // Synchronization
     std::mutex wait_requests_;
     std::mutex reg_mutex_;
 

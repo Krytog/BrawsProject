@@ -23,6 +23,7 @@ public:
 
     ~Communicator() = default;
 private:
+    Communicator() = delete;
     Communicator(uint16_t port);
 
     Communicator(const Communicator &other) = delete;

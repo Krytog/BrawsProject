@@ -80,9 +80,8 @@ std::string ClientGameManagement::SerializeInput() {
     return output;
 }
 
-void ClientGameManagement::ReceiveAndHandleFromServer() {
+void ClientGameManagement::ReceiveAndHandleFromServer(Communicator& communicator) {
     static Overmind& overmind = Overmind::GetInstance();
-    static Communicator& communicator = Communicator::GetInstance();
     auto raw_data = communicator.ReceiveFromServer();
     std::string_view data(raw_data);
     data = DataPreprocessing(data);

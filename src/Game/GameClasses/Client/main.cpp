@@ -13,16 +13,11 @@
 #define SLEEP_TIME std::chrono::microseconds(int(1000000 * (1.0 / 60 - time.EvaluateTime())))
 
 void Game(uint16_t communicator_port, uint64_t user_id) {
-    std::cout << "Game Client" << std::endl;
     ClientEngine& engine = ClientEngine::GetInstance();
-    std::cout << "safasf" << std::endl;
     Communicator& communicator = Communicator::GetInstance(communicator_port);
-    std::cout << "dsfgsdgfdfg" << std::endl;
     communicator.SetId(user_id);
     // communicator.BindOnPort(communicator_port);
-    std::cout << "before run" << std::endl;
     communicator.Run();
-    std::cout << "after run" << std::endl;
     ClientGameManagement::InitGameClient();
     ClientGameManagement::InitRegistryForOvermind();
     MyTime time;
@@ -58,10 +53,8 @@ int main(int argc, char* argv[]) {
     while (true) {
         if (agent.ApproveGame()) {
             std::cout << "Game Approved" << std::endl;
-                std::cout << "before Game" << std::endl;
                 Game(agent.GetPort(), id);
             //     return 0;
-            std::cout << "keeek" << std::endl;
             break;
         }
     }
