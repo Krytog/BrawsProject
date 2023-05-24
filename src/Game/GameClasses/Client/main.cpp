@@ -8,14 +8,18 @@
 
 #include <NormInfrastructure/Client/Communicator.h>
 #include <NormInfrastructure/Client/Agent.h>
+#include <cstddef>
 
 #define SLEEP_TIME std::chrono::microseconds(int(1000000 * (1.0 / 60 - time.EvaluateTime())))
 
-void Game() {
+void Game(uint16_t communicator_port, uint64_t user_id) {
     std::cout << "Game Client" << std::endl;
     ClientEngine& engine = ClientEngine::GetInstance();
-    std::cout << "bebra" << std::endl;
-    Communicator& communicator = Communicator::GetInstance();
+    std::cout << "safasf" << std::endl;
+    Communicator& communicator = Communicator::GetInstance(communicator_port);
+    std::cout << "dsfgsdgfdfg" << std::endl;
+    communicator.SetId(user_id);
+    // communicator.BindOnPort(communicator_port);
     std::cout << "before run" << std::endl;
     communicator.Run();
     std::cout << "after run" << std::endl;
@@ -25,8 +29,8 @@ void Game() {
     engine.SetActiveOn();
     while (engine.IsActive()) {
         time.ResetTime();
-//        Overmind::GetInstance().DebugInfo();
-        ClientGameManagement::ReceiveAndHandleFromServer();
+    // Overmind::GetInstance().DebugInfo();
+        ClientGameManagement::ReceiveAndHandleFromServer(communicator);
 
         engine.Update();
 
@@ -41,10 +45,10 @@ void Game() {
 int main(int argc, char* argv[]) {
     Agent& agent = Agent::GetInstance();
     uint64_t id = agent.GetUserID();
-    std::cout << "Our ID " <<  id << std::endl;
+    std::cout << "my id " <<  id << std::endl;
 
     if (argc == 1)  {  // creator
-        std::cout << "Lobby ID " << agent.CreateGame(Character::PIRATE) << std::endl;
+        std::cout << "lobby id " << agent.CreateGame(Character::PIRATE) << std::endl;
     } else {
         uint64_t lobby = strtoull(argv[1], NULL, 10);
         std::cout << lobby << std::endl;
@@ -54,12 +58,10 @@ int main(int argc, char* argv[]) {
     while (true) {
         if (agent.ApproveGame()) {
             std::cout << "Game Approved" << std::endl;
-//            if (!fork()) {
                 std::cout << "before Game" << std::endl;
-                Game();
-//                return 0;
-//            }
-//            wait(NULL);
+                Game(agent.GetPort(), id);
+            //     return 0;
+            std::cout << "keeek" << std::endl;
             break;
         }
     }

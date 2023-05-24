@@ -6,19 +6,18 @@ Agent& Agent::GetInstance() {
     return instance;
 }
 
-Agent::Agent() : socket_(io_context_) {
+Agent::Agent() : socket_(io_context_), rd_(), gen_(rd_()), dis_() {
     // Establish connection
     tcp::resolver resolver(io_context_);
     tcp::resolver::query query(tcp::v4(), GAME_HOST, STR(GAME_PORT));
     tcp::resolver::iterator iterator = resolver.resolve(query);
     boost::asio::connect(socket_, iterator);
-
-    udp::endpoint ep(udp::v4(), 0);
-    uint16_t port = ep.port();
+    
+    port_ = (dis_(gen_) % 50000) + 10000;
     // Get ID from Server
     Read(&player_id_);
     // Send available port
-    Write(&port);
+    Write(&port_);
 }
 
 Agent::~Agent() {
@@ -66,4 +65,7 @@ bool Agent::ApproveGame() {
     return true;
 }
 
+uint16_t Agent::GetPort() {
+    return port_;
+}
 

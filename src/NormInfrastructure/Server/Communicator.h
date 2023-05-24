@@ -8,10 +8,10 @@
 #include <deque>
 #include <queue>
 #include <thread>
+#include "../GameInfo.h"
 
 #include <boost/asio.hpp>
 #include <boost/circular_buffer.hpp>
-#include "../GameInfo.h"
 
 using boost::asio::ip::udp;
 
@@ -27,13 +27,13 @@ class Communicator {
 public:
     static Communicator &GetInstance();
 
+    uint64_t RegUser();
     std::string ReceiveFromClient(uint64_t client_id);
     void SendToClient(uint64_t client_id, std::string_view data);
+    void RunFor(size_t milliseconds);
     void Run();
     void Stop();
     size_t GetUserNumber();
-
-    // Returns vector of clients' IDs
     std::vector<uint64_t> SetClients(const std::unordered_map<uint64_t, Player>& players);
 
     ~Communicator();
@@ -46,13 +46,15 @@ private:
     Communicator &operator=(const Communicator &other) = delete;
     Communicator &operator=(Communicator &&other) = delete;
 
+    uint64_t RegId();
     void DoReceive(uint64_t thread_id);
     bool IsValidData(std::string_view data, uint64_t client_id) const;
 
     boost::asio::io_context io_context_;
     udp::socket socket_;
+    udp::socket reg_socket_;
 
-    std::unordered_map<uint64_t, Player> players_;
+    std::unordered_map<uint64_t, udp::endpoint> connections_;
     std::unordered_map<uint64_t, FixedQueue<std::string, kQueueSize>> users_data_;
 
     // ID randomizer
@@ -60,9 +62,9 @@ private:
     std::mt19937_64 gen_;
     std::uniform_int_distribution<uint64_t> dis_;
 
-    // Requests handling
     size_t user_counter_ = 0;
     std::unordered_map<uint64_t, udp::endpoint> actual_connections_;
     std::unordered_map<uint64_t, std::string> actual_message_;
     std::thread accept_thread_;
+    std::unordered_map<uint64_t, Player> players_;
 };

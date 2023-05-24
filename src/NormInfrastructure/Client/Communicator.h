@@ -11,18 +11,19 @@ using boost::asio::ip::udp;
 
 class Communicator {
 public:
-    static Communicator &GetInstance();
+    static Communicator &GetInstance(uint16_t port);
 
     std::string ReceiveFromServer();
     void SendToServer(std::string_view data);
-    void BindOnPort(uint64_t port);
+    void BindOnPort(uint16_t port);
+    void SetId(uint64_t  id);
 
     void Run();
     void Stop();
 
     ~Communicator() = default;
 private:
-    Communicator();
+    Communicator(uint16_t port);
 
     Communicator(const Communicator &other) = delete;
     Communicator(Communicator &&other) = delete;
