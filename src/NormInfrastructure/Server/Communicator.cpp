@@ -6,8 +6,8 @@
 #include <utility>
 
 namespace  {
-    size_t random_port = 10010;
-    size_t reg_port = 10011;
+    size_t random_port = 10013;
+    size_t reg_port = 10012;
 }
 
 Communicator::Communicator(): socket_(io_context_, udp::endpoint(udp::v4(), random_port)),
@@ -105,7 +105,9 @@ void Communicator::RunFor(size_t milliseconds) {
 }
 
 void Communicator::Run() {
-    DoReceive(1);
+    for (const auto& [id, player]: players_) {
+        DoReceive(id);
+    }
     accept_thread_ = std::thread([this]{ io_context_.run(); });
 }
 

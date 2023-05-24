@@ -10,14 +10,17 @@ public:
 
     // Returns lobby ID
     uint64_t CreateGame(Character character, const GameSettings& settings = {.users_count = 2});
-    void JoinGame(Character character, uint64_t game_id = 0); // id == 0 <=> join any game
+    // id == kGameUndefined <=> join any game
+    void JoinGame(Character character, uint64_t game_id = kGameUndefined);
     void LeaveGame();
-    uint16_t GetPort();
 
     bool ApproveGame();
 
     // Returns user's ID
     uint64_t GetUserID();
+    // Returns user's port
+    uint16_t GetPort();
+
 
 private:
     template <typename Buf>

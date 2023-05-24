@@ -54,6 +54,10 @@ Porter& Porter::GetInstance() {
 }
 
 Porter::Porter() : acceptor_(io_context_, tcp::endpoint(tcp::v4(), GAME_PORT)), rd_(), gen_(rd_()), dis_() {
+    ipc::shared_memory_object::remove("SharedMemorySegment");
+    shared_segment_ = shared::Segment(ipc::create_only, "SharedMemorySegment", kLobbyHashMapMaxSize);
+    shared::Manager* segment_manager = shared_segment_.get_segment_manager();
+    lobby_status_ = shared_segment_.construct<SharedLobbyStatusHashMap>("SharedHashMap")(segment_manager);
 }
 
 void Porter::RegUser() {
@@ -78,11 +82,15 @@ void Porter::HandleConnection(uint64_t user_id, tcp::socket& connection, const R
 
     if (header.type == RequestType::ConnectToGame) {
         std::scoped_lock guard(lobby_lock_);
-        if (players_[user_id] != 0) {  // user is in another lobby
-            lobbies_.at(players_[user_id]).RemovePlayer(user_id);
-            players_.erase(user_id);
+        if (!lobbies_.contains(header.id)) {  // Invalid lobby ID
+            std::cout << "Invalid Game ID" << std::endl;
+            return;
         }
-        if (header.id == 0) {  // join any game
+        if (players_[user_id] != kGameUndefined) {  // user is in another lobby
+            lobbies_.at(players_[user_id]).RemovePlayer(user_id);
+            players_[user_id] = kGameUndefined;
+        }
+        if (header.id == kGameUndefined) {  // join any game
             for (auto& [lobby_id, lobby] : lobbies_) {
                 if (lobby.GetStatus() == Lobby::Waiting) {
                     lobbies_.at(lobby_id).AddPlayer(
@@ -90,14 +98,14 @@ void Porter::HandleConnection(uint64_t user_id, tcp::socket& connection, const R
                     players_[user_id] = lobby_id;
                 }
             }
-        } else {
+        } else {  // join game with ID == header.id
             if (lobbies_.at(header.id).Ready()) return;  // cannot connect to Ready lobby
             lobbies_.at(header.id).AddPlayer(
                 {.id = user_id, .endpoint = endpoint, .character = header.character_type});
             players_[user_id] = header.id;
         }
     } else if (header.type == RequestType::CreateNewGame) {
-        if (players_[user_id] != 0) {  // user is in another lobby
+        if (players_[user_id] != kGameUndefined) {  // user is in another lobby
             std::scoped_lock guard(lobby_lock_);
             lobbies_.at(players_[user_id]).RemovePlayer(user_id);
         }
@@ -116,6 +124,7 @@ void Porter::HandleConnection(uint64_t user_id, tcp::socket& connection, const R
             {.id = user_id, .endpoint = endpoint, .character = header.character_type});
         players_[user_id] = lobby_id;
     } else if (header.type == RequestType::LeaveGame) {
+        /* Add Checks */
         std::scoped_lock guard(lobby_lock_);
         lobbies_.at(players_[user_id]).RemovePlayer(user_id);
         players_.erase(user_id);  // need faster
@@ -146,8 +155,9 @@ void Porter::HandleRequests() {
         }
 
         if (header.type == RequestType::EndGameSession) {  // final package
-            if (players_[user_id] != 0) {                  // user is still in lobby
-                std::scoped_lock guard(lobby_lock_);
+            std::cout << "deleted user " << std::endl;
+            std::scoped_lock guard(lobby_lock_);
+            if (players_[user_id] != kGameUndefined) {                  // user is still in lobby
                 lobbies_.at(players_[user_id]).RemovePlayer(user_id);
             }
             players_.erase(user_id);
@@ -178,18 +188,16 @@ void Porter::StartHandling() {
 uint64_t Porter::RegId() {
     do {
         uint64_t num = dis_(gen_);
-        if (!used_user_ids_.contains(num)) {
-            used_user_ids_.insert(num);
+        if (!ports_.contains(num)) {
             return num;
         }
     } while (true);
 }
 
 uint64_t Porter::RegLobbyId() { /* избавиться от копипасты потом */
-    return 1;
     do {
         uint64_t num = dis_(gen_);
-        if (!num || lobbies_.contains(num)) {
+        if (num == kGameUndefined || lobbies_.contains(num)) {
             continue;
         }
         return num;
@@ -198,28 +206,41 @@ uint64_t Porter::RegLobbyId() { /* избавиться от копипасты 
 
 void Porter::CheckLobbiesState() {
     std::scoped_lock guard(lobby_lock_);
+    std::cout << lobbies_.size() << std::endl;
     std::erase_if(lobbies_, [this](std::pair<const uint64_t, Lobby>& p) {
         Lobby& lobby = p.second;
+        if ((*lobby_status_)[p.first].load()) {
+            std::cout << lobby_status_->size() << std::endl;
+            lobby_status_->erase(p.first);
+            lobby.SetStatus(Lobby::Finished);
+        }
         if (lobby.GetStatus() == Lobby::Finished) {
-            for (const auto& [id, player] : lobby.GetPlayers()) {
-                players_.erase(id);
+            for (const auto& [id, player]: lobby.GetPlayers()) {
+                players_[id] = kGameUndefined;  // the game ended, but user can start a new one
             }
             return true;
         }
         if (lobby.Ready() && lobby.GetStatus() != Lobby::Running) {
             lobby.SetStatus(Lobby::Running);
-            InitGame(lobby);
+            lobby_status_->emplace(p.first, false);
+            InitGame(p.first, lobby);
         }
         return false;
     });
 }
 
-void Porter::InitGame(Porter::Lobby& lobby) {
-    // not working trash
+void Porter::InitGame(uint64_t lobby_id, Porter::Lobby& lobby) {
     SendInitGamePackages(lobby);
     if (!fork()) {
+        std::cout << "Game Started" << std::endl;
         Game(lobby.GetPlayers());
-        lobby.SetStatus(Lobby::Finished);
+
+        shared::Segment segment(ipc::open_only, "SharedMemorySegment");
+        SharedLobbyStatusHashMap* hashmap = segment.find<SharedLobbyStatusHashMap>("SharedHashMap").first;
+        (*hashmap)[lobby_id].store(true);
+        std::cout << "Game Ended" << std::endl;
+
+        exit(0);
         /* Collect statistics */
     }
 }
@@ -234,4 +255,7 @@ void Porter::SendInitGamePackages(const Lobby& lobby) {
 Porter::~Porter() {
     reg_thread_.join();
     accept_thread_.join();
+
+    shared_segment_.destroy<SharedLobbyStatusHashMap>("SharedHashMap");
+    ipc::shared_memory_object::remove("SharedMemorySegment");
 }

@@ -7,7 +7,7 @@
 #define STR_IMPL(EXPR) #EXPR
 
 #define GAME_HOST "localhost"
-#define GAME_PORT 10001
+#define GAME_PORT 10003
 
 #define GAME_APPROVE "start"
 
@@ -26,6 +26,8 @@ enum Character {
     TANK,
     PIRATE
 };
+
+static constexpr uint64_t kGameUndefined = 0;
 
 struct Player {
     uint64_t id;
