@@ -27,10 +27,8 @@ class Communicator {
 public:
     static Communicator &GetInstance();
 
-    uint64_t RegUser();
     std::string ReceiveFromClient(uint64_t client_id);
     void SendToClient(uint64_t client_id, std::string_view data);
-    void RunFor(size_t milliseconds);
     void Run();
     void Stop();
     size_t GetUserNumber();
@@ -46,13 +44,11 @@ private:
     Communicator &operator=(const Communicator &other) = delete;
     Communicator &operator=(Communicator &&other) = delete;
 
-    uint64_t RegId();
     void DoReceive(uint64_t thread_id);
     bool IsValidData(std::string_view data, uint64_t client_id) const;
 
     boost::asio::io_context io_context_;
     udp::socket socket_;
-    udp::socket reg_socket_;
 
     std::unordered_map<uint64_t, udp::endpoint> connections_;
     std::unordered_map<uint64_t, FixedQueue<std::string, kQueueSize>> users_data_;

@@ -7,11 +7,10 @@
 
 namespace  {
     size_t random_port = 10013;
-    size_t reg_port = 10012;
 }
 
 Communicator::Communicator(): socket_(io_context_, udp::endpoint(udp::v4(), random_port)),
-      reg_socket_(io_context_, udp::endpoint(udp::v4(), reg_port)), rd_(), gen_(rd_()), dis_() {
+      rd_(), gen_(rd_()), dis_() {
 }
 
 Communicator::~Communicator() {
@@ -23,41 +22,6 @@ Communicator::~Communicator() {
 Communicator &Communicator::GetInstance() {
     static Communicator instance;
     return instance;
-}
-
-uint64_t Communicator::RegId() {
-    do {
-        uint64_t num = dis_(gen_);
-        if (!connections_.contains(num)) {
-            return num;
-        }
-    } while (true);
-}
-
-uint64_t Communicator::RegUser() {
-    uint64_t usr_id = RegId();
-
-    char message[kMaxDtgrmLen];
-    size_t bytes_recvd = reg_socket_.receive_from(
-        boost::asio::buffer(message, kMaxDtgrmLen), connections_[usr_id]);
-    std::string_view reg_message = "register";
-    if ((bytes_recvd != reg_message.size()) /* || (reg_message != actual_message_[usr_id].substr(0, reg_message.size())) */) {
-        char bad_reg[] = "";
-        reg_socket_.send_to(boost::asio::buffer(bad_reg, strlen(bad_reg)), connections_[usr_id]);
-        return RegUser();
-    }
-    //////////
-    std::cout << "Registered user with id: " << usr_id << std::endl;
-    /////////
-
-    char payload[sizeof(usr_id)];
-    memcpy(payload, &usr_id, sizeof(usr_id));
-    reg_socket_.send_to(boost::asio::buffer(payload, strlen(payload)), connections_[usr_id]);
-
-    DoReceive(usr_id);
-
-    ++user_counter_;
-    return usr_id;
 }
 
 void Communicator::SendToClient(uint64_t client_id, std::string_view data) {
@@ -100,9 +64,6 @@ std::string Communicator::ReceiveFromClient(uint64_t client_id) {
     return std::move(message.substr(sizeof(client_id)));
 }
 
-void Communicator::RunFor(size_t milliseconds) {
-    io_context_.run_for(std::chrono::milliseconds(milliseconds));
-}
 
 void Communicator::Run() {
     for (const auto& [id, player]: players_) {

@@ -155,7 +155,6 @@ void Porter::HandleRequests() {
         }
 
         if (header.type == RequestType::EndGameSession) {  // final package
-            std::cout << "deleted user " << std::endl;
             std::scoped_lock guard(lobby_lock_);
             if (players_[user_id] != kGameUndefined) {                  // user is still in lobby
                 lobbies_.at(players_[user_id]).RemovePlayer(user_id);
@@ -206,11 +205,9 @@ uint64_t Porter::RegLobbyId() { /* избавиться от копипасты 
 
 void Porter::CheckLobbiesState() {
     std::scoped_lock guard(lobby_lock_);
-    std::cout << lobbies_.size() << std::endl;
     std::erase_if(lobbies_, [this](std::pair<const uint64_t, Lobby>& p) {
         Lobby& lobby = p.second;
         if ((*lobby_status_)[p.first].load()) {
-            std::cout << lobby_status_->size() << std::endl;
             lobby_status_->erase(p.first);
             lobby.SetStatus(Lobby::Finished);
         }
@@ -232,6 +229,10 @@ void Porter::CheckLobbiesState() {
 void Porter::InitGame(uint64_t lobby_id, Porter::Lobby& lobby) {
     SendInitGamePackages(lobby);
     if (!fork()) {
+        int nullfd = open("/dev/null", O_WRONLY);
+        dup2(nullfd, STDERR_FILENO);  // ignore errors
+        close(nullfd);
+
         std::cout << "Game Started" << std::endl;
         Game(lobby.GetPlayers());
 
@@ -240,8 +241,9 @@ void Porter::InitGame(uint64_t lobby_id, Porter::Lobby& lobby) {
         (*hashmap)[lobby_id].store(true);
         std::cout << "Game Ended" << std::endl;
 
-        exit(0);
         /* Collect statistics */
+
+        exit(0);  // here std::system_error throws because of threads, we ignore it
     }
 }
 

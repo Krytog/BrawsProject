@@ -7,7 +7,7 @@
 #define STR_IMPL(EXPR) #EXPR
 
 #define GAME_HOST "localhost"
-#define GAME_PORT 10003
+#define GAME_PORT 10005
 
 #define GAME_APPROVE "start"
 
