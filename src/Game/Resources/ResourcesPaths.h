@@ -16,3 +16,6 @@
 #define RES_PATH_UI_AIM "../src/Game/Resources/UI/Aim.png"
 #define RES_PATH_UI_WIN "../src/Game/Resources/UI/Win.png"
 #define RES_PATH_UI_LOSE "../src/Game/Resources/UI/Lose.png"
+#define RES_PATH_POWERUP_HEALTH "../src/Game/Resources/PowerUps/HealthPU.png"
+#define RES_PATH_POWERUP_DAMAGE "../src/Game/Resources/PowerUps/DamagePU.png"
+#define RES_PATH_POWERUP_SPEED "../src/Game/Resources/PowerUps/SpeedPU.png"
