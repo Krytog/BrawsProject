@@ -1,8 +1,9 @@
 #include "ProjectilePawnServer.h"
 #include <Core/ServerEngine.h>
-#include <Game/GameClasses/Server/Pawns/Characters/CharacterPawnServer.h>
+#include <Game/GameClasses/Server/Pawns/Interfaces/IDamageable.h>
 #include <SwarmSystem/Overmind.h>
 #include <Game/GameClasses/CommandsList.h>
+#include <Game/GameClasses/GameObjectTags.h>
 
 
 ProjectilePawnServer::ProjectilePawnServer(const ArgPack& argpack): speed_(argpack.speed), damage_(argpack.damage), direction_(argpack.direction) {
@@ -16,10 +17,13 @@ Vector2D ProjectilePawnServer::GetRotator() const {
 }
 
 void ProjectilePawnServer::OnUpdate() {
-    auto collisions = ServerEngine::GetInstance().GetPhysicalCollisions(this);
+    auto collisions = ServerEngine::GetInstance().GetAllCollisions(this);
     for (auto& collision : collisions) {
-        if (auto character = dynamic_cast<CharacterPawnServer*>(collision.game_object)) {
-            character->ReceiveDamage(damage_);
+        if (collision.tag.starts_with(TAGS_ZONES_STARTSWITH)) {
+            continue;
+        }
+        if (auto damageable = dynamic_cast<IDamageable*>(collision.game_object)) {
+            damageable->ReceiveDamage(damage_);
         }
         LeaveHitTrail();
         CorrectSelfDestroy();
@@ -36,4 +40,8 @@ ProjectilePawnServer::~ProjectilePawnServer() {
 
 void ProjectilePawnServer::CorrectSelfDestroy() {
     ServerEngine::GetInstance().Invoke(0, &ServerEngine::Destroy, &ServerEngine::GetInstance(), this);
+}
+
+void ProjectilePawnServer::ReceiveDamage(double damage) {
+    CorrectSelfDestroy();
 }

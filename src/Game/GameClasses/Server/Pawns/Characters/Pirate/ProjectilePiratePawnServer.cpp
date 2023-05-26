@@ -7,6 +7,7 @@
 #include <Game/GameClasses/GameObjectTags.h>
 #include <Game/GameClasses/Server/Pawns/Projectiles/HitTrail.h>
 #include <Game/GameClasses/Server/Pawns/Characters/CharacterPawnServer.h>
+#include <Game/GameClasses/Server/Pawns/Interfaces/IDamageable.h>
 
 #define COLLIDER_RADIUS 15.5
 #define DAMAGE_RADIUS 150
@@ -35,16 +36,19 @@ void ProjectilePiratePawnServer::OnUpdate() {
     const double precision = 15;
     const Vector2D vector_from_destination = final_destination_->GetPosition().GetCoordinatesAsVector2D() - position_->GetCoordinatesAsVector2D();
     if (vector_from_destination.Length() <= precision) {
-        ServerEngine::GetInstance().CreateGameObject<ProjectilePiratePawnServer::Explosion>(final_destination_->GetPosition(), damage_);
+        ServerEngine::GetInstance().CreateGameObject<ProjectilePiratePawnServer::Explosion>(final_destination_->GetPosition(), damage_, this);
         ServerEngine::GetInstance().Destroy(final_destination_);
         final_destination_ = nullptr;
         LeaveHitTrail();
         CorrectSelfDestroy();
         return;
     }
-    auto collisions = ServerEngine::GetInstance().GetPhysicalCollisions(this);
-    if (!collisions.empty()) {
-        ServerEngine::GetInstance().CreateGameObject<ProjectilePiratePawnServer::Explosion>(final_destination_->GetPosition(), damage_);
+    auto collisions = ServerEngine::GetInstance().GetAllCollisions(this);
+    for (auto& collision : collisions) {
+        if (collision.tag.starts_with(TAGS_ZONES_STARTSWITH)) {
+            //continue;
+        }
+        ServerEngine::GetInstance().CreateGameObject<ProjectilePiratePawnServer::Explosion>(final_destination_->GetPosition(), damage_, this);
         LeaveHitTrail();
         CorrectSelfDestroy();
         return;
@@ -68,17 +72,21 @@ ProjectilePiratePawnServer::DestinationPoint::~DestinationPoint() {
     Overmind::GetInstance().DestroyCerebrate(cerebrate_id_);
 }
 
-ProjectilePiratePawnServer::Explosion::Explosion(const Position& position, double damage) {
+ProjectilePiratePawnServer::Explosion::Explosion(const Position& position, double damage, GameObject* owner) {
     *position_ = position;
+    owner_ = owner;
     collider_ = std::make_unique<CircleCollider>(position, DAMAGE_RADIUS, Collider::Category::Trigger);
     ServerEngine::GetInstance().Invoke(0, &ProjectilePiratePawnServer::Explosion::DealDamageAndDisappear, this, damage);
 }
 
 void ProjectilePiratePawnServer::Explosion::DealDamageAndDisappear(double damage) {
-    auto collisions = ServerEngine::GetInstance().GetPhysicalCollisions(this);
+    auto collisions = ServerEngine::GetInstance().GetAllCollisions(this);
     for (auto& collision : collisions) {
-        if (auto character = dynamic_cast<CharacterPawnServer*>(collision.game_object)) {
-            character->ReceiveDamage(damage);
+        if (collision.game_object == owner_) {
+            continue;
+        }
+        if (auto damageable = dynamic_cast<IDamageable*>(collision.game_object)) {
+            damageable->ReceiveDamage(damage);
         }
     }
     ServerEngine::GetInstance().CreateEvent([](){return true;}, {}, &ServerEngine::Destroy,

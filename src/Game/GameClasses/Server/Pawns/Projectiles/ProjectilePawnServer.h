@@ -1,8 +1,9 @@
 #pragma once
 
 #include <Core/GameObject.h>
+#include <Game/GameClasses/Server/Pawns/Interfaces/IDamageable.h>
 
-class ProjectilePawnServer : public GameObject {
+class ProjectilePawnServer : public GameObject, public IDamageable {
 public:
     struct ArgPack {
         Position position;
@@ -13,6 +14,8 @@ public:
 
     ProjectilePawnServer(const ArgPack& argpack);
     virtual ~ProjectilePawnServer();
+
+    void ReceiveDamage(double damage) override;
 
     virtual void OnUpdate() override;
 

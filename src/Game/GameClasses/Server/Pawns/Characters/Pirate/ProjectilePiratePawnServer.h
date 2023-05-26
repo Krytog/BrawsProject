@@ -27,8 +27,10 @@ private:
 
     class Explosion : public PersistentObject {
     public:
-        Explosion(const Position& position, double damage);
+        Explosion(const Position& position, double damage, GameObject* owner);
         void DealDamageAndDisappear(double damage);
+    private:
+        GameObject* owner_;
     };
 
     void LeaveHitTrail() const override;

@@ -7,25 +7,30 @@
 #define TAGS_COLLIDERS_WALK_FLY "wf"
 
 // CHARACTERS TAGS
-#define TAGS_CHARACTER_Default "character_default"
-#define TAGS_CHARACTER_Mage "character_mage"
-#define TAGS_CHARACTER_Pirate "character_pirate"
-#define TAGS_CHARACTER_Bully "character_bully"
+#define TAGS_CHARACTER_STARTSWITH "character"
+#define TAGS_CHARACTER_Default TAGS_CHARACTER_STARTSWITH "_default"
+#define TAGS_CHARACTER_Mage TAGS_CHARACTER_STARTSWITH "_mage"
+#define TAGS_CHARACTER_Pirate TAGS_CHARACTER_STARTSWITH "_pirate"
+#define TAGS_CHARACTER_Bully TAGS_CHARACTER_STARTSWITH "_bully"
 
 // MAPS TAGS
-#define TAGS_MAPS_Default "maps_default"
+#define TAGS_MAPS_STARTSWITH "maps"
+#define TAGS_MAPS_Default TAGS_MAPS_STARTSWITH "_default"
 
 // PROJECTILES TAGS
-#define TAGS_PROJECTILE_MAGE "projectile_mage"
-#define TAGS_PROJECTILE_PIRATE "projectile_pirate"
-#define TAGS_PROJECTILE_BULLY "projectile_bully"
-#define TAGS_PROJECTILE_MARK "projectile_mark"
+#define TAGS_PROJECTILE_STARTSWITH "projectile"
+#define TAGS_PROJECTILE_MAGE TAGS_PROJECTILE_STARTSWITH "_mage"
+#define TAGS_PROJECTILE_PIRATE TAGS_PROJECTILE_STARTSWITH "_pirate"
+#define TAGS_PROJECTILE_BULLY TAGS_PROJECTILE_STARTSWITH "_bully"
+#define TAGS_PROJECTILE_MARK TAGS_PROJECTILE_STARTSWITH "_mark"
 
 // ZONES TAGS
-#define TAGS_ZONES_HAZARDZONEMANAGER "zones_manager"
-#define TAGS_ZONES_HAZARD "zones_hazardzone"
+#define TAGS_ZONES_STARTSWITH "zones"
+#define TAGS_ZONES_HAZARDZONEMANAGER TAGS_ZONES_STARTSWITH "_manager"
+#define TAGS_ZONES_HAZARD TAGS_ZONES_STARTSWITH "_hazardzone"
 
 // POWERUPS TAGS
-#define TAGS_POWERUP_HEALTH "powerup_health"
-#define TAGS_POWERUP_SPEED "powerup_speed"
-#define TAGS_POWERUP_DAMAGE "powerup_damage"
+#define TAGS_POWERUP_STARTSWITH "powerup"
+#define TAGS_POWERUP_HEALTH TAGS_POWERUP_STARTSWITH "_health"
+#define TAGS_POWERUP_SPEED TAGS_POWERUP_STARTSWITH "_speed"
+#define TAGS_POWERUP_DAMAGE TAGS_POWERUP_STARTSWITH "_damage"
