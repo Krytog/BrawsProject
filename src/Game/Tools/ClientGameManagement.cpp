@@ -16,6 +16,9 @@
 #include <Game/GameClasses/Client/Pawns/Particles/ExplosionParticles.h>
 #include <Game/GameClasses/Client/Pawns/Particles/SmokeParticles.h>
 #include <Game/GameClasses/Client/Pawns/Zones/DamageZonePawnClient.h>
+#include <Game/GameClasses/Client/Pawns/PowerUps/HealthPowerUpPawnClient.h>
+#include <Game/GameClasses/Client/Pawns/PowerUps/SpeedPowerUpPawnClient.h>
+#include <Game/GameClasses/Client/Pawns/PowerUps/DamagePowerUpPawnClient.h>
 #include <SwarmSystem/Register.h>
 #include <SwarmSystem/TypeIdList.h>
 #include <NormInfrastructure/Client/Communicator.h>
@@ -63,6 +66,9 @@ void ClientGameManagement::InitRegistryForOvermind() {
     registry.RegisterClass<HitSynchronizerCerebrateClient<ExplosionParticles>>(TypeId_Trail_Explosion);
     registry.RegisterClass<HitSynchronizerCerebrateClient<SmokeParticles>>(TypeId_Trail_Smoke);
     registry.RegisterClass<ZoneCerebrateClient<DamageZonePawnClient>>(TypeId_Zone_Damage);
+    registry.RegisterClass<PositionalCerebrateClient<HealthPowerUpPawnClient>>(TypeId_Powerup_Health);
+    registry.RegisterClass<PositionalCerebrateClient<SpeedPowerUpPawnClient>>(TypeId_Powerup_Speed);
+    registry.RegisterClass<PositionalCerebrateClient<DamagePowerUpPawnClient>>(TypeId_Powerup_Damage);
 }
 
 std::string ClientGameManagement::SerializeInput() {

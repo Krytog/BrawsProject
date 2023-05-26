@@ -1,5 +1,6 @@
 #include "DamagePowerUpPawnServer.h"
-
+#include <Game/GameClasses/Server/Cerebrates/Positional/PositionalCerebrateServer.h>
+#include <SwarmSystem/Overmind.h>
 #include <Game/GameClasses/GameObjectTags.h>
 #include <SwarmSystem/TypeIdList.h>
 
@@ -11,6 +12,7 @@ enum {
 #define BOOST_RATE 1.25
 
 DamagePowerUpPawnServer::DamagePowerUpPawnServer(const Position& position) {
+    cerebrate_id_ = Overmind::GetInstance().CreateCerebrateToPossess<PositionalCerebrateServer<DamagePowerUpPawnServer>>(this);
     collider_ = std::make_unique<RectangleCollider>(position, COLLIDER_WIDTH, COLLIDER_HEIGHT, Collider::Category::Trigger);
     GameObject::UpdatePosition(position);
     tag_ = TAGS_POWERUP_DAMAGE;

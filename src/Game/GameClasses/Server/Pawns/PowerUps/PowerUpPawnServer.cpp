@@ -1,7 +1,10 @@
 #include "PowerUpPawnServer.h"
+#include <SwarmSystem/Overmind.h>
 
 PowerUpPawnServer::PowerUpPawnServer() = default;
-PowerUpPawnServer::~PowerUpPawnServer() = default;
+PowerUpPawnServer::~PowerUpPawnServer() {
+    Overmind::GetInstance().DestroyCerebrate(cerebrate_id_);
+}
 
 void PowerUpPawnServer::CorrectSelfDestruction() {
     ServerEngine::GetInstance().Invoke(0, &ServerEngine::Destroy, &ServerEngine::GetInstance(), this);
@@ -20,4 +23,8 @@ void PowerUpPawnServer::OnUpdate() {
             break;
         }
     }
+}
+
+Vector2D PowerUpPawnServer::GetRotator() const {
+    return Vector2D::Right;
 }
