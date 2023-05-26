@@ -3,16 +3,16 @@
 #include <cstddef>
 #include <cstring>
 #include <iostream>
+#include "../GameInfo.h"
 
 namespace {
-    char host[] = "localhost";
     char random_port[] = "10013";
     size_t k_max_dtgrm_len = 3200;
 }
 
 Communicator::Communicator(uint16_t port): socket_(io_context_, udp::endpoint(udp::v4(), port)) {
     udp::resolver resolver(io_context_);
-    endpoints_ = resolver.resolve(udp::v4(), host, random_port);
+    endpoints_ = resolver.resolve(udp::v4(), GAME_HOST, random_port);
     package_.resize(k_max_dtgrm_len);
 }
 
