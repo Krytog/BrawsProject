@@ -24,3 +24,8 @@
 // ZONES TAGS
 #define TAGS_ZONES_HAZARDZONEMANAGER "zones_manager"
 #define TAGS_ZONES_HAZARD "zones_hazardzone"
+
+// POWERUPS TAGS
+#define TAGS_POWERUP_HEALTH "powerup_health"
+#define TAGS_POWERUP_SPEED "powerup_speed"
+#define TAGS_POWERUP_DAMAGE "powerup_damage"

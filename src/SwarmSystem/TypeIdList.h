@@ -13,3 +13,6 @@
 #define TypeId_Trail_Hit 10
 #define TypeId_Trail_Smoke 11
 #define TypeId_Zone_Damage 12
+#define TypeId_Powerup_Health 13
+#define TypeId_Powerup_Speed 14
+#define TypeId_Powerup_Damage 15

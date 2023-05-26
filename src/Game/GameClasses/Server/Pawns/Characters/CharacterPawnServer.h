@@ -2,8 +2,9 @@
 
 #include <Core/ServerEngine.h>
 #include <Core/MyTime.h>
+#include <Game/GameClasses/Server/Pawns/Interfaces/IDamageable.h>
 
-class CharacterPawnServer : public GameObject {
+class CharacterPawnServer : public GameObject, public IDamageable {
 public:
     struct ArgPack {
         double health_max;
@@ -28,7 +29,7 @@ public:
     Vector2D GetDirection() const;
 
     void Move(const Vector2D& direction);
-    virtual void ReceiveDamage(double damage);
+    virtual void ReceiveDamage(double damage) override;
     virtual void Heal(double health);
 
     double GetHealthCur() const;
