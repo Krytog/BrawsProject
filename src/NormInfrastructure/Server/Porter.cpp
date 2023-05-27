@@ -142,19 +142,18 @@ void Porter::HandleRequests() {
         incoming_users_.clear();
         has_incoming_users_.store(false);
     }
-
+    std::cout << connections_.size() << std::endl;
     std::erase_if(connections_, [this](std::pair<const uint64_t, tcp::socket>& p) {
         Request header;
         const uint64_t& user_id = p.first;
         tcp::socket& connection = p.second;
 
-        try {
-            boost::asio::read(connection, boost::asio::buffer(&header, sizeof(header)));
-        } catch (...) {  // empty socket or connection errors
-            return false;
-        }
+        boost::system::error_code ec;
+        boost::asio::read(connection, boost::asio::buffer(&header, sizeof(header)), ec);  // handle exceptions using error codes
+        if (ec == boost::asio::error::would_block) { return false; } // empty socket, but still connected
 
-        if (header.type == RequestType::EndGameSession) {  // final package
+        if (ec == boost::asio::error::eof || ec == boost::asio::error::connection_reset ||
+            header.type == RequestType::EndGameSession) {  // tcp socket disconnection or final package arrival
             std::scoped_lock guard(lobby_lock_);
             if (players_[user_id] != kGameUndefined) {                  // user is still in lobby
                 lobbies_.at(players_[user_id]).RemovePlayer(user_id);

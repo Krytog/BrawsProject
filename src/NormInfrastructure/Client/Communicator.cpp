@@ -55,7 +55,6 @@ void Communicator::Stop() {
 
 void Communicator::BindOnPort(uint16_t port) {
     udp::endpoint endpoint(udp::v4(), port);
-    std::cout << port << std::endl;
     socket_.bind(endpoint);
 }
 
