@@ -28,6 +28,7 @@ void Game(uint16_t communicator_port, uint64_t user_id) {
         ClientGameManagement::ReceiveAndHandleFromServer(communicator);
 
         engine.Update();
+        engine.DebugInfo();
 
         auto for_server = ClientGameManagement::SerializeInput();
         communicator.SendToServer(for_server);

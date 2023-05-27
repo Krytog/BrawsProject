@@ -1,0 +1,18 @@
+#pragma once
+
+#define RES_PATH_MAPS_LUDUS_background00 "../src/Game/Resources/Maps/LudusMap/00-min.png"
+#define RES_PATH_MAPS_LUDUS_background01 "../src/Game/Resources/Maps/LudusMap/01-min.png"
+#define RES_PATH_MAPS_LUDUS_background02 "../src/Game/Resources/Maps/LudusMap/02-min.png"
+#define RES_PATH_MAPS_LUDUS_background03 "../src/Game/Resources/Maps/LudusMap/03-min.png"
+#define RES_PATH_MAPS_LUDUS_background10 "../src/Game/Resources/Maps/LudusMap/10-min.png"
+#define RES_PATH_MAPS_LUDUS_background11 "../src/Game/Resources/Maps/LudusMap/11-min.png"
+#define RES_PATH_MAPS_LUDUS_background12 "../src/Game/Resources/Maps/LudusMap/12-min.png"
+#define RES_PATH_MAPS_LUDUS_background13 "../src/Game/Resources/Maps/LudusMap/13-min.png"
+#define RES_PATH_MAPS_LUDUS_background20 "../src/Game/Resources/Maps/LudusMap/20-min.png"
+#define RES_PATH_MAPS_LUDUS_background21 "../src/Game/Resources/Maps/LudusMap/21-min.png"
+#define RES_PATH_MAPS_LUDUS_background22 "../src/Game/Resources/Maps/LudusMap/22-min.png"
+#define RES_PATH_MAPS_LUDUS_background23 "../src/Game/Resources/Maps/LudusMap/23-min.png"
+#define RES_PATH_MAPS_LUDUS_background30 "../src/Game/Resources/Maps/LudusMap/30-min.png"
+#define RES_PATH_MAPS_LUDUS_background31 "../src/Game/Resources/Maps/LudusMap/31-min.png"
+#define RES_PATH_MAPS_LUDUS_background32 "../src/Game/Resources/Maps/LudusMap/32-min.png"
+#define RES_PATH_MAPS_LUDUS_background33 "../src/Game/Resources/Maps/LudusMap/33-min.png"
