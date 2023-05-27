@@ -16,6 +16,7 @@
 // MAPS TAGS
 #define TAGS_MAPS_STARTSWITH "maps"
 #define TAGS_MAPS_Default TAGS_MAPS_STARTSWITH "_default"
+#define TAGS_MAPS_Ludus TAGS_MAPS_STARTSWITH "_ludus"
 
 // PROJECTILES TAGS
 #define TAGS_PROJECTILE_STARTSWITH "projectile"

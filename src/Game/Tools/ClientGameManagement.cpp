@@ -2,6 +2,7 @@
 
 #include <Core/ClientEngine.h>
 #include <Game/GameClasses/Client/Pawns/Maps/Default/MapsDefaultClient.h>
+#include <Game/GameClasses/Client/Pawns/Maps/LudusMap/LudusMapClient.h>
 #include <Game/GameClasses/Client/Cerebrates/Characters/CharacterCerebrateClient.h>
 #include <Game/GameClasses/Client/Cerebrates/Positional/PositionalCerebrateClient.h>
 #include <Game/GameClasses/Client/Cerebrates/HitSynchronizer/HitSynchronizerCerebrateClient.h>
@@ -52,7 +53,7 @@ namespace {
 
 void ClientGameManagement::InitGameClient() {
     ClientEngine& engine = ClientEngine::GetInstance();
-    engine.CreateGameObjectByDefault<MapsDefaultClient>();
+    engine.CreateGameObjectByDefault<LudusMapClient>();
     engine.CreateGameObjectByDefault<Cursor>();
 }
 

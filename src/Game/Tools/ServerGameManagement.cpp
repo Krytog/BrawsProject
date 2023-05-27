@@ -2,6 +2,7 @@
 
 #include <Core/ServerEngine.h>
 #include <Game/GameClasses/Server/Pawns/Maps/Default/MapsDefaultServer.h>
+#include <Game/GameClasses/Server/Pawns/Maps/LudusMap/LudusMap.h>
 #include <Game/GameClasses/Server/Pawns/Characters/Default/CharacterDefaultPawnServer.h>
 #include <Game/GameClasses/Server/Pawns/Characters/Mage/CharacterMagePawnServer.h>
 #include <Game/GameClasses/Server/Pawns/Characters/Pirate/CharacterPiratePawnServer.h>
@@ -28,14 +29,14 @@ namespace {
         return false;
     }
 
-    bool Kostil(Cerebrate* from, Cerebrate* other) {
+    bool AlwaysTrue(Cerebrate* from, Cerebrate* other) {
         return true;
     }
 }
 
 void ServerGameManagement::InitGameServer(std::vector<uint64_t>& players_id) {
     ServerEngine& engine = ServerEngine::GetInstance();
-    engine.CreateGameObjectByDefault<MapsDefaultServer>();
+    engine.CreateGameObjectByDefault<LudusMapServer>();
     for (size_t i = 0; i < players_id.size(); ++i) {
         GameObject* player_pawn;
         if (i % 2 == 0) {
@@ -47,7 +48,7 @@ void ServerGameManagement::InitGameServer(std::vector<uint64_t>& players_id) {
         }
     }
     GameRuler::GetInstance().BeginGame();
-    engine.CreateGameObject<HazardZoneManager>(4000, 2000, 60, 2, 20);
+    engine.CreateGameObject<HazardZoneManager>(8000, 4000, 120, 1, 20);
 }
 
 void ServerGameManagement::HandleInput(uint64_t player_id, std::string_view input) {

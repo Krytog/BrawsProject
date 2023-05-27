@@ -14,6 +14,7 @@ add_library(game_tools
 # game for client & server
 add_library(game_client
         GameClasses/Client/Pawns/Maps/Default/MapsDefaultClient.cpp
+        GameClasses/Client/Pawns/Maps/LudusMap/LudusMapClient.cpp
         GameClasses/Client/Pawns/Characters/CharacterPawnClient.cpp
         GameClasses/Client/Pawns/Projectiles/ProjectilePawnClient.cpp
         GameClasses/Client/Pawns/Characters/Default/CharacterDefaultPawnClient.cpp
@@ -33,10 +34,11 @@ add_library(game_client
         GameClasses/Client/Pawns/PowerUps/SpeedPowerUpPawnClient.cpp
         GameClasses/Client/Pawns/PowerUps/DamagePowerUpPawnClient.cpp)
 add_library(game_server
+        GameClasses/Server/Pawns/Maps/Default/MapsDefaultServer.cpp
+        GameClasses/Server/Pawns/Maps/LudusMap/LudusMap.cpp
         GameClasses/Server/Pawns/Characters/CharacterPawnServer.cpp
         GameClasses/Server/Pawns/Projectiles/ProjectilePawnServer.cpp
         GameClasses/Server/Pawns/Characters/Default/CharacterDefaultPawnServer.cpp
-        GameClasses/Server/Pawns/Maps/Default/MapsDefaultServer.cpp
         GameClasses/Server/Pawns/Characters/Mage/CharacterMagePawnServer.cpp
         GameClasses/Server/Pawns/Characters/Mage/ProjectileMagePawnServer.cpp
         GameClasses/Server/Pawns/Characters/Pirate/CharacterPiratePawnServer.cpp
