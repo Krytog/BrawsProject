@@ -12,6 +12,7 @@
 #define RES_PATH_PARTICLES_EXPLOSION "../src/Game/Resources/Particles/Explosion.png"
 #define RES_PATH_PARTICLES_SMOKE "../src/Game/Resources/Particles/Smoke.png"
 #define RES_PATH_PARTICLES_HIT "../src/Game/Resources/Particles/Hit.png"
+#define RES_PATH_PARTICLES_POWERUP "../src/Game/Resources/Particles/PowerUp.png"
 #define RES_PATH_ZONES_DAMAGE "../src/Game/Resources/Zones/HazardZone.png"
 #define RES_PATH_UI_AIM "../src/Game/Resources/UI/Aim.png"
 #define RES_PATH_UI_WIN "../src/Game/Resources/UI/Win.png"

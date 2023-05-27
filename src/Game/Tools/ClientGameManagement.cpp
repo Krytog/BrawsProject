@@ -15,6 +15,7 @@
 #include <Game/GameClasses/Client/Pawns/UI/EndGameWidget.h>
 #include <Game/GameClasses/Client/Pawns/Particles/ExplosionParticles.h>
 #include <Game/GameClasses/Client/Pawns/Particles/SmokeParticles.h>
+#include <Game/GameClasses/Client/Pawns/Particles/PowerUpParticles.h>
 #include <Game/GameClasses/Client/Pawns/Zones/DamageZonePawnClient.h>
 #include <Game/GameClasses/Client/Pawns/PowerUps/HealthPowerUpPawnClient.h>
 #include <Game/GameClasses/Client/Pawns/PowerUps/SpeedPowerUpPawnClient.h>
@@ -65,6 +66,7 @@ void ClientGameManagement::InitRegistryForOvermind() {
     registry.RegisterClass<PositionalCerebrateClient<ProjectilePiratePawnClient::Mark>>(TypeId_Projectile_Mark);
     registry.RegisterClass<HitSynchronizerCerebrateClient<ExplosionParticles>>(TypeId_Trail_Explosion);
     registry.RegisterClass<HitSynchronizerCerebrateClient<SmokeParticles>>(TypeId_Trail_Smoke);
+    registry.RegisterClass<HitSynchronizerCerebrateClient<PowerUpParticles>>(TypeId_Trail_PowerUp);
     registry.RegisterClass<ZoneCerebrateClient<DamageZonePawnClient>>(TypeId_Zone_Damage);
     registry.RegisterClass<PositionalCerebrateClient<HealthPowerUpPawnClient>>(TypeId_Powerup_Health);
     registry.RegisterClass<PositionalCerebrateClient<SpeedPowerUpPawnClient>>(TypeId_Powerup_Speed);

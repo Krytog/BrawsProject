@@ -18,5 +18,6 @@ protected:
     size_t cerebrate_id_;
 
     void CorrectSelfDestruction();
+    void LeaveTrailWhenUsed();
     virtual void ApplyEffect(CharacterPawnServer* character) = 0;
 };
