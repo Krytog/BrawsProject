@@ -1,8 +1,7 @@
 #pragma once
 
 #include <string>
-#include <Core/Observer.h>
-#include <Core/ClientEngine.h>
+#include "../Core/Observer.h"
 
 class BotManagement {
 public:

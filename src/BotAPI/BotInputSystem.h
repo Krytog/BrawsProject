@@ -1,4 +1,6 @@
-#include <Core/InputSystem.h>
+#pragma once
+
+#include "../Core/InputSystem.h"
 
 class BotInputSystem : public InputSystem {
 public:

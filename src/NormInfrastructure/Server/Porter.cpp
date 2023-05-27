@@ -142,7 +142,6 @@ void Porter::HandleRequests() {
         incoming_users_.clear();
         has_incoming_users_.store(false);
     }
-    std::cout << connections_.size() << std::endl;
     std::erase_if(connections_, [this](std::pair<const uint64_t, tcp::socket>& p) {
         Request header;
         const uint64_t& user_id = p.first;

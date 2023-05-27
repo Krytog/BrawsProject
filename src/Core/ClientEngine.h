@@ -2,11 +2,15 @@
 
 #include "Engine.h"
 #include "VisibleGameObject.h"
+#include "Tools/Concepts.h"
 
 #include "Qt/MainWidget/Render.h"
 #include "Qt/PaintTemplates/BasicSprite.h"
 #include "Qt/PaintTemplates/AnimatedSprite.h"
 #include "InputSystem.h"
+
+#include "../BotAPI/BotInputSystem.h"
+#include "../BotAPI/BotManagement.h"
 
 template <>
 class Engine<VisibleGameObject, __EngineCreation::Initialization> final
@@ -76,7 +80,8 @@ public:
 
     // Camera controls
     ///////////////////////////////////////////////////////////////////////////////////////
-    void SetCameraOn(const GameObject* object) {
+    void SetCameraOn(GameObject* object) {
+        BotManagement::GetInstance().ObserveBot(object);
         render_.SetCameraOn(object);
     }
     Position GetCameraPosition() const {

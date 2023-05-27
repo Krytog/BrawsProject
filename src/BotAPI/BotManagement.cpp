@@ -1,6 +1,8 @@
 #include "BotManagement.h"
 #include <iostream>
 
+#include <Core/ClientEngine.h>
+
 BotManagement::BotManagement() {
     observer_ = dynamic_cast<Observer*>(ClientEngine::GetInstance().CreateGameObject<Observer>());
 }

@@ -2,6 +2,7 @@
 #include <cassert>
 
 #include "BotInputSystem.h"
+#include "BotManagement.h"
 
 BotInputSystem* BotInputSystem::InitInstance() {
     static BotInputSystem instance;
@@ -11,6 +12,8 @@ BotInputSystem* BotInputSystem::InitInstance() {
 // N/Y(PosX;PosY)#WASDQE
 
 void BotInputSystem::ReadNewInput() {
+    BotManagement::GetInstance().SendInfoToBot();  // send info to bot
+
     std::string command;
     std::cin >> command;  // command line sent from bot
 
