@@ -15,7 +15,6 @@
 
 void Game(uint16_t communicator_port, uint64_t user_id) {
     ClientEngine& engine = ClientEngine::GetInstance();
-    engine.SwitchInputSystem<BotInputSystem>();
     Communicator& communicator = Communicator::GetInstance(communicator_port);
     communicator.SetId(user_id);
     // communicator.BindOnPort(communicator_port);
@@ -50,7 +49,7 @@ int main(int argc, char* argv[]) {
     } else {
         uint64_t lobby = strtoull(argv[1], NULL, 10);
         std::cout << lobby << std::endl;
-        agent.JoinGame(Character::MAGE, lobby);
+        agent.JoinGame(Character::TANK, lobby);
     }
 
     while (true) {

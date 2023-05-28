@@ -34,14 +34,10 @@ CharacterMagePawnClient::CharacterMagePawnClient(const Position &position) {
 void CharacterMagePawnClient::Shoot() {}
 
 void CharacterMagePawnClient::ReceiveDamage() {
-//    std::cout << "I receive damage!" << std::endl;
 }
 
 void CharacterMagePawnClient::OnUpdate() {
     CharacterPawnClient::OnUpdate();
-//    std::cout << "HEALTH: " << health_ << std::endl;
-//    std::cout << "AMMO: " << ammo_left_ << std::endl;
-//    std::cout << "COOLDOWN: " << cooldown_ << std::endl;
 }
 
 const size_t CharacterMagePawnClient::kTypeId = TypeId_Character_Mage;
