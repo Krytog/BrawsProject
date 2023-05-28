@@ -16,14 +16,13 @@ void Game(const std::unordered_map<uint64_t, Player>& players) {
     Communicator& communicator = Communicator::GetInstance();
     std::vector<uint64_t> players_id = communicator.SetClients(players);
     communicator.Run();
-    ServerGameManagement::InitGameServer(players_id);
+    ServerGameManagement::InitGameServer(players);
 
 
     MyTime time;
     engine.SetActiveOn();
     while (engine.IsActive()) {
         time.ResetTime();
-//        overmind.DebugInfo();
         for (auto player : players_id) {
             auto from_client = communicator.ReceiveFromClient(player);
             ServerGameManagement::HandleInput(player, from_client);

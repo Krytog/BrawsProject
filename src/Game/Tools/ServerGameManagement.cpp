@@ -32,20 +32,38 @@ namespace {
     bool AlwaysTrue(Cerebrate* from, Cerebrate* other) {
         return true;
     }
+
+    GameObject* CreateCharacter(const Position& pos, Character character) {
+        ServerEngine& engine = ServerEngine::GetInstance();
+        GameObject* output = nullptr;
+        switch (character) {
+            case Character::MAGE: {
+                output = engine.CreateGameObject<CharacterMagePawnServer>(pos);
+                break;
+            }
+            case Character::PIRATE: {
+                output = engine.CreateGameObject<CharacterPiratePawnServer>(pos);
+                break;
+            }
+            case Character::TANK: {
+                output = nullptr;
+                break;
+            }
+        }
+        return output;
+    }
 }
 
-void ServerGameManagement::InitGameServer(std::vector<uint64_t>& players_id) {
+static const Position kStartPositions[2] = {Position(-2000, 0), Position(2000, 0)};
+
+void ServerGameManagement::InitGameServer(const std::unordered_map<uint64_t, Player>& players) {
     ServerEngine& engine = ServerEngine::GetInstance();
     engine.CreateGameObjectByDefault<LudusMapServer>();
-    for (size_t i = 0; i < players_id.size(); ++i) {
-        GameObject* player_pawn;
-        if (i % 2 == 0) {
-            player_pawn = engine.CreateGameObject<CharacterMagePawnServer>(Position(-500, 0));
-            Overmind::GetInstance().RegisterNewPlayer(players_id[i], dynamic_cast<CharacterMagePawnServer*>(player_pawn)->GetCerebrateId());
-        } else {
-            player_pawn = engine.CreateGameObject<CharacterPiratePawnServer>(Position(500, 0));
-            Overmind::GetInstance().RegisterNewPlayer(players_id[i], dynamic_cast<CharacterPiratePawnServer*>(player_pawn)->GetCerebrateId());
-        }
+    size_t counter = 0;
+    for (auto& [id, player] : players) {
+        GameObject* player_pawn = CreateCharacter(kStartPositions[counter], player.character);
+        Overmind::GetInstance().RegisterNewPlayer(player.id, dynamic_cast<CharacterPawnServer*>(player_pawn)->GetCerebrateId());
+        ++counter;
     }
     GameRuler::GetInstance().BeginGame();
     engine.CreateGameObject<HazardZoneManager>(LudusMapServer::kWidth, LudusMapServer::kHeight, 120, 1, 20);
