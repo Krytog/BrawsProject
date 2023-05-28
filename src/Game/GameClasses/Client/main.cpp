@@ -13,8 +13,15 @@
 
 #define SLEEP_TIME std::chrono::microseconds(int(1000000 * (1.0 / 60 - time.EvaluateTime())))
 
-void Game(uint16_t communicator_port, uint64_t user_id) {
+enum ControlType {
+    MANUAL, BOT
+};
+
+void Game(uint16_t communicator_port, uint64_t user_id, ControlType controls) {
     ClientEngine& engine = ClientEngine::GetInstance();
+    if (controls == ControlType::BOT) {
+        engine.SwitchInputSystem<BotInputSystem>();
+    }
     Communicator& communicator = Communicator::GetInstance(communicator_port);
     communicator.SetId(user_id);
     // communicator.BindOnPort(communicator_port);
@@ -25,11 +32,9 @@ void Game(uint16_t communicator_port, uint64_t user_id) {
     engine.SetActiveOn();
     while (engine.IsActive()) {
         time.ResetTime();
-    // Overmind::GetInstance().DebugInfo();
         ClientGameManagement::ReceiveAndHandleFromServer(communicator);
 
         engine.Update();
-        //engine.DebugInfo();
 
         auto for_server = ClientGameManagement::SerializeInput();
         communicator.SendToServer(for_server);
@@ -55,7 +60,7 @@ int main(int argc, char* argv[]) {
     while (true) {
         if (agent.ApproveGame()) {
             std::cout << "Game Approved" << std::endl;
-                Game(agent.GetPort(), id);
+                Game(agent.GetPort(), id, ControlType::MANUAL);
             //     return 0;
             break;
         }

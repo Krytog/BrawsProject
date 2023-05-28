@@ -1,5 +1,6 @@
 #pragma once
 
+#define RES_PATH_MAPS_LUDUS_backgroundWHOLE "../src/Game/Resources/Maps/LudusMap/LudusMap.png"
 #define RES_PATH_MAPS_LUDUS_background00 "../src/Game/Resources/Maps/LudusMap/00-min.png"
 #define RES_PATH_MAPS_LUDUS_background01 "../src/Game/Resources/Maps/LudusMap/01-min.png"
 #define RES_PATH_MAPS_LUDUS_background02 "../src/Game/Resources/Maps/LudusMap/02-min.png"

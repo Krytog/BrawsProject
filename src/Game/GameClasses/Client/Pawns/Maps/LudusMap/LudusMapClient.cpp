@@ -32,15 +32,16 @@ LudusMapClient::LudusMapClient(): PersistentVisibleObject(new Position(0, 0), nu
     //CreateQuarter(0, 2, GetRes(0 , 2));
     //CreateQuarter(0, 3, GetRes(0 , 3));
     //CreateQuarter(1, 0, GetRes(1 , 0));
-    CreateQuarter(1, 1, GetRes(1 , 1));
-    CreateQuarter(1, 2, GetRes(1 , 2));
+    //CreateQuarter(1, 1, GetRes(1 , 1));
+    //CreateQuarter(1, 2, GetRes(1 , 2));
     //CreateQuarter(1, 3, GetRes(1 , 3));
     //CreateQuarter(2, 0, GetRes(2 , 0));
-    CreateQuarter(2, 1, GetRes(2 , 1));
-    CreateQuarter(2, 2, GetRes(2 , 2));
+    //CreateQuarter(2, 1, GetRes(2 , 1));
+    //CreateQuarter(2, 2, GetRes(2 , 2));
     //CreateQuarter(2, 3, GetRes(2 , 3));
     //CreateQuarter(3, 0, GetRes(3 , 0));
     //CreateQuarter(3, 1, GetRes(3 , 1));
     //CreateQuarter(3, 2, GetRes(3 , 2));
     //CreateQuarter(3, 3, GetRes(3 , 3));
+    visible_object_ = std::make_unique<BasicSprite>(RES_PATH_MAPS_LUDUS_backgroundWHOLE, *position_, MAP_WIDTH, MAP_HEIGHT, 0, IVisibleObject::RenderLayers::BackGround);
 }
