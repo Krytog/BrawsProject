@@ -16,10 +16,13 @@ public:
 
     virtual void RenderIt(Painter *painter) override;
     bool IsDisplayed() const override;
+    QImage& GetVisiblePart();
 
     virtual ~BasicSprite() = default;
 
     void Scale(const size_t& width, const size_t& height) override; /* TODO: вынести это в VisibleObject.h */
+private:
+    QImage visible_part_;
 };
 
 class BasicFlexibleSprite: public IFlexibleVisibleObject, public QImage {
@@ -30,8 +33,11 @@ public:
 
     virtual void RenderItCustom(Painter* painter) override;
     void UpdateSrc(std::string_view image_src);
+    QImage& GetVisiblePart();
 
     virtual ~BasicFlexibleSprite() = default;
 
     void Scale(const size_t& width, const size_t& height) override; /* TODO: вынести это в VisibleObject.h */
+private:
+    QImage visible_part_;
 };

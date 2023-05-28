@@ -50,3 +50,11 @@ void BasicFlexibleSprite::UpdateSrc(std::string_view image_src) {
 void BasicFlexibleSprite::RenderItCustom(Painter* painter) {
     DrawStaticImageHelper(this, pos_, angle_).Paint(painter);
 }
+
+QImage& BasicSprite::GetVisiblePart() {
+    return visible_part_;
+}
+
+QImage& BasicFlexibleSprite::GetVisiblePart() {
+    return visible_part_;
+}

@@ -11,21 +11,33 @@ void DrawStaticImageHelper::Paint(Painter* painter) const {
     auto real_painter = dynamic_cast<QPainter*>(painter);
     real_painter->save();
 
-    ////////
+
+    //////// Temporary fix /////////
     if (!angle_) {
-        auto bebra = Position(pos_.GetCoordinates().first, -pos_.GetCoordinates().second);
-        auto camera_pos = Render::GetInstance().GetCameraPosition().GetCoordinates();
-        bebra.Translate({-camera_pos.first, camera_pos.second});
-        bebra.Translate(Vector2D(-(image_->width() / 2), -(image_->height() / 2)));
-        auto left_corner_coords = bebra.GetCoordinates();
+        auto result_position = Position(pos_.GetCoordinates().first, -pos_.GetCoordinates().second);
+        auto camera_position = Render::GetInstance().GetCameraPosition().GetCoordinates();
+
+        result_position.Translate({-camera_position.first, camera_position.second});
+        result_position.Translate(Vector2D(-(image_->width() / 2), -(image_->height() / 2)));
+    
+        auto left_corner_coords = result_position.GetCoordinates();
         QRect image(left_corner_coords.first, left_corner_coords.second, image_->width(), image_->height());
         QRect canvas(-(kWindowWidth / 2), -(kWindowHeight / 2), kWindowWidth, kWindowHeight);
-        auto common = canvas.intersected(image);
-        auto on_image = common.translated(-left_corner_coords.first, -left_corner_coords.second);
-        common.translate(camera_pos.first, -camera_pos.second);
-        QImage* real_image = new QImage(image_->copy(on_image));
+        auto intersection_rect = canvas.intersected(image);
 
-        real_painter->drawImage(common, *real_image, real_image->rect());
+        auto original_image_rect = intersection_rect.translated(-left_corner_coords.first, -left_corner_coords.second);
+        intersection_rect.translate(camera_position.first, -camera_position.second);
+
+        QImage* visible;
+        if (dynamic_cast<BasicSprite*>(image_)) {
+            visible = &dynamic_cast<BasicSprite*>(image_)->GetVisiblePart();
+            *visible = image_->copy(original_image_rect);
+        } else if (dynamic_cast<BasicFlexibleSprite*>(image_)) {
+            visible = &dynamic_cast<BasicFlexibleSprite*>(image_)->GetVisiblePart();
+            *visible = image_->copy(original_image_rect);
+        }
+
+        real_painter->drawImage(intersection_rect, *visible, visible->rect());
     } else {
         const auto& coords = pos_.GetCoordinates();
 
