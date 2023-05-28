@@ -7,7 +7,7 @@
 #include <Game/GameClasses/Server/Pawns/Projectiles/HitTrail.h>
 
 #define COLLIDER_RADIUS 17.5
-#define TRAIL_STAYS_TICKS 10
+#define TRAIL_STAYS_TICKS 4
 
 ProjectileBullyPawnServer::ProjectileBullyPawnServer(const ProjectilePawnServer::ArgPack& argpack): ProjectilePawnServer(argpack) {
     ServerEngine::GetInstance().Invoke(std::chrono::milliseconds(250), &ServerEngine::Destroy, &ServerEngine::GetInstance(), this);
@@ -19,5 +19,5 @@ ProjectileBullyPawnServer::ProjectileBullyPawnServer(const ProjectilePawnServer:
 const size_t ProjectileBullyPawnServer::kTypeId = TypeId_Projectile_Bully;
 
 void ProjectileBullyPawnServer::LeaveHitTrail() const {
-    ServerEngine::GetInstance().CreateGameObject<HitTrail>(TypeId_Trail_Explosion, TRAIL_STAYS_TICKS, *position_);
+    ServerEngine::GetInstance().CreateGameObject<HitTrail>(TypeId_Trail_Hit, TRAIL_STAYS_TICKS, *position_);
 }

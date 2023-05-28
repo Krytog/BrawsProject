@@ -29,6 +29,7 @@ add_library(game_client
         GameClasses/Client/Pawns/Particles/Particles.cpp
         GameClasses/Client/Pawns/Particles/ExplosionParticles.cpp
         GameClasses/Client/Pawns/Particles/SmokeParticles.cpp
+        GameClasses/Client/Pawns/Particles/HitParticles.cpp
         GameClasses/Client/Pawns/Particles/PowerUpParticles.cpp
         GameClasses/Client/Pawns/Zones/DamageZonePawnClient.cpp
         GameClasses/Client/Pawns/PowerUps/PowerUpPawnClient.cpp
