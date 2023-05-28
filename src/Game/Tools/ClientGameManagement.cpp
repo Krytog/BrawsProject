@@ -12,6 +12,8 @@
 #include <Game/GameClasses/Client/Pawns/Characters/Mage/ProjectileMagePawnClient.h>
 #include <Game/GameClasses/Client/Pawns/Characters/Pirate/CharacterPiratePawnClient.h>
 #include <Game/GameClasses/Client/Pawns/Characters/Pirate/ProjectilePiratePawnClient.h>
+#include <Game/GameClasses/Client/Pawns/Characters/Bully/CharacterBullyPawnClient.h>
+#include <Game/GameClasses/Client/Pawns/Characters/Bully/ProjectileBullyPawnClient.h>
 #include <Game/GameClasses/Client/Pawns/UI/Cursor.h>
 #include <Game/GameClasses/Client/Pawns/UI/EndGameWidget.h>
 #include <Game/GameClasses/Client/Pawns/Particles/ExplosionParticles.h>
@@ -62,9 +64,11 @@ void ClientGameManagement::InitRegistryForOvermind() {
     registry.RegisterClass<CharacterCerebrateClient<CharacterDefaultPawnClient>>(TypeId_Character_Default);
     registry.RegisterClass<CharacterCerebrateClient<CharacterMagePawnClient>>(TypeId_Character_Mage);
     registry.RegisterClass<CharacterCerebrateClient<CharacterPiratePawnClient>>(TypeId_Character_Pirate);
+    registry.RegisterClass<CharacterCerebrateClient<CharacterBullyPawnClient>>(TypeId_Character_Bully);
     registry.RegisterClass<PositionalCerebrateClient<ProjectileMagePawnClient>>(TypeId_Projectile_Mage);
     registry.RegisterClass<PositionalCerebrateClient<ProjectilePiratePawnClient>>(TypeId_Projectile_Pirate);
     registry.RegisterClass<PositionalCerebrateClient<ProjectilePiratePawnClient::Mark>>(TypeId_Projectile_Mark);
+    registry.RegisterClass<PositionalCerebrateClient<ProjectileBullyPawnClient>>(TypeId_Projectile_Bully);
     registry.RegisterClass<HitSynchronizerCerebrateClient<ExplosionParticles>>(TypeId_Trail_Explosion);
     registry.RegisterClass<HitSynchronizerCerebrateClient<SmokeParticles>>(TypeId_Trail_Smoke);
     registry.RegisterClass<HitSynchronizerCerebrateClient<PowerUpParticles>>(TypeId_Trail_PowerUp);

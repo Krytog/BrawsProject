@@ -22,6 +22,8 @@ add_library(game_client
         GameClasses/Client/Pawns/Characters/Mage/ProjectileMagePawnClient.cpp
         GameClasses/Client/Pawns/Characters/Pirate/CharacterPiratePawnClient.cpp
         GameClasses/Client/Pawns/Characters/Pirate/ProjectilePiratePawnClient.cpp
+        GameClasses/Client/Pawns/Characters/Bully/CharacterBullyPawnClient.cpp
+        GameClasses/Client/Pawns/Characters/Bully/ProjectileBullyPawnClient.cpp
         GameClasses/Client/Pawns/UI/Cursor.cpp
         GameClasses/Client/Pawns/UI/EndGameWidget.cpp
         GameClasses/Client/Pawns/Particles/Particles.cpp
@@ -43,6 +45,8 @@ add_library(game_server
         GameClasses/Server/Pawns/Characters/Mage/ProjectileMagePawnServer.cpp
         GameClasses/Server/Pawns/Characters/Pirate/CharacterPiratePawnServer.cpp
         GameClasses/Server/Pawns/Characters/Pirate/ProjectilePiratePawnServer.cpp
+        GameClasses/Server/Pawns/Characters/Bully/CharacterBullyPawnServer.cpp
+        GameClasses/Server/Pawns/Characters/Bully/ProjectileBullyPawnServer.cpp
         GameClasses/Server/ParsingUtilities/ControllerTools.cpp
         GameClasses/Server/Pawns/Projectiles/HitTrail.cpp
         GameClasses/Server/GameRulers/GameRuler.cpp

@@ -6,6 +6,7 @@
 #include <Game/GameClasses/Server/Pawns/Characters/Default/CharacterDefaultPawnServer.h>
 #include <Game/GameClasses/Server/Pawns/Characters/Mage/CharacterMagePawnServer.h>
 #include <Game/GameClasses/Server/Pawns/Characters/Pirate/CharacterPiratePawnServer.h>
+#include <Game/GameClasses/Server/Pawns/Characters/Bully/CharacterBullyPawnServer.h>
 #include <SwarmSystem/Overmind.h>
 #include <NormInfrastructure/Server/Communicator.h>
 #include <Game/GameClasses/CommandsList.h>
@@ -46,7 +47,7 @@ namespace {
                 break;
             }
             case Character::TANK: {
-                output = nullptr;
+                output = engine.CreateGameObject<CharacterBullyPawnServer>(pos);
                 break;
             }
         }
