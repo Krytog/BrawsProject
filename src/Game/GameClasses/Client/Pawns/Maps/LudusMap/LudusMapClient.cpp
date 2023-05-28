@@ -23,7 +23,6 @@ namespace {
         CreateGameObject<PersistentVisibleObject>(new Position(pos), nullptr,
                                                   new BasicSprite(path, pos, std::ceil(MAP_WIDTH / 4) + 5, std::ceil(MAP_HEIGHT / 4) + 5,
                                                                   0, IVisibleObject::RenderLayers::BackGround), TAGS_MAPS_Ludus);
-        std::cout << pos.GetCoordinates().first << " " << pos.GetCoordinates().second << std::endl;
     }
 }
 

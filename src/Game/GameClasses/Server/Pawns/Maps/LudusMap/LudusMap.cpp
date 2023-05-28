@@ -18,5 +18,5 @@ LudusMapServer::LudusMapServer(): PersistentObject(new Position(0, 0), nullptr, 
     ServerEngine::GetInstance().CreateGameObject<DamagePowerUpPawnServer>(Position(-200, -800));
 }
 
-const size_t LudusMapServer::kHeight = MAP_HEIGHT / 2;
-const size_t LudusMapServer::kWidth = MAP_WIDTH / 2;
+const size_t LudusMapServer::kHeight = MAP_HEIGHT;
+const size_t LudusMapServer::kWidth = MAP_WIDTH;
