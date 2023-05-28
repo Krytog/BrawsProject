@@ -73,9 +73,6 @@ public:
             delete object_ptr;
             return;
         }
-        throw std::runtime_error(
-            "The pointed object was not created using "
-            "the engine or was already destroyed");
     }
 
     // Camera controls
