@@ -5,6 +5,7 @@
 #include <Game/Tools/ClientGameManagement.h>
 #include <SwarmSystem/Overmind.h>
 #include <SwarmSystem/Profiler/Profiler.h>
+#include <BotAPI/BotInputSystem.h>
 
 #include <NormInfrastructure/Client/Communicator.h>
 #include <NormInfrastructure/Client/Agent.h>
@@ -14,6 +15,7 @@
 
 void Game(uint16_t communicator_port, uint64_t user_id) {
     ClientEngine& engine = ClientEngine::GetInstance();
+    engine.SwitchInputSystem<BotInputSystem>();
     Communicator& communicator = Communicator::GetInstance(communicator_port);
     communicator.SetId(user_id);
     // communicator.BindOnPort(communicator_port);
@@ -28,7 +30,7 @@ void Game(uint16_t communicator_port, uint64_t user_id) {
         ClientGameManagement::ReceiveAndHandleFromServer(communicator);
 
         engine.Update();
-        engine.DebugInfo();
+        //engine.DebugInfo();
 
         auto for_server = ClientGameManagement::SerializeInput();
         communicator.SendToServer(for_server);
