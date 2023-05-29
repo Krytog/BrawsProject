@@ -1,19 +1,22 @@
+#include <QFileDialog>
+#include <QString>
+
 #include "ControlModeScreen.h"
 #include "../mainwindow.h"
 
 ControlModeScreen::ControlModeScreen(QWidget* parent) {
     back_button = new QPushButton("back");
     forward_button = new QPushButton("forward");
-    
+
     connect(back_button, &QPushButton::clicked, this, &ControlModeScreen::ClickedBack);
     connect(forward_button, &QPushButton::clicked, this, &ControlModeScreen::ClickedForward);
- 
+
     regular_control_mode = new QPushButton("mouse/keyboard");
     bot_control_mode = new QPushButton("bot mode");
 
     connect(regular_control_mode, &QPushButton::clicked, this, &ControlModeScreen::ClickedRegular);
     connect(bot_control_mode, &QPushButton::clicked, this, &ControlModeScreen::ClickedBot);
-   
+
     control_mode_layout = new QGridLayout();
     control_mode_layout->addWidget(regular_control_mode, 0, 0);
     control_mode_layout->addWidget(bot_control_mode, 0, 1);
@@ -49,8 +52,12 @@ void ControlModeScreen::ClickedForward() {
 
 void ControlModeScreen::ClickedBot() {
     SetButtonsDefault();
-    bot_control_mode->setFlat(true);
-    MatchInfo.contoltype = GameInfo::ControlType::BOT;
+    QString filepath = QFileDialog::getOpenFileName(this, tr("Select file"), "/home");
+    if (!filepath.isEmpty()) {
+        bot_control_mode->setFlat(true);
+        MatchInfo.contoltype = GameInfo::ControlType::BOT;
+        MatchInfo.path = filepath.toStdString();
+    }
 }
 
 void ControlModeScreen::ClickedRegular() {

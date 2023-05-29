@@ -14,27 +14,27 @@
 
 void LoadScreen::ClickedCreateGame() {
     // creation logic
-
+    std::cout << "Trying to create game" << std::endl;
     Agent& agent = Agent::GetInstance();
     uint64_t id = agent.GetUserID();
     std::cout << "my_id" << id << std::endl;
 
     Character character;
     switch(MatchInfo.gamehero) {
-        case GameInfo::HeroType::MAGE:
-            character = Character::MAGE;
-            break;
+    case GameInfo::HeroType::MAGE:
+        character = Character::MAGE;
+        break;
 
-        case GameInfo::HeroType::TANK:
-            character = Character::TANK;
-            break;
+    case GameInfo::HeroType::TANK:
+        character = Character::TANK;
+        break;
 
-        case GameInfo::HeroType::PIRATE:
-            character = Character::PIRATE;
-            break;
+    case GameInfo::HeroType::PIRATE:
+        character = Character::PIRATE;
+        break;
 
-        default:
-            character = static_cast<Character>(rand()%3);
+    default:
+        character = static_cast<Character>(rand()%3);
     }
 
     if (MatchInfo.gamemode == GameInfo::GameType::CREATE) {
@@ -57,7 +57,7 @@ void LoadScreen::ClickedCreateGame() {
                 if (MatchInfo.contoltype == GameInfo::ControlType::REGULAR) {
                     GameStarter::StartManualGame(port, user_id);
                 } else {
-                    //GameStarter::StartBotGame();
+                    GameStarter::StartBotGame(port, user_id, MatchInfo.path);
                 }
             }
             waitpid(pid, NULL, 0);

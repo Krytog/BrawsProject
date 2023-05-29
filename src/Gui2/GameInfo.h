@@ -1,3 +1,5 @@
+#include <string>
+
 struct GameInfo {
     enum class GameType {
         CREATE,
@@ -20,4 +22,5 @@ struct GameInfo {
     GameType gamemode = GameType::CREATE;
     HeroType gamehero = HeroType::RANDOM;
     ControlType contoltype = ControlType::REGULAR;
+    std::string path;
 };
