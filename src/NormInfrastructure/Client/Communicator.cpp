@@ -41,6 +41,7 @@ void Communicator::SendToServer(std::string_view data) {
 }
 
 void Communicator::Run() {
+    DoReceive();
     accept_thread_ = std::thread([this]{ io_context_.run(); });
 }
 
