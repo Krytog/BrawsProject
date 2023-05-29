@@ -26,18 +26,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-if(ANDROID)
-  add_library(Gui SHARED
+add_executable(Gui
     main.cpp
     mainwindow.cpp
     mainwindow.h
-  )
-else()
-  add_executable(Gui
-    main.cpp
-    mainwindow.cpp
-    mainwindow.h
-  )
-endif()
+
+    ScreenClasses/StartScreen.cpp
+    ScreenClasses/HeroScreen.cpp
+    ScreenClasses/ControlModeScreen.cpp
+)
 
 target_link_libraries(Gui PRIVATE Qt5::Widgets)
