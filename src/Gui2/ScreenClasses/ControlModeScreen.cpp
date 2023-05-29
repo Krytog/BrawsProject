@@ -44,7 +44,7 @@ void ControlModeScreen::ClickedBack() {
 }
 
 void ControlModeScreen::ClickedForward() {
-    MainWindow::GetInstance()->ChangeScreen(Screens::MODE);
+    MainWindow::GetInstance()->ChangeScreen(Screens::LOAD);
 }
 
 void ControlModeScreen::ClickedBot() {

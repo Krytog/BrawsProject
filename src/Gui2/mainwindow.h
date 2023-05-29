@@ -12,6 +12,7 @@ enum class Screens {
     START,
     HERO,
     MODE,
+    LOAD,
 };
 
 class MainWindow : public QMainWindow

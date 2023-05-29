@@ -19,6 +19,7 @@ set(PROJECT_SOURCES
         ScreenClasses/StartScreen.cpp
         ScreenClasses/HeroScreen.cpp
         ScreenClasses/ControlModeScreen.cpp
+        ScreenClasses/LoadScreen.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
