@@ -15,6 +15,7 @@
 
 #define GetRes(x, y) RES_PATH_MAPS_LUDUS_background ## x ## y
 #define Wall(x) CreateWall(MACRO_CONCAT(MACRO_CONCAT(WALL, x), _X), MACRO_CONCAT(MACRO_CONCAT(WALL, x), _Y), MACRO_CONCAT(MACRO_CONCAT(WALL, x), _WIDTH), MACRO_CONCAT(MACRO_CONCAT(WALL, x), _HEIGHT));
+#define Circle(x) CreateWaterCircle(MACRO_CONCAT(MACRO_CONCAT(WATER, x), _X), MACRO_CONCAT(MACRO_CONCAT(WATER, x), _Y), MACRO_CONCAT(MACRO_CONCAT(WATER, x), _RADIUS));
 
 namespace {
     Position QuarterPosition(uint8_t x, uint8_t y) {
@@ -39,6 +40,15 @@ namespace {
         ClientEngine::GetInstance().CreateGameObject<PersistentVisibleObject>(arg_pack);
     }
 
+    void CreateWaterCircle(double x, double y, double radius) {
+        VisibleGameObject::ArgPack arg_pack;
+        arg_pack.position = new Position(x, y);
+        arg_pack.collider = new CircleCollider(Position(x, y), radius);
+        arg_pack.visible_object = nullptr;
+        arg_pack.tag = TAGS_COLLIDERS_NOWALK_FLY;
+        ClientEngine::GetInstance().CreateGameObject<PersistentVisibleObject>(arg_pack);
+    }
+
     void CreateWalls() {
         Wall(1);
         Wall(2);
@@ -58,6 +68,10 @@ namespace {
         Wall(16);
         Wall(17);
         Wall(18);
+        Circle(1);
+        Circle(2);
+        Circle(3);
+        Circle(4);
     }
 }
 

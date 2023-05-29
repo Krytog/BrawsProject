@@ -17,6 +17,14 @@ namespace {
         ServerEngine::GetInstance().CreateGameObject<PersistentObject>(arg_pack);
     }
 
+    void CreateWaterCircle(double x, double y, double radius) {
+        GameObject::ArgPack arg_pack;
+        arg_pack.position = new Position(x, y);
+        arg_pack.collider = new CircleCollider(Position(x, y), radius);
+        arg_pack.tag = TAGS_COLLIDERS_NOWALK_FLY;
+        ServerEngine::GetInstance().CreateGameObject<PersistentObject>(arg_pack);
+    }
+
     template<typename T>
     void CreatePowerUp(double x, double y) {
         static_assert(std::is_base_of<PowerUpPawnServer, T>(), "T must inherit from PowerUpPawnServer");
@@ -34,6 +42,7 @@ enum {
 
 #define GetRes(x, y) RES_PATH_MAPS_LUDUS_background ## x ## y
 #define Wall(x) CreateWall(MACRO_CONCAT(MACRO_CONCAT(WALL, x), _X), MACRO_CONCAT(MACRO_CONCAT(WALL, x), _Y), MACRO_CONCAT(MACRO_CONCAT(WALL, x), _WIDTH), MACRO_CONCAT(MACRO_CONCAT(WALL, x), _HEIGHT));
+#define Circle(x) CreateWaterCircle(MACRO_CONCAT(MACRO_CONCAT(WATER, x), _X), MACRO_CONCAT(MACRO_CONCAT(WATER, x), _Y), MACRO_CONCAT(MACRO_CONCAT(WATER, x), _RADIUS));
 
 void LudusMapServer::SpawnPowerUps() {
     CreatePowerUp<HealthPowerUpPawnServer>(0, -800);
@@ -62,6 +71,10 @@ void LudusMapServer::SpawnWalls() {
     Wall(16);
     Wall(17);
     Wall(18);
+    Circle(1);
+    Circle(2);
+    Circle(3);
+    Circle(4);
 }
 
 LudusMapServer::LudusMapServer(): PersistentObject(new Position(0, 0), nullptr, TAGS_MAPS_Ludus) {

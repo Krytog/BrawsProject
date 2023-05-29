@@ -89,3 +89,19 @@
 #define WALL18_Y -2016.5
 #define WALL18_WIDTH 1313
 #define WALL18_HEIGHT 68
+
+#define WATER1_X -7790
+#define WATER1_Y 3375.5
+#define WATER1_RADIUS 1635
+
+#define WATER2_X -8530
+#define WATER2_Y 3300.5
+#define WATER2_RADIUS 2250
+
+#define WATER3_X -8760
+#define WATER3_Y 2033.5
+#define WATER3_RADIUS 2250
+
+#define WATER4_X -8220
+#define WATER4_Y 518.5
+#define WATER4_RADIUS 1635
