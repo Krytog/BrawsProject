@@ -10,7 +10,7 @@ using json = nlohmann::json;
 #define STR(EXPR) STR_IMPL(EXPR)
 #define STR_IMPL(EXPR) #EXPR
 
-#define GAME_HOST "localhost"
+#define GAME_HOST "194.87.252.128"
 #define GAME_PORT 10005
 #define COMMUNICATOR_RECEIVE_PORT 10013
 
