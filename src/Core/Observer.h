@@ -6,10 +6,16 @@
 
 class Observer : public VisibleGameObject {
 public:
+
+    struct CollisionsWithPlayer {
+        CollisionSystem::CollisionsInfoArray info_array;
+        int64_t player_index;
+    };
+
     Observer();
 
     void Observe(GameObject* object_to_follow);
-    CollisionSystem::CollisionsInfoArray GetScreenCollisions();
+    CollisionsWithPlayer GetScreenCollisions();
 
     void OnUpdate() override;
 

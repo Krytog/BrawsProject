@@ -15,8 +15,16 @@ void Observer::Observe(GameObject* object_to_follow) {
     }
 }
 
-CollisionSystem::CollisionsInfoArray Observer::GetScreenCollisions() {
-    return ClientEngine::GetInstance().GetAllCollisions(object_to_follow_);
+Observer::CollisionsWithPlayer Observer::GetScreenCollisions() {
+    auto collisions = ClientEngine::GetInstance().GetAllCollisions(this);
+    int64_t id = -1;
+    for (int64_t i = 0; i < collisions.size(); ++i) {
+        if (collisions[i].game_object == this->object_to_follow_) {
+            id = i;
+            break;
+        }
+    }
+    return {collisions, id};
 }
 
 void Observer::OnUpdate() {

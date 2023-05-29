@@ -18,8 +18,12 @@ void BotManagement::ObserveBot(GameObject* bot) {
 
 std::string BotManagement::GetPlaygroundInfo() {
     std::string playground_info;
-    auto info_array = observer_->GetScreenCollisions();
+    auto collisions_with_player = observer_->GetScreenCollisions();
+    auto info_array = collisions_with_player.info_array;
+    auto player_id = collisions_with_player.player_index;
     playground_info += std::to_string(info_array.size());  // number of objects on screen
+    playground_info += '#';
+    playground_info += std::to_string(player_id);  // player ID in the info array, starting from 0; -1 <=> NO
     for (const auto& info: info_array) {
         auto [x, y] = info.position.GetCoordinates();
         playground_info += '{';
