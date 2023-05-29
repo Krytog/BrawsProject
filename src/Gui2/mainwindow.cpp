@@ -11,7 +11,13 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    setCentralWidget(new StartScreen);
+    screen_stack = new QStackedWidget();
+
+    screen_stack->addWidget(new StartScreen);
+    screen_stack->addWidget(new HeroScreen);
+    screen_stack->addWidget(new ControlModeScreen);
+
+    setCentralWidget(screen_stack);
 }
 
 MainWindow::~MainWindow()
@@ -26,13 +32,13 @@ MainWindow* MainWindow::GetInstance() {
 void MainWindow::ChangeScreen(Screens screen) {
     switch(screen) {
     case Screens::START:
-        setCentralWidget(new StartScreen);
+        screen_stack->setCurrentIndex(0);
         break;
     case Screens::HERO:
-        setCentralWidget(new HeroScreen);
+        screen_stack->setCurrentIndex(1);
         break;
     case Screens::MODE:
-        setCentralWidget(new ControlModeScreen);
+        screen_stack->setCurrentIndex(2);
         break;
     }
 }

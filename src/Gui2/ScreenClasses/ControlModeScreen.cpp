@@ -40,7 +40,6 @@ void ControlModeScreen::SetButtonsDefault() {
 }
 
 void ControlModeScreen::ClickedBack() {
-
     MainWindow::GetInstance()->ChangeScreen(Screens::HERO);
 }
 

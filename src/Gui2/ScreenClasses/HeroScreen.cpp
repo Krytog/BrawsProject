@@ -68,7 +68,6 @@ void HeroScreen::ClickedThird() {
 }
 
 void HeroScreen::ClickedBack() {
-    MatchInfo.gamehero = GameInfo::HeroType::RANDOM;
     MainWindow::GetInstance()->ChangeScreen(Screens::START);
 }
 

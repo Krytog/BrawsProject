@@ -3,6 +3,7 @@
 
 #include <QApplication>
 #include <QMainWindow>
+#include <QStackedWidget>
 
 #include "GameInfo.h"
 #define MatchInfo MainWindow::GetInstance()->gameinfo
@@ -26,6 +27,9 @@ public:
     void ChangeScreen(Screens screen);
 
     GameInfo gameinfo;
+
+private:
+    QStackedWidget* screen_stack;
 };
 
 #endif // MAINWINDOW_H
