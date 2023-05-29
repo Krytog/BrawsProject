@@ -8,4 +8,7 @@ public:
 
     static const size_t kWidth;
     static const size_t kHeight;
+private:
+    void SpawnPowerUps();
+    void SpawnWalls();
 };

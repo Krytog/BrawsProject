@@ -70,6 +70,7 @@ void CharacterBullyPawnServer::Shoot(const Position &position) {
 
 void CharacterBullyPawnServer::OnUpdate() {
     CharacterPawnServer::OnUpdate();
+    std::cout << position_->GetCoordinates().first << " " << position_->GetCoordinates().second << std::endl;
 }
 
 const size_t CharacterBullyPawnServer::kTypeId = TypeId_Character_Bully;
