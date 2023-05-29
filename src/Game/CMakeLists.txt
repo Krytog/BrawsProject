@@ -69,3 +69,6 @@ target_include_directories(game_tools PRIVATE ${CMAKE_CURRENT_LIST_DIR}/..)
 target_include_directories(game_client PRIVATE ${CMAKE_CURRENT_LIST_DIR}/..)
 target_include_directories(game_server PRIVATE ${CMAKE_CURRENT_LIST_DIR}/..)
 
+add_executable(Dup.o
+        GameClasses/Client/Dup.c)
+
