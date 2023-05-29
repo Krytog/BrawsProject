@@ -32,9 +32,7 @@ public:
     void SendToClient(uint64_t client_id, std::string_view data);
     void Run();
     void Stop();
-    size_t GetUserNumber();
     std::vector<uint64_t> SetClients(const std::unordered_map<uint64_t, Player>& players);
-    void RegAll();
 
     ~Communicator();
 private:
@@ -47,7 +45,6 @@ private:
     Communicator &operator=(Communicator &&other) = delete;
 
     void DoReceive(uint64_t thread_id);
-    void RegUser();
     bool IsValidData(std::string_view data, uint64_t client_id) const;
 
     boost::asio::io_context io_context_;
@@ -64,10 +61,6 @@ private:
     std::unordered_map<uint64_t, std::string> actual_message_;
     std::thread accept_thread_;
 
-    // Registration
-    udp::socket reg_socket_;
     std::unordered_map<uint64_t, udp::endpoint> endpoint_by_id_;
     std::unordered_set<uint64_t> players_;
-    size_t users_count_ = 0;
-    size_t total_users_;
 };

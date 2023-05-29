@@ -15,7 +15,6 @@ void Game(const std::unordered_map<uint64_t, Player>& players) {
     Overmind& overmind = Overmind::GetInstance();
     Communicator& communicator = Communicator::GetInstance();
     std::vector<uint64_t> players_id = communicator.SetClients(players);
-    communicator.RegAll();
     communicator.Run();
 
     ServerGameManagement::InitGameServer(players);

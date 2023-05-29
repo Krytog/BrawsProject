@@ -12,7 +12,6 @@ namespace {
 Communicator::Communicator(uint16_t port): socket_(io_context_, udp::endpoint(udp::v4(), port)) {
     udp::resolver resolver(io_context_);
     endpoints_ = resolver.resolve(udp::v4(), GAME_HOST, STR(COMMUNICATOR_RECEIVE_PORT));
-    reg_endpoints_ = resolver.resolve(udp::v4(), GAME_HOST, STR(COMMUNICATOR_REG_PORT));
     package_.resize(k_max_dtgrm_len);
 }
 
@@ -54,10 +53,4 @@ void Communicator::Stop() {
 
 void Communicator::SetId(uint64_t  id) {
     user_id_ = id;
-}
-
-void Communicator::RegOnServer() {
-    sleep(1); // TODO: сделать нормальную синхронизацию регистрации 
-    socket_.send_to(boost::asio::buffer(&user_id_, sizeof(user_id_)), *reg_endpoints_.begin());
-    DoReceive();
 }

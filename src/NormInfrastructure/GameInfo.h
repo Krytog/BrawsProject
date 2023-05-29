@@ -9,7 +9,6 @@
 #define GAME_HOST "localhost"
 #define GAME_PORT 10005
 #define COMMUNICATOR_RECEIVE_PORT 10013
-#define COMMUNICATOR_REG_PORT 11000
 
 #define GAME_APPROVE "start"
 
