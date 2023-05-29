@@ -4,6 +4,7 @@
 #include <Game/GameClasses/Server/Pawns/PowerUps/HealthPowerUpPawnServer.h>
 #include <Game/GameClasses/Server/Pawns/PowerUps/SpeedPowerUpPawnServer.h>
 #include <Game/GameClasses/Server/Pawns/PowerUps/DamagePowerUpPawnServer.h>
+#include <Core/Tools/Concepts.h>
 
 #include "ObjectsCoordinates.h"
 
@@ -28,6 +29,12 @@ enum {
     MAP_HEIGHT = 8667,
 };
 
+#define VANISH_IMPL(X)
+#define VANISH(X) VANISH_IMPL(X)
+
+#define GetRes(x, y) RES_PATH_MAPS_LUDUS_background ## x ## y
+#define Wall(x) CreateWall(MACRO_CONCAT(MACRO_CONCAT(WALL, x), _X), MACRO_CONCAT(MACRO_CONCAT(WALL, x), _Y), MACRO_CONCAT(MACRO_CONCAT(WALL, x), _WIDTH), MACRO_CONCAT(MACRO_CONCAT(WALL, x), _HEIGHT));
+
 void LudusMapServer::SpawnPowerUps() {
     CreatePowerUp<HealthPowerUpPawnServer>(0, -800);
     CreatePowerUp<SpeedPowerUpPawnServer>(200, -800);
@@ -37,14 +44,24 @@ void LudusMapServer::SpawnPowerUps() {
 }
 
 void LudusMapServer::SpawnWalls() {
-    CreateWall(WALL1_X, WALL1_Y, WALL1_WIDTH, WALL1_HEIGHT);
-    CreateWall(WALL2_X, WALL2_Y, WALL2_WIDTH, WALL2_HEIGHT);
-    CreateWall(WALL3_X, WALL3_Y, WALL3_WIDTH, WALL3_HEIGHT);
-    CreateWall(WALL4_X, WALL4_Y, WALL4_WIDTH, WALL4_HEIGHT);
-    CreateWall(WALL5_X, WALL5_Y, WALL5_WIDTH, WALL5_HEIGHT);
-    CreateWall(WALL6_X, WALL6_Y, WALL6_WIDTH, WALL6_HEIGHT);
-    CreateWall(WALL7_X, WALL7_Y, WALL7_WIDTH, WALL7_HEIGHT);
-    CreateWall(WALL8_X, WALL8_Y, WALL8_WIDTH, WALL8_HEIGHT);
+    Wall(1);
+    Wall(2);
+    Wall(3);
+    Wall(4);
+    Wall(5);
+    Wall(6);
+    Wall(7);
+    Wall(8);
+    Wall(9);
+    Wall(10);
+    Wall(11);
+    Wall(12);
+    Wall(13);
+    Wall(14);
+    Wall(15);
+    Wall(16);
+    Wall(17);
+    Wall(18);
 }
 
 LudusMapServer::LudusMapServer(): PersistentObject(new Position(0, 0), nullptr, TAGS_MAPS_Ludus) {

@@ -63,7 +63,7 @@ void Game(uint16_t communicator_port, uint64_t user_id, ControlType controls) {
 //            if (pid) {
 //                waitpid(pid, NULL, 0);
 //            } else {
-//                execlp("./Dup.o", "./Dup.o", "./bot.o", "./Client_inner", std::to_string(agent.GetPort()).data(), std::to_string(id).data(), "1", NULL);
+//                execlp("./Client_inner", "./Client_inner", std::to_string(agent.GetPort()).data(), std::to_string(id).data(), "0", NULL);
 //            }
 //            //     return 0;
 //            break;

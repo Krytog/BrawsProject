@@ -1,41 +1,91 @@
 #pragma once
 
-#define WALL1_X -6079.5
-#define WALL1_Y -3849.5
+#define WALL1_X -4261
+#define WALL1_Y -1090
 #define WALL1_WIDTH 68
 #define WALL1_HEIGHT 1918
 
-#define WALL2_X -6079.5
-#define WALL2_Y -4228.5
+#define WALL2_X -4261
+#define WALL2_Y -2629
 #define WALL2_WIDTH 68
 #define WALL2_HEIGHT 387
 
-#define WALL3_X -5453.5
-#define WALL3_Y -4874
+#define WALL3_X -3009
+#define WALL3_Y -580.5
 #define WALL3_WIDTH 68
 #define WALL3_HEIGHT 892
 
-#define WALL4_X -5453.5
-#define WALL4_Y -4939.5
+#define WALL4_X -3009
+#define WALL4_Y -1466
 #define WALL4_WIDTH 68
 #define WALL4_HEIGHT 215
 
-#define WALL5_X -5455.5
-#define WALL5_Y -3951.5
+#define WALL5_X -3013
+#define WALL5_Y -2351.5
 #define WALL5_WIDTH 68
 #define WALL5_HEIGHT 942
 
-#define WALL6_X -4885.5
-#define WALL6_Y -4448.5
+#define WALL6_X -1873
+#define WALL6_Y -792
 #define WALL6_WIDTH 68
 #define WALL6_HEIGHT 1319
 
-#define WALL7_X -4885.5
-#define WALL7_Y -4671.5
+#define WALL7_X -1873
+#define WALL7_Y -1922.5
 #define WALL7_WIDTH 68
 #define WALL7_HEIGHT 268
 
-#define WALL8_X -4349.5
-#define WALL8_Y -3088.5
+#define WALL8_X -801
+#define WALL8_Y -1472
 #define WALL8_WIDTH 68
 #define WALL8_HEIGHT 2679
+
+#define WALL9_X -3295.5
+#define WALL9_Y -172.5
+#define WALL9_WIDTH 1991
+#define WALL9_HEIGHT 68
+
+#define WALL10_X -1869
+#define WALL10_Y -168.5
+#define WALL10_WIDTH 268
+#define WALL10_HEIGHT 68
+
+#define WALL11_X -848
+#define WALL11_Y -172.5
+#define WALL11_WIDTH 166
+#define WALL11_HEIGHT 68
+
+#define WALL12_X -3984.5
+#define WALL12_Y -1472.5
+#define WALL12_WIDTH 589
+#define WALL12_HEIGHT 68
+
+#define WALL13_X -801
+#define WALL13_Y -1472
+#define WALL13_WIDTH 68
+#define WALL13_HEIGHT 2679
+
+#define WALL14_X -3168.5
+#define WALL14_Y -1464.5
+#define WALL14_WIDTH 357
+#define WALL14_HEIGHT 68
+
+#define WALL15_X -886
+#define WALL15_Y -2784
+#define WALL15_WIDTH 242
+#define WALL15_HEIGHT 68
+
+#define WALL16_X -2805
+#define WALL16_Y -2774.5
+#define WALL16_WIDTH 2980
+#define WALL16_HEIGHT 68
+
+#define WALL17_X -2729
+#define WALL17_Y -2013.5
+#define WALL17_WIDTH 636
+#define WALL17_HEIGHT 68
+
+#define WALL18_X -1426.5
+#define WALL18_Y -2016.5
+#define WALL18_WIDTH 1313
+#define WALL18_HEIGHT 68
