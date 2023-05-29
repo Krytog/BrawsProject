@@ -1,4 +1,7 @@
 # client tools
+add_library(game_starters
+        GameClasses/Client/GameStarters/GameStarter.cpp)
+
 add_library(game_client_tools
         Tools/ClientGameManagement.cpp  # special for client
         Tools/Decoy/ServerDecoy.cpp)

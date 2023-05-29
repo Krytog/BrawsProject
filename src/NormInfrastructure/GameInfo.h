@@ -49,10 +49,3 @@ struct Request {
 struct GameSettings {
     uint64_t users_count;
 };
-
-void LoadFromConf() {
-    std::ifstream file("GameInfo.json");
-    json config;
-    file >> config;
-    // TODO: Remove macro
-}

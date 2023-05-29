@@ -1,4 +1,0 @@
-/home/matthew/HSE/CursoviProject/src/Gui/test_build/CMakeFiles/Gui.dir
-/home/matthew/HSE/CursoviProject/src/Gui/test_build/CMakeFiles/edit_cache.dir
-/home/matthew/HSE/CursoviProject/src/Gui/test_build/CMakeFiles/rebuild_cache.dir
-/home/matthew/HSE/CursoviProject/src/Gui/test_build/CMakeFiles/Gui_autogen.dir
