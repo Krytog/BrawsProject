@@ -1,5 +1,6 @@
 #pragma once
 
+#include <boost/asio/ip/address.hpp>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -33,6 +34,7 @@ public:
     void Stop();
     size_t GetUserNumber();
     std::vector<uint64_t> SetClients(const std::unordered_map<uint64_t, Player>& players);
+    void RegAll();
 
     ~Communicator();
 private:
@@ -45,12 +47,11 @@ private:
     Communicator &operator=(Communicator &&other) = delete;
 
     void DoReceive(uint64_t thread_id);
+    void RegUser();
     bool IsValidData(std::string_view data, uint64_t client_id) const;
 
     boost::asio::io_context io_context_;
     udp::socket socket_;
-
-    std::unordered_map<uint64_t, udp::endpoint> connections_;
     std::unordered_map<uint64_t, FixedQueue<std::string, kQueueSize>> users_data_;
 
     // ID randomizer
@@ -58,9 +59,15 @@ private:
     std::mt19937_64 gen_;
     std::uniform_int_distribution<uint64_t> dis_;
 
-    size_t user_counter_ = 0;
+    // Connections handling
     std::unordered_map<uint64_t, udp::endpoint> actual_connections_;
     std::unordered_map<uint64_t, std::string> actual_message_;
     std::thread accept_thread_;
-    std::unordered_map<uint64_t, Player> players_;
+
+    // Registration
+    udp::socket reg_socket_;
+    std::unordered_map<uint64_t, udp::endpoint> endpoint_by_id_;
+    std::unordered_set<uint64_t> players_;
+    size_t users_count_ = 0;
+    size_t total_users_;
 };

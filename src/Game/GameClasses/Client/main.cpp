@@ -24,7 +24,7 @@ void Game(uint16_t communicator_port, uint64_t user_id, ControlType controls) {
     }
     Communicator& communicator = Communicator::GetInstance(communicator_port);
     communicator.SetId(user_id);
-    // communicator.BindOnPort(communicator_port);
+    communicator.RegOnServer();
     communicator.Run();
     ClientGameManagement::InitGameClient();
     ClientGameManagement::InitRegistryForOvermind();

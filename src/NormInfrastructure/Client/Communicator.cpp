@@ -6,13 +6,13 @@
 #include "../GameInfo.h"
 
 namespace {
-    char random_port[] = "10013";
     size_t k_max_dtgrm_len = 3200;
 }
 
 Communicator::Communicator(uint16_t port): socket_(io_context_, udp::endpoint(udp::v4(), port)) {
     udp::resolver resolver(io_context_);
-    endpoints_ = resolver.resolve(udp::v4(), GAME_HOST, random_port);
+    endpoints_ = resolver.resolve(udp::v4(), GAME_HOST, STR(COMMUNICATOR_RECEIVE_PORT));
+    reg_endpoints_ = resolver.resolve(udp::v4(), GAME_HOST, STR(COMMUNICATOR_REG_PORT));
     package_.resize(k_max_dtgrm_len);
 }
 
@@ -42,7 +42,6 @@ void Communicator::SendToServer(std::string_view data) {
 }
 
 void Communicator::Run() {
-    DoReceive();
     accept_thread_ = std::thread([this]{ io_context_.run(); });
 }
 
@@ -53,11 +52,12 @@ void Communicator::Stop() {
     }
 }
 
-void Communicator::BindOnPort(uint16_t port) {
-    udp::endpoint endpoint(udp::v4(), port);
-    socket_.bind(endpoint);
-}
-
 void Communicator::SetId(uint64_t  id) {
     user_id_ = id;
+}
+
+void Communicator::RegOnServer() {
+    sleep(1); // TODO: сделать нормальную синхронизацию регистрации 
+    socket_.send_to(boost::asio::buffer(&user_id_, sizeof(user_id_)), *reg_endpoints_.begin());
+    DoReceive();
 }

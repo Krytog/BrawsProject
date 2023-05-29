@@ -13,9 +13,9 @@ class Communicator {
 public:
     static Communicator &GetInstance(uint16_t port);
 
+    void RegOnServer();
     std::string ReceiveFromServer();
     void SendToServer(std::string_view data);
-    void BindOnPort(uint16_t port);
     void SetId(uint64_t  id);
 
     void Run();
@@ -34,6 +34,8 @@ private:
 
     std::string package_;
 
+    // Registration
+    udp::resolver::results_type reg_endpoints_;
     uint64_t user_id_;
 
     boost::asio::io_context io_context_;
@@ -41,7 +43,6 @@ private:
     std::thread accept_thread_;
 
     udp::resolver::results_type endpoints_;
-
     udp::endpoint connection_;
 
 private:
