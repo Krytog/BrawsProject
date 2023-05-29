@@ -20,6 +20,8 @@ set(PROJECT_SOURCES
         ScreenClasses/HeroScreen.cpp
         ScreenClasses/ControlModeScreen.cpp
         ScreenClasses/LoadScreen.cpp
+        ../NormInfrastructure/Client/Agent.cpp
+        ../Game/GameClasses/Client/GameStarters/GameStarter.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

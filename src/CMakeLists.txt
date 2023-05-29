@@ -6,6 +6,7 @@ add_subdirectory("Game")
 add_subdirectory("SwarmSystem")
 add_subdirectory("NormInfrastructure")
 add_subdirectory("BotAPI")
+add_subdirectory("Gui2")
 
 # game depends on core
 target_link_libraries(game_client_tools core_lib)
