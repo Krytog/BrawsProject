@@ -75,6 +75,12 @@ void LudusMapServer::SpawnWalls() {
     Circle(2);
     Circle(3);
     Circle(4);
+    Wall(19);
+    Wall(20);
+    Wall(21);
+    Wall(22);
+    Wall(23);
+    Wall(24);
 }
 
 LudusMapServer::LudusMapServer(): PersistentObject(new Position(0, 0), nullptr, TAGS_MAPS_Ludus) {

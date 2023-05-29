@@ -72,6 +72,12 @@ namespace {
         Circle(2);
         Circle(3);
         Circle(4);
+        Wall(19);
+        Wall(20);
+        Wall(21);
+        Wall(22);
+        Wall(23);
+        Wall(24);
     }
 }
 
