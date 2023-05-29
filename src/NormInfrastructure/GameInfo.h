@@ -2,6 +2,10 @@
 
 #include <boost/asio.hpp>
 #include <cstdint>
+#include <nlohmann/json.hpp>
+#include <fstream>
+
+using json = nlohmann::json;
 
 #define STR(EXPR) STR_IMPL(EXPR)
 #define STR_IMPL(EXPR) #EXPR
@@ -45,3 +49,10 @@ struct Request {
 struct GameSettings {
     uint64_t users_count;
 };
+
+void LoadFromConf() {
+    std::ifstream file("GameInfo.json");
+    json config;
+    file >> config;
+    // TODO: Remove macro
+}
