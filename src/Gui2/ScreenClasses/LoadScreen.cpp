@@ -1,10 +1,14 @@
 #include <iostream>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 #include "LoadScreen.h"
 #include "../mainwindow.h"
 
 #include "../../NormInfrastructure/Client/Agent.h"
+#include "../../Game/GameClasses/Client/GameStarters/GameStarter.h"
 
 
 
@@ -43,6 +47,21 @@ void LoadScreen::ClickedCreateGame() {
         if (agent.ApproveGame()) {
             std::cout << "Game Approved" << std::endl;
             break;
+
+            pid_t pid = fork();
+            if (!pid) {
+                auto port = agent.GetPort();
+                auto user_id = agent.GetUserID();
+                std::cout << "port: " << port << " " << "user_id: " << user_id << std::endl;
+
+                if (MatchInfo.contoltype == GameInfo::ControlType::REGULAR) {
+                    GameStarter::StartManualGame(port, user_id);
+                } else {
+                    //GameStarter::StartBotGame();
+                }
+            }
+            waitpid(pid, NULL, 0);
+
         }
     }
 }
