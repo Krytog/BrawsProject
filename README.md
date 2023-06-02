@@ -4,8 +4,8 @@ Brawls is a simple multiplayer game to play with your friends. Play as a team or
 
 ## Setup
 
-Для сборки всего проекта используется CMake. Для начала требуется склонировать репозиторий, и зайти в его корень ```.../BrawsProject```. Далее:
-  * Созаём директорию build: ```mkdir build```
+Для сборки всего проекта используется CMake. Для начала требуется склонировать репозиторий, и зайти в его корень ```.../BrawsProject/```. Далее:
+  * Создаём директорию build: ```mkdir build```
   * Заходим в неё: ```cd build```
   * Генерируем make files: ```cmake ..```
   * Собираем Client target: ```make Client```
